@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Title</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/themes/default/nhealth.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+
+    <script type="text/javascript">
+
+      function chageTimeout(){
+          window.location.href = 'login.php';
+      }
+
+      $(document).ready(function(e) {
+          setTimeout( 'chageTimeout()', 2000 ); // กำหนดเวลาตรวจเช็คเริ่มต้น
+      });
+
+    </script>
+      <style>
+          .bg{
+            position:absolute;
+            width:100vw;
+            height:100vh;
+            object-fit: cover;
+          }
+      </style>
+    <title>Title</title>
+  </head>
+  <body >
+    <img class="bg" src="img/background01.png">
+    <div class="logo d-flex justify-content-center">
+      <img class="index_logo" src="img/logo.png">
+    </div>
+  </body>
+</html>
