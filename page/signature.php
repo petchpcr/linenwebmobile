@@ -4,7 +4,7 @@
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
     if($Userid==""){
-      header("location:index.html");
+      header("location:../index.html");
     }
     $DocNo = $_GET['DocNo'];
 ?>
@@ -20,14 +20,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  <link rel="shortcut icon" href="favicon.ico">
-	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="css/themes/default/nhealth.css">
+  <link rel="shortcut icon" href="../favicon.ico">
+	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-  <link rel="stylesheet" href="dist/css/sweetalert2.min.css">
-  <link rel="stylesheet" href="css/signature-pad.css">
-  <script src="js/jquery.js"></script>
+  <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
+  <link rel="stylesheet" href="../css/signature-pad.css">
+  <script src="../js/jquery.js"></script>
 
   <!-- <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -666,7 +666,7 @@
       var DocNo = "<?php echo $DocNo?>";
       var SigCode = dataURL;
       document.getElementById("h_code").value = SigCode;
-      var URL = 'process/signature.php';
+      var URL = '../process/signature.php';
       $.ajax({  
         url: URL,
         method:"POST",
@@ -749,7 +749,7 @@
     });
 
   </script>
-  <script src="dist/js/sweetalert2.min.js"></script>
-  <script src="bootstrap/js/bootstrap.js"></script>
+  <script src="../dist/js/sweetalert2.min.js"></script>
+  <script src="../bootstrap/js/bootstrap.js"></script>
 </body>
 </html>

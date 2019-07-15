@@ -4,8 +4,9 @@
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
     if($Userid==""){
-      header("location:index.html");
+      header("location:../index.html");
     }
+    $Menu = $_GET['Menu'];
     $siteCode = $_GET['siteCode'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -14,15 +15,15 @@
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
-	<link rel="shortcut icon" href="favicon.ico">
-	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="css/themes/default/nhealth.css">
+	<link rel="shortcut icon" href="../favicon.ico">
+	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<script src="js/jquery.js"></script>
-	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-    <script src="dist/js/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="dist/css/sweetalert2.min.css">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="../dist/js/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         $(document).ready(function (e) {
             load_doc();
@@ -30,15 +31,18 @@
 
         function load_doc(){
             var siteCode = "<?php echo $siteCode?>";
+            var Menu = "<?php echo $Menu?>";
             var data = {
                 'siteCode': siteCode,
+                'Menu': Menu,
                 'STATUS': 'load_doc'
             };
             senddata(JSON.stringify(data));
         }
 
         function show_process(DocNo){
-            window.location.href='process.php?DocNo='+DocNo;
+            var Menu = <?php echo $Menu;?>;
+            window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
         }
 
         function confirm_doc(DocNo){
@@ -67,7 +71,8 @@
         }
 
         function back(){
-            window.location.href="main.php";
+            var Menu = <?php echo $Menu;?>;
+            window.location.href="hospital.php?Menu="+Menu;
         }
 
         function logout(num){
@@ -81,7 +86,7 @@
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = 'process/document.php';
+            var URL = '../process/document.php';
             $.ajax({
                 url: URL,
                 dataType: 'text',
@@ -139,7 +144,7 @@
 
                                 var Str = "<button "+on_click+" class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                     Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
-                                    Str += "<img src='img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
+                                    Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                     Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
 
                                 $("#document").append(Str);
@@ -154,7 +159,7 @@
                         window.location.href='process.php?siteCode='+temp['siteCode'];
                     }
                     else if(temp["form"] == 'logout'){
-                        window.location.href='index.html';
+                        window.location.href='../index.html';
                     }
                 } else if (temp['status'] == "failed") {
                     swal({
@@ -188,7 +193,7 @@
         </header>
         <div data-role="content" style="font-family:sans-serif;">
 
-            <div align="center" style="margin:1rem 0;"><img src="img/logo.png" width="220" height="45"/></div>
+            <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
             <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
             <div id="document">
 

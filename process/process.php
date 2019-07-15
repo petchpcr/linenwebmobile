@@ -465,16 +465,16 @@
 
         $logout = $DATA["Confirm"];
 
-        unset($_SESSION['Userid']);
-        unset($_SESSION['Username']);
-        unset($_SESSION['FName']);
-        unset($_SESSION['PmID']);
-        unset($_SESSION['TimeOut']);
-        unset($_SESSION['HptCode']);
-        unset($_SESSION['FacCode']);
-        session_destroy();
-        
         if ($logout == 1) {
+            unset($_SESSION['Userid']);
+            unset($_SESSION['Username']);
+            unset($_SESSION['FName']);
+            unset($_SESSION['PmID']);
+            unset($_SESSION['TimeOut']);
+            unset($_SESSION['HptCode']);
+            unset($_SESSION['FacCode']);
+            session_destroy();
+            
             $return['status'] = "success";
             $return['form'] = "logout";
             echo json_encode($return);

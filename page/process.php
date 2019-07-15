@@ -5,8 +5,9 @@
     $UserFName = $_SESSION['FName'];
     $ShowSign = "";
     if($Userid==""){
-      header("location:index.html");
+      header("location:../index.html");
     }
+    $Menu = $_GET['Menu'];
     $DocNo = $_GET['DocNo'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -15,13 +16,13 @@
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
-	<link rel="shortcut icon" href="favicon.ico">
-	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="css/themes/default/nhealth.css">
+	<link rel="shortcut icon" href="../favicon.ico">
+	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-    <link rel="stylesheet" href="dist/css/sweetalert2.min.css">
-    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
+    <script src="../js/jquery.js"></script>
     <script>
         
         $(document).ready(function (e) {
@@ -204,7 +205,8 @@
         }
 
         function back(site){
-            window.location.href="document.php?siteCode="+site;
+            var Menu = <?php echo $Menu;?>;
+            window.location.href='document.php?Menu='+Menu+'&siteCode='+site;
         }
 
         function logout(num){
@@ -218,7 +220,7 @@
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = 'process/process.php';
+            var URL = '../process/process.php';
             $.ajax({
                 url: URL,
                 dataType: 'text',
@@ -241,9 +243,9 @@
                         $("#title").after(Back);
                         $("#h_status").text(temp['IsStatus']);
                         if(temp['IsStatus'] == 0 || temp['IsStatus'] == null){ //-----ยังไม่ได้ทำอะไร
-                            $("#W_Status").attr("src","img/Status_4.png");
-                            $("#P_Status").attr("src","img/Status_4.png");
-                            $("#S_Status").attr("src","img/Status_4.png");
+                            $("#W_Status").attr("src","../img/Status_4.png");
+                            $("#P_Status").attr("src","../img/Status_4.png");
+                            $("#S_Status").attr("src","../img/Status_4.png");
                             $("#W_Status_text").text("No Process");
                             $("#P_Status_text").text("No Process");
                             $("#S_Status_text").text("No Process");
@@ -267,9 +269,9 @@
                             $("#W_End_btn").hide();
                         }
                         else if(temp['IsStatus'] == 1){ //-----กำลังซัก
-                            $("#W_Status").attr("src","img/Status_1.png");
-                            $("#P_Status").attr("src","img/Status_4.png");
-                            $("#S_Status").attr("src","img/Status_4.png");
+                            $("#W_Status").attr("src","../img/Status_1.png");
+                            $("#P_Status").attr("src","../img/Status_4.png");
+                            $("#S_Status").attr("src","../img/Status_4.png");
                             $("#W_Status_text").text("Wait Process");
                             $("#P_Status_text").text("No Process");
                             $("#S_Status_text").text("No Process");
@@ -315,7 +317,7 @@
 
                                 $("#W_Stop_btn").hide();
                                 $("#W_Start_btn").show();
-                                $("#W_Status").attr("src","img/Status_2.png");
+                                $("#W_Status").attr("src","../img/Status_2.png");
                                 $("#W_Status_text").text("Stop Process");
                                 $("#countdown").hide();
                                 $("#show_stop").show();
@@ -323,20 +325,20 @@
                                 if(temp['WashStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
                                     $("#W_Stop_btn").hide();
                                     $("#W_Start_btn").show();
-                                    $("#W_Status").attr("src","img/Status_4.png");
+                                    $("#W_Status").attr("src","../img/Status_4.png");
                                     $("#W_Status_text").text("No Process");
                                 }else{                              // ถ้าเคยกดเริ่มแล้ว
                                     $("#W_Stop_btn").show();
                                     $("#W_Start_btn").hide();
-                                    $("#W_Status").attr("src","img/Status_1.png");
+                                    $("#W_Status").attr("src","../img/Status_1.png");
                                     $("#W_Status_text").text("Wait Process");
                                 }
                             }
                         }
                         else if(temp['IsStatus'] == 2){ //-----กำลังแพคของ
-                            $("#W_Status").attr("src","img/Status_3.png");
-                            $("#P_Status").attr("src","img/Status_1.png");  
-                            $("#S_Status").attr("src","img/Status_4.png");
+                            $("#W_Status").attr("src","../img/Status_3.png");
+                            $("#P_Status").attr("src","../img/Status_1.png");  
+                            $("#S_Status").attr("src","../img/Status_4.png");
                             $("#W_Status_text").text("Success Process");
                             $("#P_Status_text").text("Wait Process");
                             $("#S_Status_text").text("No Process");
@@ -376,9 +378,9 @@
                             }
                         }
                         else if(temp['IsStatus'] == 3){ //-----กำลังขนส่ง
-                            $("#W_Status").attr("src","img/Status_3.png");
-                            $("#P_Status").attr("src","img/Status_3.png");
-                            $("#S_Status").attr("src","img/Status_1.png");
+                            $("#W_Status").attr("src","../img/Status_3.png");
+                            $("#P_Status").attr("src","../img/Status_3.png");
+                            $("#S_Status").attr("src","../img/Status_1.png");
                             $("#W_Status_text").text("Success Process");
                             $("#P_Status_text").text("Success Process");
                             $("#S_Status_text").text("Wait Process");
@@ -455,9 +457,9 @@
                             $("#W_Sum_btn").remove();
                             $("#P_Sum_btn").remove();
                             $("#S_Sum_btn").remove();
-                            $("#W_Status").attr("src","img/Status_3.png");
-                            $("#P_Status").attr("src","img/Status_3.png");
-                            $("#S_Status").attr("src","img/Status_3.png");
+                            $("#W_Status").attr("src","../img/Status_3.png");
+                            $("#P_Status").attr("src","../img/Status_3.png");
+                            $("#S_Status").attr("src","../img/Status_3.png");
                             $("#W_Status_text").text("Success Process");
                             $("#P_Status_text").text("Success Process");
                             $("#S_Status_text").text("Success Process");
@@ -521,7 +523,7 @@
                         $("#W_Start_btn").hide();
                         $("#W_Stop_btn").show();
                         $("#W_End_btn").show();
-                        $("#W_Status").attr("src","img/Status_1.png");
+                        $("#W_Status").attr("src","../img/Status_1.png");
                         $("#W_Status_text").text("Wait Process");
                         $("#h_status").text("1");
 
@@ -562,7 +564,7 @@
                     else if (temp["form"] == 'stop_wash'){
                         $("#W_Start_btn").show();
                         $("#W_Stop_btn").hide();
-                        $("#W_Status").attr("src","img/Status_2.png");
+                        $("#W_Status").attr("src","../img/Status_2.png");
                         $("#W_Status_text").text("Stop Process");
                         var stop = $("#countdown").text();
                         $("#countdown").hide();
@@ -575,8 +577,8 @@
                         $("#h_status").text(2);
                         $("#W_Sum_btn").remove();
                         $("#P_Sum_btn").show();
-                        $("#W_Status").attr("src","img/Status_3.png");                        
-                        $("#P_Status").attr("src","img/Status_1.png");
+                        $("#W_Status").attr("src","../img/Status_3.png");                        
+                        $("#P_Status").attr("src","../img/Status_1.png");
                         $("#W_Status_text").text("Success Process");
                         $("#P_Status_text").text("Wait Process");
                         $("#cnd").remove();
@@ -630,8 +632,8 @@
                         $("#h_status").text(3);
                         $("#P_Sum_btn").remove();
                         $("#S_Sum_btn").show();
-                        $("#P_Status").attr("src","img/Status_3.png");                        
-                        $("#S_Status").attr("src","img/Status_1.png");
+                        $("#P_Status").attr("src","../img/Status_3.png");                        
+                        $("#S_Status").attr("src","../img/Status_1.png");
                         $("#P_Status_text").text("Success Process");
                         $("#S_Status_text").text("Wait Process");
                         $("#P_Start_text").removeClass("col-lg-6");
@@ -682,7 +684,7 @@
                     else if (temp["form"] == 'end_send'){
                         $("#h_status").text(4);
                         $("#S_Sum_btn").remove();                        
-                        $("#S_Status").attr("src","img/Status_3.png");                        
+                        $("#S_Status").attr("src","../img/Status_3.png");                        
                         $("#S_Status_text").text("Success Process");
                         $("#S_Start_text").removeClass("col-lg-6");
                         $("#S_End_text").removeClass("col-lg-6");
@@ -723,7 +725,7 @@
                         }
                     }
                     else if(temp["form"] == 'logout'){
-                        window.location.href='index.html';
+                        window.location.href='../index.html';
                     }
                 } else if (temp['status'] == "failed") {
                     if(temp["form"] == 'load_process'){
@@ -759,7 +761,7 @@
         </header>
         <div data-role="content" style="font-family:sans-serif;">
 
-            <div align="center" style="margin:1rem 0;"><img src="img/logo.png" width="220" height="45"/></div>
+            <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
             <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
             <div id="h_status" hidden></div>
             <div id="hw_start" hidden></div>
@@ -775,7 +777,7 @@
                         <div class="col-4 align-self-center">
                             <div class="row">
                                 <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center"><img src="img/icon_1.png" height="90px"/></div>
+                                <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_1.png" height="90px"/></div>
                                 <div class="col-md-6 col-sm-none"></div>
                                 <div class="col-md-6 col-sm-12 text-center font-weight-light">ซักผ้า</div>
                             </div>
@@ -827,7 +829,7 @@
                         <div class="col-4 align-self-center">
                             <div class="row">
                                 <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center"><img src="img/icon_2.png" height="90px"/></div>
+                                <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_2.png" height="90px"/></div>
                                 <div class="col-md-6 col-sm-none"></div>
                                 <div class="col-md-6 col-sm-12 text-center font-weight-light">บรรจุผ้า</div>
                             </div>
@@ -873,7 +875,7 @@
                         <div class="col-4 align-self-center">
                             <div class="row">
                                 <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center"><img src="img/icon_3.png" height="90px"/></div>
+                                <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_3.png" height="90px"/></div>
                                 <div class="col-md-6 col-sm-none"></div>
                                 <div class="col-md-6 col-sm-12 text-center font-weight-light">ขนส่ง</div>
                             </div>
@@ -927,8 +929,8 @@
         </div>
     </section>
     
-	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-    <script src="dist/js/sweetalert2.min.js"></script>
-    <script src="bootstrap/js/bootstrap.js"></script>
+	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="../dist/js/sweetalert2.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
 </body>
 </html>

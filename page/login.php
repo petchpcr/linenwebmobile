@@ -7,14 +7,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
-	<link rel="shortcut icon" href="favicon.ico">
-	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<link rel="shortcut icon" href="../favicon.ico">
+	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<script src="js/jquery.js"></script>
-	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-    <script src="dist/js/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="dist/css/sweetalert2.min.css">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="../dist/js/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
 	<script>
         function chklogin() {
             var user = $("#username").val();
@@ -40,7 +40,7 @@
         function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = 'process/login.php';
+			var URL = '../process/login.php';
 			$.ajax({
 			url: URL,
 			dataType: 'text',
@@ -77,9 +77,9 @@
 						confirmButtonText: 'Ok',
 						showConfirmButton: false
 					}).then(function () {
-						window.location.href = 'main.php';
+						window.location.href = 'hospital.php';
 					}, function (dismiss) {
-						window.location.href = 'main.php';
+						window.location.href = 'hospital.php';
 						if (dismiss === 'cancel') {
 		
 						}
@@ -127,7 +127,7 @@
 		}
 		.bg_login {
 			/* The image used */
-			background-image: url("img/background01.png") !important;
+			background-image: url("../img/background01.png") !important;
 
 			/* Full height */
 			height: 100% !important; 
@@ -148,7 +148,7 @@
 				<table class="center" width="100%" border="0" cellspacing="5" cellpadding="5">
 				<tr>
 					<td>
-						<div class="mb-2" align="center"><img src="img/logo.png" width="240" height="60" /></div>
+						<div class="mb-2" align="center"><img src="../img/logo.png" width="240" height="60" /></div>
 					</td>
 				</tr>
 				<tr>

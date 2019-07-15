@@ -5,6 +5,7 @@
     function load_doc($conn, $DATA){
         $count = 0;
         $siteCode = $DATA["siteCode"];
+        $Menu = $DATA["Menu"];
         $boolean = false;
         $Sql = "SELECT
                     dirty.DocNo,
@@ -18,7 +19,8 @@
                     dirty
                 INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode'
+                WHERE site.HptCode = '$siteCode' 
+                AND site.PmID = '' 
                 ORDER BY dirty.DocNo DESC";
         $return['sql'] = $Sql;
 
@@ -74,17 +76,17 @@
     function logout($conn, $DATA){
 
         $logout = $DATA["Confirm"];
-
-        unset($_SESSION['Userid']);
-        unset($_SESSION['Username']);
-        unset($_SESSION['FName']);
-        unset($_SESSION['PmID']);
-        unset($_SESSION['TimeOut']);
-        unset($_SESSION['HptCode']);
-        unset($_SESSION['FacCode']);
-        session_destroy();
         
         if ($logout == 1) {
+            unset($_SESSION['Userid']);
+            unset($_SESSION['Username']);
+            unset($_SESSION['FName']);
+            unset($_SESSION['PmID']);
+            unset($_SESSION['TimeOut']);
+            unset($_SESSION['HptCode']);
+            unset($_SESSION['FacCode']);
+            session_destroy();
+
             $return['status'] = "success";
             $return['form'] = "logout";
             echo json_encode($return);
