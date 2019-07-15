@@ -646,183 +646,181 @@
 </head>
 
 <body>
-    <section data-role="page">
 
-        <header data-role="header">
-            <div class="head-bar d-flex justify-content-between">
-                <div id="user" class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
-                <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+    <header data-role="header">
+        <div class="head-bar d-flex justify-content-between">
+            <div id="user" class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
+            <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+        </div>
+    </header>
+    <div class="px-3" style="font-family:sans-serif;">
+
+        <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
+        <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
+        <div id="h_status" hidden></div>
+        <div id="hw_start" hidden></div>
+        <div id="hw_stop" hidden></div>
+        <div id="hw_end" hidden></div>
+        <div id="hp_start" hidden></div>
+        <div id="hp_end" hidden></div>
+        <div id="hs_start" hidden></div>
+
+        <div id="process">
+            <div class="card mt-3" style="padding:1rem;">
+                <div class="row">
+                    <div class="col-4 align-self-center">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_1.png" height="90px"/></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div class="col-md-6 col-sm-12 text-center font-weight-light">ซักผ้า</div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 text-left align-self-center text-center">
+                        <div class="row">
+                            <div id="W_Start_text" class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="head_text">เวลาที่เริ่ม</div>
+                                <label id="W_Start" class='font-weight-light'></label>
+                            </div>
+                            <div id="cnd" class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="head_text">นับถอยหลัง</div>
+                                <label id="countdown" class='font-weight-light'>00:00:00</label>
+                                <label id="show_stop" class='font-weight-light'></label>
+                            </div>
+                            <div id="W_End_text" class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="head_text">เวลาสิ้นสุด</div>
+                                <label id="W_End" class='font-weight-light'></label>
+                            </div>
+                            <div id="W_Use_text" class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="head_text">ใช้เวลา</div>
+                                <label id="W_Use" class='font-weight-light'></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 align-self-center">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 text-center"><img id="W_Status" height="40px"/></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div id="W_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="W_Sum_btn" class="row mt-4">
+                    <div class="col-md-2 col-sm-none"></div>
+                    <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มซัก</button></div>
+                    <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">ทำต่อ</button></div>
+                    <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block">หยุด</button></div>
+                    <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
+                    <div class="col-md-2 col-sm-none"></div>
+                </div>
             </div>
-        </header>
-        <div class="px-3" style="font-family:sans-serif;">
 
-            <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-            <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
-            <div id="h_status" hidden></div>
-            <div id="hw_start" hidden></div>
-            <div id="hw_stop" hidden></div>
-            <div id="hw_end" hidden></div>
-            <div id="hp_start" hidden></div>
-            <div id="hp_end" hidden></div>
-            <div id="hs_start" hidden></div>
-
-            <div id="process">
-                <div class="card mt-3" style="padding:1rem;">
-                    <div class="row">
-                        <div class="col-4 align-self-center">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_1.png" height="90px"/></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center font-weight-light">ซักผ้า</div>
-                            </div>
+            <div class="card mt-4" style="padding:1rem;">
+                <div class="row">
+                    <div class="col-4 align-self-center">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_2.png" height="90px"/></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div class="col-md-6 col-sm-12 text-center font-weight-light">บรรจุผ้า</div>
                         </div>
+                    </div>
 
-                        <div class="col-4 text-left align-self-center text-center">
-                            <div class="row">
-                                <div id="W_Start_text" class="col-lg-4 col-md-12 col-sm-12">
-                                    <div class="head_text">เวลาที่เริ่ม</div>
-                                    <label id="W_Start" class='font-weight-light'></label>
-                                </div>
-                                <div id="cnd" class="col-lg-4 col-md-12 col-sm-12">
-                                    <div class="head_text">นับถอยหลัง</div>
-                                    <label id="countdown" class='font-weight-light'>00:00:00</label>
-                                    <label id="show_stop" class='font-weight-light'></label>
-                                </div>
-                                <div id="W_End_text" class="col-lg-4 col-md-12 col-sm-12">
-                                    <div class="head_text">เวลาสิ้นสุด</div>
-                                    <label id="W_End" class='font-weight-light'></label>
-                                </div>
-                                <div id="W_Use_text" class="col-lg-4 col-md-12 col-sm-12">
-                                    <div class="head_text">ใช้เวลา</div>
-                                    <label id="W_Use" class='font-weight-light'></label>
-                                </div>
+                    <div class="col-4 text-left align-self-center text-center">
+                        <div class="row">
+                            <div id="P_Start_text" class="col-lg-6 col-md-12 col-sm-12">
+                                <div class="head_text">เวลาที่เริ่ม</div>
+                                <label id="P_Start" class='font-weight-light'></label>
                             </div>
-                        </div>
-
-                        <div class="col-4 align-self-center">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-12 text-center"><img id="W_Status" height="40px"/></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div id="W_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
-                                <div class="col-md-6 col-sm-none"></div>
+                            <div id="P_End_text" class="col-lg-6 col-md-12 col-sm-12">
+                                <div class="head_text">เวลาสิ้นสุด</div>
+                                <label id="P_End" class='font-weight-light'></label>                                    
+                            </div>
+                            <div id="P_Use_text" class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="head_text">ใช้เวลา</div>
+                                <label id="P_Use" class='font-weight-light'></label>
                             </div>
                         </div>
                     </div>
-                    <div id="W_Sum_btn" class="row mt-4">
-                        <div class="col-md-2 col-sm-none"></div>
-                        <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มซัก</button></div>
-                        <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">ทำต่อ</button></div>
-                        <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block">หยุด</button></div>
-                        <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
-                        <div class="col-md-2 col-sm-none"></div>
+
+                    <div class="col-4 align-self-center">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 text-center"><img id="P_Status" height="40px"/></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div id="P_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                        </div>
                     </div>
                 </div>
+                <div id="P_Sum_btn" class="row mt-4">
+                    <div class="col-md-2 col-sm-none"></div>
+                    <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มบรรจุ</button></div>
+                    <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
+                    <div class="col-md-2 col-sm-none"></div>
 
-                <div class="card mt-4" style="padding:1rem;">
-                    <div class="row">
-                        <div class="col-4 align-self-center">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_2.png" height="90px"/></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center font-weight-light">บรรจุผ้า</div>
-                            </div>
+                </div>
+            </div>
+
+            <div class="card mt-4" style="padding:1rem;">
+                <div class="row">
+                    <div class="col-4 align-self-center">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_3.png" height="90px"/></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div class="col-md-6 col-sm-12 text-center font-weight-light">ขนส่ง</div>
                         </div>
+                    </div>
 
-                        <div class="col-4 text-left align-self-center text-center">
-                            <div class="row">
-                                <div id="P_Start_text" class="col-lg-6 col-md-12 col-sm-12">
-                                    <div class="head_text">เวลาที่เริ่ม</div>
-                                    <label id="P_Start" class='font-weight-light'></label>
-                                </div>
-                                <div id="P_End_text" class="col-lg-6 col-md-12 col-sm-12">
-                                    <div class="head_text">เวลาสิ้นสุด</div>
-                                    <label id="P_End" class='font-weight-light'></label>                                    
-                                </div>
-                                <div id="P_Use_text" class="col-lg-4 col-md-12 col-sm-12">
-                                    <div class="head_text">ใช้เวลา</div>
-                                    <label id="P_Use" class='font-weight-light'></label>
-                                </div>
+                    <div class="col-4 text-left align-self-center text-center">
+                        <div class="row">
+                            <div id="S_Start_text" class="col-lg-6 col-md-12 col-sm-12">
+                                <div class="head_text">เวลาที่เริ่ม</div>
+                                <label id="S_Start" class='font-weight-light'></label>
                             </div>
-                        </div>
-
-                        <div class="col-4 align-self-center">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-12 text-center"><img id="P_Status" height="40px"/></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div id="P_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
-                                <div class="col-md-6 col-sm-none"></div>
+                            <div id="S_End_text" class="col-lg-6 col-md-12 col-sm-12">
+                                <div class="head_text">เวลาสิ้นสุด</div>
+                                <label id="S_End" class='font-weight-light'></label> 
+                            </div>
+                            <div id="S_Use_text" class="col-lg-4 col-md-12 col-sm-12">
+                                <div id="S_Head_use" class="head_text"></div>
+                                <label id="S_Use" class='font-weight-light'></label>
                             </div>
                         </div>
                     </div>
-                    <div id="P_Sum_btn" class="row mt-4">
-                        <div class="col-md-2 col-sm-none"></div>
-                        <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มบรรจุ</button></div>
-                        <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
-                        <div class="col-md-2 col-sm-none"></div>
 
+                    <div class="col-4 align-self-center">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 text-center"><img id="S_Status" height="40px"/></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                            <div id="S_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
+                            <div class="col-md-6 col-sm-none"></div>
+                        </div>
                     </div>
                 </div>
+                <div id="S_Sum_btn" class="row mt-4">
+                    <div class="col-md-2 col-sm-none"></div>
+                    <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มขนส่ง</button></div>
+                    <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
+                    <div class="col-md-2 col-sm-none"></div>
 
-                <div class="card mt-4" style="padding:1rem;">
-                    <div class="row">
-                        <div class="col-4 align-self-center">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_3.png" height="90px"/></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div class="col-md-6 col-sm-12 text-center font-weight-light">ขนส่ง</div>
-                            </div>
-                        </div>
-
-                        <div class="col-4 text-left align-self-center text-center">
-                            <div class="row">
-                                <div id="S_Start_text" class="col-lg-6 col-md-12 col-sm-12">
-                                    <div class="head_text">เวลาที่เริ่ม</div>
-                                    <label id="S_Start" class='font-weight-light'></label>
-                                </div>
-                                <div id="S_End_text" class="col-lg-6 col-md-12 col-sm-12">
-                                    <div class="head_text">เวลาสิ้นสุด</div>
-                                    <label id="S_End" class='font-weight-light'></label> 
-                                </div>
-                                <div id="S_Use_text" class="col-lg-4 col-md-12 col-sm-12">
-                                    <div id="S_Head_use" class="head_text"></div>
-                                    <label id="S_Use" class='font-weight-light'></label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-4 align-self-center">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-12 text-center"><img id="S_Status" height="40px"/></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                                <div id="S_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
-                                <div class="col-md-6 col-sm-none"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="S_Sum_btn" class="row mt-4">
-                        <div class="col-md-2 col-sm-none"></div>
-                        <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มขนส่ง</button></div>
-                        <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
-                        <div class="col-md-2 col-sm-none"></div>
-
-                    </div>
                 </div>
+            </div>
 
-                <div id="sign_zone" class="mx-3" hidden>
-                    <div class="text-center">
-                        <div class="row justify-content-center">
-                            <div class="card my-2 p-2">
-                                <div id="show_sign"></div>
-                            </div>
+            <div id="sign_zone" class="mx-3" hidden>
+                <div class="text-center">
+                    <div class="row justify-content-center">
+                        <div class="card my-2 p-2">
+                            <div id="show_sign"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
     
 </body>
 </html>
