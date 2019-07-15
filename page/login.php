@@ -77,9 +77,9 @@
 						confirmButtonText: 'Ok',
 						showConfirmButton: false
 					}).then(function () {
-						window.location.href = 'hospital.php';
+						window.location.href = 'menu.php';
 					}, function (dismiss) {
-						window.location.href = 'hospital.php';
+						window.location.href = 'menu.php';
 						if (dismiss === 'cancel') {
 		
 						}

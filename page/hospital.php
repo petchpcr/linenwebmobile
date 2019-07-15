@@ -13,14 +13,18 @@
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Login</title>
+    <title>Login</title>
+    
+	<script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/gijgo.min.js" type="text/javascript"></script>
+    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+
 	<link rel="shortcut icon" href="../favicon.ico">
-	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../fontawesome/css/all.min.css">
 	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<script src="../js/jquery.js"></script>
-	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
+
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
@@ -39,10 +43,6 @@
                 'STATUS': 'load_site'
             };
             senddata(JSON.stringify(data));
-        }
-
-        function select_date(SiteCode){
-            
         }
 
         function show_doc(SiteCode){
@@ -92,7 +92,7 @@
                                 picture = "logo.png";
                             }
 
-                            var Str = "<button onclick='select_date(\""+temp[i]['HptCode']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
+                            var Str = "<button onclick='show_doc(\""+temp[i]['HptCode']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
                                 Str += "<div class='row'><div class='col-6'><div class='row d-flex justify-content-end'><div style='width:200px !important;'>";
                                 Str += "<img class='hpt_img' src='../img/"+picture+"'/></div></div></div><div class='col-6 d-flex justify-content-start align-items-center' style='padding-left:0;color:black;'>";
                                 Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name'>"+temp[i]['HptName']+"</div></div></div></button>";
@@ -102,7 +102,21 @@
                     } 
                     else if(temp["form"] == 'show_doc'){
                         var Menu = <?php echo $Menu;?>;
-                        window.location.href='document.php?siteCode='+temp['siteCode']+'&Menu='+Menu;
+                        if(Menu == 1 || Menu == 2){
+                            window.location.href='dirty.php?siteCode='+temp['siteCode']+'&Menu='+Menu;
+                        }
+                        else if (Menu == 3) {
+                            window.location.href='clean.php?siteCode='+temp['siteCode']+'&Menu='+Menu;
+                        }
+                        else if (Menu == 4) {
+                            window.location.href='qc.php?siteCode='+temp['siteCode']+'&Menu='+Menu;
+                        }
+                        else if (Menu == 5) {
+                            window.location.href='report.php?siteCode='+temp['siteCode']+'&Menu='+Menu;
+                        }
+                        else if (Menu == 6) {
+                            window.location.href='tools.php?siteCode='+temp['siteCode']+'&Menu='+Menu;
+                        }
                     }
                     else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
@@ -129,20 +143,17 @@
 </head>
 
 <body>
-    <section data-role="page">
-
-        <header data-role="header">
-            <title>Select Site</title>
-            <button onclick='back()' class='footer-button-left ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-left ui-btn-inline ui-corner-all ui-mini'>กลับ</button>
-            <h1 class="ui-title" role="heading" aria-level="1"><?php echo $UserName?> : <?php echo $UserFName?></h1>
-            <a onclick="logout(1)" class="ui-btn-right ui-btn ui-btn-b ui-icon-power ui-btn-icon-right ui-btn-inline ui-corner-all ui-mini">ออก</a>
-        </header>
-        <div data-role="content" style="font-family:sans-serif;">
-            <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-            <div class="text-center my-4"><h4 class="text-truncate">All Hospital</h4></div>
-            <div id="hospital"></div>
+    <header data-role="header">
+        <div class="head-bar d-flex justify-content-between">
+            <button  onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button >
+            <div class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
+            <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
         </div>
-
-	</section>			
+    </header>
+    <div class="px-3" style="font-family:sans-serif;">
+        <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
+        <div class="text-center my-4"><h4 class="text-truncate">All Hospital</h4></div>
+        <div id="hospital"></div>
+    </div>
 </body>
 </html>

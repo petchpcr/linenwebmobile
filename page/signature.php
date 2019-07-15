@@ -6,13 +6,14 @@
     if($Userid==""){
       header("location:../index.html");
     }
+    $Menu = $_GET['Menu'];
     $DocNo = $_GET['DocNo'];
 ?>
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Signature Pad demo</title>
+  <title>Signature</title>
   <meta name="description" content="Signature Pad - HTML5 canvas based smooth signature drawing using variable width spline interpolation.">
 
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
@@ -20,14 +21,21 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+  <script src="../js/jquery-3.3.1.min.js"></script>
+
   <link rel="shortcut icon" href="../favicon.ico">
-	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
+  <link rel="stylesheet" href="../fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../css/themes/default/nhealth.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+  <script src="../js/gijgo.min.js" type="text/javascript"></script>
+  <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+
+  <script src="../dist/js/sweetalert2.min.js"></script>
   <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
+
   <link rel="stylesheet" href="../css/signature-pad.css">
-  <script src="../js/jquery.js"></script>
 
   <!-- <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -675,7 +683,8 @@
               SigCode:SigCode
           },
           success: function (data) {
-              window.location.href='process.php?DocNo='+DocNo;
+              var Menu = "<?php echo $Menu?>";
+              window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
           }
       });
     }
@@ -749,7 +758,5 @@
     });
 
   </script>
-  <script src="../dist/js/sweetalert2.min.js"></script>
-  <script src="../bootstrap/js/bootstrap.js"></script>
 </body>
 </html>

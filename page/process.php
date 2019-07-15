@@ -15,18 +15,24 @@
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Login</title>
-	<link rel="shortcut icon" href="../favicon.ico">
-	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+    <title>Login</title>
+
+    <script src="../js/jquery-3.3.1.min.js"></script>
+
+    <link rel="shortcut icon" href="../favicon.ico">
+	<link rel="stylesheet" href="../fontawesome/css/all.min.css">
 	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+    <script src="../js/gijgo.min.js" type="text/javascript"></script>
+    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
-    <script src="../js/jquery.js"></script>
     <script>
         
         $(document).ready(function (e) {
-            setTimeout( 'countdown()', 1000 );
             load_process();
         });
 
@@ -46,7 +52,7 @@
                     if(cdnWash != "" || cdnWash != null){ // มีเวลาสิ้นสุด(เคยกดเริ่มไปแล้ว)
                         if(cur_date < cdnWash){ //ถ้ายังซักไม่เสร็จ
                             var differ = cdnWash-cur_date;
-                            
+                            // alert("Differ : "+differ);
                             var ms = differ % 1000;
                             differ = (differ - ms) / 1000;
                             var secs = differ % 60;
@@ -206,7 +212,7 @@
 
         function back(site){
             var Menu = <?php echo $Menu;?>;
-            window.location.href='document.php?Menu='+Menu+'&siteCode='+site;
+            window.location.href='dirty.php?Menu='+Menu+'&siteCode='+site;
         }
 
         function logout(num){
@@ -238,9 +244,9 @@
 
                 if (temp["status"] == 'success') {
                     if (temp["form"] == 'load_process') {
-                            
-                        var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='footer-button-left ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-left ui-btn-inline ui-corner-all ui-mini'>กลับ</button>";
-                        $("#title").after(Back);
+                        $(".head-btn.btn-light").remove();
+                        var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>กลับ</button>";
+                        $("#user").before(Back);
                         $("#h_status").text(temp['IsStatus']);
                         if(temp['IsStatus'] == 0 || temp['IsStatus'] == null){ //-----ยังไม่ได้ทำอะไร
                             $("#W_Status").attr("src","../img/Status_4.png");
@@ -297,6 +303,7 @@
 
                             if(temp['IsStop'] == 1){ // ถ้าหยุด
                                 $("#hw_stop").text(temp['WashStopTime']);
+                                $("#hw_stop").show();
                                 var W_Stop = new Date(temp['WashStopTime']);
                                 var differ = W_End-W_Stop;
 
@@ -322,6 +329,10 @@
                                 $("#countdown").hide();
                                 $("#show_stop").show();
                             }else{
+                                $("#hw_stop").text(null);
+                                $("#hw_stop").hide();
+                                $("#countdown").show();
+                                $("#show_stop").hide();
                                 if(temp['WashStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
                                     $("#W_Stop_btn").hide();
                                     $("#W_Start_btn").show();
@@ -330,10 +341,12 @@
                                 }else{                              // ถ้าเคยกดเริ่มแล้ว
                                     $("#W_Stop_btn").show();
                                     $("#W_Start_btn").hide();
+                                    $("#W_End_btn").show();
                                     $("#W_Status").attr("src","../img/Status_1.png");
                                     $("#W_Status_text").text("Wait Process");
                                 }
                             }
+                            setTimeout( 'countdown()', 1000 );
                         }
                         else if(temp['IsStatus'] == 2){ //-----กำลังแพคของ
                             $("#W_Status").attr("src","../img/Status_3.png");
@@ -388,6 +401,7 @@
                             $("#P_End_text").removeClass("col-lg-6");
                             $("#P_Start_text").addClass("col-lg-4");
                             $("#P_End_text").addClass("col-lg-4");
+                            $("#P_Use_text").show();
                             $("#S_Use_text").hide();
                             $("#W_Sum_btn").remove();
                             $("#P_Sum_btn").remove();
@@ -445,7 +459,8 @@
                                     closeOnConfirm: true,
                                     closeOnCancel: true,
                                 }).then(result => {
-                                    window.location.href='signature.php?DocNo='+temp['DocNo'];
+                                    var Menu = "<?php echo $Menu?>";
+                                    window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo'];
                                 })
                             }
                             else{
@@ -518,15 +533,6 @@
                         load_process();
                     }
                     else if (temp["form"] == 'start_wash'){
-                        $("#h_status").text(1);
-                        $("#W_First_btn").remove();
-                        $("#W_Start_btn").hide();
-                        $("#W_Stop_btn").show();
-                        $("#W_End_btn").show();
-                        $("#W_Status").attr("src","../img/Status_1.png");
-                        $("#W_Status_text").text("Wait Process");
-                        $("#h_status").text("1");
-
                         if(temp['WashStopTime'] != null){ // ถ้ากดเริ่ม หลังจากหยุด
                             var stopTime = new Date(temp['WashStopTime']);
                             var endTime = new Date(temp['WashEndTime']);
@@ -534,66 +540,23 @@
                             var current = new Date();
                             current.setMilliseconds(current.getMilliseconds() + differ);
                             set_end_wash(current);
-                            $("#hw_start").text(temp['WashStartTime']);
-                            $("#hw_stop").text(temp['WashStopTime']);
-                            $("#hw_end").text(temp['WashEndTime']);
                         }
                         else{
-                            var W_Start = new Date(temp['WashStartTime']);
-                            $("#hw_start").text(temp['WashStartTime']);
-                            $("#W_Start").text(W_Start.toLocaleTimeString());
-                            
                             var millitime = temp['processt']*60000;
                             var W_End = new Date(temp['WashStartTime']);
                             W_End.setMilliseconds(W_End.getMilliseconds() + millitime);
                             set_end_wash(W_End);
                         }
-                        $("#countdown").text("00:00:00");
-                        $("#countdown").show();
-                        $("#show_stop").hide();
-                        setTimeout( 'countdown()', 1000 );
-
                     }
                     else if (temp["form"] == 'set_end_wash'){
-                        var endtime = new Date(temp['endTime']);
-                        $("#hw_end").text(temp['endTime']);
-                        $("#W_End").text(endtime.toLocaleTimeString());
-                        $("#countdown").text("00:00:00");
-
+                        load_process();
                     }
                     else if (temp["form"] == 'stop_wash'){
-                        $("#W_Start_btn").show();
-                        $("#W_Stop_btn").hide();
-                        $("#W_Status").attr("src","../img/Status_2.png");
-                        $("#W_Status_text").text("Stop Process");
-                        var stop = $("#countdown").text();
-                        $("#countdown").hide();
-                        $("#show_stop").text(stop);
-                        $("#show_stop").show();
-                        $("#W_End").text("--:--:--");
-                        $("#hw_stop").text(temp['stopTime']);
+                        load_process();
                     }
                     else if (temp["form"] == 'do_end_wash' || temp["form"] == 'auto_end_wash'){
-                        $("#h_status").text(2);
-                        $("#W_Sum_btn").remove();
-                        $("#P_Sum_btn").show();
-                        $("#W_Status").attr("src","../img/Status_3.png");                        
-                        $("#P_Status").attr("src","../img/Status_1.png");
-                        $("#W_Status_text").text("Success Process");
-                        $("#P_Status_text").text("Wait Process");
-                        $("#cnd").remove();
-                        $("#W_Use_text").show();
-                        
-                        var endTime = new Date(temp['endTime']);
-
-                        if(temp["form"] == 'do_end_wash'){
-                            $("#W_End").text(endTime.toLocaleTimeString());
-                        }
-
-                        $("#hw_end").text(temp['endTime']);
-                        
                         var start = new Date($("#hw_start").text());
-                        var end = new Date($("#hw_end").text());
+                        var end = new Date(temp['endTime']);
                         var differ = end-start;
 
                         var ms = differ % 1000;
@@ -606,46 +569,16 @@
                         var WashUseTime = (hrs * 60) + mins;
 
                         use_time_wash(WashUseTime);
-                        $("#P_End_btn").hide();
-                        $("#P_Start").text("--:--:--");
-                        $("#P_End").text("--:--:--");
                     }
                     else if (temp["form"] == 'use_time_wash'){
-                        var WashUseTime = temp['WashUseTime'];
-                        var TextUseTime = "ไม่เกิน 1";
-
-                        if(WashUseTime >= 1){
-                            TextUseTime = WashUseTime;
-                        }
-
-                        $("#W_Use").text(TextUseTime+" นาที");
+                        load_process();
                     }
                     else if (temp["form"] == 'start_pack'){
-                        $("#P_Start_btn").remove();
-                        $("#P_End_btn").show();
-                        
-                        var P_Start = new Date(temp['PackStartTime']);
-                        $("#hp_start").text(temp['PackStartTime']);
-                        $("#P_Start").text(P_Start.toLocaleTimeString());
+                        load_process();
                     }
                     else if (temp["form"] == 'end_pack'){
-                        $("#h_status").text(3);
-                        $("#P_Sum_btn").remove();
-                        $("#S_Sum_btn").show();
-                        $("#P_Status").attr("src","../img/Status_3.png");                        
-                        $("#S_Status").attr("src","../img/Status_1.png");
-                        $("#P_Status_text").text("Success Process");
-                        $("#S_Status_text").text("Wait Process");
-                        $("#P_Start_text").removeClass("col-lg-6");
-                        $("#P_End_text").removeClass("col-lg-6");
-                        $("#P_Start_text").addClass("col-lg-4");
-                        $("#P_End_text").addClass("col-lg-4");
-                        $("#P_Use_text").show();
-
                         var P_Start = new Date($("#hp_start").text());
                         var P_End = new Date(temp['PackEndTime']);
-                        $("#hp_end").text(temp['PackEndTime']);
-                        $("#P_End").text(P_End.toLocaleTimeString());
                         
                         var differ = P_End-P_Start;
 
@@ -659,42 +592,16 @@
                         var PackUseTime = (hrs * 60) + mins;
 
                         use_time_pack(PackUseTime);
-                        $("#S_End_btn").hide();
-                        $("#S_Start").text("--:--:--");
-                        $("#S_End").text("--:--:--");
                     }
                     else if (temp["form"] == 'use_time_pack'){
-                        var PackUseTime = temp['PackUseTime'];
-                        var TextUseTime = "ไม่เกิน 1";
-
-                        if(PackUseTime >= 1){
-                            TextUseTime = PackUseTime;
-                        }
-
-                        $("#P_Use").text(TextUseTime+" นาที");
+                        load_process();
                     }
-                    else if (temp["form"] == 'start_send'){
-                        $("#S_Start_btn").remove();
-                        $("#S_End_btn").show();
-
-                        var S_Start = new Date(temp['SendStartTime']);
-                        $("#hs_start").text(temp['SendStartTime']);
-                        $("#S_Start").text(S_Start.toLocaleTimeString());                       
+                    else if (temp["form"] == 'start_send'){                    
+                        load_process();
                     }
                     else if (temp["form"] == 'end_send'){
-                        $("#h_status").text(4);
-                        $("#S_Sum_btn").remove();                        
-                        $("#S_Status").attr("src","../img/Status_3.png");                        
-                        $("#S_Status_text").text("Success Process");
-                        $("#S_Start_text").removeClass("col-lg-6");
-                        $("#S_End_text").removeClass("col-lg-6");
-                        $("#S_Start_text").addClass("col-lg-4");
-                        $("#S_End_text").addClass("col-lg-4");
-                        $("#S_Use_text").show();
-
                         var S_Start = new Date(temp['SendStartTime']);
                         var S_End = new Date(temp['SendEndTime']);
-                        $("#S_End").text(S_End.toLocaleTimeString());
 
                         var differ = S_End-S_Start;
                             
@@ -707,22 +614,9 @@
 
                         var OverTime = (hrs * 60) + mins;
                         cal_overtime(OverTime);
-                        load_process();
                     }
                     else if(temp["form"] == 'cal_overtime'){
-                        if(temp['SendOverTime'] >= 1){
-                            $("#S_Head_use").text("เกินเวลา");
-                            $("#S_Head_use").css("color","red");
-                            $("#S_Use").css("color","red");
-                            $("#S_Use").text(temp['SendOverTime']+" นาที");
-                        } else {
-                            $("#S_Head_use").text("ใช้เวลา");
-                            var useText = "ไม่เกิน 1";
-                            if(temp['SendUseTime'] >= 1){
-                                useText = temp['SendUseTime'];
-                            }
-                            $("#S_Use").text(useText+" นาที");
-                        }
+                        load_process();
                     }
                     else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
@@ -755,11 +649,12 @@
     <section data-role="page">
 
         <header data-role="header">
-            <title id="title">Process</title>
-            <h1 class="ui-title" role="heading" aria-level="1"><?php echo $UserName;?> : <?php echo $UserFName;?></h1>
-            <a onclick="logout(1)" class="ui-btn-right ui-btn ui-btn-b ui-icon-power ui-btn-icon-right ui-btn-inline ui-corner-all ui-mini">ออก</a>
+            <div class="head-bar d-flex justify-content-between">
+                <div id="user" class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
+                <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+            </div>
         </header>
-        <div data-role="content" style="font-family:sans-serif;">
+        <div class="px-3" style="font-family:sans-serif;">
 
             <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
             <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
@@ -816,10 +711,10 @@
                     </div>
                     <div id="W_Sum_btn" class="row mt-4">
                         <div class="col-md-2 col-sm-none"></div>
-                        <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary">เริ่มซัก</button></div>
-                        <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary">ทำต่อ</button></div>
-                        <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger">หยุด</button></div>
-                        <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success">เสร็จสิ้น</button></div>
+                        <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มซัก</button></div>
+                        <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">ทำต่อ</button></div>
+                        <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block">หยุด</button></div>
+                        <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
                         <div class="col-md-2 col-sm-none"></div>
                     </div>
                 </div>
@@ -863,8 +758,8 @@
                     </div>
                     <div id="P_Sum_btn" class="row mt-4">
                         <div class="col-md-2 col-sm-none"></div>
-                        <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary">เริ่มบรรจุ</button></div>
-                        <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success">เสร็จสิ้น</button></div>
+                        <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มบรรจุ</button></div>
+                        <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
                         <div class="col-md-2 col-sm-none"></div>
 
                     </div>
@@ -909,28 +804,25 @@
                     </div>
                     <div id="S_Sum_btn" class="row mt-4">
                         <div class="col-md-2 col-sm-none"></div>
-                        <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary">เริ่มขนส่ง</button></div>
-                        <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success">เสร็จสิ้น</button></div>
+                        <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มขนส่ง</button></div>
+                        <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
                         <div class="col-md-2 col-sm-none"></div>
 
                     </div>
                 </div>
-            </div>
 
-        </div>
-        <div id="sign_zone" hidden>
-            <div class="text-center">
-                <div class="row mx-3 justify-content-center">
-                    <div class="card my-2 p-2">
-                        <div id="show_sign"></div>
+                <div id="sign_zone" class="mx-3" hidden>
+                    <div class="text-center">
+                        <div class="row justify-content-center">
+                            <div class="card my-2 p-2">
+                                <div id="show_sign"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     
-	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
-    <script src="../dist/js/sweetalert2.min.js"></script>
-    <script src="../bootstrap/js/bootstrap.js"></script>
 </body>
 </html>

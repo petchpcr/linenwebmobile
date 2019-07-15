@@ -13,14 +13,19 @@
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Login</title>
+    <title>Login</title>
+    
+	<script src="../js/jquery-3.3.1.min.js"></script>
+    
 	<link rel="shortcut icon" href="../favicon.ico">
-	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../fontawesome/css/all.min.css">
 	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<script src="../js/jquery.js"></script>
-	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="../js/gijgo.min.js" type="text/javascript"></script>
+    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
@@ -84,9 +89,11 @@
     <section data-role="page">
 
         <header data-role="header">
-            <title>Select Site</title>
-            <h1 class="ui-title" role="heading" aria-level="1"><?php echo $UserName?> : <?php echo $UserFName?></h1>
-            <a onclick="logout(1)" class="ui-btn-right ui-btn ui-btn-b ui-icon-power ui-btn-icon-right ui-btn-inline ui-corner-all ui-mini">ออก</a>
+            <div class="head-bar d-flex justify-content-between">
+                <div style="margin-right:75px"></div >
+                <div class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
+                <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+            </div>
         </header>
         <div data-role="content" style="font-family:sans-serif;">
             <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
@@ -96,38 +103,38 @@
 
         <div class="row px-4">
             <div class="my-col-menu">
-                <button onclick="menu_click(1)" type="button" class="btn btn-mylight">
-                    <img src="../img/laundry.png">
-                    <div class="text-truncate">โรงงานซัก</div>
-                </button>
-            </div>
-            <div class="my-col-menu">
-                <button onclick="menu_click(2)" type="button" class="btn btn-mylight">
-                    <img src="../img/laundry.png">
-                    <div class="text-truncate">ผ้าสะอาด</div>
-                </button>
-            </div>
-            <div class="my-col-menu">
-                <button onclick="menu_click(3)" type="button" class="btn btn-mylight">
+                <button onclick="menu_click(1)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/tshirt.png">
                     <div class="text-truncate">ผ้าสกปรก</div>
                 </button>
             </div>
             <div class="my-col-menu">
-                <button onclick="menu_click(4)" type="button" class="btn btn-mylight">
+                <button onclick="menu_click(2)" type="button" class="btn btn-mylight btn-block">
+                    <img src="../img/Factory.png">
+                    <div class="text-truncate">โรงงานซัก</div>
+                </button>
+            </div>
+            <div class="my-col-menu">
+                <button onclick="menu_click(3)" type="button" class="btn btn-mylight btn-block">
+                    <img src="../img/laundry.png">
+                    <div class="text-truncate">ผ้าสะอาด</div>
+                </button>
+            </div>
+            <div class="my-col-menu">
+                <button onclick="menu_click(4)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/QC.png">
                     <div class="text-truncate">QC</div>
                 </button>
             </div>
             <div class="my-col-menu">
-                <button onclick="menu_click(5)" type="button" class="btn btn-mylight">
+                <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Report.png">
                     <div class="text-truncate">รายงาน</div>
                 </button>
             </div>
             <div class="my-col-menu">
-                <button onclick="menu_click(6)" type="button" class="btn btn-mylight">
-                    <img src="../img/Report.png">
+                <button onclick="menu_click(6)" type="button" class="btn btn-mylight btn-block">
+                    <img src="../img/Tools.png">
                     <div class="text-truncate">ตั้งค่า</div>
                 </button>
             </div>
