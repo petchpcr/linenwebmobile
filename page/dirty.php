@@ -20,9 +20,11 @@
     
 	<link rel="shortcut icon" href="../favicon.ico">
 	<link rel="stylesheet" href="../fontawesome/css/all.min.css">
-	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+	<script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 
 	<script src="../js/gijgo.min.js" type="text/javascript"></script>
     <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
@@ -31,9 +33,21 @@
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         $(document).ready(function (e) {
+            var Menu = <?php echo $Menu;?>;
+            if(Menu == 2){ $("#add_doc").remove(); }
+            load_dep();
             load_site();
             load_doc();
         });
+
+        function load_dep(){
+            var siteCode = "<?php echo $siteCode?>";
+            var data = {
+                'siteCode': siteCode,
+                'STATUS': 'load_dep'
+            };
+            senddata(JSON.stringify(data));
+        }
 
         function load_site(){
             var siteCode = "<?php echo $siteCode?>";
@@ -50,7 +64,7 @@
             var siteCode = "<?php echo $siteCode?>";
             var Menu = "<?php echo $Menu?>";
             var data = {
-                'search': searchDate,
+                'search': search,
                 'siteCode': siteCode,
                 'Menu': Menu,
                 'STATUS': 'load_doc'
@@ -59,8 +73,14 @@
         }
 
         function show_process(DocNo){
+            var siteCode = "<?php echo $siteCode?>";
             var Menu = <?php echo $Menu;?>;
-            window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
+            if(Menu == 1){
+                window.location.href='dirty_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
+            }
+            else if(Menu == 2){
+                window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
+            }
         }
         
         function confirm_doc(DocNo){
@@ -84,6 +104,29 @@
             var data = {
                 'DocNo': DocNo,
                 'STATUS': 'confirm_yes'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function change_dep(){
+            var slt = $("#DepName").val();
+            if (slt == 0) {
+                $("#btn_add_dirty").prop('disabled',true);
+            }
+            else {
+                $("#btn_add_dirty").prop('disabled',false);
+            }
+        }
+
+        function add_dirty(){
+            var Userid = "<?php echo $Userid?>";
+            var siteCode = "<?php echo $siteCode?>";
+            var DepCode = $("#DepName").val();
+            var data = {
+                'Userid': Userid,
+                'siteCode': siteCode,
+                'DepCode': DepCode,
+                'STATUS': 'add_dirty'
             };
             senddata(JSON.stringify(data));
         }
@@ -121,11 +164,18 @@
                 }
 
                 if (temp["status"] == 'success') {
-                    if(temp["form"] == 'load_site'){
+                    if(temp["form"] == 'load_dep'){
+                        for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                            var Str = "<option value="+temp[i]['DepCode']+">"+temp[i]['DepName']+"</option>";
+                            $("#DepName").append(Str);
+                        }
+
+                    }
+                    else if(temp["form"] == 'load_site'){
                         $("#HptName").text(temp['HptName']);
                     }
-
                     else if (temp["form"] == 'load_doc') {
+                        
                         $(".btn.btn-mylight.btn-block").remove();
                         for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
                             var status_class = "";
@@ -178,6 +228,10 @@
                     else if(temp["form"] == 'show_process'){
                         window.location.href='process.php?siteCode='+temp['siteCode'];
                     }
+                    else if(temp["form"] == 'add_dirty'){
+                        var 
+                        window.location.href='process.php?siteCode='+temp['siteCode'];                        
+                    }
                     else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
                     }
@@ -227,33 +281,72 @@
             <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
         </div>
     </header>
-    <div class="px-3" style="font-family:sans-serif;">
+    <div class="px-3 pb-4 mb-5" style="font-family:sans-serif;">
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
         <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
         <div id="document">
-        <div class="d-flex justify-content-center mb-3">
-            <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
-            <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button">ค้นหา</button>
-        </div>
+            <div class="d-flex justify-content-center mb-3">
+                <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
+                <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i>ค้นหา</button>
+            </div>
+            <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
+                <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
+                    <i class="fas fa-plus mr-1"></i>สร้างเอกสาร
+                </button>
+            </div>
+            <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
+                <div class="row">
+                    <div class='my-col-5'>
+                        <div class='row justify-content-end align-items-center'>        
+                            <div class='card status1'>หยุดชั่วขณะ</div>
+                            <img src='../img/StatusLine_1.png' height='50'/>
+                        </div>
+                    </div>
 
-        <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
-            <div class="row">
-                <div class='my-col-5'>
-                    <div class='row justify-content-end align-items-center'>        
-                        <div class='card status1'>หยุดชั่วขณะ</div>
-                        <img src='../img/StatusLine_1.png' height='50'/>
+                    <div class='my-col-7 text-left'>
+                        <div class='text-truncate font-weight-bold'>9999999999999999</div>
+                        <div class='font-weight-light'>Hospital / Department</div>
                     </div>
                 </div>
-
-                <div class='my-col-7 text-left'>
-                    <div class='text-truncate font-weight-bold'>9999999999999999</div>
-                    <div class='font-weight-light'>Hospital / Department</div>
-                </div>
-            </div>
-        </button> -->
+            </button> -->
 
         </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการสร้างเอกสาร</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                คุณต้องการสร้างเอกสารผ้าสกปรก ไว้ในแผนกใด?
+                <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">เลือกแผนก</label>
+                    </div>
+                    <select onchange="change_dep()" id="DepName" class="custom-select">
+                        <option value="0" selected>โปรกเลือกแผนก...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <div class="row w-100 d-flex align-items-center m-0">
+                    <div class="col-6 text-right">
+                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled>ยืนยัน</button>
+                    </div>
+                    <div class="col-6 text-left">
+                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal">ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <script>

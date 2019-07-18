@@ -6,8 +6,9 @@
     if($Userid==""){
       header("location:../index.html");
     }
-    $Menu = $_GET['Menu'];
     $siteCode = $_GET['siteCode'];
+    $Menu = $_GET['Menu'];
+    $DocNo = $_GET['DocNo'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -24,7 +25,7 @@
 	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 
-    <script src="../js/gijgo.min.js" type="text/javascript"></script>
+	<script src="../js/gijgo.min.js" type="text/javascript"></script>
     <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
     
     <script src="../dist/js/sweetalert2.min.js"></script>
@@ -37,35 +38,28 @@
 
         function load_site(){
             var siteCode = "<?php echo $siteCode?>";
+            var DocNo = "<?php echo $DocNo?>";
             var data = {
                 'siteCode': siteCode,
+                'DocNo': DocNo,
                 'STATUS': 'load_site'
             };
             senddata(JSON.stringify(data));
         }
 
         function load_doc(){
-            var search = $('#datepicker').val();
-            var searchDate = new Date(search);
-            var siteCode = "<?php echo $siteCode?>";
-            var Menu = "<?php echo $Menu?>";
+            var DocNo = "<?php echo $DocNo?>";
             var data = {
-                'search': searchDate,
-                'siteCode': siteCode,
-                'Menu': Menu,
+                'DocNo': DocNo,
                 'STATUS': 'load_doc'
             };
             senddata(JSON.stringify(data));
         }
 
-        function show_process(DocNo){
-            var Menu = <?php echo $Menu;?>;
-            window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
-        }
-
         function back(){
+            var siteCode = '<?php echo $siteCode;?>';
             var Menu = <?php echo $Menu;?>;
-            window.location.href="hospital.php?Menu="+Menu;
+            window.location.href='dirty.php?siteCode='+siteCode+'&Menu='+Menu;
         }
 
         function logout(num){
@@ -79,7 +73,7 @@
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = '../process/clean.php';
+            var URL = '../process/dirty_view.php';
             $.ajax({
                 url: URL,
                 dataType: 'text',
@@ -96,40 +90,31 @@
                 }
 
                 if (temp["status"] == 'success') {
-                    if(temp["form"] == 'load_site'){
-                        $("#HptName").text(temp['HptName']);
+                    if (temp["form"] == 'load_site') {
+                        var HosDep = "<b>โรงพยาบาล : </b>"+temp['HptName']+" / "+temp['DepName'];
+                        $("#HptName").html(HosDep);
                     }
-
                     else if (temp["form"] == 'load_doc') {
-                        $(".btn.btn-mylight.btn-block").remove();
+                        // var RefDocNo = "<b>เอกสารอ้างอิง : </b>"+temp['RefDocNo'];
+                        // if(temp['RefDocNo'] == null || temp['RefDocNo'] == ""){
+                        //     RefDocNo = "<b>เอกสารอ้างอิง : </b>";
+                        // }
+                        $("#RefDocNo").html(RefDocNo);
+                        var FName = "<b>ผู้บันทึก : </b>"+temp['FName'];
+                        $("#FName").html(FName);
+                        var Date = "<b>วันที่ : </b>"+temp['xdate']+" <b>เวลา : </b>"+temp['xtime'];
+                        $("#Date").html(Date);
+                        var Weight = "<b>น้ำหนักรวม : </b>"+temp['Total']+" กิโลกรัม";
+                        $("#Weight").html(Weight);
                         for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                            var status_class = "";
-                            var status_text = "";
-                            var status_line = "";
-                            var on_click = "";
+                            var num = i+1;
+                            var Str = "<tr><td><div class='row'>";
+                                Str += "<div scope='row' class='col-5 d-flex align-items-center justify-content-center'>"+num+"</div>";
+                                Str += "<div class='col-7'><div class='row'><div class='col-12 font-weight-bold mb-1'>"+temp[i]['ItemName']+"</div>";
+                                Str += "<div class='col-12 text-black-50 mb-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div></div></td></tr>";
 
-                            if(temp[i]['IsStatus'] == 0 || temp[i]['IsStatus'] == null){
-                                status_class = "status4";
-                                status_text = "ไม่ทำงาน";
-                                status_line = "StatusLine_4";
-                            }
-                            else if(temp[i]['IsStatus'] == 1){
-                                status_class = "status2";
-                                status_text = "เสร็จสิ้น";
-                                status_line = "StatusLine_2";
-                            }
-                            
-                            var Str = "<button "+on_click+" class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
-                                Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
-                                Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
-                                Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
-
-                            $("#document").append(Str);
-                            
+                            $("#item").append(Str);
                         }
-                    }
-                    else if(temp["form"] == 'show_process'){
-                        window.location.href='process.php?siteCode='+temp['siteCode'];
                     }
                     else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
@@ -181,42 +166,47 @@
         </div>
     </header>
     <div class="px-3" style="font-family:sans-serif;">
-
-        <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
-        <div id="document">
-        <div class="d-flex justify-content-center mb-3">
-            <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
-            <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i>ค้นหา</button>
-        </div>
-        <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-            <button onclick="" class="btn btn-primary btn-block" type="button"><i class="fas fa-plus mr-1"></i>สร้างเอกสาร</button>
-        </div>
-        <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
-            <div class="row">
-                <div class='my-col-5'>
-                    <div class='row justify-content-end align-items-center'>        
-                        <div class='card status1'>หยุดชั่วขณะ</div>
-                        <img src='../img/StatusLine_1.png' height='50'/>
-                    </div>
-                </div>
-
-                <div class='my-col-7 text-left'>
-                    <div class='text-truncate font-weight-bold'>9999999999999999</div>
-                    <div class='font-weight-light'>Hospital / Department</div>
-                </div>
+            <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-10 col-sm-12 mb-3">
+                <div id="HptName" class="text-truncate"></div>
+                <div id="HptName"></div>
+                <div id="RefDocNo"></div>
+                <div id="FName"></div>
+                <div id="Date"></div>
+                <div id="Weight"></div>
             </div>
-        </button> -->
-
+        </div>
+        <div class="row justify-content-center px-3">
+            <table class="table table-hover col-lg-9 col-md-10 col-sm-12">
+                <thead>
+                    <tr class="bg-primary text-white">
+                    <th scope="col">
+                        <div class="row">
+                            <div class="col-5 text-center">สำดับ</div>
+                            <div class="col-7 text-center">รายการ</div>
+                        </div>
+                    </th>
+                    </tr>
+                </thead>
+                <tbody id="item">
+                    <!-- <tr>
+                    <td>
+                        <div class="row">
+                            <div scope="row" class="col-5 d-flex align-items-center justify-content-center">1</div>
+                            <div class="col-7">
+                                <div class="row">
+                                    <div class="col-12 font-weight-bold p-1">ผ้าเช็ดปาก</div>
+                                    <div class="col-12 text-black-50 p-1">จำนวน 0 / น้ำหนัก 0 </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    </tr> -->
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <script>
-        $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap4',
-            format: 'yyyy-mm-dd'
-        });
-    </script>
 
 </body>
 </html>
