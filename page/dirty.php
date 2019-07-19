@@ -229,8 +229,12 @@
                         window.location.href='process.php?siteCode='+temp['siteCode'];
                     }
                     else if(temp["form"] == 'add_dirty'){
-                        var 
-                        window.location.href='process.php?siteCode='+temp['siteCode'];                        
+                        var Userid = temp['user']
+                        var siteCode = temp['siteCode']
+                        var DepCode = temp['DepCode']
+                        var DocNo = temp['DocNo']
+                        var Menu = <?php echo $Menu;?>;
+                        window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid;
                     }
                     else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
