@@ -47,6 +47,9 @@ $Userid = $_GET['user'];
         });
 
         function load_items() {
+            arr_old_items = [];
+            arr_new_items = [];
+            arr_del_items = [];
             var DocNo = "<?php echo $DocNo ?>";
             var data = {
                 'DocNo': DocNo,
@@ -73,12 +76,12 @@ $Userid = $_GET['user'];
             } else {
                 $(id).prop("checked", true);
             }
-            var test = $(id).attr("data-name");
+            var test = $(id).data("name");
         }
 
         function select_chk() {
             $("#md_item").modal('hide');
-            var last_item = $('.item:last').attr("data-num");
+            var last_item = $('.item:last').data("num");
             if (last_item == null || last_item == '') {
                 last_item = 0;
             }
@@ -87,7 +90,7 @@ $Userid = $_GET['user'];
             $(".chk-item").each(function() {
                 if ($(this).is(':checked')) {
                     var id = "weight" + num;
-                    var name = $(this).attr('data-name');
+                    var name = $(this).data('name');
                     var code = $(this).val();
                     var qty = 0;
                     var unit = 1;
@@ -110,14 +113,14 @@ $Userid = $_GET['user'];
             var item = "#item" + num;
             var input = "#weight" + num;
             var have = 0;
-            var code = $(input).attr("data-code");
+            var code = $(input).data("code");
 
             for (var i = 0; i < arr_del_items.length; i++) {
-                // var code = $(input).attr("data-code");
                 if (arr_del_items[i] == code) {
                     have = 1;
                 }
             }
+
             var old_i = arr_old_items.indexOf(code); // หา Index ของคำนั้น
             if (old_i != -1) {
                 arr_old_items.splice(old_i, 1);
@@ -173,9 +176,10 @@ $Userid = $_GET['user'];
             $(".old").each(function() {
                 arr_old_Qty.push($(this).data("qty"));
                 arr_old_UnitCode.push($(this).data("unit"));
+                var val = $(this).val();
                 var weight = 0;
-                if ($(this).val() != null || $(this).val() != "") {
-                    weight = $(this).val();
+                if (val != null && val != "") {
+                    weight = val;
                 }
                 arr_old_weight.push(weight);
             });
@@ -191,12 +195,12 @@ $Userid = $_GET['user'];
             $(".new").each(function() {
                 arr_new_Qty.push($(this).data("qty"));
                 arr_new_UnitCode.push($(this).data("unit"));
+                var val = $(this).val();
                 var weight = 0;
-                if ($(this).val() != null || $(this).val() != "") {
-                    weight = $(this).val();
+                if (val != null && val != "") {
+                    weight = val;
                 }
                 arr_new_weight.push(weight);
-                console.log(weight);
             });
 
             var new_i = arr_new_items.join(',');
