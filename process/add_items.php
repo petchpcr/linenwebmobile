@@ -94,6 +94,8 @@
 
     function add_item($conn, $DATA){
         $DocNo = $DATA['DocNo'];
+        $Userid = $DATA['Userid'];
+
         $arr_old_i = $DATA['old_i'];
         $arr_old_qty = $DATA['old_qty'];
         $arr_old_unit = $DATA['old_unit'];
@@ -137,6 +139,15 @@
             $return[$i]['Weight'] = $new_weight[$i];
             mysqli_query($conn,$Sql);
         }
+
+        $Sql = "SELECT SUM(Weight) AS total FROM dirty_detail WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $total = $Result['total'];
+
+        $Sql = "UPDATE dirty SET Total = $total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1 WHERE DocNo = '$DocNo'";
+        $return['Last Update'] = $Sql;
+        mysqli_query($conn,$Sql);
 
         $return['status'] = "success";
         $return['form'] = "add_item";

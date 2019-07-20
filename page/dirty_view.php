@@ -119,7 +119,7 @@
                             var num = i+1;
                             var Str = "<tr><td><div class='row'>";
                                 Str += "<div scope='row' class='col-5 d-flex align-items-center justify-content-center'>"+num+"</div>";
-                                Str += "<div class='col-7'><div class='row'><div class='col-12 font-weight-bold mb-1'>"+temp[i]['ItemName']+"</div>";
+                                Str += "<div class='col-7'><div class='row'><div class='col-12 text-truncate font-weight-bold mb-1'>"+temp[i]['ItemName']+"</div>";
                                 Str += "<div class='col-12 text-black-50 mb-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div></div></td></tr>";
 
                             $("#item").append(Str);
@@ -179,7 +179,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-9 col-md-10 col-sm-12 mb-3">
                 <div id="HptName" class="text-truncate"></div>
-                <div id="HptName"></div>
+                <div id="HptName" class="text-truncate"></div>
                 <div id="RefDocNo"></div>
                 <div id="FName"></div>
                 <div id="Date"></div>
@@ -205,7 +205,7 @@
                             <div scope="row" class="col-5 d-flex align-items-center justify-content-center">1</div>
                             <div class="col-7">
                                 <div class="row">
-                                    <div class="col-12 font-weight-bold p-1">ผ้าเช็ดปาก</div>
+                                    <div class="col-12 text-truncate font-weight-bold p-1">ผ้าเช็ดปาก</div>
                                     <div class="col-12 text-black-50 p-1">จำนวน 0 / น้ำหนัก 0 </div>
                                 </div>
                             </div>

@@ -169,6 +169,7 @@ $Userid = $_GET['user'];
 
         function add_item() {
             var DocNo = "<?php echo $DocNo ?>";
+            var Userid = "<?php echo $Userid ?>";
 
             var arr_old_Qty = [];
             var arr_old_UnitCode = [];
@@ -212,6 +213,7 @@ $Userid = $_GET['user'];
             
             var data = {
                 'DocNo': DocNo,
+                'Userid': Userid,
                 'old_i': old_i,
                 'old_qty': old_qty,
                 'old_unit': old_unit,
