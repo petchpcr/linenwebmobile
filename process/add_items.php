@@ -62,7 +62,8 @@
                 FROM dirty_detail,
                      item 
                 WHERE DocNo = '$DocNo'
-                AND	  item.ItemCode = dirty_detail.ItemCode";
+                AND	  item.ItemCode = dirty_detail.ItemCode
+                ORDER BY ItemName ASC";
         $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -89,6 +90,59 @@
             mysqli_close($conn);
             die;
         }
+    }
+
+    function add_item($conn, $DATA){
+        $DocNo = $DATA['DocNo'];
+        $arr_old_i = $DATA['old_i'];
+        $arr_old_qty = $DATA['old_qty'];
+        $arr_old_unit = $DATA['old_unit'];
+        $arr_old_weight = $DATA['old_weight'];
+        $arr_new_i = $DATA['new_i'];
+        $arr_new_qty = $DATA['new_qty'];
+        $arr_new_unit = $DATA['new_unit'];
+        $arr_new_weight = $DATA['new_weight'];
+        $arr_del_i = $DATA['del_i'];
+
+        $old_i = explode(",", $arr_old_i);
+        $old_qty = explode(",", $arr_old_qty);
+        $old_unit = explode(",", $arr_old_unit);
+        $old_weight = explode(",", $arr_old_weight);
+        $new_i = explode(",", $arr_new_i);
+        $new_qty = explode(",", $arr_new_qty);
+        $new_unit = explode(",", $arr_new_unit);
+        $new_weight = explode(",", $arr_new_weight);
+        $del_i = explode(",", $arr_del_i);
+
+        $cnt_old = sizeof($old_i, 0);
+        $cnt_new = sizeof($new_i, 0);
+        $cnt_del = sizeof($del_i, 0);
+
+        for ($i = 0; $i < $cnt_del; $i++) {
+            $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
+            $return[$i]['Delete'] = $Sql;
+            mysqli_query($conn,$Sql);
+        }
+
+        for ($i = 0; $i < $cnt_old; $i++) {
+            $Sql = "UPDATE dirty_detail SET Weight = $old_weight[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
+            $return[$i]['Update'] = $Sql;
+            mysqli_query($conn,$Sql);
+        }
+
+        for ($i = 0; $i < $cnt_new; $i++) {
+            $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
+                    VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_qty[$i],$new_weight[$i]) ";
+            $return[$i]['Insert'] = $Sql;
+            $return[$i]['Weight'] = $new_weight[$i];
+            mysqli_query($conn,$Sql);
+        }
+
+        $return['status'] = "success";
+        $return['form'] = "add_item";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
     }
 
     function logout($conn, $DATA){
@@ -129,8 +183,8 @@
         else if ($DATA['STATUS'] == 'choose_items') {
             choose_items($conn, $DATA);
         }
-        else if ($DATA['STATUS'] == 'load_doc') {
-            load_doc($conn, $DATA);
+        else if ($DATA['STATUS'] == 'add_item') {
+            add_item($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

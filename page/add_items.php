@@ -89,10 +89,13 @@ $Userid = $_GET['user'];
                     var id = "weight" + num;
                     var name = $(this).attr('data-name');
                     var code = $(this).val();
+                    var qty = 0;
+                    var unit = 1;
                     var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                     Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
                     Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-                    Str += "<input onkeypress='make_number()' onkeyup='cal_weight()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' id='" + id + "' data-code='" + code + "' data-num=" + num + " placeholder='0.0'>";
+                    Str += "<input onkeypress='make_number()' onkeyup='cal_weight()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
+                    Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num=" + num + " placeholder='0.0'>";
                     Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
 
                     $("#items").append(Str);
@@ -163,17 +166,57 @@ $Userid = $_GET['user'];
 
         function add_item() {
             var DocNo = "<?php echo $DocNo ?>";
-            $(".item").each(function() {
-                var Qty = 0;
-                var UnitCode = 1;
-                var Code = $(this).data('code');
-                var Weight = $(this).val();
+
+            var arr_old_Qty = [];
+            var arr_old_UnitCode = [];
+            var arr_old_weight = [];
+            $(".old").each(function() {
+                arr_old_Qty.push($(this).data("qty"));
+                arr_old_UnitCode.push($(this).data("unit"));
+                var weight = 0;
+                if ($(this).val() != null || $(this).val() != "") {
+                    weight = $(this).val();
+                }
+                arr_old_weight.push(weight);
             });
+
             var old_i = arr_old_items.join(',');
+            var old_qty = arr_old_Qty.join(',');
+            var old_unit = arr_old_UnitCode.join(',');
+            var old_weight = arr_old_weight.join(',');
+
+            var arr_new_Qty = [];
+            var arr_new_UnitCode = [];
+            var arr_new_weight = [];
+            $(".new").each(function() {
+                arr_new_Qty.push($(this).data("qty"));
+                arr_new_UnitCode.push($(this).data("unit"));
+                var weight = 0;
+                if ($(this).val() != null || $(this).val() != "") {
+                    weight = $(this).val();
+                }
+                arr_new_weight.push(weight);
+                console.log(weight);
+            });
+
             var new_i = arr_new_items.join(',');
+            var new_qty = arr_new_Qty.join(',');
+            var new_unit = arr_new_UnitCode.join(',');
+            var new_weight = arr_new_weight.join(',');
+
+            var del_i = arr_del_items.join(',');
+            
             var data = {
+                'DocNo': DocNo,
                 'old_i': old_i,
+                'old_qty': old_qty,
+                'old_unit': old_unit,
+                'old_weight': old_weight,
                 'new_i': new_i,
+                'new_qty': new_qty,
+                'new_unit': new_unit,
+                'new_weight': new_weight,
+                'del_i': del_i,
                 'STATUS': 'add_item'
             };
             senddata(JSON.stringify(data));
@@ -214,12 +257,14 @@ $Userid = $_GET['user'];
 
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_items') {
+                            $("#items").empty();
                             for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
                                 var num = Number(i) + 1;
                                 var id = "weight" + num;
                                 var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                                 Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-                                Str += "<input onkeypress='make_number()' onkeyup='cal_weight()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' data-code='" + temp[i]['ItemCode'] + "' id='" + id + "' data-num='" + num + "' value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
+                                Str += "<input onkeypress='make_number()' onkeyup='cal_weight()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+                                Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
                                 Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
                                 $("#items").append(Str);
                                 arr_old_items.push(temp[i]['ItemCode']);
@@ -261,6 +306,8 @@ $Userid = $_GET['user'];
                                     $("#choose_item").append(Str);
                                 }
                             }
+                        } else if (temp["form"] == 'add_item') {
+                            load_items();
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
@@ -268,6 +315,9 @@ $Userid = $_GET['user'];
                         var message = "";
                         if (temp["form"] == 'choose_items') {
                             $("#choose_item").empty();
+                        }
+                        else if (temp["form"] == 'add_item') {
+                            alert("error ADD ITEM");
                         }
                     }
                 }
