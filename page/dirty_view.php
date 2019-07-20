@@ -70,10 +70,12 @@
             senddata(JSON.stringify(data));
         }
         function movetoAddItem(){
+          var Userid = '<?php echo $Userid;?>';
           var DocNo = "<?php echo $DocNo?>";
           var siteCode = '<?php echo $siteCode;?>';
           var Menu = <?php echo $Menu;?>;
-          window.location.href='add_items.php?siteCode='+siteCode+'&DocNo='+DocNo+'&Menu='+Menu;
+          var DepCode = $("#add_doc").data("depcode");
+          window.location.href='add_items.php?siteCode='+siteCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid+'&DepCode='+DepCode;
         }
 
         function senddata(data) {
@@ -98,6 +100,7 @@
                 if (temp["status"] == 'success') {
                     if (temp["form"] == 'load_site') {
                         var HosDep = "<b>โรงพยาบาล : </b>"+temp['HptName']+" / "+temp['DepName'];
+                        $("#add_doc").attr("data-depcode",temp['DepCode']);
                         $("#HptName").html(HosDep);
                     }
                     else if (temp["form"] == 'load_doc') {
@@ -214,7 +217,7 @@
         </div>
 
 
-        <div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
+        <div id="add_doc" data-depcode="" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
             <div class="col-lg-9 col-md-10 col-sm-12">
 
                 <div class="row">

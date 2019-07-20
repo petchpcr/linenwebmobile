@@ -6,7 +6,7 @@
         $siteCode = $DATA["siteCode"];
         $DocNo = $DATA["DocNo"];
         $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
-        $Sql2 = "SELECT department.DepName 
+        $Sql2 = "SELECT department.DepName,department.DepCode 
                 FROM department 
                 INNER JOIN dirty ON dirty.DepCode = department.DepCode 
                 WHERE dirty.DocNo = '$DocNo'";
@@ -21,6 +21,7 @@
         $meQuery2 = mysqli_query($conn, $Sql2);
         while ($Result = mysqli_fetch_assoc($meQuery2)) {
             $return['DepName'] = $Result['DepName'];
+            $return['DepCode'] = $Result['DepCode'];
             $boolean2 = true;
         }
         $return['boolean'] = $boolean;
