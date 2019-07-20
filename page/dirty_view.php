@@ -27,7 +27,7 @@
 
 	<script src="../js/gijgo.min.js" type="text/javascript"></script>
     <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
-    
+
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
@@ -68,6 +68,12 @@
                 'STATUS': 'logout'
             };
             senddata(JSON.stringify(data));
+        }
+        function movetoAddItem(){
+          var DocNo = "<?php echo $DocNo?>";
+          var siteCode = '<?php echo $siteCode;?>';
+          var Menu = <?php echo $Menu;?>;
+          window.location.href='add_items.php?siteCode='+siteCode+'&DocNo='+DocNo+'&Menu='+Menu;
         }
 
         function senddata(data) {
@@ -147,7 +153,7 @@
                             confirmButtonText: 'Error!!'
                         })
                     }
-                    
+
                 } else {
                     console.log(temp['msg']);
                 }
@@ -206,6 +212,22 @@
                 </tbody>
             </table>
         </div>
+
+
+        <div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
+            <div class="col-lg-9 col-md-10 col-sm-12">
+
+                <div class="row">
+                    <div class="col-12">
+                      <button class="btn btn-primary btn-block" type="button" onclick="movetoAddItem()">
+                          <i class="fas fa-plus mr-1"></i>สร้างเอกสาร
+                      </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </body>
