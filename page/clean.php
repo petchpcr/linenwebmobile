@@ -46,11 +46,11 @@
 
         function load_doc(){
             var search = $('#datepicker').val();
-            var searchDate = new Date(search);
+            // var searchDate = new Date(search);
             var siteCode = "<?php echo $siteCode?>";
             var Menu = "<?php echo $Menu?>";
             var data = {
-                'search': searchDate,
+                'search': search,
                 'siteCode': siteCode,
                 'Menu': Menu,
                 'STATUS': 'load_doc'
@@ -59,8 +59,9 @@
         }
 
         function show_process(DocNo){
+            var siteCode = "<?php echo $siteCode?>";
             var Menu = <?php echo $Menu;?>;
-            window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
+            window.location.href='clean_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
         }
 
         function back(){
@@ -106,7 +107,6 @@
                             var status_class = "";
                             var status_text = "";
                             var status_line = "";
-                            var on_click = "";
 
                             if(temp[i]['IsStatus'] == 0 || temp[i]['IsStatus'] == null){
                                 status_class = "status4";
@@ -119,7 +119,7 @@
                                 status_line = "StatusLine_2";
                             }
                             
-                            var Str = "<button "+on_click+" class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
+                            var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                 Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
                                 Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                 Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
@@ -185,28 +185,30 @@
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
         <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
         <div id="document">
-        <div class="d-flex justify-content-center mb-3">
-            <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
-            <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i>ค้นหา</button>
-        </div>
-        <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-            <button onclick="" class="btn btn-primary btn-block" type="button"><i class="fas fa-plus mr-1"></i>สร้างเอกสาร</button>
-        </div>
-        <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
-            <div class="row">
-                <div class='my-col-5'>
-                    <div class='row justify-content-end align-items-center'>        
-                        <div class='card status1'>หยุดชั่วขณะ</div>
-                        <img src='../img/StatusLine_1.png' height='50'/>
+            <div class="d-flex justify-content-center mb-3">
+                <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
+                <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i>ค้นหา</button>
+            </div>
+            <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
+                <button onclick="" class="btn btn-primary btn-block" type="button">
+                    <i class="fas fa-plus mr-1"></i>สร้างเอกสาร
+                </button>
+            </div>
+            <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
+                <div class="row">
+                    <div class='my-col-5'>
+                        <div class='row justify-content-end align-items-center'>        
+                            <div class='card status1'>หยุดชั่วขณะ</div>
+                            <img src='../img/StatusLine_1.png' height='50'/>
+                        </div>
+                    </div>
+
+                    <div class='my-col-7 text-left'>
+                        <div class='text-truncate font-weight-bold'>9999999999999999</div>
+                        <div class='font-weight-light'>Hospital / Department</div>
                     </div>
                 </div>
-
-                <div class='my-col-7 text-left'>
-                    <div class='text-truncate font-weight-bold'>9999999999999999</div>
-                    <div class='font-weight-light'>Hospital / Department</div>
-                </div>
-            </div>
-        </button> -->
+            </button> -->
 
         </div>
     </div>

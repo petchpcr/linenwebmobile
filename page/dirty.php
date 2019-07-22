@@ -60,7 +60,7 @@
 
         function load_doc(){
             var search = $('#datepicker').val();
-            var searchDate = new Date(search);
+            // var searchDate = new Date(search);
             var siteCode = "<?php echo $siteCode?>";
             var Menu = "<?php echo $Menu?>";
             var data = {
@@ -181,7 +181,6 @@
                             var status_class = "";
                             var status_text = "";
                             var status_line = "";
-                            var on_click = "";
 
                             if(temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null){
                                 status_class = "status4";
@@ -205,14 +204,8 @@
                             }
 
                             if(temp[i]['IsStatus'] > 0){
-                                if(temp[i]['IsReceive'] == 0){
-                                    on_click = "onclick='confirm_doc(\""+temp[i]['DocNo']+"\")'";
-                                }
-                                else if(temp[i]['IsReceive'] == 1){
-                                    on_click = "onclick='show_process(\""+temp[i]['DocNo']+"\")'";
-                                }
-
-                                var Str = "<button "+on_click+" class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
+                                
+                                var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                     Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
                                     Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                     Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
