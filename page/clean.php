@@ -3,62 +3,85 @@
     $Userid = $_SESSION['Userid'];
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
-    if($Userid==""){
-      header("location:../index.html");
+    if ($Userid == "") {
+        header("location:../index.html");
     }
     $Menu = $_GET['Menu'];
     $siteCode = $_GET['siteCode'];
+    $language = $_SESSION['lang'];
+    $xml = simplexml_load_file('../xml/Language/clean_lang.xml');
+    $json = json_encode($xml);
+    $array = json_decode($json, TRUE);
+    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+    $json = json_encode($genxml);
+    $genarray = json_decode($json, TRUE);
+    require '../getTimeZone.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo $genarray['titleclean'][$language].$genarray['titleDocument'][$language];?></title>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
 
     <link rel="shortcut icon" href="../favicon.ico">
-  	<link rel="stylesheet" href="../fontawesome/css/all.min.css">
-  	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
-      <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../css/themes/default/nhealth.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 
-  	<script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-  	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+    <script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 
-  	<script src="../js/gijgo.min.js" type="text/javascript"></script>
-      <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/gijgo.min.js" type="text/javascript"></script>
+    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
-      <script src="../dist/js/sweetalert2.min.js"></script>
-      <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
-      <script>
-        $(document).ready(function (e) {
-            load_site();
+    <script src="../dist/js/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
+    <script>
+        $(document).ready(function(e) {
+            load_dep();
             load_doc();
+            load_site();
         });
 
-        function load_site(){
-            var siteCode = "<?php echo $siteCode?>";
+        function load_site() {
+            //var datenow = ;
+            console.log("<?php echo date("Y-m-d"); ?>");
+            $('#datepicker').val("<?php echo date("Y-m-d"); ?>");
+            var siteCode = "<?php echo $siteCode ?>";
             var data = {
                 'siteCode': siteCode,
                 'STATUS': 'load_site'
             };
             senddata(JSON.stringify(data));
         }
-        function change_dep(){
+
+        function change_dep() {
             var slt = $("#DepName").val();
             if (slt == 0) {
-                $("#btn_add_dirty").prop('disabled',true);
-            }
-            else {
-                $("#btn_add_dirty").prop('disabled',false);
+                $("#btn_confirm").prop('disabled', true);
+            } else {
+                $("#btn_confirm").prop('disabled', false);
             }
         }
-        function load_doc(){
+
+        function load_dep(){
+            var siteCode = "<?php echo $siteCode?>";
+            var data = {
+                'siteCode': siteCode,
+                'STATUS': 'load_dep'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function load_doc() {
             var search = $('#datepicker').val();
             // var searchDate = new Date(search);
-            var siteCode = "<?php echo $siteCode?>";
-            var Menu = "<?php echo $Menu?>";
+            var siteCode = "<?php echo $siteCode ?>";
+            var Menu = "<?php echo $Menu ?>";
             var data = {
                 'search': search,
                 'siteCode': siteCode,
@@ -68,23 +91,30 @@
             senddata(JSON.stringify(data));
         }
 
-        function show_process(DocNo){
-            var siteCode = "<?php echo $siteCode?>";
-            var Menu = <?php echo $Menu;?>;
-            window.location.href='clean_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
+        function show_process(DocNo) {
+            var siteCode = "<?php echo $siteCode ?>";
+            var Menu = <?php echo $Menu; ?>;
+            window.location.href = 'clean_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
         }
 
-        function back(){
-            var Menu = <?php echo $Menu;?>;
-            window.location.href="hospital.php?Menu="+Menu;
+        function back() {
+            var Menu = <?php echo $Menu; ?>;
+            window.location.href = "hospital.php?Menu=" + Menu;
         }
 
-        function logout(num){
+        function logout(num) {
             var data = {
                 'Confirm': num,
                 'STATUS': 'logout'
             };
             senddata(JSON.stringify(data));
+        }
+
+        function add_dirty(){
+            var Userid = "<?php echo $Userid?>";
+            var siteCode = "<?php echo $siteCode?>";
+            var DepCode = $("#DepName").val();
+            window.location.href = "hospital.php?Userid=" + Userid +'&siteCode='+siteCode+'&DepCode='+DepCode;
         }
 
         function senddata(data) {
@@ -99,83 +129,85 @@
                 processData: false,
                 data: form_data,
                 type: 'post',
-                success: function (result) {
-                try {
-                    var temp = $.parseJSON(result);
-                } catch (e) {
-                    console.log('Error#542-decode error');
-                }
-
-                if (temp["status"] == 'success') {
-                    if(temp["form"] == 'load_site'){
-                        $("#HptName").text(temp['HptName']);
+                success: function(result) {
+                    try {
+                        var temp = $.parseJSON(result);
+                    } catch (e) {
+                        console.log('Error#542-decode error');
                     }
 
-                    else if (temp["form"] == 'load_doc') {
-                        $(".btn.btn-mylight.btn-block").remove();
-                        for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                            var status_class = "";
-                            var status_text = "";
-                            var status_line = "";
+                    if (temp["status"] == 'success') {
+                        if (temp["form"] == 'load_site') {
+                            $("#HptName").text(temp['HptName']);
+                        } else if (temp["form"] == 'load_doc') {
+                            $(".btn.btn-mylight.btn-block").remove();
+                            for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                                var status_class = "";
+                                var status_text = "";
+                                var status_line = "";
 
-                            if(temp[i]['IsStatus'] == 0 || temp[i]['IsStatus'] == null){
-                                status_class = "status4";
-                                status_text = "ไม่ทำงาน";
-                                status_line = "StatusLine_4";
+                                if (temp[i]['IsStatus'] == 0 || temp[i]['IsStatus'] == null) {
+                                    status_class = "status4";
+                                    status_text = "ไม่ทำงาน";
+                                    status_line = "StatusLine_4";
+                                } else if (temp[i]['IsStatus'] == 1) {
+                                    status_class = "status2";
+                                    status_text = "เสร็จสิ้น";
+                                    status_line = "StatusLine_2";
+                                }
+
+                                var Str = "<button onclick='show_process(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
+                                Str += "<div class='row justify-content-end align-items-center'><div class='card " + status_class + "'>" + status_text + "</div>";
+                                Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
+                                Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
+
+                                $("#document").append(Str);
+
                             }
-                            else if(temp[i]['IsStatus'] == 1){
-                                status_class = "status2";
-                                status_text = "เสร็จสิ้น";
-                                status_line = "StatusLine_2";
+                        } else if (temp["form"] == 'show_process') {
+                            window.location.href = 'process.php?siteCode=' + temp['siteCode'];
+                        } else if (temp["form"] == 'logout') {
+                            window.location.href = '../index.html';
+                        }else if(temp["form"] == 'load_dep'){
+                            for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                                var Str = "<option value="+temp[i]['DepCode']+">"+temp[i]['DepName']+"</option>";
+                                $("#DepName").append(Str);
                             }
-
-                            var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
-                                Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
-                                Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
-                                Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
-
-                            $("#document").append(Str);
-
                         }
-                    }
-                    else if(temp["form"] == 'show_process'){
-                        window.location.href='process.php?siteCode='+temp['siteCode'];
-                    }
-                    else if(temp["form"] == 'logout'){
-                        window.location.href='../index.html';
-                    }
-                } else if (temp['status'] == "failed") {
-                    if(temp["form"] == 'load_doc'){
-                        $(".btn.btn-mylight.btn-block").remove();
-                        swal({
-                            title: '',
-                            text: "ไม่พบข้อมูลในวันที่เลือก",
-                            type: 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            confirmButtonText: 'Data found'
-                        })
+                    } else if (temp['status'] == "failed") {
+                        if (temp["form"] == 'load_doc') {
+                            $(".btn.btn-mylight.btn-block").remove();
+                            var search = $('#datepicker').val();
+                            console.log(search);
+                            swal({
+                                title: '',
+                                text: '<?php echo $genarray['notfoundDocInDate'][$language]; ?>'+search,
+                                type: 'warning',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                confirmButtonText: 'Data found'
+                            })
+
+                        } else {
+                            swal({
+                                title: '',
+                                text: temp['msg'],
+                                type: 'warning',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                confirmButtonText: 'Error!!'
+                            })
+                        }
 
                     } else {
-                        swal({
-                            title: '',
-                            text: temp['msg'],
-                            type: 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            confirmButtonText: 'Error!!'
-                        })
+                        console.log(temp['msg']);
                     }
-
-                } else {
-                    console.log(temp['msg']);
-                }
                 }
             });
         }
@@ -185,77 +217,63 @@
 <body>
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
-            <button  onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button >
-            <div class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
-            <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+            <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3" style="font-family:sans-serif;">
 
-        <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
+        <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
+        <div class="text-center my-4">
+            <h4 id="HptName" class="text-truncate"></h4>
+        </div>
         <div id="document">
             <div class="d-flex justify-content-center mb-3">
-                <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
-                <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i>ค้นหา</button>
+                <input id="datepicker" class="text-truncate text-center" width="276" placeholder='<?php echo $genarray['CreateDocDate'][$language]; ?>' />
+                <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
             <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
                 <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fas fa-plus mr-1"></i>สร้างเอกสาร
+                    <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
                 </button>
             </div>
-            <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
-                <div class="row">
-                    <div class='my-col-5'>
-                        <div class='row justify-content-end align-items-center'>
-                            <div class='card status1'>หยุดชั่วขณะ</div>
-                            <img src='../img/StatusLine_1.png' height='50'/>
-                        </div>
-                    </div>
-
-                    <div class='my-col-7 text-left'>
-                        <div class='text-truncate font-weight-bold'>9999999999999999</div>
-                        <div class='font-weight-light'>Hospital / Department</div>
-                    </div>
-                </div>
-            </button> -->
-
         </div>
     </div>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการสร้างเอกสาร</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                คุณต้องการสร้างเอกสารผ้าสกปรก ไว้ในแผนกใด?
-                <div class="input-group my-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">เลือกแผนก</label>
-                    </div>
-                    <select onchange="change_dep()" id="DepName" class="custom-select">
-                        <option value="0" selected>โปรกเลือกแผนก...</option>
-                    </select>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['confirmCreatedocno'][$language]; ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-            <div class="modal-footer text-center">
-                <div class="row w-100 d-flex align-items-center m-0">
-                    <div class="col-6 text-right">
-                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled>ยืนยัน</button>
+                <div class="modal-body text-center">
+                    <?php echo $genarray['chooseDepartment'][$language].$array['CreateCleanLinenDoc'][$language]; ?>
+                    <div class="input-group my-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>
+                        </div>
+                        <select onchange="change_dep()" id="DepName" class="custom-select">
+                            <option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
+                        </select>
                     </div>
-                    <div class="col-6 text-left">
-                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal">ยกเลิก</button>
+                </div>
+                <div class="modal-footer text-center">
+                    <div class="row w-100 d-flex align-items-center m-0">
+                        <div class="col-6 text-right">
+                            <button id="btn_confirm" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+                        </div>
+                        <div class="col-6 text-left">
+                            <button type="button" class="btn btn-danger m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <script>
         $('#datepicker').datepicker({
@@ -265,4 +283,5 @@
     </script>
 
 </body>
+
 </html>

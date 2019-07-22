@@ -2,11 +2,6 @@
 <lang>
 
 <title><en>| Select Hospital</en><th>|เลือกโรงพยาบาล</th></title>
-<clean><en>Clean Doc </en><th>ผ้าสะอาด</th></clean>
-<dirty><en>Dirty Doc </en><th>ผ้าสกปรก</th></dirty>
-<QC><en>QC</en><th>QC </th></QC>
-<factory><en>Clean Fac </en><th>โรงงานซัก</th></factory>
-
 <AllHospital><en>All Hospital</en><th>โรงพยาบาลทั้งหมด</th></AllHospital>
-All Hospital
+
 </lang>

@@ -7,14 +7,23 @@
       header("location:../index.html");
     }
     $Menu = $_GET['Menu'];
-    $siteCode = $_GET['siteCode'];
+    $siteCode = $_GET['siteCode'];    
+    $language = $_SESSION['lang'];
+    $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
+    $json = json_encode($xml);
+    $array = json_decode($json, TRUE);
+    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+    $json = json_encode($genxml);
+    $genarray = json_decode($json, TRUE);
+    require '../getTimeZone.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    
+    <title><?php echo $genarray['titledirty'][$language].$genarray['titleDocument'][$language];?></title>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
     
@@ -50,6 +59,7 @@
         }
 
         function load_site(){
+            $('#datepicker').val("<?php echo date("Y-m-d"); ?>");
             var siteCode = "<?php echo $siteCode?>";
             var data = {
                 'siteCode': siteCode,
@@ -81,23 +91,6 @@
             else if(Menu == 2){
                 window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
             }
-        }
-        
-        function confirm_doc(DocNo){
-            swal({
-                title: "ยืนยันการรับเอกสาร",
-                text: "คุณได้รับเอกสารผ้าสกปรกนี้แล้วใช่หรือไม่",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-success",
-                cancelButtonClass: "btn-danger",
-                confirmButtonText: "ใช่",
-                cancelButtonText: "ไม่ใช่",
-                closeOnConfirm: true,
-                closeOnCancel: true,
-            }).then(result => {
-                confirm_yes(DocNo);
-            })
         }
 
         function confirm_yes(DocNo){
@@ -237,7 +230,7 @@
                         $(".btn.btn-mylight.btn-block").remove();
                         swal({
                             title: '',
-                            text: "ไม่พบข้อมูลในวันที่เลือก",
+                            text: '<?php echo $genarray['notfoundDocInDate'][$language]; ?>'+$('#datepicker').val(),
                             type: 'warning',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
@@ -316,29 +309,29 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">ยืนยันการสร้างเอกสาร</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['confirmCreatedocno'][$language]; ?></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-center">
-                คุณต้องการสร้างเอกสารผ้าสกปรก ไว้ในแผนกใด?
-                <div class="input-group my-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">เลือกแผนก</label>
+                    <?php echo $genarray['chooseDepartment'][$language].$array['CreateDirtyLinenDoc'][$language]; ?>
+                    <div class="input-group my-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>
+                        </div>
+                        <select onchange="change_dep()" id="DepName" class="custom-select">
+                            <option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
+                        </select>
                     </div>
-                    <select onchange="change_dep()" id="DepName" class="custom-select">
-                        <option value="0" selected>โปรกเลือกแผนก...</option>
-                    </select>
                 </div>
-            </div>
             <div class="modal-footer text-center">
                 <div class="row w-100 d-flex align-items-center m-0">
                     <div class="col-6 text-right">
-                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled>ยืนยัน</button>
+                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled><?php echo $genarray['confirm'][$language]; ?></button>
                     </div>
                     <div class="col-6 text-left">
-                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal">ยกเลิก</button>
+                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
                     </div>
                 </div>
             </div>

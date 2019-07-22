@@ -98,7 +98,7 @@
         <header data-role="header">
             <div class="head-bar d-flex justify-content-between">
                 <div style="margin-right:75px"></div >
-                <div class="head-text text-truncate align-self-center"><?php echo $language?> : <?php echo $UserFName?></div>
+                <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName?></div>
                 <button  onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button >
             </div>
         </header>

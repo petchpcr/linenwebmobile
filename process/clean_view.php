@@ -2,75 +2,48 @@
     session_start();
     require '../connect/connect.php';
 
-    function load_site($conn, $DATA){
-        $siteCode = $DATA["siteCode"];
+    function load_doc($conn, $DATA){
+        $count = 0;
         $DocNo = $DATA["DocNo"];
-        $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
-        $Sql2 = "SELECT department.DepName,department.DepCode 
-                FROM department 
-                INNER JOIN clean ON clean.DepCode = department.DepCode 
-                WHERE clean.DocNo = '$DocNo'";
+        $siteCode = $DATA["siteCode"];
         $boolean = false;
-        $boolean2 = false;
+        $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return['HptName'] = $Result['HptName'];
             $boolean = true;
         }
-        $meQuery2 = mysqli_query($conn, $Sql2);
-        while ($Result = mysqli_fetch_assoc($meQuery2)) {
-            $return['DepName'] = $Result['DepName'];
-            $return['DepCode'] = $Result['DepCode'];
-            $boolean2 = true;
-        }
-        $return['boolean'] = $boolean;
-        $return['boolean2'] = $boolean2;
-
-        if ($boolean) {
-            $return['status'] = "success";
-            $return['form'] = "load_site";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        } else {
-            $return['status'] = "failed";
-            $return['form'] = "load_site";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
-    }
-
-    function load_doc($conn, $DATA){
-        $count = 0;
-        $DocNo = $DATA["DocNo"];
-        $boolean = false;
-        $boolean2 = false;
+        
+        $s = "1";
         $Sql = "SELECT RefDocNo,
                         DATE_FORMAT(clean.Modify_Date,'%d %M %Y') AS xdate,
                         DATE_FORMAT(clean.Modify_Date,'%H:%i') AS xtime,
                         FName,
                         Total,
-                        DepCode
-                FROM clean, users, site
+                        department.DepCode,
+                        department.DepName
+                FROM clean, users, site, department
                 WHERE DocNo ='$DocNo'
                 AND users.ID = clean.Modify_Code
+                AND clean.DepCode = department.DepCode
                 AND users.HptCode = site.HptCode";
         $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return['DocNo'] = $Result['RefDocNo'];
+            $return['RefDocNo'] = $Result['RefDocNo'];
             $return['xdate'] = $Result['xdate'];
             $return['xtime'] = $Result['xtime'];
             $return['FName']  = $Result['FName'];
             $return['Total']  = $Result['Total'];
             $return['DepCode']  = $Result['DepCode'];
+            $return['DepName']  = $Result['DepName'];
             $boolean = true;
         }
         $return['boolean'] = $boolean;
 
+        $s = "2";
         $Sql2 = "SELECT clean_detail.ItemCode,
                         item.ItemName,
                         clean_detail.UnitCode,
@@ -90,18 +63,21 @@
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $count++;
-            $boolean2 = true;
+            $s = "true";
         }
-        $return['boolean2'] = $boolean2;
+        
+        $s = "3";
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_doc";
+            $return['msg'] =  $s;
             echo json_encode($return);
             mysqli_close($conn);
             die;
         } else {
             $return['status'] = "failed";
             $return['form'] = "load_doc";
+            $return['msg'] =  $s;
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -140,10 +116,7 @@
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
 
-        if ($DATA['STATUS'] == 'load_site') {
-            load_site($conn, $DATA);
-        }
-        else if ($DATA['STATUS'] == 'load_doc') {
+        if ($DATA['STATUS'] == 'load_doc') {
             load_doc($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {

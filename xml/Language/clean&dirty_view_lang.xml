@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+
+<title><en>| Detail</en><th>| รายละเอียด</th></title>
+<userEditer><en>Editer</en><th>ผู้บันทึก</th></userEditer>
+<referentDocument><en>Ref. Document</en><th>เอกสารอ้างอิง</th></referentDocument>
+<weightSum><en>Weight Sum</en><th>น้ำหนักรวม</th></weightSum>
+<KG><en>Kg</en><th>กิโลกรัม</th></KG>
+
+<no><en>No.</en><th>ลำดับ</th></no>
+<list><en>List</en><th>รายการ</th></list>
+<weight><en>weight</en><th>น้ำหนัก</th></weight>
+<numberSize><en>Number</en><th>จำนวน</th></numberSize>
+
+<addList><en>Add item</en><th>เพิ่มรายการ</th></addList>
+</lang>

@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang>
 
-
 <logout><en>Logout</en><th>ออกจากระบบ</th></logout>
+<back><en>Back</en><th>กลับ</th></back>
+<search><en>Search</en><th>ค้นหา</th></search>
+
 <NotFoundHpt><en>Not found Hospital</en><th>ไม่พบข้อมูลในโรงพยาบาล</th></NotFoundHpt>
+
+<CreateDocDate><en>Create document date</en><th>วันที่สร้างเอกสาร</th></CreateDocDate>
+
+<titleDocument><en>| Document</en><th>| เอกสาร</th></titleDocument>
+<createdocno><en>Create document</en><th>สร้างเอกสาร</th></createdocno>
+
+<notfoundDocInDate><en>Not found Document on </en><th>ไม่พบเอกสารในวันที่</th></notfoundDocInDate>
+
+<confirmCreatedocno><en>Confirm to create document</en><th>ยืนยันการสร้างเอกสาร</th></confirmCreatedocno>
+<chooseDepartmentPl><en>Please Choose department</en><th>กรุณาเลือกแผนก</th></chooseDepartmentPl>
+<chooseDepartment><en>Choose department</en><th>เลือกแผนก</th></chooseDepartment>
+<chooseDep><en>Choose dep.</en><th>เลือกแผนก</th></chooseDep>
+
+<Hospital><en>Hospital</en><th>โรงพยาบาล</th></Hospital>
+<date><en>Date</en><th>วันที่</th></date>
+<time><en>time</en><th>เวลา</th></time>
+
+<titleclean><en>Clean Doc </en><th>ผ้าสะอาด</th></titleclean>
+<titledirty><en>Dirty Doc </en><th>ผ้าสกปรก</th></titledirty>
+<titleQC><en>QC</en><th>QC </th></titleQC>
+<titlefactory><en>Clean Fac </en><th>โรงงานซัก</th></titlefactory>
+
+<confirm><en>Confirm</en><th>ยืนยัน</th></confirm>
+<cancel><en>Cancel</en><th>ยกเลิก</th></cancel>
 
 //old
 <activeItem><en>Active</en><th>Active</th></activeItem>
@@ -17,7 +43,6 @@
 
 <pack><en>Pack</en><th>แพ็ค</th></pack>
 <type><en>type</en><th>ประเภท</th></type>
-<search><en>Search</en><th>ค้นหา</th></search>
 <search_active><en>Search not active</en><th>ค้นหา รายการใหม่</th></search_active>
 <search_hp><en>SRCH HOSP</en><th>ค้นหา โรงพยาบาล</th></search_hp>
 <search_ct_main><en>SRCH MN CAT.</en><th>ค้นหา หมวดหมู่หลัก</th></search_ct_main>
@@ -25,14 +50,6 @@
 <searchalldep><en>Search all departments</en><th>ค้นหาทุกแผนก</th></searchalldep>
 <searchdep><en>Search To Department</en><th>ค้นหาตามแผนก</th></searchdep>
 <searchall><en>Search All</en><th>ค้นหาทั้งหมด</th></searchall>
-<titledirty><en>Receive dirty linen</en><th>รับผ้าสกปรก</th></titledirty>
-<titlestockin><en>Receive into stock</en><th>รับเข้าสต๊อก</th></titlestockin>
-<titleclean><en>Receive clean linen</en><th>รับผ้าสะอาด</th></titleclean>
-<titleshelf><en>Shelf Count</en><th>Shelf Count</th></titleshelf>
-<titleclaim><en>Claim</en><th>ใบเคลม</th></titleclaim>
-<titlecus><en>Customer bill records</en><th>บันทึกบิลลูกค้า</th></titlecus>
-<titlewash><en>Washing bill records</en><th>บันทึกบิลซัก</th></titlewash>
-<titlecontractfac><en>Factory Contract</en><th>สัญญาโรงงาน</th></titlecontractfac>
 <priceunit><en>PriceUnit</en><th>ราคาต่อหน่วย</th></priceunit>
 
 <titlecontracthos><en>Hospital Contract</en><th>สัญญาโรงพยาบาล</th></titlecontracthos>
@@ -42,7 +59,6 @@
 <titledraw><en>Save draw</en><th>บันทึกเบิก</th></titledraw>
 <oldFormatItemCode><en>Old Format Code</en><th>รูปแบบรหัสเก่า</th></oldFormatItemCode>
 <newFormatItemCode><en>New Format Code</en><th>รูปแบบรหัสใหม่</th></newFormatItemCode>
-<side><en>Hospital</en><th>โรงพยาบาล</th></side>
 <department><en>Department</en><th>แผนก</th></department>
 <docdate><en>Document date</en><th>วันที่เอกสาร</th></docdate>
 <docno><en>Doc No</en><th>เลขที่เอกสาร</th></docno>
@@ -51,7 +67,6 @@
 <empcode><en>Employee Code</en><th>รหัสพนักงาน</th></empcode>
 <empfname><en>First Name</en><th>ชื่อพนักงาน</th></empfname>
 <emplname><en>Last Name</en><th>นามสกุล</th></emplname>
-<time><en>Record time</en><th>เวลาที่บันทึก</th></time>
 <totalweight><en>Total Weight</en><th>น้ำหนักรวม</th></totalweight>
 <code><en>Code</en><th>รหัส</th></code>
 <item><en>Lists</en><th>รายการ</th></item>
@@ -60,16 +75,13 @@
 <unit2><en>Unit</en><th>หน่วยนับ</th></unit2>
 <weight><en>Weight</en><th>น้ำหนัก</th></weight>
 <numofpiece><en>No. of pieces</en><th>จำนวนชิ้น</th></numofpiece>
-<createdocno><en>Create a document</en><th>สร้างเอกสาร</th></createdocno>
 <import><en>Import</en><th>นำเข้า</th></import>
 <delitem><en>Delete items</en><th>ลบรายการ</th></delitem>
 <save><en>Save</en><th>บันทึก</th></save>
-<cancel><en>Cancel</en><th>ยกเลิก</th></cancel>
 <searchplace><en>Search Document</en><th>ค้นหารายการ</th></searchplace>
 <show><en>Show items</en><th>แสดงรายการ</th></show>
 <status><en>Status</en><th>สถานะ</th></status>
 <close><en>Close</en><th>ปิด</th></close>
-<confirm><en>Confirm</en><th>ยืนยัน</th></confirm>
 <sendlinen><en>Send Linen</en><th>จัดส่งผ้า</th></sendlinen>
 <sendlinendep><en>Send linen to department.</en><th>จัดส่งผ้าเข้าแผนก</th></sendlinendep>
 <confirm1><en>Are you sure to delete [ </en><th>คุณต้องการลบรายการนี้ [ </th></confirm1>
@@ -98,7 +110,6 @@
 <datestart><en>Starting date</en><th>วันที่เริ่ม</th></datestart>
 <dateend><en>End date</en><th>วันที่สิ้นสุด</th></dateend>
 <percent><en>Percent</en><th>เปอร์เซ็นต์</th></percent>
-<date><en>Date</en><th>วันที่</th></date>
 <categorymain><en>Main category</en><th>หมวดหมู่หลัก</th></categorymain>
 <categorysub><en>Secondary category</en><th>หมวดหมู่รอง</th></categorysub>
 <category><en>Category</en><th>หมวดหมู่</th></category>
@@ -183,9 +194,8 @@
 <password><en>Password</en><th>รหัสผ่าน</th></password>
 <flname><en>Firstname-Surname</en><th>ชื่อ-สกุล</th></flname>
 <setprice><en>Set Price</en><th>กำหนดราคา</th></setprice>
-<datepicker><en>Select Date</en><th>เลือกวันที่</th></datepicker>
 <saveprice><en>Price records</en><th>บันทึกราคา</th></saveprice>
-<back><en>Back</en><th>กลับ</th></back>
+
 <changetimeout><en>Edit screen time</en><th>แก้ไขเวลาพักหน้าจอ</th></changetimeout>
 <changelang><en>Change Language</en><th>เปลี่ยนภาษา</th></changelang>
 <thai><en>Thai</en><th>ไทย</th></thai>
