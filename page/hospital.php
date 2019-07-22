@@ -6,15 +6,36 @@
     if($Userid==""){
       header("location:../index.html");
     }
-    $Menu = $_GET['Menu'];
+    
+    $language = $_SESSION['lang'];
+    $xml = simplexml_load_file('../xml/Language/hospital_lang.xml');
+    $json = json_encode($xml);
+    $array = json_decode($json,TRUE);
+    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+    $json = json_encode($genxml);
+    $genarray = json_decode($json,TRUE);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    
+    <?php
+            $Menu = $_GET['Menu'];
+            if($Menu == 1){
+                echo "<title>".$array['dirty'][$language].$array['title'][$language]."</title>";
+            }
+            else if ($Menu == 2) {
+                echo "<title>".$array['factory'][$language].$array['title'][$language]."</title>";
+            }
+            else if ($Menu == 3) {
+                echo "<title>".$array['clean'][$language].$array['title'][$language]."</title>";
+            }
+            else if ($Menu == 4) {
+                echo "<title>".$array['QC'][$language].$array['title'][$language]."</title>";
+            }
+    ?>
+
 	<script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/gijgo.min.js" type="text/javascript"></script>
     <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
@@ -30,20 +51,6 @@
     <script>
         $(document).ready(function (e) {
             load_site();
-
-            var Menu = <?php echo $Menu; ?>;
-            if(Menu == 1){
-                <title><?php echo $array['dirty'][$language]; ?><?php echo $array['title'][$language]; ?></title>
-            }
-            else if (Menu == 2) {
-                <title><?php echo $array['factory'][$language]; ?><?php echo $array['title'][$language]; ?></title>
-            }
-            else if (Menu == 3) {
-                <title><?php echo $array['clean'][$language]; ?><?php echo $array['title'][$language]; ?></title>
-            }
-            else if (Menu == 4) {
-                <title><?php echo $array['QC'][$language]; ?><?php echo $array['title'][$language]; ?></title>
-            }
         });
 
         function ImgToText(){
@@ -138,7 +145,7 @@
                 } else if (temp['status'] == "failed") {
                     swal({
                     title: '',
-                    text: "ไม่พบข้อมูลในโรงพยาบาล",
+                    text: '<?php $genarray['NotFoundHpt'][$language] ?>',
                     type: 'warning',
                     showCancelButton: false,
                     confirmButtonColor: '#3085d6',
@@ -161,12 +168,12 @@
         <div class="head-bar d-flex justify-content-between">
             <button  onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button >
             <div class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
-            <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+            <button  onclick="logout(1)" class="head-btn btn-dark" role="button"><?php $genarray['logout'][$language] ?><i class="fas fa-power-off ml-1"></i></button >
         </div>
     </header>
     <div class="px-3" style="font-family:sans-serif;">
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center my-4"><h4 class="text-truncate">All Hospital</h4></div>
+        <div class="text-center my-4"><h4 class="text-truncate"><?php $genarray['AllHospital'][$language] ?></h4></div>
         <div id="hospital"></div>
     </div>
 </body>

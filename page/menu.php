@@ -7,10 +7,10 @@
       header("location:../index.html");
     }
     $language = $_SESSION['lang'];
-    $xml = simplexml_load_file('../xml/menu_lang.xml');
+    $xml = simplexml_load_file('../xml/Language/menu_lang.xml');
     $json = json_encode($xml);
     $array = json_decode($json,TRUE);
-    $genxml = simplexml_load_file('../xml/general_lang.xml');
+    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
     $json = json_encode($genxml);
     $genarray = json_decode($json,TRUE);
 ?>
