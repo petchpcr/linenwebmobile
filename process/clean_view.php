@@ -8,8 +8,8 @@
         $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
         $Sql2 = "SELECT department.DepName,department.DepCode 
                 FROM department 
-                INNER JOIN dirty ON dirty.DepCode = department.DepCode 
-                WHERE dirty.DocNo = '$DocNo'";
+                INNER JOIN clean ON clean.DepCode = department.DepCode 
+                WHERE clean.DocNo = '$DocNo'";
         $boolean = false;
         $boolean2 = false;
 
@@ -48,14 +48,14 @@
         $boolean = false;
         $boolean2 = false;
         $Sql = "SELECT RefDocNo,
-                        DATE_FORMAT(dirty.Modify_Date,'%d %M %Y') AS xdate,
-                        DATE_FORMAT(dirty.Modify_Date,'%H:%i') AS xtime,
+                        DATE_FORMAT(clean.Modify_Date,'%d %M %Y') AS xdate,
+                        DATE_FORMAT(clean.Modify_Date,'%H:%i') AS xtime,
                         FName,
                         Total,
                         DepCode
-                FROM dirty, users, site
+                FROM clean, users, site
                 WHERE DocNo ='$DocNo'
-                AND users.ID = dirty.Modify_Code
+                AND users.ID = clean.Modify_Code
                 AND users.HptCode = site.HptCode";
         $return['sql'] = $Sql;
 
@@ -71,15 +71,15 @@
         }
         $return['boolean'] = $boolean;
 
-        $Sql2 = "SELECT dirty_detail.ItemCode,
+        $Sql2 = "SELECT clean_detail.ItemCode,
                         item.ItemName,
-                        dirty_detail.UnitCode,
-                        dirty_detail.Qty,
-                        dirty_detail.Weight 
-                FROM dirty_detail,
+                        clean_detail.UnitCode,
+                        clean_detail.Qty,
+                        clean_detail.Weight 
+                FROM clean_detail,
                      item 
                 WHERE DocNo = '$DocNo'
-                AND	  item.ItemCode = dirty_detail.ItemCode";
+                AND	  item.ItemCode = clean_detail.ItemCode";
         $return['sql2'] = $Sql2;
 
         $meQuery2 = mysqli_query($conn, $Sql2);
