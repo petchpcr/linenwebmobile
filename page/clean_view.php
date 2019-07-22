@@ -59,7 +59,7 @@
         function back(){
             var siteCode = '<?php echo $siteCode;?>';
             var Menu = <?php echo $Menu;?>;
-            window.location.href='dirty.php?siteCode='+siteCode+'&Menu='+Menu;
+            window.location.href='clean.php?siteCode='+siteCode+'&Menu='+Menu;
         }
 
         function logout(num){
@@ -81,7 +81,7 @@
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = '../process/dirty_view.php';
+            var URL = '../process/clean_view.php';
             $.ajax({
                 url: URL,
                 dataType: 'text',
