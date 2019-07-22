@@ -9,26 +9,20 @@ function checklogin($conn,$DATA)
     $user = $DATA['USERNAME'];
     $password = $DATA['PASSWORD'];
     $boolean = false;
-    $Sql = "SELECT
-        users.ID,
-        users.UserName,
-        users.FName,
-        users.`Password`,
-        permission.PmID,
-        permission.Permission,
-        users.TimeOut,
-        users.HptCode,
-        users.FacCode
-        FROM permission
-        INNER JOIN users ON users.PmID = permission.PmID
-        WHERE users.UserName = '$user' AND users.`Password` = '$password' AND users.IsCancel = 0";
-        $return['sql'] = $Sql;
+    $Sql = "SELECT    UserName,FName,ID,PmID,lang,HptCode,FacCode,TimeOut
+            FROM      users
+            WHERE     UserName = '$user'
+            AND       Password = '$password' 
+            AND       IsCancel = 0";
+
+    $return['sql'] = $Sql;
     $meQuery = mysqli_query($conn,$Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
       $_SESSION['Userid'] = $Result['ID'];
       $_SESSION['Username'] = $Result['UserName'];
       $_SESSION['FName'] = $Result['FName'];
       $_SESSION['PmID'] = $Result['PmID'];
+      $_SESSION['lang'] = $Result['lang'];
       $_SESSION['TimeOut'] = $Result['TimeOut'];
       $_SESSION['HptCode'] = $Result['HptCode'];
       $_SESSION['FacCode'] = $Result['FacCode'];

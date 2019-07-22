@@ -32,7 +32,7 @@
 			swal({
 				type: 'warning',
 				title: 'Something Wrong',
-				text: 'Please recheck your username and password! test'
+				text: 'Please recheck your username and password!'
 			})
 			}
         }
@@ -162,7 +162,7 @@
 							<input type="password" id="password" value="">
 						</div>
 						<div class="m-4">
-							<button class="ui-shadow ui-btn ui-corner-all" name="submit-button-1" id="submit-button-1" onclick="chklogin();" >ตกลง</button>	
+							<button class="ui-shadow ui-btn ui-corner-all" name="submit-button-1" id="submit-button-1" onclick="chklogin();" >Login</button>	
 						</div>
 							
 					</td>

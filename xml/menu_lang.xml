@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+
+<NotFoundHpt><en>Not found Hospital</en><th>ไม่พบข้อมูลในโรงพยาบาล</th></NotFoundHpt>
+<menu><en>Menu</en><th>เมนู</th></menu>
+<clean><en>Clean Doc.</en><th>ผ้าสะอาด</th></clean>
+<dirty><en>Dirty Doc.</en><th>ผ้าสกปรก</th></dirty>
+<QC><en>QC</en><th>QC</th></QC>
+<setting><en>Setting</en><th>ตั้งค่า</th></setting>
+<report><en>Report</en><th>รายงาน</th></report>
+<factory><en>Clean Fac.</en><th>โรงงานซัก</th></factory>
+
+</lang>

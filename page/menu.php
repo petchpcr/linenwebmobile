@@ -3,10 +3,17 @@
     $Userid = $_SESSION['Userid'];
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
+
     if($Userid==""){
       header("location:../index.html");
     }
-    
+    $language = $_SESSION['lang'];
+    $xml = simplexml_load_file('../xml/menu_lang.xml');
+    $json = json_encode($xml);
+    $array = json_decode($json,TRUE);
+    $genxml = simplexml_load_file('../xml/general_lang.xml');
+    $json = json_encode($genxml);
+    $genarray = json_decode($json,TRUE);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -67,7 +74,7 @@
                 } else if (temp['status'] == "failed") {
                     swal({
                     title: '',
-                    text: "ไม่พบข้อมูลในโรงพยาบาล",
+                    text: <?php echo $array['NotFoundHpt'][$language]; ?>,
                     type: 'warning',
                     showCancelButton: false,
                     confirmButtonColor: '#3085d6',
@@ -91,13 +98,13 @@
         <header data-role="header">
             <div class="head-bar d-flex justify-content-between">
                 <div style="margin-right:75px"></div >
-                <div class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
-                <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+                <div class="head-text text-truncate align-self-center"><?php echo $language?> : <?php echo $UserFName?></div>
+                <button  onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button >
             </div>
         </header>
         <div data-role="content" style="font-family:sans-serif;">
             <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-            <div class="text-center my-4"><h4 class="text-truncate">Menu</h4></div>
+            <div class="text-center my-4"><h4 class="text-truncate"><?php echo $array['menu'][$language]; ?></h4></div>
             <div id="hospital"></div>
         </div>
 
@@ -105,37 +112,37 @@
             <div class="my-col-menu">
                 <button onclick="menu_click(1)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/tshirt.png">
-                    <div class="text-truncate">ผ้าสกปรก</div>
+                    <div class="text-truncate"><?php echo $array['dirty'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
                 <button onclick="menu_click(2)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Factory.png">
-                    <div class="text-truncate">โรงงานซัก</div>
+                    <div class="text-truncate"><?php echo $array['factory'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
                 <button onclick="menu_click(3)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/laundry.png">
-                    <div class="text-truncate">ผ้าสะอาด</div>
+                    <div class="text-truncate"><?php echo $array['clean'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
                 <button onclick="menu_click(4)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/QC.png">
-                    <div class="text-truncate">QC</div>
+                    <div class="text-truncate"><?php echo $array['QC'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
                 <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Report.png">
-                    <div class="text-truncate">รายงาน</div>
+                    <div class="text-truncate"><?php echo $array['report'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
                 <button onclick="menu_click(6)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Tools.png">
-                    <div class="text-truncate">ตั้งค่า</div>
+                    <div class="text-truncate"><?php echo $array['setting'][$language]; ?></div>
                 </button>
             </div>
         </div>
