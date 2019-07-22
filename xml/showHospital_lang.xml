@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang>
 
-<title><en>Main Menu</en><th>Main Menu</th></title>
-<menu><en>Menu</en><th>เมนู</th></menu>
+<title><en>|Select Hospital</en><th>|เลือกโรงพยาบาล</th></title>
 <clean><en>Clean Doc.</en><th>ผ้าสะอาด</th></clean>
 <dirty><en>Dirty Doc.</en><th>ผ้าสกปรก</th></dirty>
 <QC><en>QC</en><th>QC</th></QC>
-<setting><en>Setting</en><th>ตั้งค่า</th></setting>
-<report><en>Report</en><th>รายงาน</th></report>
 <factory><en>Clean Fac.</en><th>โรงงานซัก</th></factory>
 
 </lang>

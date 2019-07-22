@@ -3,6 +3,7 @@
 
 
 <logout><en>Logout</en><th>ออกจากระบบ</th></logout>
+<NotFoundHpt><en>Not found Hospital</en><th>ไม่พบข้อมูลในโรงพยาบาล</th></NotFoundHpt>
 
 //old
 <activeItem><en>Active</en><th>Active</th></activeItem>

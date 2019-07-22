@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    
     
 	<script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/gijgo.min.js" type="text/javascript"></script>
@@ -30,6 +30,20 @@
     <script>
         $(document).ready(function (e) {
             load_site();
+
+            var Menu = <?php echo $Menu; ?>;
+            if(Menu == 1){
+                <title><?php echo $array['dirty'][$language]; ?><?php echo $array['title'][$language]; ?></title>
+            }
+            else if (Menu == 2) {
+                <title><?php echo $array['factory'][$language]; ?><?php echo $array['title'][$language]; ?></title>
+            }
+            else if (Menu == 3) {
+                <title><?php echo $array['clean'][$language]; ?><?php echo $array['title'][$language]; ?></title>
+            }
+            else if (Menu == 4) {
+                <title><?php echo $array['QC'][$language]; ?><?php echo $array['title'][$language]; ?></title>
+            }
         });
 
         function ImgToText(){

@@ -3,7 +3,6 @@
     $Userid = $_SESSION['Userid'];
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
-
     if($Userid==""){
       header("location:../index.html");
     }
@@ -20,7 +19,8 @@
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    
+    <title><?php echo $array['title'][$language]; ?></title>
     
 	<script src="../js/jquery-3.3.1.min.js"></script>
     
@@ -74,7 +74,7 @@
                 } else if (temp['status'] == "failed") {
                     swal({
                     title: '',
-                    text: <?php echo $array['NotFoundHpt'][$language]; ?>,
+                    text: '<?php echo $genarray['NotFoundHpt'][$language]; ?>',
                     type: 'warning',
                     showCancelButton: false,
                     confirmButtonColor: '#3085d6',
