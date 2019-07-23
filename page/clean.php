@@ -111,10 +111,10 @@
         }
 
         function add_dirty(){
-            var Userid = "<?php echo $Userid?>";
             var siteCode = "<?php echo $siteCode?>";
             var DepCode = $("#DepName").val();
-            window.location.href = "hospital.php?Userid=" + Userid +'&siteCode='+siteCode+'&DepCode='+DepCode;
+            var Menu = <?php echo $Menu;?>;
+            window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode='+DepCode+'&Menu='+Menu;
         }
 
         function senddata(data) {
