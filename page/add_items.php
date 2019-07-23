@@ -11,6 +11,13 @@ $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
+$language = $_SESSION['lang'];
+    $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
+    $json = json_encode($xml);
+    $array = json_decode($json, TRUE);
+    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+    $json = json_encode($genxml);
+    $genarray = json_decode($json, TRUE);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -347,16 +354,16 @@ $Userid = $_GET['user'];
 
 <body>
     <header data-role="header">
-        <div class="head-bar d-flex justify-content-between">
-            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button>
+    <div class="head-bar d-flex justify-content-between">
+            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-            <button onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button>
+            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3 mb-5" style="font-family:sans-serif;">
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
         <div class="text-center mb-3">
-            <h4 class="text-truncate">เอกสาร</h4>
+            <h4 class="text-truncate"><?php echo $genarray['docno'][$language]; ?></h4>
             <div id="DocNo" class="text-truncate"></div>
         </div>
         <div class="row justify-content-center px-3 mb-5">
@@ -382,11 +389,11 @@ $Userid = $_GET['user'];
             <div class="form-row my-2">
                 <div class="col-12 input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">น้ำหนักรวม</span>
+                        <span class="input-group-text"><?php echo $array['weightSum'][$language]; ?></span>
                     </div>
                     <input id="sum_weight" type="text" class="form-control text-center bg-white" id="total_weight" placeholder="0.0" disabled>
                     <div class="input-group-append">
-                        <span class="input-group-text">กิโลกรัม</span>
+                        <span class="input-group-text"><?php echo $array['KG'][$language]; ?></span>
                     </div>
 
                 </div>
@@ -394,12 +401,12 @@ $Userid = $_GET['user'];
             <div class="row">
                 <div class="col-6">
                     <button onclick="choose_items()" class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#md_item">
-                        <i class="fas fa-plus mr-1"></i>เพิ่มรายการ
+                        <i class="fas fa-plus mr-1"></i><?php echo $array['addList'][$language]; ?>
                     </button>
                 </div>
                 <div class="col-6">
                     <button onclick="add_item()" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
-                        <i class="fas fa-save mr-1"></i>บันทึก
+                        <i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
                     </button>
                 </div>
             </div>
@@ -411,13 +418,13 @@ $Userid = $_GET['user'];
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">เพิ่มรายการ</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><?php echo $array['addList'][$language]; ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-                    <input onkeyup="choose_items()" id="search_items" class="form-control mb-3" type="text" placeholder="ค้นหารายการ">
+                    <input onkeyup="choose_items()" id="search_items" class="form-control mb-3" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
 
                     <div id="choose_item">
                         <!-- <button onclick="chk_items('chk0')" class="btn btn-block alert alert-info py-1 px-3 mb-2">
@@ -434,10 +441,10 @@ $Userid = $_GET['user'];
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
                         <div class="col-6 text-right">
-                            <button id="btn_add_items" onclick="select_chk()" type="button" class="btn btn-success m-2">ยืนยัน</button>
+                            <button id="btn_add_items" onclick="select_chk()" type="button" class="btn btn-success m-2"><?php echo $genarray['confirm'][$language]; ?></button>
                         </div>
                         <div class="col-6 text-left">
-                            <button type="button" class="btn btn-danger m-2" data-dismiss="modal">ยกเลิก</button>
+                            <button type="button" class="btn btn-danger m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
                         </div>
                     </div>
                 </div>

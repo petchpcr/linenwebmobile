@@ -13,4 +13,6 @@
 <numberSize><en>Number</en><th>จำนวน</th></numberSize>
 
 <addList><en>Add item</en><th>เพิ่มรายการ</th></addList>
+
+<searchitem><en>Search item</en><th>ค้นหารายการ</th></searchitem>
 </lang>

@@ -36,7 +36,7 @@ $genarray = json_decode($json, TRUE);
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         $(document).ready(function(e) {
-            load_site();
+            $("#lang").val('<?php echo $language; ?>');
         });
 
         function back() {
@@ -49,6 +49,23 @@ $genarray = json_decode($json, TRUE);
                 'STATUS': 'logout'
             };
             senddata(JSON.stringify(data));
+        }
+
+        function save_lang() {
+
+            var lang = $("#lang").val();
+            var Userid = '<?php echo $Userid; ?>';
+
+            var data = {
+                'lang': lang,
+                'Userid': Userid,
+                'STATUS': 'save_lang'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function save() {
+            save_lang()
         }
 
         function senddata(data) {
@@ -71,27 +88,24 @@ $genarray = json_decode($json, TRUE);
                     }
 
                     if (temp["status"] == 'success') {
-                        if (temp["form"] == 'load_site') {
-                            for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                                var picture = temp[i]['picture'];
-                                if (temp[i]['picture'] == null || temp[i]['picture'] == "") {
-                                    picture = "logo.png";
-                                }
-
-                                var Str = "<button onclick='show_doc(\"" + temp[i]['HptCode'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
-                                Str += "<div class='row'><div class='col-6'><div class='row d-flex justify-content-end'><div style='width:200px !important;'>";
-                                Str += "<img class='hpt_img' src='../img/" + picture + "'/></div></div></div><div class='col-6 d-flex justify-content-start align-items-center' style='padding-left:0;color:black;'>";
-                                Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name'>" + temp[i]['HptName'] + "</div></div></div></button>";
-
-                                $("#hospital").append(Str);
-                            }
+                        if (temp["form"] == 'save_lang') {
+                            swal({
+                            title: '',
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            confirmButtonText: 'Error!!'
+                            })
+                            setTimeout( 'window.location.href = "menu.php"', 1000 );
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
                     } else if (temp['status'] == "failed") {
                         swal({
                             title: '',
-                            text: '<?php $genarray['NotFoundHpt'][$language] ?>',
                             type: 'warning',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
@@ -112,17 +126,31 @@ $genarray = json_decode($json, TRUE);
 <body>
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
-            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button>
+            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php $genarray['logout'][$language] ?><i class="fas fa-power-off ml-1"></i></button>
+            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3" style="font-family:sans-serif;">
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
-        <div class="text-center my-4">
-            <h4 class="text-truncate"><?php $genarray['AllHospital'][$language] ?></h4>
+        <div class="modal-body text-center">
+            <div class="input-group my-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01"><?php echo $array['changelang'][$language]; ?></label>
+                    </div>
+                    <select id="lang" class="custom-select">
+                        <option value="th" selected><?php echo $array['th'][$language]; ?></option>
+                        <option value="en" selected><?php echo $array['en'][$language]; ?></option>
+                    </select>
+                </div>
         </div>
-        <div id="hospital"></div>
+        <div class="modal-footer text-center">
+            <div class="row w-100 d-flex align-items-center">
+                <div class="col-12 text-right">
+                    <button id="btn_save" onclick="save()" type="button" class="btn btn-success"><?php echo $genarray['save'][$language]; ?></button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
