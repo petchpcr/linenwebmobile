@@ -37,7 +37,12 @@
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         function menu_click(num) {
-            window.location.href='hospital.php?Menu='+num;
+            if(num<=4){
+                window.location.href='hospital.php?Menu='+num;
+            }else if(num==6){
+                window.location.href='setting.php';
+            }
+           
         }
 
         function logout(num){
