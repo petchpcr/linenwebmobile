@@ -62,14 +62,28 @@ $Userid = $_GET['user'];
             senddata(JSON.stringify(data));
         }
 
-        function chk_items(chk) {
-            var id = "#" + chk;
-            if ($(id).is(':checked')) {
-                $(id).prop("checked", false);
-            } else {
-                $(id).prop("checked", true);
+        function chk_items(num) {
+            var DocNo = '<?php echo $DocNo ?>';
+            var ItemCode = $("#question"+num).data("itemcode");
+            var Question = $("#question"+num).data("question");
+            var chk_id = "#chk" + num;
+            var unchk_id = "#unchk" + num;
+            var IsStatus = 1;
+
+            if ($(chk_id).is(':checked') == true && $(unchk_id).is(':checked') == false) {
+                IsStatus = 0;
+                $(unchk_id).prop("checked", true);
+
+            } else if ($(chk_id).is(':checked') == false && $(unchk_id).is(':checked') == true) {
+                $(chk_id).prop("checked", true);
             }
-            var test = $(id).data("name");
+
+            var data = {
+                'DocNo': DocNo,
+                'IsStatus': IsStatus,
+                'STATUS': 'chk_items'
+            };
+            senddata(JSON.stringify(data));
         }
 
         function back() {
@@ -137,11 +151,17 @@ $Userid = $_GET['user'];
                             // alert(length);
                             for (var i = 0; i < (Object.keys(temp).length - 5); i++) {
                                 var id = "#text_question"+i;
-                                var Str = "<button onclick='chk_items('chk"+i+"')' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+                                // var Str = "<button onclick='chk_items('chk"+i+"')' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+                                //     Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>";
+                                //     Str += "<div id='1111'>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate text-right'>";
+                                //     Str += "<div class='form-check'><input class='m-0' type='radio' id='chk"+i+"' value='1' checked>ผ่าน";
+                                //     Str += "<input class='ml-3' type='radio' id='unchk"+i+"' value='2'>ไม่ผ่าน</div></div></button>";
+
+                                var Str = "<button onclick='chk_items("+i+")' id='question"+i+"' data-itemcode='"+temp[i]['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
                                     Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>";
-                                    Str += "<div id='1111'>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate text-right'>";
-                                    Str += "<div class='form-check'><input class='m-0' type='radio' id='chk"+i+"' value='1' checked>ผ่าน";
-                                    Str += "<input class='ml-3' type='radio' id='unchk"+i+"' value='2'>ไม่ผ่าน</div></div></button>";
+                                    Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate text-right p-0'><div class='form-check form-check-inline m-0'>";
+                                    Str += "<input class='form-check-input' type='radio' name='radio"+i+"' id='chk"+i+"' checked>ผ่าน";
+                                    Str += "<input class='form-check-input ml-3' type='radio' name='radio"+i+"' id='unchk"+i+"'>ไม่ผ่าน</div></div></button>";
 
                                 // alert("array : "+i);
                                 // alert(temp[i]['Question']);
@@ -178,6 +198,7 @@ $Userid = $_GET['user'];
             <h4 class="text-truncate">เอกสาร</h4>
             <div id="DocNo" class="text-truncate"></div>
         </div>
+        <p class="text-justify">Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec sed odio operae, eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac, sitientis piros Afros. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus sit amet fermentum.</p>
 
         <div class="row justify-content-center px-3">
             <table class="table table-hover col-lg-9 col-md-10 col-sm-12">
@@ -247,15 +268,17 @@ $Userid = $_GET['user'];
                     <div id="item_name"></div>
                     <div id="question">
 
-                        <button onclick="chk_items('chk0')" class="btn btn-block alert alert-info py-1 px-3 mb-2">
-                            <div class="d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0">
-                                <div>99 X 99 สีขาว</div>
+                        <button onclick="chk_items(0)" id="question0" data-itemcode="99999" data-question="121" class="btn btn-block alert alert-info py-1 px-3 mb-2">
+                            <div class="col-12 text-justify pr-0 border border-danger">
+                                99 X 99 สีขาว 999999999999999999999999999999999999999999999999999
                             </div>
-                            <div class="col-12 text-truncate text-right">
-                                <input class="m-0" type="checkbox" id="chk0" value="1">
-                                ผ่าน
-                                <input class="ml-3" type="checkbox" id="chk0" value="1">
-                                ไม่ผ่าน
+                            <div class="col-12 text-truncate text-right p-0">
+                                <div class="form-check form-check-inline m-0">
+                                    <input class="form-check-input" type="radio" name="radio0" id="chk0" value="option1" checked>
+                                    ผ่าน
+                                    <input class="form-check-input ml-3" type="radio" name="radio0" id="unchk0" value="option2">
+                                    ไม่ผ่าน
+                                </div>
                             </div>
                         </button>
 

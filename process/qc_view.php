@@ -139,6 +139,37 @@
         }
     }
 
+    function chk_items($conn, $DATA){
+        $DocNo=$DATA["DocNo"];
+        $ItemCode=$DATA["ItemCode"];
+        $question=$DATA["question"];
+        $IsStatus=$DATA["IsStatus"];
+
+        $Sql = "    UPDATE      qcchecklist
+
+                    SET         IsStatus = $IsStatus
+                    
+                    WHERE       DocNo= '$DocNo'
+                    AND         ItemCode='$ItemCode'
+                    AND         QuestionId='$question'";
+        $return['sql'] = $Sql;
+        $meQuery = mysqli_query($conn,$Sql);
+
+        if ($meQuery = mysqli_query($conn,$Sql)) {
+            $return['status'] = "success";
+            $return['form'] = "chk_items";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "chk_items";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function logout($conn, $DATA){
 
         $logout = $DATA["Confirm"];
@@ -176,6 +207,9 @@
         }
         else if ($DATA['STATUS'] == 'show_question') {
             show_question($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'chk_items') {
+            chk_items($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);
