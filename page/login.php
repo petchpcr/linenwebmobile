@@ -163,40 +163,6 @@
 </head>
 
 <body>
-	<!-- <div class="bg_login"> -->
-
-		<!-- <div class="row w-100 border" style="padding-top:10rem;"> -->
-			<!-- <div class="col-lg-3 col-md-2 col-sm-none"></div> -->
-			<!-- <div class="col-lg-6 col-md-8 col-sm-12">
-				<table class="center" border="0" cellspacing="5" cellpadding="5">
-				<tr>
-					<td>
-						<div class="mb-2" align="center"><img src="../img/logo.png" width="240" height="60" /></div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="mx-4" data-demo-html="true">
-							<label for="text-basic">User Name :</label>
-							<input type="text" id="username" value="">
-						</div>
-						<div class="mx-4" data-demo-html="true">
-							<label for="text-basic">Password :</label>
-							<input type="password" id="password" value="">
-						</div>
-						<div class="m-4">
-							<button class="ui-shadow ui-btn ui-corner-all" name="submit-button-1" id="submit-button-1" onclick="chklogin();" >Login</button>	
-						</div>
-							
-					</td>
-				</tr>
-				</table>
-			</div> -->
-			<!-- <div class="col-lg-3 col-md-2 col-sm-none"></div> -->
-		<!-- </div> -->
-		<!-- <div style="padding-bottom:50rem;">
-		</div> -->
-	<!-- </div> -->
 	<div class="d-flex justify-content-center" style="height:100%;padding-top:10rem;">
 		<div class="col-lg-9 col-md-10 col-sm-12">
 
@@ -213,7 +179,7 @@
 			</div>
 
 			<div class="form-group">
-				<button class="btn btn-info btn-block font-weight-bold" onclick="" >Login</button>	
+				<button class="btn btn-info btn-block font-weight-bold" onclick="chklogin();" >Login</button>	
 			</div>
 		</div>
 		
