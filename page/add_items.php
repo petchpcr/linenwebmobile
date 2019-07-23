@@ -179,13 +179,15 @@ $genarray = json_decode($json, TRUE);
                 var num2 =(this.value.replace(/[^0-9]/g, '')).length;
                 if((num1-num2)>=2){
                     this.value = $("#"+this.id).data("weight");
+                }else if((num1-num2)==0){
+                    this.value= Number(this.value);
                 }
                 $("#"+this.id).data("weight",$("#"+this.id).val());
                 //console.log($("#"+this.id).data("weight"));
                 //console.log(num1);
                 //console.log(num2);
+                cal_weight();
              });
-            cal_weight();
         }
 
         function currencyFormat(num) {
