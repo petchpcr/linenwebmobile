@@ -28,10 +28,13 @@
 <titleclean><en>Clean Doc </en><th>ผ้าสะอาด</th></titleclean>
 <titledirty><en>Dirty Doc </en><th>ผ้าสกปรก</th></titledirty>
 <titleQC><en>QC</en><th>QC </th></titleQC>
-<titlefactory><en>Clean Fac </en><th>โรงงานซัก</th></titlefactory>
+<titlefactory><en>Factory </en><th>โรงงานซัก</th></titlefactory>
 
 <confirm><en>Confirm</en><th>ยืนยัน</th></confirm>
 <cancel><en>Cancel</en><th>ยกเลิก</th></cancel>
+
+<changelang><en>Change Language</en><th>เปลี่ยนภาษา</th></changelang>
+<save><en>Save</en><th>บันทึก</th></save>
 
 //old
 <activeItem><en>Active</en><th>Active</th></activeItem>
@@ -55,7 +58,6 @@
 <priceunit><en>PriceUnit</en><th>ราคาต่อหน่วย</th></priceunit>
 
 <titlecontracthos><en>Hospital Contract</en><th>สัญญาโรงพยาบาล</th></titlecontracthos>
-<titlefactory><en>Factory</en><th>โรงงานซัก</th></titlefactory>
 <titlefactoryin><en>FactoryIn</en><th>รับผ้าสกปรก</th></titlefactoryin>
 <titlefactoryout><en>Send clean linen</en><th>ส่งผ้าสะอาด</th></titlefactoryout>
 <titledraw><en>Save draw</en><th>บันทึกเบิก</th></titledraw>
@@ -78,8 +80,6 @@
 <numofpiece><en>No. of pieces</en><th>จำนวนชิ้น</th></numofpiece>
 <import><en>Import</en><th>นำเข้า</th></import>
 <delitem><en>Delete items</en><th>ลบรายการ</th></delitem>
-<save><en>Save</en><th>บันทึก</th></save>
-<searchplace><en>Search Document</en><th>ค้นหารายการ</th></searchplace>
 <show><en>Show items</en><th>แสดงรายการ</th></show>
 <status><en>Status</en><th>สถานะ</th></status>
 <close><en>Close</en><th>ปิด</th></close>
@@ -198,7 +198,6 @@
 <saveprice><en>Price records</en><th>บันทึกราคา</th></saveprice>
 
 <changetimeout><en>Edit screen time</en><th>แก้ไขเวลาพักหน้าจอ</th></changetimeout>
-<changelang><en>Change Language</en><th>เปลี่ยนภาษา</th></changelang>
 <thai><en>Thai</en><th>ไทย</th></thai>
 <eng><en>English</en><th>อังกฤษ</th></eng>
 <alertPar><en>Over Par</en><th>แจ้งเตือนจำนวนเกิน</th></alertPar>

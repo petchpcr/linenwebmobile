@@ -158,9 +158,9 @@ $genarray = json_decode($json, TRUE);
 <body>
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
-            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button>
+            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php $genarray['logout'][$language] ?><i class="fas fa-power-off ml-1"></i></button>
+            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3" style="font-family:sans-serif;">

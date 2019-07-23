@@ -266,9 +266,9 @@
 <body>
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
-            <button  onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button >
-            <div class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
-            <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+            <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3 pb-4 mb-5" style="font-family:sans-serif;">
@@ -277,30 +277,14 @@
         <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
         <div id="document">
             <div class="d-flex justify-content-center mb-3">
-                <input id="datepicker" class="text-truncate text-center" width="276" placeholder="เลือกวันที่สร้างเอกสาร"/>
-                <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i>ค้นหา</button>
+                <input id="datepicker" class="text-truncate text-center" width="276" placeholder='<?php echo $genarray['CreateDocDate'][$language]; ?>' />
+                <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
             <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
                 <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fas fa-plus mr-1"></i>สร้างเอกสาร
+                    <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
                 </button>
             </div>
-            <!-- <button on_click="" class='btn btn-block' style='align-items: center !important;'>
-                <div class="row">
-                    <div class='my-col-5'>
-                        <div class='row justify-content-end align-items-center'>        
-                            <div class='card status1'>หยุดชั่วขณะ</div>
-                            <img src='../img/StatusLine_1.png' height='50'/>
-                        </div>
-                    </div>
-
-                    <div class='my-col-7 text-left'>
-                        <div class='text-truncate font-weight-bold'>9999999999999999</div>
-                        <div class='font-weight-light'>Hospital / Department</div>
-                    </div>
-                </div>
-            </button> -->
-
         </div>
     </div>
     
