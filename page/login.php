@@ -15,7 +15,11 @@
 	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
-	<script>
+	<script type="text/javascript">
+		function back() {
+			alert("Go to back");
+		}
+
         function chklogin() {
             var user = $("#username").val();
 			var password = $("#password").val();
@@ -141,7 +145,7 @@
 </head>
 
 <body>
-	<div class="bg_login">
+	<div class="bg_login"></div>
 		<div class="row" style="padding-top:10rem;">
 			<div class="col-lg-3 col-md-2 col-sm-none"></div>
 			<div class="col-lg-6 col-md-8 col-sm-12">
@@ -171,9 +175,9 @@
 			</div>
 			<div class="col-lg-3 col-md-2 col-sm-none"></div>
 		</div>
-		<div style="padding-bottom:50rem;">
-		</div>
-	</div>
+		<!-- <div style="padding-bottom:50rem;">
+		</div> -->
+	
 				
 </body>
 
