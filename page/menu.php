@@ -40,7 +40,7 @@
             if(num<=4){
                 window.location.href='hospital.php?Menu='+num;
             }else if(num==6){
-                window.location.href='setting.php;
+                window.location.href='setting.php';
             }
            
         }
