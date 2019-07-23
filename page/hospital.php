@@ -22,16 +22,16 @@ $genarray = json_decode($json, TRUE);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-        $Menu = $_GET['Menu'];
-        if ($Menu == 1) {
-            echo "<title>" . $genarray['titledirty'][$language] . $array['title'][$language] . "</title>";
-        } else if ($Menu == 2) {
-            echo "<title>" . $genarray['titlefactory'][$language] . $array['title'][$language] . "</title>";
-        } else if ($Menu == 3) {
-            echo "<title>" . $genarray['titleclean'][$language] . $array['title'][$language] . "</title>";
-        } else if ($Menu == 4) {
-            echo "<title>" . $genarray['titleQC'][$language] . $array['title'][$language] . "</title>";
-        }
+    $Menu = $_GET['Menu'];
+    if ($Menu == 1) {
+        echo "<title>" . $genarray['titledirty'][$language] . $array['title'][$language] . "</title>";
+    } else if ($Menu == 2) {
+        echo "<title>" . $genarray['titlefactory'][$language] . $array['title'][$language] . "</title>";
+    } else if ($Menu == 3) {
+        echo "<title>" . $genarray['titleclean'][$language] . $array['title'][$language] . "</title>";
+    } else if ($Menu == 4) {
+        echo "<title>" . $genarray['titleQC'][$language] . $array['title'][$language] . "</title>";
+    }
     ?>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -65,11 +65,24 @@ $genarray = json_decode($json, TRUE);
         }
 
         function show_doc(SiteCode) {
-            var data = {
-                'SiteCode': SiteCode,
-                'STATUS': 'show_doc'
-            };
-            senddata(JSON.stringify(data));
+            // var data = {
+            //     'SiteCode': SiteCode,
+            //     'STATUS': 'show_doc'
+            // };
+            // senddata(JSON.stringify(data));
+
+            var Menu = <?php echo $Menu; ?>;
+            if (Menu == 1 || Menu == 2) {
+                window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+            } else if (Menu == 3) {
+                window.location.href = 'clean.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+            } else if (Menu == 4) {
+                window.location.href = 'qc.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+            } else if (Menu == 5) {
+                window.location.href = 'report.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+            } else if (Menu == 6) {
+                window.location.href = 'tools.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+            }
         }
 
         function back() {
@@ -118,26 +131,26 @@ $genarray = json_decode($json, TRUE);
 
                                 $("#hospital").append(Str);
                             }
-                        } else if (temp["form"] == 'show_doc') {
-                            var Menu = <?php echo $Menu; ?>;
-                            if (Menu == 1 || Menu == 2) {
-                                window.location.href = 'dirty.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            } else if (Menu == 3) {
-                                window.location.href = 'clean.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            } else if (Menu == 4) {
-                                window.location.href = 'qc.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            } else if (Menu == 5) {
-                                window.location.href = 'report.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            } else if (Menu == 6) {
-                                window.location.href = 'tools.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            }
+                            //} else if (temp["form"] == 'show_doc') {
+                            //     var Menu = <?php echo $Menu; ?>;
+                            //     if (Menu == 1 || Menu == 2) {
+                            //         window.location.href = 'dirty.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
+                            //     } else if (Menu == 3) {
+                            //         window.location.href = 'clean.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
+                            //     } else if (Menu == 4) {
+                            //         window.location.href = 'qc.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
+                            //     } else if (Menu == 5) {
+                            //         window.location.href = 'report.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
+                            //     } else if (Menu == 6) {
+                            //         window.location.href = 'tools.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
+                            //     }
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
                     } else if (temp['status'] == "failed") {
                         swal({
                             title: '',
-                            text: '<?php $genarray['NotFoundHpt'][$language] ?>',
+                            text: "<?php $genarray['NotFoundHpt'][$language] ?>",
                             type: 'warning',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
