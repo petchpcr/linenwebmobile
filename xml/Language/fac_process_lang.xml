@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+
+<title><en>| Clean Process</en><th>| กระบวนการทำความสะอาด</th></title>
+
+<errorToAddData><en>Error to add information</en><th>เกิดข้อผิดพลาดในการเพิ่มข้อมูล</th></errorToAddData>
+
+<Starttime><en>Start time</en><th>เวลาที่เริ่ม</th></Starttime>
+<countdown><en>Count down</en><th>นับถอยหลัง</th></countdown>
+<Finishtime><en>Finish time</en><th>เวลาสิ้นสุด</th></Finishtime>
+<Processtime><en>Process time</en><th>เวลาดำเนินการ</th></Processtime>
+
+<Wash><en>Wash</en><th>ซักผ้า</th></Wash>
+<StartWash><en>Start Washing</en><th>เริ่มซัก</th></StartWash>
+<Continue><en>Continue</en><th>ทำต่อ</th></Continue>
+<Stop><en>Stop</en><th>หยุด</th></Stop>
+
+
+<pack><en>Pack</en><th>บรรจุผ้า</th></pack>
+<Startpack><en>Start packing</en><th>เริ่มบรรจุ</th></Startpack>
+
+<shipping><en>Shipping</en><th>ขนส่ง</th></shipping>
+<Startshipping><en>Start shipping</en><th>เริ่มขนส่ง</th></Startshipping>
+
+<Finish><en>Finish</en><th>เสร็จสิ้น</th></Finish>
+</lang>

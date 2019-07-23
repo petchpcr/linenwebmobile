@@ -26,7 +26,14 @@ $language = $_SESSION['lang'];
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <?php
+        $Menu = $_GET['Menu'];
+        if ($Menu == 1) {
+            echo "<title>" . $genarray['titledirty'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
+        } else if ($Menu == 3) {
+            echo "<title>" . $genarray['titleclean'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
+        }
+    ?>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
 
@@ -105,8 +112,8 @@ $language = $_SESSION['lang'];
                     var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                     Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
                     Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-                    Str += "<input onkeypress='make_number()' onkeyup='cal_weight()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-                    Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num=" + num + " placeholder='0.0'>";
+                    Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
+                    Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num=" + num + " value=10>";
                     Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
 
                     $("#items").append(Str);
@@ -147,6 +154,7 @@ $language = $_SESSION['lang'];
             console.log("Del : " + arr_del_items);
             console.log("Old : " + arr_old_items);
             console.log("New : " + arr_new_items);
+            cal_weight();
         }
 
         function cal_weight() {
@@ -167,6 +175,8 @@ $language = $_SESSION['lang'];
         function make_number() {
             $('.numonly').on('input', function() {
                 this.value = this.value.replace(/[^0-9.]/g, ''); //<-- replace all other than given set of values
+                console.log(this.value);
+                cal_weight();
             });
         }
 

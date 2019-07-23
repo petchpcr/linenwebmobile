@@ -22,8 +22,14 @@
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <title><?php echo $genarray['titledirty'][$language].$genarray['titleDocument'][$language];?></title>
+    <?php
+        $Menu = $_GET['Menu'];
+        if ($Menu == 1) {
+            echo "<title>" . $genarray['titledirty'][$language] . $genarray['titleDocument'][$language] . "</title>";
+        }else{
+            echo "<title>" . $genarray['titlefactory'][$language] . $genarray['titleDocument'][$language] . "</title>";
+        }
+    ?>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
     

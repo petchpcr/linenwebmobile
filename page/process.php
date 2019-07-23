@@ -9,13 +9,20 @@
     }
     $Menu = $_GET['Menu'];
     $DocNo = $_GET['DocNo'];
+    $language = $_SESSION['lang'];
+    $xml = simplexml_load_file('../xml/Language/fac_process_lang.xml');
+    $json = json_encode($xml);
+    $array = json_decode($json, TRUE);
+    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+    $json = json_encode($genxml);
+    $genarray = json_decode($json, TRUE);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title><?php echo $genarray['titlefactory'][$language].$array['title'][$language];?></title>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
 
@@ -245,7 +252,7 @@
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_process') {
                             $(".head-btn.btn-light").remove();
-                            var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>กลับ</button>";
+                            var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>";
                             $("#user").before(Back);
                             $("#h_status").text(temp['IsStatus']);
                             if(temp['IsStatus'] == 0 || temp['IsStatus'] == null){ //-----ยังไม่ได้ทำอะไร
@@ -628,7 +635,7 @@
                         else if(temp["form"] == 'insert_process'){
                             swal({
                             title: '',
-                            text: 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล',
+                            text: '<?php echo $genarray['errorToAddData'][$language];?>',
                             type: 'warning',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
@@ -650,7 +657,7 @@
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
             <div id="user" class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
-            <button  onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button >
+            <button  onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button >
         </div>
     </header>
     <div class="px-3" style="font-family:sans-serif;">
@@ -673,27 +680,27 @@
                             <div class="col-md-6 col-sm-none"></div>
                             <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_1.png" height="90px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div class="col-md-6 col-sm-12 text-center font-weight-light">ซักผ้า</div>
+                            <div class="col-md-6 col-sm-12 text-center font-weight-light"><?php echo $array['Wash'][$language]; ?></div>
                         </div>
                     </div>
 
                     <div class="col-4 text-left align-self-center text-center">
                         <div class="row">
                             <div id="W_Start_text" class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="head_text">เวลาที่เริ่ม</div>
+                                <div class="head_text"><?php echo $array['Starttime'][$language]; ?></div>
                                 <label id="W_Start" class='font-weight-light'></label>
                             </div>
                             <div id="cnd" class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="head_text">นับถอยหลัง</div>
+                                <div class="head_text"><?php echo $array['countdown'][$language]; ?></div>
                                 <label id="countdown" class='font-weight-light'>00:00:00</label>
                                 <label id="show_stop" class='font-weight-light'></label>
                             </div>
                             <div id="W_End_text" class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="head_text">เวลาสิ้นสุด</div>
+                                <div class="head_text"><?php echo $array['Finishtime'][$language]; ?></div>
                                 <label id="W_End" class='font-weight-light'></label>
                             </div>
                             <div id="W_Use_text" class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="head_text">ใช้เวลา</div>
+                                <div class="head_text"><?php echo $array['Processtime'][$language]; ?></div>
                                 <label id="W_Use" class='font-weight-light'></label>
                             </div>
                         </div>
@@ -710,10 +717,10 @@
                 </div>
                 <div id="W_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มซัก</button></div>
-                    <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">ทำต่อ</button></div>
-                    <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block">หยุด</button></div>
-                    <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
+                    <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
+                    <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Continue'][$language]; ?></button></div>
+                    <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block"><?php echo $array['Stop'][$language]; ?></button></div>
+                    <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
                 </div>
             </div>
@@ -725,22 +732,22 @@
                             <div class="col-md-6 col-sm-none"></div>
                             <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_2.png" height="90px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div class="col-md-6 col-sm-12 text-center font-weight-light">บรรจุผ้า</div>
+                            <div class="col-md-6 col-sm-12 text-center font-weight-light"><?php echo $array['pack'][$language]; ?></div>
                         </div>
                     </div>
 
                     <div class="col-4 text-left align-self-center text-center">
                         <div class="row">
                             <div id="P_Start_text" class="col-lg-6 col-md-12 col-sm-12">
-                                <div class="head_text">เวลาที่เริ่ม</div>
+                                <div class="head_text"><?php echo $array['Starttime'][$language]; ?></div>
                                 <label id="P_Start" class='font-weight-light'></label>
                             </div>
                             <div id="P_End_text" class="col-lg-6 col-md-12 col-sm-12">
-                                <div class="head_text">เวลาสิ้นสุด</div>
+                                <div class="head_text"><?php echo $array['Finishtime'][$language]; ?></div>
                                 <label id="P_End" class='font-weight-light'></label>                                    
                             </div>
                             <div id="P_Use_text" class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="head_text">ใช้เวลา</div>
+                                <div class="head_text"><?php echo $array['Processtime'][$language]; ?></div>
                                 <label id="P_Use" class='font-weight-light'></label>
                             </div>
                         </div>
@@ -757,8 +764,8 @@
                 </div>
                 <div id="P_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มบรรจุ</button></div>
-                    <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
+                    <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Startpack'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
 
                 </div>
@@ -771,18 +778,18 @@
                             <div class="col-md-6 col-sm-none"></div>
                             <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_3.png" height="90px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div class="col-md-6 col-sm-12 text-center font-weight-light">ขนส่ง</div>
+                            <div class="col-md-6 col-sm-12 text-center font-weight-light"><?php echo $array['shipping'][$language]; ?></div>
                         </div>
                     </div>
 
                     <div class="col-4 text-left align-self-center text-center">
                         <div class="row">
                             <div id="S_Start_text" class="col-lg-6 col-md-12 col-sm-12">
-                                <div class="head_text">เวลาที่เริ่ม</div>
+                                <div class="head_text"><?php echo $array['Starttime'][$language]; ?></div>
                                 <label id="S_Start" class='font-weight-light'></label>
                             </div>
                             <div id="S_End_text" class="col-lg-6 col-md-12 col-sm-12">
-                                <div class="head_text">เวลาสิ้นสุด</div>
+                                <div class="head_text"><?php echo $array['Finishtime'][$language]; ?></div>
                                 <label id="S_End" class='font-weight-light'></label> 
                             </div>
                             <div id="S_Use_text" class="col-lg-4 col-md-12 col-sm-12">
@@ -803,8 +810,8 @@
                 </div>
                 <div id="S_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block">เริ่มขนส่ง</button></div>
-                    <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block">เสร็จสิ้น</button></div>
+                    <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
 
                 </div>

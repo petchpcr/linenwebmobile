@@ -10,6 +10,7 @@
 <CreateDocDate><en>Create document date</en><th>วันที่สร้างเอกสาร</th></CreateDocDate>
 
 <titleDocument><en>| Document</en><th>| เอกสาร</th></titleDocument>
+<titleCreatedocno><en>| Create New document</en><th>| สร้างเอกสารใหม่</th></titleCreatedocno>
 <titleRefDocument><en>| Ref.Document</en><th>| เอกสารอ้างอิง</th></titleRefDocument>
 <createdocno><en>Create document</en><th>สร้างเอกสาร</th></createdocno>
 
