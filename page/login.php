@@ -7,14 +7,32 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
-	<link rel="shortcut icon" href="../favicon.ico">
+
+	<!-- <link rel="shortcut icon" href="../favicon.ico">
 	<link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
 	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 	<script src="../js/jquery.js"></script>
 	<script src="../js/jquery.mobile-1.4.5.min.js"></script>
     <script src="../dist/js/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
+	<link rel="stylesheet" href="../dist/css/sweetalert2.min.css"> -->
+	
+	<script src="../js/jquery-3.3.1.min.js"></script>
+
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../css/themes/default/nhealth.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+    <script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+
+    <script src="../js/gijgo.min.js" type="text/javascript"></script>
+    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="../dist/js/sweetalert2.min.js"></script>
+	<link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
+	
 	<script type="text/javascript">
 		function back() {
 			alert("Go to back");
@@ -128,28 +146,29 @@
 		body, html {
 			height: 100% !important;
 			margin: 0 !important;
+			background-image: url("../img/background01.png") !important;
+			/* background-position: center !important;
+			background-repeat: no-repeat !important;
+			background-size: cover !important; */
 		}
 		.bg_login {
 			/* The image used */
-			background-image: url("../img/background01.png") !important;
 
 			/* Full height */
-			height: 100% !important; 
 
 			/* Center and scale the image nicely */
-			background-position: center !important;
-			background-repeat: no-repeat !important;
-			background-size: cover !important;
+			
 		}
 	</style>
 </head>
 
 <body>
-	<div class="bg_login"></div>
-		<div class="row" style="padding-top:10rem;">
-			<div class="col-lg-3 col-md-2 col-sm-none"></div>
-			<div class="col-lg-6 col-md-8 col-sm-12">
-				<table class="center" width="100%" border="0" cellspacing="5" cellpadding="5">
+	<!-- <div class="bg_login"> -->
+
+		<!-- <div class="row w-100 border" style="padding-top:10rem;"> -->
+			<!-- <div class="col-lg-3 col-md-2 col-sm-none"></div> -->
+			<!-- <div class="col-lg-6 col-md-8 col-sm-12">
+				<table class="center" border="0" cellspacing="5" cellpadding="5">
 				<tr>
 					<td>
 						<div class="mb-2" align="center"><img src="../img/logo.png" width="240" height="60" /></div>
@@ -172,13 +191,33 @@
 					</td>
 				</tr>
 				</table>
-			</div>
-			<div class="col-lg-3 col-md-2 col-sm-none"></div>
-		</div>
+			</div> -->
+			<!-- <div class="col-lg-3 col-md-2 col-sm-none"></div> -->
+		<!-- </div> -->
 		<!-- <div style="padding-bottom:50rem;">
 		</div> -->
-	
-				
+	<!-- </div> -->
+	<div class="d-flex justify-content-center" style="height:100%;padding-top:10rem;">
+		<div class="col-lg-9 col-md-10 col-sm-12">
+
+			<div class="mb-3" align="center"><img src="../img/logo.png" width="240" height="60" /></div>
+
+			<div class="form-group">
+				<label>User Name :</label>
+				<input type="text" class="form-control" id="username">
+			</div>
+
+			<div class="form-group mb-4">
+				<label>Password :</label>
+				<input type="password" class="form-control" id="password">
+			</div>
+
+			<div class="form-group">
+				<button class="btn btn-info btn-block font-weight-bold" onclick="" >Login</button>	
+			</div>
+		</div>
+		
+	</div>	
 </body>
 
 </html>
