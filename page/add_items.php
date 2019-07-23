@@ -12,12 +12,12 @@ $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
 $language = $_SESSION['lang'];
-    $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
-    $json = json_encode($xml);
-    $array = json_decode($json, TRUE);
-    $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
-    $json = json_encode($genxml);
-    $genarray = json_decode($json, TRUE);
+$xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
+$json = json_encode($xml);
+$array = json_decode($json, TRUE);
+$genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+$json = json_encode($genxml);
+$genarray = json_decode($json, TRUE);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -113,7 +113,7 @@ $language = $_SESSION['lang'];
                     Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
                     Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
                     Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-                    Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num=" + num + " value=10>";
+                    Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-weight=0 value=0>";
                     Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
 
                     $("#items").append(Str);
@@ -175,9 +175,17 @@ $language = $_SESSION['lang'];
         function make_number() {
             $('.numonly').on('input', function() {
                 this.value = this.value.replace(/[^0-9.]/g, ''); //<-- replace all other than given set of values
-                console.log(this.value);
-                cal_weight();
-            });
+                var num1 =this.value.length;
+                var num2 =(this.value.replace(/[^0-9]/g, '')).length;
+                if((num1-num2)>=2){
+                    this.value = $("#"+this.id).data("weight");
+                }
+                $("#"+this.id).data("weight",$("#"+this.id).val());
+                //console.log($("#"+this.id).data("weight"));
+                //console.log(num1);
+                //console.log(num2);
+             });
+            cal_weight();
         }
 
         function currencyFormat(num) {
@@ -299,8 +307,8 @@ $language = $_SESSION['lang'];
                                 var id = "weight" + num;
                                 var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                                 Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-                                Str += "<input onkeypress='make_number()' onkeyup='cal_weight()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-                                Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
+                                Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+                                Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-weight="+ temp[i]['Weight'] +" value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
                                 Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
                                 $("#items").append(Str);
                                 arr_old_items.push(temp[i]['ItemCode']);
