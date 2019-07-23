@@ -10,6 +10,7 @@
 <CreateDocDate><en>Create document date</en><th>วันที่สร้างเอกสาร</th></CreateDocDate>
 
 <titleDocument><en>| Document</en><th>| เอกสาร</th></titleDocument>
+<titleRefDocument><en>| Ref.Document</en><th>| เอกสารอ้างอิง</th></titleRefDocument>
 <createdocno><en>Create document</en><th>สร้างเอกสาร</th></createdocno>
 
 <notfoundDocInDate><en>Not found Document on </en><th>ไม่พบเอกสารในวันที่</th></notfoundDocInDate>
@@ -20,6 +21,7 @@
 <chooseDep><en>Choose dep.</en><th>เลือกแผนก</th></chooseDep>
 
 <Hospital><en>Hospital</en><th>โรงพยาบาล</th></Hospital>
+<docno><en>Doc No</en><th>เลขที่เอกสาร</th></docno>
 <date><en>Date</en><th>วันที่</th></date>
 <time><en>time</en><th>เวลา</th></time>
 
@@ -61,7 +63,6 @@
 <newFormatItemCode><en>New Format Code</en><th>รูปแบบรหัสใหม่</th></newFormatItemCode>
 <department><en>Department</en><th>แผนก</th></department>
 <docdate><en>Document date</en><th>วันที่เอกสาร</th></docdate>
-<docno><en>Doc No</en><th>เลขที่เอกสาร</th></docno>
 <refdocno><en>Reference</en><th>เอกสารอ้างอิง</th></refdocno>
 <employee><en>Recorder</en><th>ผู้บันทึก</th></employee>
 <empcode><en>Employee Code</en><th>รหัสพนักงาน</th></empcode>

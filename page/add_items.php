@@ -11,6 +11,7 @@ $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -213,6 +214,7 @@ $Userid = $_GET['user'];
             
             var data = {
                 'DocNo': DocNo,
+                'refDocNo': '<?php echo $refDoc;?>',
                 'Userid': Userid,
                 'old_i': old_i,
                 'old_qty': old_qty,
@@ -231,7 +233,12 @@ $Userid = $_GET['user'];
         function back() {
             var siteCode = '<?php echo $siteCode; ?>';
             var Menu = <?php echo $Menu; ?>;
-            window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+            if(Menu==1){
+                window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+            }else{
+                window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+            }
+            
         }
 
         function logout(num) {
@@ -245,7 +252,13 @@ $Userid = $_GET['user'];
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = '../process/add_items.php';
+            var Menu = <?php echo $Menu; ?>;
+            if(Menu==1){
+                var URL = '../process/add_items_dirty.php';
+            }else{
+                var URL = '../process/add_items_clean.php';
+            }
+            
             $.ajax({
                 url: URL,
                 dataType: 'text',
