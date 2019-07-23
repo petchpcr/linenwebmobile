@@ -16,6 +16,10 @@
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
 	<script>
+		function back() {
+			alert("Go to back");
+		}
+
         function chklogin() {
             var user = $("#username").val();
 			var password = $("#password").val();
