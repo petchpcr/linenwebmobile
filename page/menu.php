@@ -108,7 +108,7 @@
             <div id="hospital"></div>
         </div>
 
-        <div class="row px-4">
+        <div class="row w-100 m-0">
             <div class="my-col-menu">
                 <button onclick="menu_click(1)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/tshirt.png">
