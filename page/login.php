@@ -147,17 +147,6 @@
 			height: 100% !important;
 			margin: 0 !important;
 			background-image: url("../img/background01.png") !important;
-			/* background-position: center !important;
-			background-repeat: no-repeat !important;
-			background-size: cover !important; */
-		}
-		.bg_login {
-			/* The image used */
-
-			/* Full height */
-
-			/* Center and scale the image nicely */
-			
 		}
 	</style>
 </head>
