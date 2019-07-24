@@ -39,7 +39,7 @@
         function menu_click(num) {
             if(num<=4){
                 window.location.href='hospital.php?Menu='+num;
-            }else if(num==6){
+            }else if(num==5){
                 window.location.href='setting.php';
             }
            
