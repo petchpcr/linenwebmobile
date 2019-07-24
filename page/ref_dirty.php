@@ -132,26 +132,26 @@
                             var status_text = "";
                             var status_line = "";
 
-                            if(temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null){
-                                status_class = "status4";
-                                status_text = "ไม่ทำงาน";
-                                status_line = "StatusLine_4";
-                            }
-                            else if(temp[i]['IsProcess'] == 1){
+                            // if(temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null){
+                            //     status_class = "status4";
+                            //     status_text = "ไม่ทำงาน";
+                            //     status_line = "StatusLine_4";
+                            // }
+                            // else if(temp[i]['IsProcess'] == 1){
                                 status_class = "status3";
                                 status_text = "กำลังดำเนินการ";
                                 status_line = "StatusLine_3";
-                            }
-                            else if(temp[i]['IsProcess'] == 3){
-                                status_class = "status2";
-                                status_text = "เสร็จสิ้น";
-                                status_line = "StatusLine_2";
-                            }
-                            else if(temp[i]['IsProcess'] == 2){
-                                status_class = "status1";
-                                status_text = "หยุดชั่วขณะ";
-                                status_line = "StatusLine_1";
-                            }
+                            // }
+                            // else if(temp[i]['IsProcess'] == 3){
+                            //     status_class = "status2";
+                            //     status_text = "เสร็จสิ้น";
+                            //     status_line = "StatusLine_2";
+                            // }
+                            // else if(temp[i]['IsProcess'] == 2){
+                            //     status_class = "status1";
+                            //     status_text = "หยุดชั่วขณะ";
+                            //     status_line = "StatusLine_1";
+                            // }
 
                             if(temp[i]['IsStatus'] > 0){
                                 
