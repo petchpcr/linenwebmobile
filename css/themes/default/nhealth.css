@@ -213,3 +213,9 @@
 .px-4-25 {
     padding-left: 1.75rem!important
 }
+
+.my-btn.focus,
+.my-btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25)
+}

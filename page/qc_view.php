@@ -10,7 +10,7 @@ $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
-$Userid = $_GET['user'];
+// $Userid = $_GET['user'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -37,10 +37,23 @@ $Userid = $_GET['user'];
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
 
+        var arr_claim_code = [];
+        var arr_claim_qty = [];
+        var arr_claim_weight = [];
+        var arr_claim_unit = [];
+
+        var arr_rewash_code = [];
+        var arr_rewash_qty = [];
+        var arr_rewash_weight = [];
+        var arr_rewash_unit = [];
+
         $(document).ready(function(e) {
             var DocNo = "<?php echo $DocNo ?>";
             $("#DocNo").text(DocNo);
             load_items();
+            $('#md_question').on('hidden.bs.modal', function (e) {
+                close_question();
+            })
         });
 
         function load_items() {
@@ -81,7 +94,97 @@ $Userid = $_GET['user'];
             var data = {
                 'DocNo': DocNo,
                 'IsStatus': IsStatus,
+                'ItemCode': ItemCode,
+                'question': Question,
                 'STATUS': 'chk_items'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function close_question() {
+            var DocNo = '<?php echo $DocNo ?>';
+            var ItemCode = $("#item_code").text();
+
+            var data = {
+                'DocNo': DocNo,
+                'ItemCode': ItemCode,
+                'STATUS': 'close_question'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function claim_click() {
+            create_claim();
+            create_rewash();
+        }
+
+        function create_claim() {
+            if (arr_claim_code.length > 0) {
+                var DocNo = '<?php echo $DocNo ?>';
+                var Userid = '<?php echo $Userid ?>';
+
+                var data = {
+                    'DocNo': DocNo,
+                    'Userid': Userid,
+                    'STATUS': 'create_claim'
+                };
+                senddata(JSON.stringify(data));
+            }
+        }
+
+        function send_claim(NewDocNo) {
+            var claim_code = arr_claim_code.join(',');
+            var claim_qty = arr_claim_qty.join(',');
+            var claim_weight = arr_claim_weight.join(',');
+            var claim_unit = arr_claim_unit.join(',');
+
+            var data = {
+                'DocNo': NewDocNo,
+                'claim_code': claim_code,
+                'claim_qty': claim_qty,
+                'claim_weight': claim_weight,
+                'claim_unit': claim_unit,
+                'STATUS': 'send_claim'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function create_rewash() {
+            if (arr_rewash_code.length > 0) {
+                var DocNo = '<?php echo $DocNo ?>';
+                var Userid = '<?php echo $Userid ?>';
+
+                var data = {
+                    'DocNo': DocNo,
+                    'Userid': Userid,
+                    'STATUS': 'create_rewash'
+                };
+                senddata(JSON.stringify(data));
+            }
+        }
+
+        function send_rewash(NewDocNo) {
+            var rewash_code = arr_rewash_code.join(',');
+            var rewash_qty = arr_rewash_qty.join(',');
+            var rewash_weight = arr_rewash_weight.join(',');
+            var rewash_unit = arr_rewash_unit.join(',');
+
+            var data = {
+                'DocNo': NewDocNo,
+                'rewash_code': rewash_code,
+                'rewash_qty': rewash_qty,
+                'rewash_weight': rewash_weight,
+                'rewash_unit': rewash_unit,
+                'STATUS': 'send_rewash'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function save_qc() {
+            var DocNo = $("#DocNo").text();
+            var data = {
+                'DocNo': DocNo,
+                'STATUS': 'save_qc'
             };
             senddata(JSON.stringify(data));
         }
@@ -121,21 +224,85 @@ $Userid = $_GET['user'];
 
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_items') {
+                            arr_claim_code = [];
+                            arr_claim_qty = [];
+                            arr_claim_weight = [];
+                            arr_claim_unit = [];
+
+                            arr_rewash_code = [];
+                            arr_rewash_qty = [];
+                            arr_rewash_weight = [];
+                            arr_rewash_unit = [];
+
                             $("#item").empty();
-                            for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                                var CheckList = temp[i]['IsCheckList'];
+                            var op_claim = 0;
+                            var test = temp['cnt'];
+                            
+                            for (var i = 0; i < temp['cnt']; i++) {
+                                var CheckList = Number(temp[i]['IsCheckList']);
                                 var img = "";
-
-                                if(CheckList == 0 || CheckList == null){
-                                    img = "../img/Status_4.png";
-                                }
-                                else if(CheckList == 1){
-                                    img = "../img/Status_3.png";
-                                }
-                                else if(CheckList == 2){
-                                    img = "../img/Status_1.png";
+                                if (CheckList == 3 || CheckList == 4 || CheckList == 6) {
+                                    alert(CheckList);
                                 }
 
+                                switch (CheckList) {
+                                    case 0:
+                                        img = "../img/Status_3.png"; // เขียว
+                                        break;
+                                    case 1:
+                                        img = "../img/Status_1.png"; // ส้ม
+                                        arr_claim_code.push(temp[i]['ItemCode']);
+                                        arr_claim_qty.push(temp[i]['Qty']);
+                                        arr_claim_weight.push(temp[i]['Weight']);
+                                        arr_claim_unit.push(temp[i]['UnitCode']);
+                                        op_claim++;
+                                        break;
+                                    case 2:
+                                        img = "../img/Status_2.png"; // แดง
+                                        arr_claim_code.push(temp[i]['ItemCode']);
+                                        arr_claim_qty.push(temp[i]['Qty']);
+                                        arr_claim_weight.push(temp[i]['Weight']);
+                                        arr_claim_unit.push(temp[i]['UnitCode']);
+                                        op_claim++;
+                                        break;
+                                    case 3:
+                                        img = "../img/Status_1.png";
+                                        arr_rewash_code.push(temp[i]['ItemCode']);
+                                        arr_rewash_qty.push(temp[i]['Qty']);
+                                        arr_rewash_weight.push(temp[i]['Weight']);
+                                        arr_rewash_unit.push(temp[i]['UnitCode']);
+                                        op_claim++;
+                                        break;
+                                    case 4:
+                                        img = "../img/Status_2.png";
+                                        arr_rewash_code.push(temp[i]['ItemCode']);
+                                        arr_rewash_qty.push(temp[i]['Qty']);
+                                        arr_rewash_weight.push(temp[i]['Weight']);
+                                        arr_rewash_unit.push(temp[i]['UnitCode']);
+                                        op_claim++;
+                                        break;
+                                    case 5:
+                                        img = "../img/Status_1.png";
+                                        arr_claim_code.push(temp[i]['ItemCode']);
+                                        arr_claim_qty.push(temp[i]['Qty']);
+                                        arr_claim_weight.push(temp[i]['Weight']);
+                                        arr_claim_unit.push(temp[i]['UnitCode']);
+                                        op_claim++;
+                                        break;
+                                    case 6:
+                                        img = "../img/Status_2.png";
+                                        arr_rewash_code.push(temp[i]['ItemCode']);
+                                        arr_rewash_qty.push(temp[i]['Qty']);
+                                        arr_rewash_weight.push(temp[i]['Weight']);
+                                        arr_rewash_unit.push(temp[i]['UnitCode']);
+                                        op_claim++;
+                                        break;
+                                    default:
+                                        img = "../img/Status_4.png"; // เทา
+                                        op_claim++;
+
+                                }
+                                
                                 var num = i+1;
                                 var Str = "<tr onclick='show_question(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-3 d-flex align-items-center justify-content-center'>"+num+"</div>";
                                     Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>"+temp[i]['ItemName']+"</div>";
@@ -144,30 +311,62 @@ $Userid = $_GET['user'];
 
                                 $("#item").append(Str);
                             }
+                            // alert(arr_rewash_code[0]);
+                            // alert(arr_rewash_code[1]);
+                            if (op_claim > 0) {
+                                $("#claim-btn").show();
+                                $("#save-btn").hide();
+                            } else {
+                                $("#claim-btn").hide();
+                                $("#save-btn").show();
+                            }
+
                         } else if (temp["form"] == 'show_question') {
+                            $("#item_code").text(temp['ItemCode']);
                             $("#item_name").text(temp['ItemName']);
-                            // $("#question").empty();
+                            $("#question").empty();
                             var length = Object.keys(temp).length;
                             // alert(length);
                             for (var i = 0; i < (Object.keys(temp).length - 5); i++) {
-                                var id = "#text_question"+i;
-                                // var Str = "<button onclick='chk_items('chk"+i+"')' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-                                //     Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>";
-                                //     Str += "<div id='1111'>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate text-right'>";
-                                //     Str += "<div class='form-check'><input class='m-0' type='radio' id='chk"+i+"' value='1' checked>ผ่าน";
-                                //     Str += "<input class='ml-3' type='radio' id='unchk"+i+"' value='2'>ไม่ผ่าน</div></div></button>";
-
-                                var Str = "<button onclick='chk_items("+i+")' id='question"+i+"' data-itemcode='"+temp[i]['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-                                    Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>";
+                                var chk = "";
+                                var unchk = "";
+                                if (temp[i]['IsStatus'] == 1) {
+                                    chk = "checked";
+                                } else if (temp[i]['IsStatus'] == 0) {
+                                    unchk = "checked";
+                                }
+                                var Str = "<button onclick='chk_items("+i+")' id='question"+i+"' data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' class='my-btn btn-block alert alert-info py-1 px-3 mb-2'>";
+                                    Str += "<div class='col-12 text-left font-weight-bold pr-0'>";
                                     Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate text-right p-0'><div class='form-check form-check-inline m-0'>";
-                                    Str += "<input class='form-check-input' type='radio' name='radio"+i+"' id='chk"+i+"' checked>ผ่าน";
-                                    Str += "<input class='form-check-input ml-3' type='radio' name='radio"+i+"' id='unchk"+i+"'>ไม่ผ่าน</div></div></button>";
+                                    Str += "<input class='form-check-input' type='radio' name='radio"+i+"' id='chk"+i+"' "+chk+">ผ่าน";
+                                    Str += "<input class='form-check-input ml-3' type='radio' name='radio"+i+"' id='unchk"+i+"' "+unchk+">ไม่ผ่าน</div></div></button>";
 
                                 // alert("array : "+i);
-                                // alert(temp[i]['Question']);
+                                // alert(temp[i]['QuestionId']);
                                 $("#question").append(Str);
                             }
                             $("#md_question").modal('show');
+
+                        } else if (temp["form"] == 'close_question') {
+                            load_items();
+
+                        } else if (temp["form"] == 'create_claim') {
+                            var NewDocNo = temp['NewDocNo'];
+                            send_claim(NewDocNo);
+
+                        } else if (temp["form"] == 'create_rewash') {
+                            var NewDocNo = temp['NewDocNo'];
+                            send_rewash(NewDocNo);
+
+                        } else if (temp["form"] == 'send_claim' || temp["form"] == 'send_rewash') {
+                            alert("10222");
+                            save_qc();
+
+                        } else if (temp["form"] == 'save_qc') {
+                            var siteCode = '<?php echo $siteCode ?>';
+                            var Menu = '<?php echo $Menu ?>';
+                            window.location.href = 'qc.php?siteCode='+siteCode+'&Menu='+Menu;
+                            
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
@@ -198,8 +397,6 @@ $Userid = $_GET['user'];
             <h4 class="text-truncate">เอกสาร</h4>
             <div id="DocNo" class="text-truncate"></div>
         </div>
-        <p class="text-justify">Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec sed odio operae, eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac, sitientis piros Afros. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus sit amet fermentum.</p>
-
         <div class="row justify-content-center px-3">
             <table class="table table-hover col-lg-9 col-md-10 col-sm-12">
                 <thead>
@@ -239,14 +436,11 @@ $Userid = $_GET['user'];
 
     <div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
         <div class="col-lg-9 col-md-10 col-sm-12">
-            <div class="row p-1">
-                <div class="col-6">
-                    <button onclick="" class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#">
+            <div class="row py-1 px-3">
+                    <button onclick="claim_click()" id="claim-btn" class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#">
                         <i class="fas fa-times mr-1"></i>ส่งเคลม
                     </button>
-                </div>
-                <div class="col-6">
-                    <button onclick="" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
+                    <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
                         <i class="fas fa-save mr-1"></i>บันทึก
                     </button>
                 </div>
@@ -265,32 +459,30 @@ $Userid = $_GET['user'];
                     </button>
                 </div>
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-                    <div id="item_name"></div>
+                    <div id="item_code" hidden></div>
+                    <div id="item_name" class="font-weight-bold mb-2"></div>
                     <div id="question">
 
-                        <button onclick="chk_items(0)" id="question0" data-itemcode="99999" data-question="121" class="btn btn-block alert alert-info py-1 px-3 mb-2">
-                            <div class="col-12 text-justify pr-0 border border-danger">
-                                99 X 99 สีขาว 999999999999999999999999999999999999999999999999999
+                        <!-- <button onclick="chk_items(10)" id="question0" data-itemcode="99999" data-question="121" class="my-btn btn-block alert alert-info py-1 px-3 mb-2">
+                            <div class='col-12 text-left font-weight-bold pr-0'>
+                                Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec sed odio operae, eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac, sitientis piros Afros. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus sit amet fermentum.
                             </div>
                             <div class="col-12 text-truncate text-right p-0">
                                 <div class="form-check form-check-inline m-0">
-                                    <input class="form-check-input" type="radio" name="radio0" id="chk0" value="option1" checked>
+                                    <input class="form-check-input" type="radio" name="radio10" id="chk10" value="option1" checked>
                                     ผ่าน
-                                    <input class="form-check-input ml-3" type="radio" name="radio0" id="unchk0" value="option2">
+                                    <input class="form-check-input ml-3" type="radio" name="radio10" id="unchk10" value="option2">
                                     ไม่ผ่าน
                                 </div>
                             </div>
-                        </button>
+                        </button> -->
 
                     </div>
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
-                        <div class="col-6 text-right">
-                            <button id="btn_add_items" onclick="select_chk()" type="button" class="btn btn-success m-2">ยืนยัน</button>
-                        </div>
-                        <div class="col-6 text-left">
-                            <button type="button" class="btn btn-danger m-2" data-dismiss="modal">ยกเลิก</button>
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-block btn-secondary m-2" data-dismiss="modal">ปิด</button>
                         </div>
                     </div>
                 </div>
