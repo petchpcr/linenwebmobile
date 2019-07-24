@@ -167,7 +167,7 @@ $genarray = json_decode($json, TRUE);
         }
 
         function change_weight() {
-            var num = $("#val_weight").data("num");
+            var num = $("#val_weight").attr("data-num");
             var val = $("#val_weight").val();
             var id = "#weight"+num;
             $(id).val(val);
