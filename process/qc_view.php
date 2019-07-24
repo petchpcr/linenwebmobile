@@ -75,7 +75,6 @@
                 AND         ItemCode = '$ItemCode'
                 AND         qcquestion.CodeId=qcchecklist.QuestionId";
         
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['Question']	=  $Result['Question'];
