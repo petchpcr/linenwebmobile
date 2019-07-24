@@ -138,14 +138,14 @@
                     <div class="text-truncate"><?php echo $array['QC'][$language]; ?></div>
                 </button>
             </div>
-            <div class="my-col-menu">
+            <!-- <div class="my-col-menu">
                 <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Report.png">
                     <div class="text-truncate"><?php echo $array['report'][$language]; ?></div>
                 </button>
-            </div>
+            </div> -->
             <div class="my-col-menu">
-                <button onclick="menu_click(6)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Tools.png">
                     <div class="text-truncate"><?php echo $array['setting'][$language]; ?></div>
                 </button>
