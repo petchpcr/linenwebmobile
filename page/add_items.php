@@ -27,12 +27,12 @@ $genarray = json_decode($json, TRUE);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-        $Menu = $_GET['Menu'];
-        if ($Menu == 1) {
-            echo "<title>" . $genarray['titledirty'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
-        } else if ($Menu == 3) {
-            echo "<title>" . $genarray['titleclean'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
-        }
+    $Menu = $_GET['Menu'];
+    if ($Menu == 1) {
+        echo "<title>" . $genarray['titledirty'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
+    } else if ($Menu == 3) {
+        echo "<title>" . $genarray['titleclean'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
+    }
     ?>
 
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -163,7 +163,7 @@ $genarray = json_decode($json, TRUE);
 
             $(".item").each(function() {
                 var id = $(this).attr("id");
-                var weight = Number($("#"+id).val());
+                var weight = Number($("#" + id).val());
                 if (weight == null || weight == "") {
                     weight = Number(0);
                 }
@@ -175,19 +175,19 @@ $genarray = json_decode($json, TRUE);
         function make_number() {
             $('.numonly').on('input', function() {
                 this.value = this.value.replace(/[^0-9.]/g, ''); //<-- replace all other than given set of values
-                var num1 =this.value.length;
-                var num2 =(this.value.replace(/[^0-9]/g, '')).length;
-                if((num1-num2)>=2){
-                    this.value = $("#"+this.id).data("weight");
-                }else if((num1-num2)==0){
-                    this.value= Number(this.value);
+                var num1 = this.value.length;
+                var num2 = (this.value.replace(/[^0-9]/g, '')).length;
+                if ((num1 - num2) >= 2) {
+                    this.value = $("#" + this.id).data("weight");
+                } else if ((num1 - num2) == 0) {
+                    this.value = Number(this.value);
                 }
-                $("#"+this.id).data("weight",$("#"+this.id).val());
+                $("#" + this.id).data("weight", $("#" + this.id).val());
                 //console.log($("#"+this.id).data("weight"));
                 //console.log(num1);
                 //console.log(num2);
                 cal_weight();
-             });
+            });
         }
 
         function currencyFormat(num) {
@@ -238,10 +238,10 @@ $genarray = json_decode($json, TRUE);
             var new_weight = arr_new_weight.join(',');
 
             var del_i = arr_del_items.join(',');
-            
+
             var data = {
                 'DocNo': DocNo,
-                'refDocNo': '<?php echo $refDoc;?>',
+                'refDocNo': '<?php echo $refDoc; ?>',
                 'Userid': Userid,
                 'old_i': old_i,
                 'old_qty': old_qty,
@@ -260,12 +260,12 @@ $genarray = json_decode($json, TRUE);
         function back() {
             var siteCode = '<?php echo $siteCode; ?>';
             var Menu = <?php echo $Menu; ?>;
-            if(Menu==1){
+            if (Menu == 1) {
                 window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
-            }else{
+            } else {
                 window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
             }
-            
+
         }
 
         function logout(num) {
@@ -280,12 +280,12 @@ $genarray = json_decode($json, TRUE);
             var form_data = new FormData();
             form_data.append("DATA", data);
             var Menu = <?php echo $Menu; ?>;
-            if(Menu==1){
+            if (Menu == 1) {
                 var URL = '../process/add_items_dirty.php';
-            }else{
+            } else {
                 var URL = '../process/add_items_clean.php';
             }
-            
+
             $.ajax({
                 url: URL,
                 dataType: 'text',
@@ -310,7 +310,7 @@ $genarray = json_decode($json, TRUE);
                                 var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                                 Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
                                 Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-                                Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-weight="+ temp[i]['Weight'] +" value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
+                                Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-weight=" + temp[i]['Weight'] + " value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
                                 Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
                                 $("#items").append(Str);
                                 arr_old_items.push(temp[i]['ItemCode']);
@@ -353,7 +353,14 @@ $genarray = json_decode($json, TRUE);
                                 }
                             }
                         } else if (temp["form"] == 'add_item') {
-                            load_items();
+                            var siteCode = '<?php echo $siteCode; ?>';
+                            var Menu = <?php echo $Menu; ?>;
+                            if (Menu == 1) {
+                                window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+                            } else {
+                                window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+                            }
+                            //load_items();
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
@@ -361,8 +368,7 @@ $genarray = json_decode($json, TRUE);
                         var message = "";
                         if (temp["form"] == 'choose_items') {
                             $("#choose_item").empty();
-                        }
-                        else if (temp["form"] == 'add_item') {
+                        } else if (temp["form"] == 'add_item') {
                             alert("error ADD ITEM");
                         }
                     }
@@ -374,7 +380,7 @@ $genarray = json_decode($json, TRUE);
 
 <body>
     <header data-role="header">
-    <div class="head-bar d-flex justify-content-between">
+        <div class="head-bar d-flex justify-content-between">
             <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
