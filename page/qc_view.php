@@ -11,6 +11,13 @@ $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
 // $Userid = $_GET['user'];
+$language = $_SESSION['lang'];
+$xml = simplexml_load_file('../xml/Language/QC_lang.xml');
+$json = json_encode($xml);
+$array = json_decode($json, TRUE);
+$genxml = simplexml_load_file('../xml/Language/general_lang.xml');
+$json = json_encode($genxml);
+$genarray = json_decode($json, TRUE);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -242,7 +249,6 @@ $DepCode = $_GET['DepCode'];
                                 var CheckList = Number(temp[i]['IsCheckList']);
                                 var img = "";
                                 if (CheckList == 3 || CheckList == 4 || CheckList == 6) {
-                                    alert(CheckList);
                                 }
 
                                 switch (CheckList) {
@@ -385,16 +391,16 @@ $DepCode = $_GET['DepCode'];
 
 <body>
     <header data-role="header">
-        <div class="head-bar d-flex justify-content-between">
-            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i>กลับ</button>
+    <div class="head-bar d-flex justify-content-between">
+            <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-            <button onclick="logout(1)" class="head-btn btn-dark" role="button">ออก<i class="fas fa-power-off ml-1"></i></button>
+            <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3 mb-5" style="font-family:sans-serif;">
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
         <div class="text-center mb-3">
-            <h4 class="text-truncate">เอกสาร</h4>
+            <h4 class="text-truncate"><?php echo $genarray['Document'][$language]; ?></h4>
             <div id="DocNo" class="text-truncate"></div>
         </div>
         <div class="row justify-content-center px-3">
@@ -403,9 +409,9 @@ $DepCode = $_GET['DepCode'];
                     <tr class="bg-primary text-white">
                     <th scope="col">
                         <div class="row">
-                            <div class="col-3 text-center">สำดับ</div>
-                            <div class="col-6 text-center">รายการ</div>
-                            <div class="col-3 text-center">สถานะ</div>
+                            <div class="col-3 text-center"><?php echo $array['no'][$language]; ?></div>
+                            <div class="col-6 text-center"><?php echo $array['List'][$language]; ?></div>
+                            <div class="col-3 text-center"><?php echo $array['Status'][$language]; ?></div>
                         </div>
                     </th>
                     </tr>
@@ -438,10 +444,10 @@ $DepCode = $_GET['DepCode'];
         <div class="col-lg-9 col-md-10 col-sm-12">
             <div class="row py-1 px-3">
                     <button onclick="claim_click()" id="claim-btn" class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#">
-                        <i class="fas fa-times mr-1"></i>ส่งเคลม
+                        <i class="fas fa-times mr-1"></i><?php echo $array['sendClaim'][$language]; ?>
                     </button>
                     <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
-                        <i class="fas fa-save mr-1"></i>บันทึก
+                        <i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
                     </button>
                 </div>
             </div>
@@ -453,7 +459,7 @@ $DepCode = $_GET['DepCode'];
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-truncate">หัวข้อตรวจสอบ</h5>
+                    <h5 class="modal-title text-truncate"><?php echo $array['Checktopic'][$language]; ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -482,7 +488,7 @@ $DepCode = $_GET['DepCode'];
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
                         <div class="col-12 text-right">
-                            <button type="button" class="btn btn-block btn-secondary m-2" data-dismiss="modal">ปิด</button>
+                            <button type="button" class="btn btn-block btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
                         </div>
                     </div>
                 </div>

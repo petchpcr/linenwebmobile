@@ -539,7 +539,7 @@
             $DocNo = $Result['DocNo'];
             $count = 1;
         }
-
+        $return['NewDocNo'] = $DocNo;
         if ($count == 1) {
             $Sql = "INSERT INTO     rewash
                                     ( 

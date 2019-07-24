@@ -36,6 +36,9 @@
 
 <changelang><en>Change Language</en><th>เปลี่ยนภาษา</th></changelang>
 <save><en>Save</en><th>บันทึก</th></save>
+<close><en>Close</en><th>ปิด</th></close>
+
+<Document><en>Document</en><th>เอกสาร</th></Document>
 
 //old
 <activeItem><en>Active</en><th>Active</th></activeItem>
@@ -83,7 +86,6 @@
 <delitem><en>Delete items</en><th>ลบรายการ</th></delitem>
 <show><en>Show items</en><th>แสดงรายการ</th></show>
 <status><en>Status</en><th>สถานะ</th></status>
-<close><en>Close</en><th>ปิด</th></close>
 <sendlinen><en>Send Linen</en><th>จัดส่งผ้า</th></sendlinen>
 <sendlinendep><en>Send linen to department.</en><th>จัดส่งผ้าเข้าแผนก</th></sendlinendep>
 <confirm1><en>Are you sure to delete [ </en><th>คุณต้องการลบรายการนี้ [ </th></confirm1>
