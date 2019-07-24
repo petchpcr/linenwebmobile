@@ -40,6 +40,8 @@
 
 <Document><en>Document</en><th>เอกสาร</th></Document>
 
+<YNwantToExit><en>Exit without save ?</en><th>ต้องการออกโดยไม่บันทึกข้อมูล ?</th></YNwantToExit>
+
 //old
 <activeItem><en>Active</en><th>Active</th></activeItem>
 
