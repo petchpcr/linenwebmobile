@@ -158,6 +158,23 @@ $genarray = json_decode($json, TRUE);
             cal_weight();
         }
 
+        function show_weight(num) {
+            var id = "#weight"+num;
+            var val = $(id).val();
+            $("#val_weight").val(val);
+            $("#val_weight").attr("data-num",num);
+            $("#md_weight").modal('show');
+        }
+
+        function change_weight() {
+            var num = $("#val_weight").attr("data-num");
+            var val = $("#val_weight").val();
+            var id = "#weight"+num;
+            $(id).val(val);
+            cal_weight();
+            $("#md_weight").modal('hide');
+        }
+
         function cal_weight() {
             $("#sum_weight").val("");
             var sum_weight = Number(0);
@@ -312,7 +329,7 @@ $genarray = json_decode($json, TRUE);
                                 Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
                                 Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
                                 Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-weight=" + temp[i]['Weight'] + " value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
-                                Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
+                                Str += "<img src='../img/kg.png' onclick='show_weight("+num+")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
                                 $("#items").append(Str);
                                 arr_old_items.push(temp[i]['ItemCode']);
                                 cal_weight();
@@ -402,7 +419,7 @@ $genarray = json_decode($json, TRUE);
                     </div>
                     <div class="d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0">
                         <input onkeyup="cal_weight()" type="text" class="form-control rounded text-center bg-white my-2 mr-1 item old numonly" data-code="BHQLPPPUT200001" id="weight0" data-num="1" placeholder="0.0">
-                        <img src="../img/kg.png" height="40">
+                        <img src="../img/kg.png" onclick="" height="40">
                         <button onclick="del_items(0)" class="btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle">x</button>
                     </div>
                 </div> -->
@@ -465,6 +482,31 @@ $genarray = json_decode($json, TRUE);
                         <div class="col-6 text-left">
                             <button type="button" class="btn btn-danger m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="md_weight" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">รับน้ำหนัก</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+                    <input onkeydown="make_number()" id="val_weight" class="form-control mb-3 numonly" type="text" placeholder="กรอกน้ำหนัก">
+                </div>
+
+                <div class="modal-footer text-center">
+                    <div class="w-100 d-flex justify-content-center m-0">
+                        <!-- <div class="col-6 text-right"> -->
+                            <button id="btn_add_items" onclick="change_weight()" type="button" class="btn btn-success m-2"><?php echo $genarray['confirm'][$language]; ?></button>
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
