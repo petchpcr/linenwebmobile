@@ -39,7 +39,7 @@
         function menu_click(num) {
             if(num<=4){
                 window.location.href='hospital.php?Menu='+num;
-            }else if(num==5){
+            }else if(num==6){
                 window.location.href='setting.php';
             }
            
@@ -145,7 +145,7 @@
                 </button>
             </div> -->
             <div class="my-col-menu">
-                <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click(6)" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Tools.png">
                     <div class="text-truncate"><?php echo $array['setting'][$language]; ?></div>
                 </button>
