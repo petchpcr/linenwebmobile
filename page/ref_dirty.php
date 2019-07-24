@@ -89,7 +89,7 @@
         }
 
         function back(){
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href="hospital.php?Menu="+Menu;
         }
 
@@ -171,7 +171,7 @@
                         var DepCode = temp['DepCode']
                         var DocNo = temp['DocNo']
                         var RefDocNo = temp['RefDocNo']
-                        var Menu = <?php echo $Menu;?>;
+                        var Menu = '<?php echo $Menu;?>';
                         window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&RefDocNo='+RefDocNo+'&Menu='+Menu+'&user='+Userid;
                     }
                     else if(temp["form"] == 'logout'){

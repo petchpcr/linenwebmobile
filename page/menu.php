@@ -36,13 +36,8 @@
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
-        function menu_click(num) {
-            if(num<=4){
-                window.location.href='hospital.php?Menu='+num;
-            }else if(num==5){
-                window.location.href='setting.php';
-            }
-           
+        function menu_click(menu) {
+            window.location.href='hospital.php?Menu='+menu;
         }
 
         function logout(num){
@@ -115,25 +110,25 @@
 
         <div class="row w-100 m-0">
             <div class="my-col-menu">
-                <button onclick="menu_click(1)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click('dirty')" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/tshirt.png">
                     <div class="text-truncate"><?php echo $array['dirty'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
-                <button onclick="menu_click(2)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click('factory')" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Factory.png">
                     <div class="text-truncate"><?php echo $array['factory'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
-                <button onclick="menu_click(3)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click('clean')" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/laundry.png">
                     <div class="text-truncate"><?php echo $array['clean'][$language]; ?></div>
                 </button>
             </div>
             <div class="my-col-menu">
-                <button onclick="menu_click(4)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click('qc')" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/QC.png">
                     <div class="text-truncate"><?php echo $array['QC'][$language]; ?></div>
                 </button>
@@ -145,7 +140,7 @@
                 </button>
             </div> -->
             <div class="my-col-menu">
-                <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
+                <button onclick="menu_click('tools')" type="button" class="btn btn-mylight btn-block">
                     <img src="../img/Tools.png">
                     <div class="text-truncate"><?php echo $array['setting'][$language]; ?></div>
                 </button>

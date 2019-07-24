@@ -198,7 +198,7 @@ $genarray = json_decode($json, TRUE);
 
         function back() {
             var siteCode = '<?php echo $siteCode; ?>';
-            var Menu = <?php echo $Menu; ?>;
+            var Menu = '<?php echo $Menu; ?>';
             window.location.href = 'qc.php?siteCode=' + siteCode + '&Menu=' + Menu;
         }
 

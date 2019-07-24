@@ -24,7 +24,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
         $Menu = $_GET['Menu'];
-        if ($Menu == 1) {
+        if ($Menu == 'dirty') {
             echo "<title>" . $genarray['titledirty'][$language] . $genarray['titleDocument'][$language] . "</title>";
         }else{
             echo "<title>" . $genarray['titlefactory'][$language] . $genarray['titleDocument'][$language] . "</title>";
@@ -48,8 +48,8 @@
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         $(document).ready(function (e) {
-            var Menu = <?php echo $Menu;?>;
-            if(Menu == 2){ $("#add_doc").remove(); }
+            var Menu = '<?php echo $Menu;?>';
+            if(Menu == 'factory'){ $("#add_doc").remove(); }
             load_dep();
             load_site();
             load_doc();
@@ -90,11 +90,11 @@
 
         function show_process(DocNo){
             var siteCode = "<?php echo $siteCode?>";
-            var Menu = <?php echo $Menu;?>;
-            if(Menu == 1){
+            var Menu = '<?php echo $Menu;?>';
+            if(Menu == 'dirty'){
                 window.location.href='dirty_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
             }
-            else if(Menu == 2){
+            else if(Menu == 'factory'){
                 window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
             }
         }
@@ -131,7 +131,7 @@
         }
 
         function back(){
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href="hospital.php?Menu="+Menu;
         }
 
@@ -180,9 +180,9 @@
                             var status_class = "";
                             var status_text = "";
                             var status_line = "";
-                            var Menu = <?php echo $Menu;?>;
+                            var Menu = '<?php echo $Menu;?>';
 
-                            if (Menu == 1) { // Dirty
+                            if (Menu == 'dirty') {
                                 if (temp[i]['IsStatus'] == 0) {
                                     status_class = "status1";
                                     status_text = "หยุดชั่วขณะ";
@@ -206,7 +206,7 @@
 
                                 $("#document").append(Str);
 
-                            } else if (Menu == 2) { // Factory
+                            } else if (Menu == 'factory') {
 
                                 if(temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null){
                                     status_class = "status4";
@@ -252,7 +252,7 @@
                         var siteCode = temp['siteCode']
                         var DepCode = temp['DepCode']
                         var DocNo = temp['DocNo']
-                        var Menu = <?php echo $Menu;?>;
+                        var Menu = '<?php echo $Menu;?>';
                         window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid;
                     }
                     else if(temp["form"] == 'logout'){

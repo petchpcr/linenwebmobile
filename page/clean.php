@@ -93,12 +93,12 @@
 
         function show_process(DocNo) {
             var siteCode = "<?php echo $siteCode ?>";
-            var Menu = <?php echo $Menu; ?>;
+            var Menu = '<?php echo $Menu; ?>';
             window.location.href = 'clean_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
         }
 
         function back() {
-            var Menu = <?php echo $Menu; ?>;
+            var Menu = '<?php echo $Menu; ?>';
             window.location.href = "hospital.php?Menu=" + Menu;
         }
 
@@ -113,7 +113,7 @@
         function add_dirty(){
             var siteCode = "<?php echo $siteCode?>";
             var DepCode = $("#DepName").val();
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode='+DepCode+'&Menu='+Menu;
         }
 

@@ -218,7 +218,7 @@
         }
 
         function back(site){
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href='dirty.php?Menu='+Menu+'&siteCode='+site;
         }
 

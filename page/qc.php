@@ -67,7 +67,7 @@
 
         function show_process(DocNo){
             var siteCode = "<?php echo $siteCode?>";
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href='qc_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
         }
 
@@ -95,7 +95,7 @@
         }
 
         function back(){
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href="hospital.php?Menu="+Menu;
         }
 
@@ -175,7 +175,7 @@
                         var siteCode = temp['siteCode']
                         var DepCode = temp['DepCode']
                         var DocNo = temp['DocNo']
-                        var Menu = <?php echo $Menu;?>;
+                        var Menu = '<?php echo $Menu;?>';
                         window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid;
                     }
                     else if(temp["form"] == 'logout'){

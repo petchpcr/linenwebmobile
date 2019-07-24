@@ -23,13 +23,13 @@ $genarray = json_decode($json, TRUE);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
     $Menu = $_GET['Menu'];
-    if ($Menu == 1) {
+    if ($Menu == 'dirty') {
         echo "<title>" . $genarray['titledirty'][$language] . $array['title'][$language] . "</title>";
-    } else if ($Menu == 2) {
+    } else if ($Menu == 'factory') {
         echo "<title>" . $genarray['titlefactory'][$language] . $array['title'][$language] . "</title>";
-    } else if ($Menu == 3) {
+    } else if ($Menu == 'clean') {
         echo "<title>" . $genarray['titleclean'][$language] . $array['title'][$language] . "</title>";
-    } else if ($Menu == 4) {
+    } else if ($Menu == 'qc') {
         echo "<title>" . $genarray['titleQC'][$language] . $array['title'][$language] . "</title>";
     }
     ?>
@@ -71,16 +71,14 @@ $genarray = json_decode($json, TRUE);
             // };
             // senddata(JSON.stringify(data));
 
-            var Menu = <?php echo $Menu; ?>;
-            if (Menu == 1 || Menu == 2) {
+            var Menu = '<?php echo $Menu; ?>';
+            if (Menu == 'dirty' || Menu == 'factory') {
                 window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 3) {
+            } else if (Menu == 'clean') {
                 window.location.href = 'clean.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 4) {
+            } else if (Menu == 'qc') {
                 window.location.href = 'qc.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 5) {
-                window.location.href = 'report.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 6) {
+            } else if (Menu == 'tools') {
                 window.location.href = 'tools.php?siteCode=' + SiteCode + '&Menu=' + Menu;
             }
         }
@@ -131,19 +129,6 @@ $genarray = json_decode($json, TRUE);
 
                                 $("#hospital").append(Str);
                             }
-                            //} else if (temp["form"] == 'show_doc') {
-                            //     var Menu = <?php echo $Menu; ?>;
-                            //     if (Menu == 1 || Menu == 2) {
-                            //         window.location.href = 'dirty.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            //     } else if (Menu == 3) {
-                            //         window.location.href = 'clean.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            //     } else if (Menu == 4) {
-                            //         window.location.href = 'qc.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            //     } else if (Menu == 5) {
-                            //         window.location.href = 'report.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            //     } else if (Menu == 6) {
-                            //         window.location.href = 'tools.php?siteCode=' + temp['siteCode'] + '&Menu=' + Menu;
-                            //     }
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }

@@ -56,7 +56,7 @@
 
         function back(){
             var siteCode = '<?php echo $siteCode;?>';
-            var Menu = <?php echo $Menu;?>;
+            var Menu = '<?php echo $Menu;?>';
             window.location.href='clean.php?siteCode='+siteCode+'&Menu='+Menu;
         }
 
@@ -71,7 +71,7 @@
           var Userid = '<?php echo $Userid;?>';
           var DocNo = "<?php echo $DocNo?>";
           var siteCode = '<?php echo $siteCode;?>';
-          var Menu = <?php echo $Menu;?>;
+          var Menu = '<?php echo $Menu;?>';
           var DepCode = $("#add_doc").data("depcode");
           window.location.href='add_items.php?siteCode='+siteCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid+'&DepCode='+DepCode;
         }
@@ -183,7 +183,7 @@
                 <div id="Weight"></div>
             </div>
         </div>
-        <div class="row justify-content-center px-3">
+        <div class="row justify-content-center mb-5 px-3">
             <table class="table table-hover col-lg-9 col-md-10 col-sm-12">
                 <thead>
                     <tr class="bg-primary text-white">

@@ -29,9 +29,9 @@ $genarray = json_decode($json, TRUE);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
     $Menu = $_GET['Menu'];
-    if ($Menu == 1) {
+    if ($Menu == 'dirty') {
         echo "<title>" . $genarray['titledirty'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
-    } else if ($Menu == 3) {
+    } else if ($Menu == 'clean') {
         echo "<title>" . $genarray['titleclean'][$language] . $genarray['titleCreatedocno'][$language] . "</title>";
     }
     ?>
@@ -277,8 +277,8 @@ $genarray = json_decode($json, TRUE);
 
         function back() {
             var siteCode = '<?php echo $siteCode; ?>';
-            var Menu = <?php echo $Menu; ?>;
-            if (Menu == 1) {
+            var Menu = '<?php echo $Menu; ?>';
+            if (Menu == 'dirty') {
                 window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
             } else {
                 window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
@@ -297,8 +297,8 @@ $genarray = json_decode($json, TRUE);
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var Menu = <?php echo $Menu; ?>;
-            if (Menu == 1) {
+            var Menu = '<?php echo $Menu; ?>';
+            if (Menu == 'dirty') {
                 var URL = '../process/add_items_dirty.php';
             } else {
                 var URL = '../process/add_items_clean.php';
@@ -372,8 +372,8 @@ $genarray = json_decode($json, TRUE);
                             }
                         } else if (temp["form"] == 'add_item') {
                             var siteCode = '<?php echo $siteCode; ?>';
-                            var Menu = <?php echo $Menu; ?>;
-                            if (Menu == 1) {
+                            var Menu = '<?php echo $Menu; ?>';
+                            if (Menu == 'dirty') {
                                 window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
                             } else {
                                 window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
