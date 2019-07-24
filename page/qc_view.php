@@ -365,7 +365,6 @@ $genarray = json_decode($json, TRUE);
                             send_rewash(NewDocNo);
 
                         } else if (temp["form"] == 'send_claim' || temp["form"] == 'send_rewash') {
-                            alert("10222");
                             save_qc();
 
                         } else if (temp["form"] == 'save_qc') {
