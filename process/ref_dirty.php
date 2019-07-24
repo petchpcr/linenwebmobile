@@ -88,6 +88,7 @@ function add_dirty($conn, $DATA)
     $siteCode = $DATA["siteCode"];
     $DepCode = $DATA["DepCode"];
     $RefDocNo = $DATA["refDocNo"];
+    $return['RefDocNo'] = $RefDocNo;
 
     $Sql = "    SELECT          CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,

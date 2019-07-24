@@ -9,6 +9,7 @@ if ($Userid == "") {
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
+$refDoc = $_GET['RefDocNo'];
 $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
 $language = $_SESSION['lang'];

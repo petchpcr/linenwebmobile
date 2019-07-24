@@ -153,7 +153,7 @@
                             //     status_line = "StatusLine_1";
                             // }
 
-                            if(temp[i]['IsStatus'] > 0){
+                            if(temp[i]['IsStatus'] == 3){
                                 
                                 var Str = "<button onclick='add_dirty(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                     Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
@@ -170,8 +170,9 @@
                         var siteCode = temp['siteCode']
                         var DepCode = temp['DepCode']
                         var DocNo = temp['DocNo']
+                        var RefDocNo = temp['RefDocNo']
                         var Menu = <?php echo $Menu;?>;
-                        window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid;
+                        window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&RefDocNo='+RefDocNo+'&Menu='+Menu+'&user='+Userid;
                     }
                     else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
