@@ -104,6 +104,21 @@
             }
         }
 
+        function receive_zero(DocNo){
+            swal({
+                title: 'ยืนยันการรรับเอกสาร',
+                text: "คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?",
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่ใช่'
+                }).then((result) => {
+                    confirm_yes(DocNo);
+                })
+        }
+
         function confirm_yes(DocNo){
             var data = {
                 'DocNo': DocNo,
@@ -233,10 +248,15 @@
                                     status_text = "หยุดชั่วขณะ";
                                     status_line = "StatusLine_1";
                                 }
+                                
+                                var onclick = "show_process(\""+temp[i]['DocNo']+"\")";
+                                if (temp[i]['IsReceive'] == 0) {
+                                    onclick = "receive_zero(\""+temp[i]['DocNo']+"\")";
+                                }
 
                                 if(temp[i]['IsStatus'] > 0){
                                 
-                                    var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
+                                    var Str = "<button onclick='"+onclick+"' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                         Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
                                         Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                         Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
