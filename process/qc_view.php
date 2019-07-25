@@ -86,6 +86,7 @@
         }
 
         if($have == 0){
+            $count = 0;
             $Sql_get_catCode = "SELECT CategoryCode FROM item WHERE ItemCode = '$ItemCode'";
             
             $meQuery = mysqli_query($conn,$Sql_get_catCode);
@@ -124,7 +125,8 @@
                 $success = 1;
             }
         }
-
+        $return['cnt'] = $count;
+        
         if ($success == 1) {
             $return['status'] = "success";
             $return['form'] = "show_question";
@@ -228,7 +230,7 @@
 
             //all list num
             $qcqnum = $Result['qcqNum'];
-
+            $return['select QCnum'] = $Sql;
             //0=ผ่าน QC ,1=ส่งเครมบางส่วน , 2=ส่งเครมทั้งหมด ,3 = ส่งซักบางส่วน ,4 =ส่งซักทั้งหมด ,5= ส่งเคลมและซักบางส่วน,6= ส่งเคลมและซักทั้งหมด
 
             if($cnum==0){
@@ -268,6 +270,9 @@
                         
                         WHERE       DocNo= '$pDocNo'
                         AND         ItemCode='$pItemCode'";
+                        $return['cnum'] = $cnum;
+                        $return['wnum'] = $wnum;
+                        $return['qcqnum'] = $qcqnum;
                     }else{
                         $Sql = "    UPDATE      clean_detail
                 

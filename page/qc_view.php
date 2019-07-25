@@ -248,8 +248,6 @@ $genarray = json_decode($json, TRUE);
                             for (var i = 0; i < temp['cnt']; i++) {
                                 var CheckList = Number(temp[i]['IsCheckList']);
                                 var img = "";
-                                if (CheckList == 3 || CheckList == 4 || CheckList == 6) {
-                                }
 
                                 switch (CheckList) {
                                     case 0:
@@ -331,9 +329,8 @@ $genarray = json_decode($json, TRUE);
                             $("#item_code").text(temp['ItemCode']);
                             $("#item_name").text(temp['ItemName']);
                             $("#question").empty();
-                            var length = Object.keys(temp).length;
-                            // alert(length);
-                            for (var i = 0; i < (Object.keys(temp).length - 5); i++) {
+                            
+                            for (var i = 0; i < temp['cnt']; i++) {
                                 var chk = "";
                                 var unchk = "";
                                 if (temp[i]['IsStatus'] == 1) {
