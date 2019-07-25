@@ -226,15 +226,30 @@
 
     function do_end_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $endtime = date("Y-m-d H:i:s");
-        $Sql = "UPDATE process SET WashStopTime = null,WashEndTime = '$endtime',IsStatus = 2,IsStop = 0 WHERE DocNo = '$DocNo' ";
-        $Sql2 = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
-        
-        if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2)){
-            $meQuery = mysqli_query($conn,$Sql);
-            $meQuery2 = mysqli_query($conn,$Sql2);
+        $boolean = false;
 
-            $return['endTime'] = $endtime;
+        $Sql = "UPDATE process SET WashStopTime = null,WashEndTime = NOW(),IsStatus = 2,IsStop = 0 WHERE DocNo = '$DocNo' ";
+        mysqli_query($conn,$Sql);
+
+        $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime
+
+                FROM    process 
+                WHERE   DocNo = '$DocNo'";
+        $return['Sql'] = $Sql;
+
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $UseTime = $Result['UseTime'];
+            $boolean = true;
+        }
+
+        if($boolean){
+            $Sql = "UPDATE process SET WashUseTime = '$UseTime' WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
+
+            $Sql = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
+            mysqli_query($conn,$Sql);
+
             $return['status'] = "success";
             $return['form'] = "do_end_wash";
             echo json_encode($return);
@@ -251,51 +266,34 @@
 
     function auto_end_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $Sql = "SELECT process.WashEndTime FROM process WHERE process.DocNo = '$DocNo'";
-        $Sql2 = "UPDATE process SET WashStopTime = null,IsStatus = 2,IsStop = 0 WHERE DocNo = '$DocNo' ";
-        $Sql3 = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
-        
-        if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2) && $meQuery3 = mysqli_query($conn,$Sql3)){
-            $meQuery = mysqli_query($conn,$Sql);
-            $meQuery2 = mysqli_query($conn,$Sql2);
-            $meQuery3 = mysqli_query($conn,$Sql3);
 
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $return['endTime'] = $Result['WashEndTime'];
-            }
+        $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime
 
-            $return['status'] = "success";
-            $return['form'] = "auto_end_wash";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }else{
-            $return['status'] = "failed";
-            $return['form'] = "auto_end_wash";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
+                FROM    process 
+                WHERE   DocNo = '$DocNo'";
+        $return['Sql'] = $Sql;
+
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $UseTime = $Result['UseTime'];
+            $boolean = true;
         }
-    }
 
-    function use_time_wash($conn, $DATA){
-        $DocNo = $DATA["DocNo"];
-        $WashUseTime = $DATA["WashUseTime"];
+        if($boolean){
+            $Sql = "UPDATE process SET WashStopTime = null,WashUseTime = '$UseTime',IsStatus = 2,IsStop = 0 WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
 
-        $Sql = "UPDATE process SET WashUseTime = '$WashUseTime' WHERE DocNo = '$DocNo'";
+            $Sql = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
+            mysqli_query($conn,$Sql);
 
-        if($meQuery = mysqli_query($conn,$Sql)){
-            $meQuery = mysqli_query($conn,$Sql);
-
-            $return['WashUseTime'] = $WashUseTime;
             $return['status'] = "success";
-            $return['form'] = "use_time_wash";
+            $return['form'] = "auto_end_wash";
             echo json_encode($return);
             mysqli_close($conn);
             die;
         }else{
             $return['status'] = "failed";
-            $return['form'] = "use_time_wash";
+            $return['form'] = "auto_end_wash";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -327,13 +325,27 @@
 
     function end_pack($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $nowdate = date('Y-m-d H:i:s');
-        $Sql = "UPDATE process SET PackEndTime = '$nowdate',IsStatus = 3 WHERE DocNo = '$DocNo'";
+        $boolean = false;
 
-        if($meQuery = mysqli_query($conn,$Sql)){
-            $meQuery = mysqli_query($conn,$Sql);
+        $Sql = "UPDATE process SET PackEndTime = NOW(),IsStatus = 3 WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
 
-            $return['PackEndTime'] = $nowdate;
+        $Sql = "SELECT  TIMEDIFF(PackEndTime,PackStartTime) AS UseTime
+
+                FROM    process 
+                WHERE   DocNo = '$DocNo'";
+        $return['Sql'] = $Sql;
+
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $UseTime = $Result['UseTime'];
+            $boolean = true;
+        }
+
+        if($boolean){
+            $Sql = "UPDATE process SET PackUseTime = '$UseTime' WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
+
             $return['status'] = "success";
             $return['form'] = "end_pack";
             echo json_encode($return);
@@ -396,69 +408,47 @@
     }
 
     function end_send($conn, $DATA){
-        $DocNo = $DATA["DocNo"];
-        $nowdate = date('Y-m-d H:i:s');
-        $Sql = "SELECT SendStartTime FROM process WHERE DocNo = '$DocNo'";
-        $Sql2 = "UPDATE process SET SendEndTime = '$nowdate',IsStatus = 4 WHERE DocNo = '$DocNo'";
-        $Sql3 = "UPDATE dirty SET IsProcess = 3,IsStatus = 3 WHERE DocNo = '$DocNo'";
-
-        if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2) && $meQuery3 = mysqli_query($conn,$Sql3)){
-
-            $meQuery = mysqli_query($conn,$Sql);
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $return['SendStartTime'] = $Result['SendStartTime'];
-            }
-
-            $meQuery = mysqli_query($conn,$Sql2);
-            $meQuery2 = mysqli_query($conn,$Sql3);
-
-            $return['SendEndTime'] = $nowdate;
-            $return['status'] = "success";
-            $return['form'] = "end_send";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }else{
-            $return['status'] = "failed";
-            $return['form'] = "end_send";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
-    }
-
-    function cal_overtime($conn, $DATA){
         $SiteCode = $_SESSION["HptCode"];
         $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
-        $OverTime = $DATA["SendOverTime"];
-        
-        $Sql = "SELECT SendTime FROM delivery_time WHERE HptCode = '$SiteCode' AND FacCode = '$FacCode'";
-        $return['sql overtime'] = $Sql;
+        $boolean = false;
 
-        if($meQuery = mysqli_query($conn,$Sql)){
-            $meQuery = mysqli_query($conn,$Sql);
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $SetOver = $Result['SendTime'];
-            }
+        $Sql = "UPDATE process SET SendEndTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
 
-            $RealOver = $OverTime-$SetOver;
+        $Sql = "SELECT  TIMEDIFF(process.SendEndTime,process.SendStartTime) AS UseTime,
+                        TIMEDIFF((delivery_time.SendTime)*100,TIMEDIFF(process.SendEndTime,process.SendStartTime)) AS Overtime 
 
-            if($RealOver < 0){
-                $RealOver = 0;
-            }
+                FROM    process,delivery_time 
+                WHERE   process.DocNo = '$DocNo'
+                AND     delivery_time.HptCode = '$SiteCode'
+                AND     delivery_time.FacCode = '$FacCode'";
+        $return['Sql'] = $Sql;
 
-            $Sql2 = "UPDATE process SET SendOverTime = '$RealOver',SendUseTime = '$OverTime' WHERE DocNo = '$DocNo'";
-            $meQuery = mysqli_query($conn,$Sql2);
-            
-            $return['SendUseTime'] = $OverTime;
-            $return['SendOverTime'] = $RealOver;
-            $return['status'] = "success";
-            $return['form'] = "cal_overtime";
-            echo json_encode($return);
-            mysqli_close($conn);
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $UseTime = $Result['UseTime'];
+            $Overtime = $Result['Overtime'];
+            $boolean = true;
         }
-        
+
+        if ($boolean) {
+            $Sql = "UPDATE process SET SendUseTime = '$UseTime',SendOverTime = '$Overtime' WHERE DocNo = '$DocNo'";
+
+            if (mysqli_query($conn,$Sql)) {
+                $return['status'] = "success";
+                $return['form'] = "end_send";
+                echo json_encode($return);
+                mysqli_close($conn);
+                die;
+            }else{
+                $return['status'] = "failed";
+                $return['form'] = "end_send";
+                echo json_encode($return);
+                mysqli_close($conn);
+                die;
+            }
+        }
     }
 
     function logout($conn, $DATA){
@@ -514,26 +504,17 @@
         else if ($DATA['STATUS'] == 'auto_end_wash') {
             auto_end_wash($conn, $DATA);
         }
-        else if ($DATA['STATUS'] == 'use_time_wash') {
-            use_time_wash($conn, $DATA);
-        }
         else if ($DATA['STATUS'] == 'start_pack') {
             start_pack($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'end_pack') {
             end_pack($conn, $DATA);
         }
-        else if ($DATA['STATUS'] == 'use_time_pack') {
-            use_time_pack($conn, $DATA);
-        }
         else if ($DATA['STATUS'] == 'start_send') {
             start_send($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'end_send') {
             end_send($conn, $DATA);
-        }
-        else if ($DATA['STATUS'] == 'cal_overtime') {
-            cal_overtime($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

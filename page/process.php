@@ -155,16 +155,6 @@
             senddata(JSON.stringify(data));
         }
 
-        function use_time_wash(WashUseTime){
-            var DocNo = "<?php echo $DocNo?>";
-            var data = {
-                'WashUseTime': WashUseTime,
-                'DocNo': DocNo,
-                'STATUS': 'use_time_wash'
-            };
-            senddata(JSON.stringify(data));
-        }
-
         function start_pack(DocNo){
             var data = {
                 'DocNo': DocNo,
@@ -181,16 +171,6 @@
             senddata(JSON.stringify(data));
         }
 
-        function use_time_pack(PackUseTime){
-            var DocNo = "<?php echo $DocNo?>";
-            var data = {
-                'PackUseTime': PackUseTime,
-                'DocNo': DocNo,
-                'STATUS': 'use_time_pack'
-            };
-            senddata(JSON.stringify(data));
-        }
-
         function start_send(DocNo){
             var data = {
                 'DocNo': DocNo,
@@ -203,16 +183,6 @@
             var data = {
                 'DocNo': DocNo,
                 'STATUS': 'end_send'
-            };
-            senddata(JSON.stringify(data));
-        }
-
-        function cal_overtime(OverTime){
-            var DocNo = "<?php echo $DocNo?>";
-            var data = {
-                'SendOverTime': OverTime,
-                'DocNo': DocNo,
-                'STATUS': 'cal_overtime'
             };
             senddata(JSON.stringify(data));
         }
@@ -254,6 +224,7 @@
                             $(".head-btn.btn-light").remove();
                             var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>";
                             $("#user").before(Back);
+                            $("#h_status").text("");
                             $("#h_status").text(temp['IsStatus']);
                             if(temp['IsStatus'] == 0 || temp['IsStatus'] == null){ //-----ยังไม่ได้ทำอะไร
                                 $("#W_Status").attr("src","../img/Status_4.png");
@@ -372,13 +343,10 @@
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
 
-                                var W_Use = "ไม่เกิน 1";
                                 var W_Start = new Date(temp['WashStartTime']);
                                 var W_End = new Date(temp['WashEndTime']);
-                                if(temp['WashUseTime'] >= 1){
-                                    W_Use = temp['WashUseTime'];
-                                }
-                                $("#W_Use").text(W_Use+" นาที");
+                                
+                                $("#W_Use").text(temp['WashUseTime']+" นาที");
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
                                 $("#W_End").text(W_End.toLocaleTimeString());
 
@@ -416,20 +384,13 @@
                                 $("#cnd").remove();
                                 $("#W_Use_text").show();
                                 
-                                var W_Use = "ไม่เกิน 1";
-                                var P_Use = "ไม่เกิน 1";
                                 var W_Start = new Date(temp['WashStartTime']);
                                 var W_End = new Date(temp['WashEndTime']);
                                 var P_Start = new Date(temp['PackStartTime']);
                                 var P_End = new Date(temp['PackEndTime']);
-                                if(temp['WashUseTime'] >= 1){
-                                    W_Use = temp['WashUseTime'];
-                                }
-                                if(temp['PackUseTime'] >= 1){
-                                    P_Use = temp['PackUseTime'];
-                                }
-                                $("#W_Use").text(W_Use+" นาที");
-                                $("#P_Use").text(P_Use+" นาที");
+                                
+                                $("#W_Use").text(temp['WashUseTime']+" นาที");
+                                $("#P_Use").text(temp['PackUseTime']+" นาที");
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
                                 $("#W_End").text(W_End.toLocaleTimeString());
                                 $("#P_Start").text(P_Start.toLocaleTimeString());
@@ -498,35 +459,27 @@
                                 $("#P_Use_text").show();
                                 $("#S_Use_text").show();
 
-                                var W_Use = "ไม่เกิน 1";
-                                var P_Use = "ไม่เกิน 1";
                                 var W_Start = new Date(temp['WashStartTime']);
                                 var W_End = new Date(temp['WashEndTime']);
                                 var P_Start = new Date(temp['PackStartTime']);
                                 var P_End = new Date(temp['PackEndTime']);
                                 var S_Start = new Date(temp['SendStartTime']);
                                 var S_End = new Date(temp['SendEndTime']);
-                                if(temp['WashUseTime'] >= 1){
-                                    W_Use = temp['WashUseTime'];
-                                }
-                                if(temp['PackUseTime'] >= 1){
-                                    P_Use = temp['PackUseTime'];
-                                }
-                                if(temp['SendOverTime'] >= 1){
-                                $("#S_Head_use").text("เกินเวลา");
-                                $("#S_Head_use").css("color","red");
-                                $("#S_Use").css("color","red");
-                                $("#S_Use").text(temp['SendOverTime']+" นาที");
+                                var S_Over = temp['SendOverTime'].substring(0, 1);
+
+                                if (S_Over == '-') {
+                                    $("#S_Head_use").text("เกินเวลา");
+                                    $("#S_Head_use").css("color","red");
+                                    $("#S_Use").css("color","red");
+                                    $("#S_Use").text(temp['SendOverTime'].substring(1)+" นาที");
+
                                 } else {
                                     $("#S_Head_use").text("ใช้เวลา");
-                                    var useText = "ไม่เกิน 1";
-                                    if(temp['SendUseTime'] >= 1){
-                                        useText = temp['SendUseTime'];
-                                    }
-                                    $("#S_Use").text(useText+" นาที");
+                                    $("#S_Use").text(temp['SendUseTime']+" นาที");
                                 }
-                                $("#W_Use").text(W_Use+" นาที");
-                                $("#P_Use").text(P_Use+" นาที");
+
+                                $("#W_Use").text(temp['WashUseTime']+" นาที");
+                                $("#P_Use").text(temp['PackUseTime']+" นาที");
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
                                 $("#W_End").text(W_End.toLocaleTimeString());
                                 $("#P_Start").text(P_Start.toLocaleTimeString());
@@ -562,67 +515,18 @@
                             load_process();
                         }
                         else if (temp["form"] == 'do_end_wash' || temp["form"] == 'auto_end_wash'){
-                            var start = new Date($("#hw_start").text());
-                            var end = new Date(temp['endTime']);
-                            var differ = end-start;
-
-                            var ms = differ % 1000;
-                            differ = (differ - ms) / 1000;
-                            var secs = differ % 60;
-                            differ = (differ - secs) / 60;
-                            var mins = differ % 60;
-                            var hrs = (differ - mins) / 60;
-
-                            var WashUseTime = (hrs * 60) + mins;
-
-                            use_time_wash(WashUseTime);
-                        }
-                        else if (temp["form"] == 'use_time_wash'){
                             load_process();
                         }
                         else if (temp["form"] == 'start_pack'){
                             load_process();
                         }
                         else if (temp["form"] == 'end_pack'){
-                            var P_Start = new Date($("#hp_start").text());
-                            var P_End = new Date(temp['PackEndTime']);
-                            
-                            var differ = P_End-P_Start;
-
-                            var ms = differ % 1000;
-                            differ = (differ - ms) / 1000;
-                            var secs = differ % 60;
-                            differ = (differ - secs) / 60;
-                            var mins = differ % 60;
-                            var hrs = (differ - mins) / 60;
-
-                            var PackUseTime = (hrs * 60) + mins;
-
-                            use_time_pack(PackUseTime);
-                        }
-                        else if (temp["form"] == 'use_time_pack'){
                             load_process();
                         }
                         else if (temp["form"] == 'start_send'){                    
                             load_process();
                         }
                         else if (temp["form"] == 'end_send'){
-                            var S_Start = new Date(temp['SendStartTime']);
-                            var S_End = new Date(temp['SendEndTime']);
-
-                            var differ = S_End-S_Start;
-                                
-                            var ms = differ % 1000;
-                            differ = (differ - ms) / 1000;
-                            var secs = differ % 60;
-                            differ = (differ - secs) / 60;
-                            var mins = differ % 60;
-                            var hrs = (differ - mins) / 60;
-
-                            var OverTime = (hrs * 60) + mins;
-                            cal_overtime(OverTime);
-                        }
-                        else if(temp["form"] == 'cal_overtime'){
                             load_process();
                         }
                         else if(temp["form"] == 'logout'){
