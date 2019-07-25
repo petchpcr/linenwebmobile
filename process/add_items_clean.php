@@ -54,7 +54,7 @@
         $DocNo = $DATA["DocNo"];
         $boolean = false;
 
-        $Sql = "SELECT clean.ItemCode,
+        $Sql = "SELECT clean_detail.ItemCode,
                         item.ItemName,
                         clean_detail.UnitCode,
                         clean_detail.Qty,

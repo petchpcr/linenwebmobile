@@ -300,7 +300,7 @@ $genarray = json_decode($json, TRUE);
             var Menu = '<?php echo $Menu; ?>';
             if (Menu == 'dirty') {
                 var URL = '../process/add_items_dirty.php';
-            } else {
+            } else if (Menu == 'clean') {
                 var URL = '../process/add_items_clean.php';
             }
 
