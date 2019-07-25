@@ -499,7 +499,7 @@ $genarray = json_decode($json, TRUE);
                 </div>
 
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-                    <input onkeydown="make_number()" id="val_weight" class="form-control mb-3 numonly" type="text" placeholder="กรอกน้ำหนัก">
+                    <input onkeydown="make_number()" id="val_weight" class="form-control mb-3 numonly" type="text">
                 </div>
 
                 <div class="modal-footer text-center">
