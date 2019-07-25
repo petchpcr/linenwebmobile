@@ -115,7 +115,7 @@ $genarray = json_decode($json, TRUE);
                     Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
                     Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
                     Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-weight=0 value=0>";
-                    Str += "<img src='../img/kg.png' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
+                    Str += "<img src='../img/kg.png' onclick='show_weight("+num+")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
 
                     $("#items").append(Str);
                     arr_new_items.push(code);
