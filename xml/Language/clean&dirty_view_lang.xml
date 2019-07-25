@@ -13,6 +13,8 @@
 <numberSize><en>Number</en><th>จำนวน</th></numberSize>
 
 <addList><en>Add item</en><th>เพิ่มรายการ</th></addList>
+<Getweight><en>Get weight</en><th>รับน้ำหนัก</th></Getweight>
+
 
 <searchitem><en>Search item</en><th>ค้นหารายการ</th></searchitem>
 </lang>
