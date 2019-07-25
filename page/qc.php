@@ -186,7 +186,7 @@
                         $(".btn.btn-mylight.btn-block").remove();
                         swal({
                             title: '',
-                            text: "ไม่พบข้อมูลในวันที่เลือก",
+                            text: '<?php echo $genarray['notfoundDocInDate'][$language]; ?>'+$('#datepicker').val(),
                             type: 'warning',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
