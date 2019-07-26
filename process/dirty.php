@@ -165,12 +165,10 @@
     }
 
     function confirm_yes($conn, $DATA){
-        $count = 0;
         $DocNo = $DATA["DocNo"];
-        $boolean = false;
-        $Sql = "UPDATE dirty SET IsReceive = 1,IsStatus = 2 WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE dirty SET IsReceive = 1,IsStatus = 2,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
 
-        if($meQuery = mysqli_query($conn, $Sql)){
+        if(mysqli_query($conn, $Sql)){
             $return['DocNo'] = $DocNo;
             $return['status'] = "success";
             $return['form'] = "confirm_yes";
