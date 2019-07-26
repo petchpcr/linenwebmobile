@@ -48,7 +48,6 @@
         });
 
         function load_site() {
-            //var datenow = ;
             console.log("<?php echo date("Y-m-d"); ?>");
             $('#datepicker').val("<?php echo date("Y-m-d"); ?>");
             var siteCode = "<?php echo $siteCode ?>";
@@ -59,14 +58,14 @@
             senddata(JSON.stringify(data));
         }
 
-        function change_dep() {
-            var slt = $("#DepName").val();
-            if (slt == 0) {
-                $("#btn_confirm").prop('disabled', true);
-            } else {
-                $("#btn_confirm").prop('disabled', false);
-            }
-        }
+        // function change_dep() {
+        //     var slt = $("#DepName").val();
+        //     if (slt == 0) {
+        //         $("#btn_confirm").prop('disabled', true);
+        //     } else {
+        //         $("#btn_confirm").prop('disabled', false);
+        //     }
+        // }
 
         function load_dep(){
             var siteCode = "<?php echo $siteCode?>";
@@ -102,19 +101,19 @@
             window.location.href = "hospital.php?Menu=" + Menu;
         }
 
+        function To_ref_dirty() {
+            var siteCode = "<?php echo $siteCode?>";
+            // var DepCode = $("#DepName").val();
+            var Menu = '<?php echo $Menu;?>';
+            window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+        }
+
         function logout(num) {
             var data = {
                 'Confirm': num,
                 'STATUS': 'logout'
             };
             senddata(JSON.stringify(data));
-        }
-
-        function add_dirty(){
-            var siteCode = "<?php echo $siteCode?>";
-            var DepCode = $("#DepName").val();
-            var Menu = '<?php echo $Menu;?>';
-            window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode='+DepCode+'&Menu='+Menu;
         }
 
         function senddata(data) {
@@ -179,12 +178,13 @@
                             window.location.href = 'process.php?siteCode=' + temp['siteCode'];
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
-                        }else if(temp["form"] == 'load_dep'){
-                            for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                                var Str = "<option value="+temp[i]['DepCode']+">"+temp[i]['DepName']+"</option>";
-                                $("#DepName").append(Str);
-                            }
                         }
+                        // else if(temp["form"] == 'load_dep'){
+                        //     for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                        //         var Str = "<option value="+temp[i]['DepCode']+">"+temp[i]['DepName']+"</option>";
+                        //         $("#DepName").append(Str);
+                        //     }
+                        // }
                     } else if (temp['status'] == "failed") {
                         if (temp["form"] == 'load_doc') {
                             $(".btn.btn-mylight.btn-block").remove();
@@ -245,7 +245,7 @@
                 <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
             <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-                <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
+                <button onclick="To_ref_dirty()" class="btn btn-primary btn-block" type="button">
                     <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
                 </button>
             </div>
@@ -253,7 +253,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -285,7 +285,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
+
     <script>
         $('#datepicker').datepicker({
             uiLibrary: 'bootstrap4',

@@ -52,6 +52,7 @@ function load_doc($conn, $DATA)
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%' 
+                AND dirty.DepCode = 224 -- Handle
                 ORDER BY dirty.DocNo DESC";
     $return['sql'] = $Sql;
 
