@@ -94,13 +94,13 @@
         }
 
         function show_process(DocNo){
-            var siteCode = "<?php echo $siteCode?>";
-            var Menu = '<?php echo $Menu;?>';
+            var siteCode = '<?php echo $siteCode ?>';
+            var Menu = '<?php echo $Menu ?>';
             if(Menu == 'dirty'){
                 window.location.href='dirty_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
             }
             else if(Menu == 'factory'){
-                window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
+                window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
             }
         }
 
@@ -268,9 +268,6 @@
                     } 
                     else if(temp["form"] == 'confirm_yes'){
                         show_process(temp['DocNo']);
-                    }
-                    else if(temp["form"] == 'show_process'){
-                        window.location.href='process.php?siteCode='+temp['siteCode'];
                     }
                     else if(temp["form"] == 'add_dirty'){
                         var Userid = temp['user']

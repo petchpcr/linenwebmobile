@@ -8,6 +8,7 @@
       header("location:../index.html");
     }
     $Menu = $_GET['Menu'];
+    $siteCode = $_GET['siteCode'];    
     $DocNo = $_GET['DocNo'];
     $language = $_SESSION['lang'];
     $xml = simplexml_load_file('../xml/Language/fac_process_lang.xml');
@@ -180,7 +181,9 @@
         }
 
         function end_send(DocNo){
+            var siteCode = '<?php echo $siteCode;?>';
             var data = {
+                'siteCode': siteCode,
                 'DocNo': DocNo,
                 'STATUS': 'end_send'
             };

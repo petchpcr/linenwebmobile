@@ -408,7 +408,7 @@
     }
 
     function end_send($conn, $DATA){
-        $SiteCode = $_SESSION["HptCode"];
+        $SiteCode = $DATA["siteCode"];
         $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
         $boolean = false;
@@ -434,6 +434,7 @@
 
         if ($boolean) {
             $Sql = "UPDATE process SET SendUseTime = '$UseTime',SendOverTime = '$Overtime' WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
 
             if (mysqli_query($conn,$Sql)) {
                 $return['status'] = "success";
