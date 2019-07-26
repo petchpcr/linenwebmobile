@@ -26,6 +26,8 @@ function checklogin($conn,$DATA)
       $_SESSION['TimeOut'] = $Result['TimeOut'];
       $_SESSION['HptCode'] = $Result['HptCode'];
       $_SESSION['FacCode'] = $Result['FacCode'];
+      $return['FacCode'] = $Result['FacCode'];
+      $return['PmID'] = $Result['PmID'];
 
       $boolean = true;
     }

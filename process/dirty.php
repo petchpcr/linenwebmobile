@@ -93,9 +93,18 @@
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
 
+            $DocNo = $Result['DocNo'];
+            $Sql2 = "SELECT Signature FROM process WHERE DocNo = '$DocNo'";
+            $meQuery2 = mysqli_query($conn, $Sql2);
+            while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                $return[$count]['Signature'] = $Result['Signature'];
+            }
+
             $count++;
             $boolean = true;
         }
+
+        
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_doc";
@@ -165,8 +174,9 @@
     }
 
     function confirm_yes($conn, $DATA){
+        $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
-        $Sql = "UPDATE dirty SET IsReceive = 1,IsStatus = 2,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE dirty SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn, $Sql)){
             $return['DocNo'] = $DocNo;

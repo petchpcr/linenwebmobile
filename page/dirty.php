@@ -106,7 +106,7 @@
 
         function receive_zero(DocNo){
             swal({
-                title: 'ยืนยันการรรับเอกสาร',
+                title: 'ยืนยันการรับเอกสาร',
                 text: "คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?",
                 type: 'question',
                 showCancelButton: true,
@@ -208,7 +208,7 @@
                                     status_text = "หยุดชั่วขณะ";
                                     status_line = "StatusLine_1";
                                 }
-                                else if (temp[i]['IsStatus'] == 1) {
+                                else if (temp[i]['IsStatus'] == 1 || temp[i]['IsStatus'] == 3) {
                                     status_class = "status2";
                                     status_text = "เสร็จสิ้น";
                                     status_line = "StatusLine_2";
@@ -238,15 +238,22 @@
                                     status_text = "กำลังดำเนินการ";
                                     status_line = "StatusLine_3";
                                 }
-                                else if(temp[i]['IsProcess'] == 3){
-                                    status_class = "status2";
-                                    status_text = "เสร็จสิ้น";
-                                    status_line = "StatusLine_2";
-                                }
                                 else if(temp[i]['IsProcess'] == 2){
                                     status_class = "status1";
                                     status_text = "หยุดชั่วขณะ";
                                     status_line = "StatusLine_1";
+                                }
+                                else if(temp[i]['IsProcess'] == 3){
+                                    if (temp[i]['Signature'] == null) {
+                                        status_class = "status3";
+                                        status_text = "กำลังดำเนินการ";
+                                        status_line = "StatusLine_3";
+                                    }
+                                    else {
+                                        status_class = "status2";
+                                        status_text = "เสร็จสิ้น";
+                                        status_line = "StatusLine_2";
+                                    }
                                 }
                                 
                                 var onclick = "show_process(\""+temp[i]['DocNo']+"\")";

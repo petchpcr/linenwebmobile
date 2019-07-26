@@ -436,13 +436,16 @@
             $Sql = "UPDATE process SET SendUseTime = '$UseTime',SendOverTime = '$Overtime' WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
+            $Sql = "UPDATE dirty SET IsProcess = 3 WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
+
             if (mysqli_query($conn,$Sql)) {
                 $return['status'] = "success";
                 $return['form'] = "end_send";
                 echo json_encode($return);
                 mysqli_close($conn);
                 die;
-            }else{
+            } else {
                 $return['status'] = "failed";
                 $return['form'] = "end_send";
                 echo json_encode($return);

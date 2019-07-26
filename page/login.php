@@ -87,6 +87,9 @@
 					console.log('Error#542-decode error');
 				}
 				if (temp["status"] == 'success') {
+					// var FacCode = temp['FacCode'];
+					var PmID = temp['PmID'];
+					
 					swal.hideLoading()
 					swal({
 						title: '',
@@ -99,11 +102,18 @@
 						confirmButtonText: 'Ok',
 						showConfirmButton: false
 					}).then(function () {
-						window.location.href = 'menu.php';
+						if (PmID == 2) {
+							window.location.href = 'hospital.php?Menu=factory';
+						}
+						else {
+							window.location.href = 'menu.php';
+						}
 					}, function (dismiss) {
-						window.location.href = 'menu.php';
-						if (dismiss === 'cancel') {
-		
+						if (PmID == 2) {
+							window.location.href = 'hospital.php?Menu=factory';
+						}
+						else {
+							window.location.href = 'menu.php';
 						}
 					})
 	
