@@ -86,11 +86,16 @@ $genarray = json_decode($json, TRUE);
                     } catch (e) {
                         console.log('Error#542-decode error');
                     }
-
+                    if($("#lang").val() == "th"){
+                        var lang = '<?php echo $array['savesuccess']["th"]; ?>';
+                    }else{
+                        var lang = '<?php echo $array['savesuccess']["en"]; ?>';
+                    }
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'save_lang') {
                             swal({
                             title: '',
+                            text: lang,
                             type: 'success',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
@@ -99,7 +104,7 @@ $genarray = json_decode($json, TRUE);
                             timer: 2000,
                             confirmButtonText: 'Error!!'
                             })
-                            setTimeout( 'window.location.href = "menu.php"', 1000 );
+                            setTimeout( 'window.location.href = "menu.php"', 2000 );
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
