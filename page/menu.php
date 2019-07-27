@@ -45,9 +45,9 @@
             } else if(menu == 'dirty'){
                 window.location.href='dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=dirty';
             } else if(menu == 'clean'){
-                window.location.href='dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
+                window.location.href='clean.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
             } else if(menu == 'qc'){
-                window.location.href='dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
+                window.location.href='qc.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
             } else {
                 window.location.href='hospital.php?Menu='+menu;
             }
