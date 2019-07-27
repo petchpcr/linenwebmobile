@@ -91,8 +91,39 @@
     function start_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
         $FacCode = $_SESSION["FacCode"];
-        $Sql = "SELECT process.WashStartTime,process.WashStopTime,process.WashEndTime FROM process WHERE process.DocNo = '$DocNo'";
-        $Sql2 = "SELECT processtime.processt FROM processtime WHERE processtime.FacCode = '$FacCode'";
+
+        $Sql = "SELECT COUNT(WashStartTime) AS ChkStart, COUNT(WashStopTime) AS ChkStop FROM process WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $ChkStart = $Result['ChkStart'];
+            $ChkStop = $Result['ChkStop'];
+        }
+
+        if ($ChkStart == 0) { // ถ้ายังไม่เคยกดเริ่ม
+            $Sql = "UPDATE process SET WashStartTime = NOW() WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
+
+            $Sql = "SELECT  ADDTIME((SELECT WashStartTime FROM process WHERE DocNo = '$DocNo'), 
+                            SEC_TO_TIME((SELECT processt FROM processtime WHERE FacCode = '$FacCode')*60)) AS WashEndTime";
+            $meQuery = mysqli_query($conn,$Sql);
+            while ($Result = mysqli_fetch_assoc($meQuery)) {
+                $EndTime = $Result['WashEndTime'];
+            }
+
+            $Sql = "UPDATE process SET WashEndTime = '$EndTime' WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
+        }
+        else { // ถ้าเคยกดเริ่มแล้ว
+            if ($ChkStop > 0) { // แต่.. กำลังหยุด
+
+            }
+        }
+
+
+        // *************************************************
+
+        $Sql = "SELECT WashStartTime,WashStopTime,WashEndTime FROM process WHERE DocNo = '$DocNo'";
+        $Sql2 = "SELECT processt FROM processtime WHERE FacCode = '$FacCode'";
         
         if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2)){
             $meQuery = mysqli_query($conn,$Sql);

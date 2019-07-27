@@ -60,6 +60,8 @@
                     if(cdnWash != "" || cdnWash != null){ // มีเวลาสิ้นสุด(เคยกดเริ่มไปแล้ว)
                         if(cur_date < cdnWash){ //ถ้ายังซักไม่เสร็จ
                             var differ = cdnWash-cur_date;
+                            $("#countdown").text(differ);
+
                             // alert("Differ : "+differ);
                             var ms = differ % 1000;
                             differ = (differ - ms) / 1000;
@@ -73,7 +75,6 @@
                             if(hrs < 10){hrs = "0" + hrs;}
 
                             var countdown = hrs + ':' + mins + ':' + secs;
-                            $("#countdown").text(countdown);
                             setTimeout('countdown()', 1000 );
                         }
                         else if(cur_date >= cdnWash) { // ถ้าซักเสร็จแล้ว
@@ -572,9 +573,9 @@
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
         <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
         <div id="h_status" hidden></div>
-        <div id="hw_start" hidden></div>
-        <div id="hw_stop" hidden></div>
-        <div id="hw_end" hidden></div>
+        <div id="hw_start" ></div>
+        <div id="hw_stop" ></div>
+        <div id="hw_end" ></div>
         <div id="hp_start" hidden></div>
         <div id="hp_end" hidden></div>
         <div id="hs_start" hidden></div>
