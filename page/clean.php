@@ -98,7 +98,7 @@
 
         function back() {
             var Menu = '<?php echo $Menu; ?>';
-            window.location.href = "hospital.php?Menu=" + Menu;
+            window.location.href="menu.php";
         }
 
         function To_ref_dirty() {

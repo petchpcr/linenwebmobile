@@ -3,6 +3,8 @@
     $Userid = $_SESSION['Userid'];
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
+    $HptCode = $_SESSION['HptCode'];
+    $FacCode = $_SESSION['FacCode'];
     if($Userid==""){
       header("location:../index.html");
     }
@@ -40,9 +42,14 @@
             if (menu == 'tools') {
                 window.location.href='setting.php?';
 
+            } else if(menu == 'dirty'){
+                window.location.href='dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=dirty';
+            } else if(menu == 'clean'){
+                window.location.href='dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
+            } else if(menu == 'qc'){
+                window.location.href='dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
             } else {
                 window.location.href='hospital.php?Menu='+menu;
-
             }
         }
 
@@ -115,42 +122,49 @@
         </div>
 
         <div class="row w-100 m-0">
-            <div class="my-col-menu">
-                <button onclick="menu_click('dirty')" type="button" class="btn btn-mylight btn-block">
-                    <img src="../img/tshirt.png">
-                    <div class="text-truncate"><?php echo $array['dirty'][$language]; ?></div>
-                </button>
-            </div>
-            <div class="my-col-menu">
-                <button onclick="menu_click('factory')" type="button" class="btn btn-mylight btn-block">
-                    <img src="../img/Factory.png">
-                    <div class="text-truncate"><?php echo $array['factory'][$language]; ?></div>
-                </button>
-            </div>
-            <div class="my-col-menu">
-                <button onclick="menu_click('clean')" type="button" class="btn btn-mylight btn-block">
-                    <img src="../img/laundry.png">
-                    <div class="text-truncate"><?php echo $array['clean'][$language]; ?></div>
-                </button>
-            </div>
-            <div class="my-col-menu">
-                <button onclick="menu_click('qc')" type="button" class="btn btn-mylight btn-block">
-                    <img src="../img/QC.png">
-                    <div class="text-truncate"><?php echo $array['QC'][$language]; ?></div>
-                </button>
-            </div>
-            <!-- <div class="my-col-menu">
-                <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
-                    <img src="../img/Report.png">
-                    <div class="text-truncate"><?php echo $array['report'][$language]; ?></div>
-                </button>
-            </div> -->
-            <div class="my-col-menu">
-                <button onclick="menu_click('tools')" type="button" class="btn btn-mylight btn-block">
-                    <img src="../img/Tools.png">
-                    <div class="text-truncate"><?php echo $array['setting'][$language]; ?></div>
-                </button>
-            </div>
+            <?php 
+                if($FacCode>0){
+                    echo '<div class="my-col-menu">
+                        <button onclick="menu_click('."'factory'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/Factory.png">
+                            <div class="text-truncate">'.$array["factory"][$language].'</div>
+                        </button>
+                    </div>';
+                }else{
+                    echo '<div class="my-col-menu">
+                    <button onclick="menu_click('."'dirty'".')" type="button" class="btn btn-mylight btn-block">
+                        <img src="../img/tshirt.png">
+                        <div class="text-truncate">'.$array["dirty"][$language].'</div>
+                        </button>
+                    </div>
+        
+                    <div class="my-col-menu">
+                        <button onclick="menu_click('."'clean'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/laundry.png">
+                            <div class="text-truncate">'.$array["clean"][$language].'</div>
+                        </button>
+                    </div>
+                    <div class="my-col-menu">
+                        <button onclick="menu_click('."'qc'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/QC.png">
+                            <div class="text-truncate">'.$array["QC"][$language].'</div>
+                        </button>
+                    </div>
+                    <!-- <div class="my-col-menu">
+                        <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/Report.png">
+                            <div class="text-truncate">'.$array["report"][$language].'</div>
+                        </button>
+                    </div> -->
+                    <div class="my-col-menu">
+                        <button onclick="menu_click('."'tools'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/Tools.png">
+                            <div class="text-truncate">'.$array["setting"][$language].'</div>
+                        </button>
+                    </div>';
+                }
+            ?>
+            
         </div>
 	</section>			
 </body>
