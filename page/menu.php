@@ -4,7 +4,7 @@
     $UserName = $_SESSION['Username'];
     $UserFName = $_SESSION['FName'];
     $HptCode = $_SESSION['HptCode'];
-    $FacCode = $_SESSION['FacCode'];
+    $PM = $_SESSION['PmID'];
     if($Userid==""){
       header("location:../index.html");
     }
@@ -123,7 +123,7 @@
 
         <div class="row w-100 m-0">
             <?php 
-                if($FacCode>0){
+                if($PM==4){
                     echo '<div class="my-col-menu">
                         <button onclick="menu_click('."'factory'".')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/Factory.png">

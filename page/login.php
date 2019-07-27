@@ -102,14 +102,14 @@
 						confirmButtonText: 'Ok',
 						showConfirmButton: false
 					}).then(function () {
-						if (PmID == 2) {
+						if (PmID == 4) {
 							window.location.href = 'hospital.php?Menu=factory';
 						}
 						else {
 							window.location.href = 'menu.php';
 						}
 					}, function (dismiss) {
-						if (PmID == 2) {
+						if (PmID == 4) {
 							window.location.href = 'hospital.php?Menu=factory';
 						}
 						else {
