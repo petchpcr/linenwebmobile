@@ -8,7 +8,7 @@
 <Starttime><en>Start time</en><th>เวลาที่เริ่ม</th></Starttime>
 <countdown><en>Count down</en><th>นับถอยหลัง</th></countdown>
 <Finishtime><en>Finish time</en><th>เวลาสิ้นสุด</th></Finishtime>
-<Processtime><en>Process time</en><th>เวลาดำเนินการ</th></Processtime>
+<Processtime><en>Process time</en><th>เวลาที่ใช้</th></Processtime>
 
 <Wash><en>Wash</en><th>ซักผ้า</th></Wash>
 <StartWash><en>Start Washing</en><th>เริ่มซัก</th></StartWash>

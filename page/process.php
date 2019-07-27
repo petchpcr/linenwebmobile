@@ -39,7 +39,10 @@
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
-        
+        var Total_Sec;
+        var Total_Time;
+        var stop_countdown;
+
         $(document).ready(function (e) {
             load_process();
         });
@@ -59,12 +62,11 @@
                     // alert("End Time : "+cdnWash);
                     if(cdnWash != "" || cdnWash != null){ // มีเวลาสิ้นสุด(เคยกดเริ่มไปแล้ว)
                         if(cur_date < cdnWash){ //ถ้ายังซักไม่เสร็จ
-                            var differ = cdnWash-cur_date;
-                            $("#countdown").text(differ);
+                            var differ = Total_Sec--;
+                            // console.log("Stop : "+stop_countdown+" Countdown : "+differ);
 
-                            // alert("Differ : "+differ);
-                            var ms = differ % 1000;
-                            differ = (differ - ms) / 1000;
+                            // var ms = differ % 1000;
+                            // differ = (differ - ms) / 1000;
                             var secs = differ % 60;
                             differ = (differ - secs) / 60;
                             var mins = differ % 60;
@@ -75,24 +77,22 @@
                             if(hrs < 10){hrs = "0" + hrs;}
 
                             var countdown = hrs + ':' + mins + ':' + secs;
-                            setTimeout('countdown()', 1000 );
+                            $("#countdown").text(countdown);
                         }
                         else if(cur_date >= cdnWash) { // ถ้าซักเสร็จแล้ว
                             var DocNo = "<?php echo $DocNo?>";
                             auto_end_wash(DocNo);
                         }
-                        else{
-                            setTimeout('countdown()', 1000 );
-                        }
                     }
-                    else{
-                        setTimeout('countdown()', 1000 );
-                    }
-                }
-                else{
-                    setTimeout('countdown()', 1000 );
                 }
                 
+            }
+
+            if (stop_countdown == 0) {
+                setTimeout('countdown()', 1000 );
+            }
+            else {
+                $("#countdown").text(Total_Time);
             }
             
         }
@@ -104,6 +104,16 @@
                 'STATUS': 'load_process'
             };
             senddata(JSON.stringify(data));
+        }
+
+        function disable_btn(){
+            $("#W_Stop_btn_sub").prop("disabled",true);
+            $("#W_Start_btn_sub").prop("disabled",true);
+        }
+
+        function enable_btn(){
+            $("#W_Stop_btn_sub").prop("disabled",false);
+            $("#W_Start_btn_sub").prop("disabled",false);
         }
 
         function insert_process(){
@@ -119,16 +129,6 @@
             var data = {
                 'DocNo': DocNo,
                 'STATUS': 'start_wash'
-            };
-            senddata(JSON.stringify(data));
-        }
-
-        function set_end_wash(W_End){
-            var DocNo = "<?php echo $DocNo?>";
-            var data = {
-                'W_End': W_End,
-                'DocNo': DocNo,
-                'STATUS': 'set_end_wash'
             };
             senddata(JSON.stringify(data));
         }
@@ -257,6 +257,7 @@
                                 $("#W_End_btn").hide();
                             }
                             else if(temp['IsStatus'] == 1){ //-----กำลังซัก
+                                disable_btn();
                                 $("#W_Status").attr("src","../img/Status_1.png");
                                 $("#P_Status").attr("src","../img/Status_4.png");
                                 $("#S_Status").attr("src","../img/Status_4.png");
@@ -270,7 +271,6 @@
                                 $("#W_Sum_btn").show();
                                 $("#P_Sum_btn").hide();
                                 $("#S_Sum_btn").hide();
-                                $("#countdown").text("00:00:00");
                                 $("#P_Start").text("--:--:--");
                                 $("#P_End").text("--:--:--");
                                 $("#S_Start").text("--:--:--");
@@ -284,37 +284,23 @@
                                 $("#hw_end").text(temp['WashEndTime']);
 
                                 if(temp['IsStop'] == 1){ // ถ้าหยุด
+                                    stop_countdown = 1;
+                                    Total_Sec = null;
+                                    Total_Time = temp['Diff_Time'];
                                     $("#hw_stop").text(temp['WashStopTime']);
                                     $("#hw_stop").show();
-                                    var W_Stop = new Date(temp['WashStopTime']);
-                                    var differ = W_End-W_Stop;
-
-                                    var ms = differ % 1000;
-                                    differ = (differ - ms) / 1000;
-                                    var secs = differ % 60;
-                                    differ = (differ - secs) / 60;
-                                    var mins = differ % 60;
-                                    var hrs = (differ - mins) / 60;
-
-                                    if(secs < 10){secs = "0" + secs;}
-                                    if(mins < 10){mins = "0" + mins;}
-                                    if(hrs < 10){hrs = "0" + hrs;}
-
-                                    var countdown = hrs + ':' + mins + ':' + secs;
-                                    $("#show_stop").text(countdown);
                                     $("#W_End").text("--:--:--");
-
                                     $("#W_Stop_btn").hide();
                                     $("#W_Start_btn").show();
+                                    setTimeout( 'enable_btn()', 3000 );
                                     $("#W_Status").attr("src","../img/Status_2.png");
                                     $("#W_Status_text").text("Stop Process");
-                                    $("#countdown").hide();
-                                    $("#show_stop").show();
                                 }else{
+                                    stop_countdown = 0;
+                                    Total_Sec = Number(temp['Diff_Sec']);
+                                    Total_Time = temp['Diff_Time'];
                                     $("#hw_stop").text(null);
                                     $("#hw_stop").hide();
-                                    $("#countdown").show();
-                                    $("#show_stop").hide();
                                     if(temp['WashStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
                                         $("#W_Stop_btn").hide();
                                         $("#W_Start_btn").show();
@@ -327,6 +313,7 @@
                                         $("#W_Status").attr("src","../img/Status_1.png");
                                         $("#W_Status_text").text("Wait Process");
                                     }
+                                    setTimeout( 'enable_btn()', 3000 );
                                 }
                                 setTimeout( 'countdown()', 1000 );
                             }
@@ -497,22 +484,6 @@
                             load_process();
                         }
                         else if (temp["form"] == 'start_wash'){
-                            if(temp['WashStopTime'] != null){ // ถ้ากดเริ่ม หลังจากหยุด
-                                var stopTime = new Date(temp['WashStopTime']);
-                                var endTime = new Date(temp['WashEndTime']);
-                                var differ = endTime-stopTime;
-                                var current = new Date();
-                                current.setMilliseconds(current.getMilliseconds() + differ);
-                                set_end_wash(current);
-                            }
-                            else{
-                                var millitime = temp['processt']*60000;
-                                var W_End = new Date(temp['WashStartTime']);
-                                W_End.setMilliseconds(W_End.getMilliseconds() + millitime);
-                                set_end_wash(W_End);
-                            }
-                        }
-                        else if (temp["form"] == 'set_end_wash'){
                             load_process();
                         }
                         else if (temp["form"] == 'stop_wash'){
@@ -573,9 +544,9 @@
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
         <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
         <div id="h_status" hidden></div>
-        <div id="hw_start" ></div>
-        <div id="hw_stop" ></div>
-        <div id="hw_end" ></div>
+        <div id="hw_start" hidden></div>
+        <div id="hw_stop" hidden></div>
+        <div id="hw_end" hidden></div>
         <div id="hp_start" hidden></div>
         <div id="hp_end" hidden></div>
         <div id="hs_start" hidden></div>
@@ -601,7 +572,6 @@
                             <div id="cnd" class="col-lg-4 col-md-12 col-sm-12">
                                 <div class="head_text"><?php echo $array['countdown'][$language]; ?></div>
                                 <label id="countdown" class='font-weight-light'>00:00:00</label>
-                                <label id="show_stop" class='font-weight-light'></label>
                             </div>
                             <div id="W_End_text" class="col-lg-4 col-md-12 col-sm-12">
                                 <div class="head_text"><?php echo $array['Finishtime'][$language]; ?></div>
@@ -627,8 +597,8 @@
                     <div class="col-md-2 col-sm-none"></div>
                     <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
                     <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Continue'][$language]; ?></button></div>
-                    <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block"><?php echo $array['Stop'][$language]; ?></button></div>
-                    <div class="col-md-4 col-sm-6" id="W_End_btn"><button onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+                    <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button id="W_Stop_btn_sub" onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block"><?php echo $array['Stop'][$language]; ?></button></div>
+                    <div class="col-md-4 col-sm-6" id="W_End_btn"><button id="W_End_btn_sub" onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
                 </div>
             </div>

@@ -11,6 +11,8 @@
                     process.WashStartTime,
                     process.WashStopTime,
                     process.WashEndTime,
+                    TIME_TO_SEC(TIMEDIFF(process.WashEndTime,NOW())) AS Diff_Sec,
+                    TIMEDIFF(process.WashEndTime,process.WashStopTime) AS Diff_Time,
                     process.WashUseTime,
                     process.PackStartTime,
                     process.PackEndTime,
@@ -35,6 +37,8 @@
             $return['WashStartTime'] = $Result['WashStartTime'];
             $return['WashStopTime'] = $Result['WashStopTime'];
             $return['WashEndTime'] = $Result['WashEndTime'];
+            $return['Diff_Sec'] = $Result['Diff_Sec'];
+            $return['Diff_Time'] = $Result['Diff_Time'];
             $return['WashUseTime'] = $Result['WashUseTime'];
             $return['PackStartTime'] = $Result['PackStartTime'];
             $return['PackEndTime'] = $Result['PackEndTime'];
@@ -100,9 +104,11 @@
         }
 
         if ($ChkStart == 0) { // ถ้ายังไม่เคยกดเริ่ม
+            // ตั้งเวลาเริ่ม
             $Sql = "UPDATE process SET WashStartTime = NOW() WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
+            // คำนวณเวลาจบ (ด้วยการเพิ่มไป 1 ชม. จากเวลาเริ่ม)
             $Sql = "SELECT  ADDTIME((SELECT WashStartTime FROM process WHERE DocNo = '$DocNo'), 
                             SEC_TO_TIME((SELECT processt FROM processtime WHERE FacCode = '$FacCode')*60)) AS WashEndTime";
             $meQuery = mysqli_query($conn,$Sql);
@@ -110,120 +116,37 @@
                 $EndTime = $Result['WashEndTime'];
             }
 
-            $Sql = "UPDATE process SET WashEndTime = '$EndTime' WHERE DocNo = '$DocNo'";
+            // ตั้งเวลาจบ
+            $Sql = "UPDATE process SET WashEndTime = '$EndTime',WashStopTime = NULL,IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
+            $DiffSec = 1;
         }
         else { // ถ้าเคยกดเริ่มแล้ว
-            if ($ChkStop > 0) { // แต่.. กำลังหยุด
+            if ($ChkStop > 0) { // และกำลังหยุด
+                // หาความต่างของ "เวลาหยุด" และเวลาจบ (หน่วยเป็นวินาที)
+                $Sql = "SELECT TIME_TO_SEC(TIMEDIFF(WashEndTime,WashStopTime)) AS DiffSec FROM process WHERE DocNo = '$DocNo'";
+                $meQuery = mysqli_query($conn,$Sql);
+                while ($Result = mysqli_fetch_assoc($meQuery)) {
+                    $DiffSec = $Result['DiffSec'];
+                }
 
+                // เพิ่มเวลาจบให้มากขึ้น ตามวินาทีที่เหลืออยู่
+                $Sql = "UPDATE process SET WashEndTime = ADDTIME(NOW(),TIMEDIFF(WashEndTime,WashStopTime)),
+                                            WashStopTime = NULL,IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
+                mysqli_query($conn,$Sql);
             }
         }
 
-
-        // *************************************************
-
-        $Sql = "SELECT WashStartTime,WashStopTime,WashEndTime FROM process WHERE DocNo = '$DocNo'";
-        $Sql2 = "SELECT processt FROM processtime WHERE FacCode = '$FacCode'";
-        
-        if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2)){
-            $meQuery = mysqli_query($conn,$Sql);
-            $meQuery2 = mysqli_query($conn,$Sql2);
-
-            $boolean = false;
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $return['WashStartTime'] = $Result['WashStartTime'];
-                $return['WashStopTime'] = $Result['WashStopTime'];
-                $return['WashEndTime'] = $Result['WashEndTime'];
-                $boolean = true;
-            }
-            $return['Bool'] = $boolean;
-
-            $boolean2 = false;
-            while ($Result2 = mysqli_fetch_assoc($meQuery2)) {
-                $return['processt'] = $Result2['processt'];
-                $boolean2 = true;
-            }
-            $return['Bool2'] = $boolean2;
-
-            if($return['WashStartTime'] == null || $return['WashStartTime'] == ""){
-
-                $nowdate = date('Y-m-d H:i:s');
-                $Sql = "UPDATE process SET WashStartTime = '$nowdate',WashStopTime = null,IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
-                $Sql2 = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo'";
-
-                if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2)){
-                    $meQuery = mysqli_query($conn,$Sql);
-                    $meQuery2 = mysqli_query($conn,$Sql2);
-
-                    $return['WashStartTime'] = $nowdate;
-                    $return['status'] = "success";
-                    $return['form'] = "start_wash";
-                    echo json_encode($return);
-                    mysqli_close($conn);
-                    die;
-                }else{
-                    $return['status'] = "failed";
-                    $return['form'] = "start_wash";
-                    echo json_encode($return);
-                    mysqli_close($conn);
-                    die;
-                }
-                $return['IsNull'] = "Yes";
-            }
-            else{
-                $Sql = "UPDATE process SET WashStopTime = null,IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
-                $Sql2 = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo'";
-
-                if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2)){
-                    $meQuery = mysqli_query($conn,$Sql);
-                    $meQuery2 = mysqli_query($conn,$Sql2);
-
-                    $return['Bool'] = $boolean;
-                    $return['Bool2'] = $boolean2;
-                    $return['IsNull'] = "No";
-                    $return['status'] = "success";
-                    $return['form'] = "start_wash";
-                    echo json_encode($return);
-                    mysqli_close($conn);
-                    die;
-                }else{
-                    $return['IsNull'] = "No";
-                    $return['status'] = "failed";
-                    $return['form'] = "start_wash";
-                    echo json_encode($return);
-                    mysqli_close($conn);
-                    die;
-                }
-            }
-        }else{
-            $return['IsNull'] = "Yes";
+        if($DiffSec == null || $DiffSec == ""){
             $return['status'] = "failed";
             $return['form'] = "start_wash";
             echo json_encode($return);
             mysqli_close($conn);
             die;
         }
-    }
-
-    function set_end_wash($conn, $DATA){
-        $DocNo = $DATA["DocNo"];
-        $W_End = $DATA["W_End"];
-        $endtime = date("Y-m-d H:i:s", strtotime($W_End));
-        $Sql = "UPDATE process SET WashEndTime = '$endtime' WHERE DocNo = '$DocNo' ";
-        $return['W_End'] = $W_End;
-        $return['endTime'] = $endtime;
-
-        if($meQuery = mysqli_query($conn,$Sql)){
-            $meQuery = mysqli_query($conn,$Sql);
-
+        else {
             $return['status'] = "success";
-            $return['form'] = "set_end_wash";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }else{
-            $return['status'] = "failed";
-            $return['form'] = "set_end_wash";
+            $return['form'] = "start_wash";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -526,9 +449,6 @@
         }
         else if ($DATA['STATUS'] == 'start_wash') {
             start_wash($conn, $DATA);
-        }
-        else if ($DATA['STATUS'] == 'set_end_wash') {
-            set_end_wash($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'stop_wash') {
             stop_wash($conn, $DATA);
