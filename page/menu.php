@@ -87,7 +87,7 @@
                 } else if (temp['status'] == "failed") {
                     swal({
                     title: '',
-                    text: '<?php echo $genarray['NotFoundHpt'][$language]; ?>',
+                    text: '',
                     type: 'warning',
                     showCancelButton: false,
                     confirmButtonColor: '#3085d6',

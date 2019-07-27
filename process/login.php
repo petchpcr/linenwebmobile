@@ -13,12 +13,14 @@ function checklogin($conn,$DATA)
             FROM      users
             WHERE     UserName = '$user'
             AND       Password = '$password' 
-            AND       IsCancel = 0";
+            AND       IsCancel = 0
+            AND       IsActive = 0";
 
     $return['sql'] = $Sql;
     $meQuery = mysqli_query($conn,$Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
       $_SESSION['Userid'] = $Result['ID'];
+      $Userid = $Result['ID'];
       $_SESSION['Username'] = $Result['UserName'];
       $_SESSION['FName'] = $Result['FName'];
       $_SESSION['PmID'] = $Result['PmID'];
@@ -31,8 +33,8 @@ function checklogin($conn,$DATA)
 
       $boolean = true;
     }
-
-    if($boolean){
+    $Sql = "UPDATE users SET IsActive = 1 WHERE ID = $Userid";
+    if($boolean && mysqli_query($conn,$Sql)){
       $return['status'] = "success";
       $return['msg'] = 'Login success' ;
       echo json_encode($return);
