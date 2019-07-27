@@ -16,6 +16,7 @@
 
 <notfoundDocInDate><en>Not found Document on </en><th>ไม่พบเอกสารในวันที่</th></notfoundDocInDate>
 
+<confirmReceivedoc><en>Confirm to receive document</en><th>ยืนยันการรับเอกสาร</th></confirmReceivedoc>
 <confirmCreatedocno><en>Confirm to create document</en><th>ยืนยันการสร้างเอกสาร</th></confirmCreatedocno>
 <chooseDepartmentPl><en>Please Choose department</en><th>กรุณาเลือกแผนก</th></chooseDepartmentPl>
 <chooseDepartment><en>Choose department</en><th>เลือกแผนก</th></chooseDepartment>
@@ -28,7 +29,7 @@
 
 <titleclean><en>Clean Doc </en><th>ผ้าสะอาด</th></titleclean>
 <titledirty><en>Dirty Doc </en><th>ผ้าสกปรก</th></titledirty>
-<titleQC><en>QC</en><th>QC </th></titleQC>
+<titleQC><en>QC</en><th>ตรวจสอบคุณภาพ</th></titleQC>
 <titlefactory><en>Factory </en><th>โรงงานซัก</th></titlefactory>
 
 <confirm><en>Confirm</en><th>ยืนยัน</th></confirm>
@@ -43,6 +44,7 @@
 <YNwantToExit><en>Exit without save ?</en><th>ต้องการออกโดยไม่บันทึกข้อมูล ?</th></YNwantToExit>
 
 //old
+
 <activeItem><en>Active</en><th>Active</th></activeItem>
 
 <email><en>Email</en><th>Email</th></email>
@@ -98,7 +100,6 @@
 <delete><en>Delete</en><th>ลบ</th></delete>
 <edit><en>Edit</en><th>แก้ไข</th></edit>
 <success><en>Success</en><th>สำเร็จ</th></success>
-<savesuccess><en>Saved</en><th>บันทึกสำเร็จ</th></savesuccess>
 <draft><en>Draft</en><th>ยังไม่ได้บันทึก</th></draft>
 <cancelbill><en>Cancel</en><th>ยกเลิกบิล</th></cancelbill>
 <dirtydoc><en>Dirty linen receipt document</en><th>เอกสารรับผ้าสกปรก</th></dirtydoc>
