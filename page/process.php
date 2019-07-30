@@ -62,8 +62,8 @@
                     // alert("End Time : "+cdnWash);
                     if(cdnWash != "" || cdnWash != null){ // มีเวลาสิ้นสุด(เคยกดเริ่มไปแล้ว)
                         if(cur_date < cdnWash){ //ถ้ายังซักไม่เสร็จ
-                            var differ = Total_Sec--;
-                            // console.log("Stop : "+stop_countdown+" Countdown : "+differ);
+                            var differ = Total_Sec;
+                            // console.log("Stop : "+stop_countdown+" Countdown : "+differ+" Total_Sec : "+Total_Sec);
 
                             // var ms = differ % 1000;
                             // differ = (differ - ms) / 1000;
@@ -78,6 +78,7 @@
 
                             var countdown = hrs + ':' + mins + ':' + secs;
                             $("#countdown").text(countdown);
+                            Total_Sec--;
                         }
                         else if(cur_date >= cdnWash) { // ถ้าซักเสร็จแล้ว
                             var DocNo = "<?php echo $DocNo?>";
@@ -134,8 +135,10 @@
         }
 
         function stop_wash(DocNo){
+            var Time = $("#countdown").text();
             var data = {
                 'DocNo': DocNo,
+                'Time': Time,
                 'STATUS': 'stop_wash'
             };
             senddata(JSON.stringify(data));
@@ -292,7 +295,7 @@
                                     $("#W_End").text("--:--:--");
                                     $("#W_Stop_btn").hide();
                                     $("#W_Start_btn").show();
-                                    setTimeout( 'enable_btn()', 3000 );
+                                    setTimeout( 'enable_btn()', 1000 );
                                     $("#W_Status").attr("src","../img/Status_2.png");
                                     $("#W_Status_text").text("Stop Process");
                                 }else{
@@ -313,7 +316,7 @@
                                         $("#W_Status").attr("src","../img/Status_1.png");
                                         $("#W_Status_text").text("Wait Process");
                                     }
-                                    setTimeout( 'enable_btn()', 3000 );
+                                    setTimeout( 'enable_btn()', 1000 );
                                 }
                                 setTimeout( 'countdown()', 1000 );
                             }
