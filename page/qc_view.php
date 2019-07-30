@@ -254,7 +254,7 @@ $genarray = json_decode($json, TRUE);
                             arr_rewash_weight = [];
                             arr_rewash_unit = [];
 
-                            // $("#item").empty();
+                            $("#item").empty();
                             var op_claim = 0;
                             var test = temp['cnt'];
                             
