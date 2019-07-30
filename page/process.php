@@ -63,7 +63,7 @@
                     if(cdnWash != "" || cdnWash != null){ // มีเวลาสิ้นสุด(เคยกดเริ่มไปแล้ว)
                         if(cur_date < cdnWash){ //ถ้ายังซักไม่เสร็จ
                             var differ = Total_Sec;
-                            console.log("Stop : "+stop_countdown+" Countdown : "+differ+" Total_Sec : "+Total_Sec);
+                            // console.log("Stop : "+stop_countdown+" Countdown : "+differ+" Total_Sec : "+Total_Sec);
 
                             // var ms = differ % 1000;
                             // differ = (differ - ms) / 1000;
