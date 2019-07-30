@@ -120,6 +120,19 @@ $genarray = json_decode($json, TRUE);
             senddata(JSON.stringify(data));
         }
 
+        function claim_detail(DocNo,ItemCode) {
+            var data = {
+                'DocNo': DocNo,
+                'ItemCode': ItemCode,
+                'STATUS': 'claim_detail'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function show_claim_detail(){
+            alert("show_claim_detail");
+        }
+
         function claim_click() {
             create_claim();
             create_rewash();
@@ -241,7 +254,7 @@ $genarray = json_decode($json, TRUE);
                             arr_rewash_weight = [];
                             arr_rewash_unit = [];
 
-                            $("#item").empty();
+                            // $("#item").empty();
                             var op_claim = 0;
                             var test = temp['cnt'];
                             
@@ -308,10 +321,11 @@ $genarray = json_decode($json, TRUE);
                                 }
                                 
                                 var num = i+1;
-                                var Str = "<tr onclick='show_question(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-3 d-flex align-items-center justify-content-center'>"+num+"</div>";
+                                var Str = "<tr onclick='show_question(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
                                     Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>"+temp[i]['ItemName']+"</div>";
                                     Str += "<div class='col-12 text-black-50 p-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div>";
-                                    Str += "<div class='col-3 d-flex align-items-center justify-content-center'><img src='"+img+"' height='40px'></div></div></td></tr>";
+                                    Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'><button onclick='event.cancelBubble=true;show_claim_detail();' class='btn btn-info'>เรียกดู</button></div>";
+                                    Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='"+img+"' height='40px'></div></div></td></tr>";
 
                                 $("#item").append(Str);
                             }
@@ -351,7 +365,13 @@ $genarray = json_decode($json, TRUE);
                             $("#md_question").modal('show');
 
                         } else if (temp["form"] == 'close_question') {
-                            load_items();
+                            // load_items();
+                            var DocNo = temp['DocNo'];
+                            var ItemCode = temp['ItemCode'];
+                            claim_detail(DocNo,ItemCode);
+
+                        } else if (temp["form"] == 'claim_detail') {
+                            $("#md_claim").modal('show');
 
                         } else if (temp["form"] == 'create_claim') {
                             var NewDocNo = temp['NewDocNo'];
@@ -405,9 +425,10 @@ $genarray = json_decode($json, TRUE);
                     <tr class="bg-primary text-white">
                     <th scope="col">
                         <div class="row">
-                            <div class="col-3 text-center"><?php echo $array['no'][$language]; ?></div>
-                            <div class="col-6 text-center"><?php echo $array['List'][$language]; ?></div>
-                            <div class="col-3 text-center"><?php echo $array['Status'][$language]; ?></div>
+                            <div class="col-2 text-center p-0"><?php echo $array['no'][$language]; ?></div>
+                            <div class="col-6 text-center p-0"><?php echo $array['List'][$language]; ?></div>
+                            <div class="col-2 text-center p-0">สาเหตุ</div>
+                            <div class="col-2 text-center p-0"><?php echo $array['Status'][$language]; ?></div>
                         </div>
                     </th>
                     </tr>
@@ -417,14 +438,17 @@ $genarray = json_decode($json, TRUE);
                     <!-- <tr>
                     <td>
                         <div class="row">
-                            <div scope="row" class="col-3 d-flex align-items-center justify-content-center">1</div>
+                            <div scope="row" class="col-2 d-flex align-items-center justify-content-center">1</div>
                             <div class="col-6">
                                 <div class="row">
                                     <div class="col-12 text-truncate font-weight-bold p-1">ผ้าเช็ดปาก</div>
                                     <div class="col-12 text-black-50 p-1">จำนวน 0 / น้ำหนัก 0 </div>
                                 </div>
                             </div>
-                            <div class="col-3 d-flex align-items-center justify-content-center">
+                            <div class="col-2 d-flex align-items-center justify-content-center p-0">
+                                <button class="btn btn-info">เรียกดู</button>
+                            </div>
+                            <div class="col-2 d-flex align-items-center justify-content-center p-0">
                                 <img src="../img/Status_4.png" height="40px">
                             </div>
                         </div>
@@ -478,6 +502,53 @@ $genarray = json_decode($json, TRUE);
                                 </div>
                             </div>
                         </button> -->
+
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <div class="row w-100 d-flex align-items-center m-0">
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-block btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="md_claim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-truncate"><?php echo $array['Checktopic'][$language]; ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+                    <div id="item_code" hidden></div>
+                    <div id="item_name" class="font-weight-bold mb-2"></div>
+                    <div id="question">
+
+                        <div id="item0" class="row alert alert-info mb-3 mx-2 p-0">
+                            <div class="row w-100 mx-2">
+                                <div class="d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7">
+                                    <div class="text-truncate font-weight-bold">12 X 12 สีขาว</div>
+                                </div>
+                                <div class="d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group pl-0">
+                                    <input onkeyup="cal_weight()" type="text" class="form-control rounded text-center bg-white my-2 mr-1 item old numonly" data-code="BHQLPPPUT200001" id="weight0" data-num="1" placeholder="0">
+                                    <div class="">จำนวน</div>
+                                </div>
+                            </div>
+                            <div class="row w-100 mx-4 pb-3">
+                                <select class="form-control">
+                                    <option value="0">เลือกความเสียหาย...</option>
+                                    <option value="1">Reject</option>
+                                    <option value="2">Repair</option>
+                                    <option value="3">Damage</option>
+                                </select>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

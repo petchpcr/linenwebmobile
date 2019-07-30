@@ -12,8 +12,8 @@
                     process.WashStartTime,
                     process.WashStopTime,
                     process.WashEndTime,
-                    TIME_TO_SEC(TIMEDIFF(process.WashEndTime,NOW())) AS Diff_Sec,
-                    TIMEDIFF(process.WashEndTime,process.WashStopTime) AS Diff_Time,
+                    process.WashBalance AS Diff_Sec,
+                    SEC_TO_TIME(process.WashBalance) AS Diff_Time,
                     process.WashUseTime,
                     process.PackStartTime,
                     process.PackEndTime,
@@ -110,15 +110,17 @@
             mysqli_query($conn,$Sql);
 
             // คำนวณเวลาจบ (ด้วยการเพิ่มไป 1 ชม. จากเวลาเริ่ม)
-            $Sql = "SELECT  ADDTIME((SELECT WashStartTime FROM process WHERE DocNo = '$DocNo'), 
+            $Sql = "SELECT  (SELECT processt FROM processtime WHERE FacCode = '$FacCode')*60 AS SecBalance ,
+                            ADDTIME((SELECT WashStartTime FROM process WHERE DocNo = '$DocNo'), 
                             SEC_TO_TIME((SELECT processt FROM processtime WHERE FacCode = '$FacCode')*60)) AS WashEndTime";
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)) {
+                $SecBalance = $Result['SecBalance'];
                 $EndTime = $Result['WashEndTime'];
             }
 
             // ตั้งเวลาจบ
-            $Sql = "UPDATE process SET WashEndTime = '$EndTime',WashStopTime = NULL,IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
+            $Sql = "UPDATE process SET WashEndTime = '$EndTime',WashStopTime = NULL,WashBalance = '$SecBalance',IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
             $DiffSec = 1;
         }
@@ -132,7 +134,7 @@
                 }
 
                 // เพิ่มเวลาจบให้มากขึ้น ตามวินาทีที่เหลืออยู่
-                $Sql = "UPDATE process SET WashEndTime = ADDTIME(NOW(),TIMEDIFF(WashEndTime,WashStopTime)),
+                $Sql = "UPDATE process SET WashEndTime = ADDTIME(NOW(),SEC_TO_TIME(WashBalance)),
                                             WashStopTime = NULL,IsStatus = 1,IsStop = 0 WHERE DocNo = '$DocNo'";
                 mysqli_query($conn,$Sql);
             }
@@ -156,8 +158,9 @@
 
     function stop_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
+        $Time = $DATA["Time"];
         $nowdate = date('Y-m-d H:i:s');
-        $Sql = "UPDATE process SET WashStopTime = '$nowdate',IsStop = 1 WHERE DocNo = '$DocNo' ";
+        $Sql = "UPDATE process SET WashStopTime = '$nowdate',WashBalance = TIME_TO_SEC('$Time'),IsStop = 1 WHERE DocNo = '$DocNo' ";
         $Sql2 = "UPDATE dirty SET IsProcess = 2 WHERE DocNo = '$DocNo'";
 
         if($meQuery = mysqli_query($conn,$Sql) && $meQuery2 = mysqli_query($conn,$Sql2)){

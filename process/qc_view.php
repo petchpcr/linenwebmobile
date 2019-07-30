@@ -177,10 +177,11 @@
     function close_question($conn, $DATA){
         $pDocNo=$DATA["DocNo"];
         $pItemCode=$DATA["ItemCode"];
+        $return['DocNo']=$pDocNo;
+        $return['ItemCode']=$pItemCode;
 
         $cnum=0;
         $wnum=0;
-
 
         $Sql = "    SELECT      COUNT(*) AS cNum
 
@@ -201,14 +202,14 @@
 
         $Sql = "    SELECT      COUNT(*) AS wNum
 
-        FROM	    qcchecklist,
-                    qcquestion
-                
-        WHERE       DocNo= '$pDocNo'
-        AND         ItemCode='$pItemCode'
-        AND         IsStatus=0
-        AND         qcchecklist.Questionid=qcquestion.CodeId
-        AND         CopeMethod=2";
+                    FROM	    qcchecklist,
+                                qcquestion
+                            
+                    WHERE       DocNo= '$pDocNo'
+                    AND         ItemCode='$pItemCode'
+                    AND         IsStatus=0
+                    AND         qcchecklist.Questionid=qcquestion.CodeId
+                    AND         CopeMethod=2";
 
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
@@ -314,6 +315,19 @@
         }
     }
 
+    function claim_detail($conn, $DATA){
+        $DocNo=$DATA["DocNo"];
+        $ItemCode=$DATA["ItemCode"];
+
+        $Sql = "SELECT ";
+
+        $return['status'] = "success";
+        $return['form'] = "claim_detail";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+    
     function create_claim($conn, $DATA){
         $cleanDocNo=$DATA["DocNo"];
         $userid=$DATA["Userid"];
@@ -784,6 +798,9 @@
         }
         else if ($DATA['STATUS'] == 'close_question') {
             close_question($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'claim_detail') {
+            claim_detail($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'create_claim') {
             create_claim($conn, $DATA);
