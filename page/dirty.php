@@ -48,7 +48,7 @@
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         $(document).ready(function (e) {
-
+            
             var Menu = '<?php echo $Menu;?>';
             if(Menu == 'factory'){ $("#add_doc").remove(); }
             load_dep();
@@ -395,7 +395,8 @@
 
     <script>
         $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap4',
+            // uiLibrary: 'bootstrap4',
+            size: 'large',
             format: 'yyyy-mm-dd'
         });
     </script>

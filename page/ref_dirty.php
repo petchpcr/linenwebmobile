@@ -239,7 +239,8 @@
 
     <script>
         $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap4',
+            // uiLibrary: 'bootstrap4',
+            size: 'large',
             format: 'yyyy-mm-dd'
         });
     </script>
