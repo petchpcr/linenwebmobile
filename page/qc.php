@@ -233,7 +233,7 @@
         <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
         <div id="document">
             <div class="d-flex justify-content-center mb-3">
-                <input id="datepicker" class="text-truncate text-center" width="276" placeholder="<?php echo $genarray['CreateDocDate'][$language]; ?>"/>
+                <input id="datepicker" class="text-truncate text-center" width="276" placeholder="<?php echo $genarray['CreateDocDate'][$language]; ?>" disabled/>
                 <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
 
