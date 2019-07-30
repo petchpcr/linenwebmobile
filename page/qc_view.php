@@ -130,7 +130,7 @@ $genarray = json_decode($json, TRUE);
         }
 
         function show_claim_detail(){
-            alert("show_claim_detail");
+            // alert("show_claim_detail");
         }
 
         function claim_click() {
@@ -365,10 +365,10 @@ $genarray = json_decode($json, TRUE);
                             $("#md_question").modal('show');
 
                         } else if (temp["form"] == 'close_question') {
-                            // load_items();
-                            var DocNo = temp['DocNo'];
-                            var ItemCode = temp['ItemCode'];
-                            claim_detail(DocNo,ItemCode);
+                            // var DocNo = temp['DocNo'];
+                            // var ItemCode = temp['ItemCode'];
+                            // claim_detail(DocNo,ItemCode);
+                            load_items();
 
                         } else if (temp["form"] == 'claim_detail') {
                             $("#md_claim").modal('show');
