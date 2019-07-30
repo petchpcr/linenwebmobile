@@ -111,6 +111,7 @@ $genarray = json_decode($json, TRUE);
                     } else if (temp['status'] == "failed") {
                         swal({
                             title: '',
+                            text: '<?php echo $genarray['savesuccess'][$language]; ?>',
                             type: 'warning',
                             showCancelButton: false,
                             confirmButtonColor: '#3085d6',
