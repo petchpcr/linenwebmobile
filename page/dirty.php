@@ -332,6 +332,8 @@
                 $Menu = $_GET['Menu'];
                 if ($Menu == 'dirty') {
                     echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>".$genarray['back'][$language]."</button>";
+                } else {
+                    echo "<div style='margin-right:75px'></div >";
                 }
             ?>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
