@@ -48,8 +48,7 @@ function load_doc($conn, $DATA)
                 INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND rewash.DocDate LIKE '%$search%' 
-                AND rewash.DepCode = 224 -- Handler
+                AND rewash.DocDate LIKE '%$search%'
                 AND rewash.IsStatus = 1
                 ORDER BY rewash.DocNo DESC";
     $return['sql'] = $Sql;
