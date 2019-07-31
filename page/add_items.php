@@ -487,7 +487,7 @@ $genarray = json_decode($json, TRUE);
             <div id="DocNo" class="text-truncate"></div>
         </div>
         <div class="row justify-content-center px-3 mb-5">
-            <div id="items" class="col-lg-9 col-md-10 col-sm-12 pb-3 mb-5">
+            <div id="items" class="col-lg-9 col-md-10 col-sm-12 pb-3" style = "margin-bottom:100px;">
             
             </div>
         </div>
@@ -500,7 +500,7 @@ $genarray = json_decode($json, TRUE);
                     <div class="input-group-prepend">
                         <span class="input-group-text"><?php echo $array['numberSum'][$language]; ?></span>
                     </div>
-                    <input id="sum_num" type="text" class="form-control text-center bg-white" placeholder="0.0" disabled>
+                    <input id="sum_num" type="text" class="form-control text-center bg-white" width="60%" placeholder="0.0" disabled>
                     <div class="input-group-append">
                         <span class="input-group-text"><?php echo $array['piece'][$language]; ?></span>
                     </div>
