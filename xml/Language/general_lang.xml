@@ -43,6 +43,7 @@
 
 <YNwantToExit><en>Exit without save ?</en><th>ต้องการออกโดยไม่บันทึกข้อมูล ?</th></YNwantToExit>
 
+<savesuccess><en>Saved</en><th>บันทึกสำเร็จ</th></savesuccess>
 //old
 
 <activeItem><en>Active</en><th>Active</th></activeItem>

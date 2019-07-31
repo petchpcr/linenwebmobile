@@ -87,9 +87,9 @@ $genarray = json_decode($json, TRUE);
                         console.log('Error#542-decode error');
                     }
                     if($("#lang").val() == "th"){
-                        var lang = '<?php echo $array['savesuccess']["th"]; ?>';
+                        var lang = '<?php echo $genarray['savesuccess']["th"]; ?>';
                     }else{
-                        var lang = '<?php echo $array['savesuccess']["en"]; ?>';
+                        var lang = '<?php echo $genarray['savesuccess']["en"]; ?>';
                     }
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'save_lang') {
