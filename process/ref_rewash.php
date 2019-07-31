@@ -50,6 +50,7 @@ function load_doc($conn, $DATA)
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.DocDate LIKE '%$search%' 
                 AND rewash.DepCode = 224 -- Handler
+                AND rewash.IsStatus = 1
                 ORDER BY rewash.DocNo DESC";
     $return['sql'] = $Sql;
 
