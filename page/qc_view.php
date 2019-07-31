@@ -223,6 +223,17 @@ $genarray = json_decode($json, TRUE);
             senddata(JSON.stringify(data));
         }
 
+        function AlertError(Title,Text,Type){
+            swal({
+                title: Title,
+                text: Text,
+                type: Type,
+                showConfirmButton: true,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'ตกลง'
+            })
+        }
+            
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
@@ -257,87 +268,100 @@ $genarray = json_decode($json, TRUE);
                             $("#item").empty();
                             var op_claim = 0;
                             var test = temp['cnt'];
-                            
-                            for (var i = 0; i < temp['cnt']; i++) {
-                                var CheckList = Number(temp[i]['IsCheckList']);
-                                var img = "";
+                            if (temp['cnt'] > 0) {
+                                for (var i = 0; i < temp['cnt']; i++) {
+                                    var CheckList = Number(temp[i]['IsCheckList']);
+                                    var img = "";
 
-                                switch (CheckList) {
-                                    case 0:
-                                        img = "../img/Status_3.png"; // เขียว
-                                        break;
-                                    case 1:
-                                        img = "../img/Status_1.png"; // ส้ม
-                                        arr_claim_code.push(temp[i]['ItemCode']);
-                                        arr_claim_qty.push(temp[i]['Qty']);
-                                        arr_claim_weight.push(temp[i]['Weight']);
-                                        arr_claim_unit.push(temp[i]['UnitCode']);
-                                        op_claim++;
-                                        break;
-                                    case 2:
-                                        img = "../img/Status_2.png"; // แดง
-                                        arr_claim_code.push(temp[i]['ItemCode']);
-                                        arr_claim_qty.push(temp[i]['Qty']);
-                                        arr_claim_weight.push(temp[i]['Weight']);
-                                        arr_claim_unit.push(temp[i]['UnitCode']);
-                                        op_claim++;
-                                        break;
-                                    case 3:
-                                        img = "../img/Status_1.png";
-                                        arr_rewash_code.push(temp[i]['ItemCode']);
-                                        arr_rewash_qty.push(temp[i]['Qty']);
-                                        arr_rewash_weight.push(temp[i]['Weight']);
-                                        arr_rewash_unit.push(temp[i]['UnitCode']);
-                                        op_claim++;
-                                        break;
-                                    case 4:
-                                        img = "../img/Status_2.png";
-                                        arr_rewash_code.push(temp[i]['ItemCode']);
-                                        arr_rewash_qty.push(temp[i]['Qty']);
-                                        arr_rewash_weight.push(temp[i]['Weight']);
-                                        arr_rewash_unit.push(temp[i]['UnitCode']);
-                                        op_claim++;
-                                        break;
-                                    case 5:
-                                        img = "../img/Status_1.png";
-                                        arr_claim_code.push(temp[i]['ItemCode']);
-                                        arr_claim_qty.push(temp[i]['Qty']);
-                                        arr_claim_weight.push(temp[i]['Weight']);
-                                        arr_claim_unit.push(temp[i]['UnitCode']);
-                                        op_claim++;
-                                        break;
-                                    case 6:
-                                        img = "../img/Status_2.png";
-                                        arr_rewash_code.push(temp[i]['ItemCode']);
-                                        arr_rewash_qty.push(temp[i]['Qty']);
-                                        arr_rewash_weight.push(temp[i]['Weight']);
-                                        arr_rewash_unit.push(temp[i]['UnitCode']);
-                                        op_claim++;
-                                        break;
-                                    default:
-                                        img = "../img/Status_4.png"; // เทา
-                                        op_claim++;
+                                    switch (CheckList) {
+                                        case 0:
+                                            img = "../img/Status_3.png"; // เขียว
+                                            break;
+                                        case 1:
+                                            img = "../img/Status_1.png"; // ส้ม
+                                            arr_claim_code.push(temp[i]['ItemCode']);
+                                            arr_claim_qty.push(temp[i]['Qty']);
+                                            arr_claim_weight.push(temp[i]['Weight']);
+                                            arr_claim_unit.push(temp[i]['UnitCode']);
+                                            op_claim++;
+                                            break;
+                                        case 2:
+                                            img = "../img/Status_2.png"; // แดง
+                                            arr_claim_code.push(temp[i]['ItemCode']);
+                                            arr_claim_qty.push(temp[i]['Qty']);
+                                            arr_claim_weight.push(temp[i]['Weight']);
+                                            arr_claim_unit.push(temp[i]['UnitCode']);
+                                            op_claim++;
+                                            break;
+                                        case 3:
+                                            img = "../img/Status_1.png";
+                                            arr_rewash_code.push(temp[i]['ItemCode']);
+                                            arr_rewash_qty.push(temp[i]['Qty']);
+                                            arr_rewash_weight.push(temp[i]['Weight']);
+                                            arr_rewash_unit.push(temp[i]['UnitCode']);
+                                            op_claim++;
+                                            break;
+                                        case 4:
+                                            img = "../img/Status_2.png";
+                                            arr_rewash_code.push(temp[i]['ItemCode']);
+                                            arr_rewash_qty.push(temp[i]['Qty']);
+                                            arr_rewash_weight.push(temp[i]['Weight']);
+                                            arr_rewash_unit.push(temp[i]['UnitCode']);
+                                            op_claim++;
+                                            break;
+                                        case 5:
+                                            img = "../img/Status_1.png";
+                                            arr_claim_code.push(temp[i]['ItemCode']);
+                                            arr_claim_qty.push(temp[i]['Qty']);
+                                            arr_claim_weight.push(temp[i]['Weight']);
+                                            arr_claim_unit.push(temp[i]['UnitCode']);
+                                            op_claim++;
+                                            break;
+                                        case 6:
+                                            img = "../img/Status_2.png";
+                                            arr_rewash_code.push(temp[i]['ItemCode']);
+                                            arr_rewash_qty.push(temp[i]['Qty']);
+                                            arr_rewash_weight.push(temp[i]['Weight']);
+                                            arr_rewash_unit.push(temp[i]['UnitCode']);
+                                            op_claim++;
+                                            break;
+                                        default:
+                                            img = "../img/Status_4.png"; // เทา
+                                            op_claim++;
 
+                                    }
+                                    
+                                    var num = i+1;
+                                    var Str = "<tr onclick='show_question(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
+                                        Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>"+temp[i]['ItemName']+"</div>";
+                                        Str += "<div class='col-12 text-black-50 p-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div>";
+                                        Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'><button onclick='event.cancelBubble=true;show_claim_detail();' class='btn btn-info'>เรียกดู</button></div>";
+                                        Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='"+img+"' height='40px'></div></div></td></tr>";
+
+                                    $("#item").append(Str);
                                 }
-                                
-                                var num = i+1;
-                                var Str = "<tr onclick='show_question(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
-                                    Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>"+temp[i]['ItemName']+"</div>";
-                                    Str += "<div class='col-12 text-black-50 p-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div>";
-                                    Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'><button onclick='event.cancelBubble=true;show_claim_detail();' class='btn btn-info'>เรียกดู</button></div>";
-                                    Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='"+img+"' height='40px'></div></div></td></tr>";
 
-                                $("#item").append(Str);
+                                if (op_claim > 0) {
+                                    $("#claim-btn").show();
+                                    $("#save-btn").hide();
+                                } else {
+                                    $("#claim-btn").hide();
+                                    $("#save-btn").show();
+                                }
                             }
+                            else {
+                                $("#claim-btn").hide();
+                                $("#save-btn").hide();
+
+                                Title = "ข้อมูลว่างเปล่า";
+                                Text = "ยังไม่มีข้อมูลรายการ !";
+                                Type = "info";
+                                AlertError(Title,Text,Type);
+                            }
+                            
                             // alert(arr_rewash_code[0]);
                             // alert(arr_rewash_code[1]);
-                            if (op_claim > 0) {
-                                $("#claim-btn").show();
-                                $("#save-btn").hide();
-                            } else {
-                                $("#claim-btn").hide();
-                                $("#save-btn").show();
-                            }
+                            
 
                         } else if (temp["form"] == 'show_question') {
                             $("#item_code").text(temp['ItemCode']);

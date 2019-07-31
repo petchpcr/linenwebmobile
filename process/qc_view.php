@@ -6,7 +6,6 @@
     function load_items($conn, $DATA){
         $count = 0;
         $DocNo = $DATA["DocNo"];
-        $boolean = false;
         $ItemCode = $DATA['ItemCode'];
         $return['ItemCode'] = $ItemCode;
         $Sql = "SELECT  item.ItemName,
@@ -33,12 +32,10 @@
             $return[$count]['Weight'] = $Result['Weight'];
             $return[$count]['IsCheckList'] = $Result['IsCheckList'];
             $count++;
-            $boolean = true;
         }
 
         $return['cnt'] = $count;
-        $return['boolean'] = $boolean;
-        if ($boolean) {
+        if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "load_items";
             echo json_encode($return);
