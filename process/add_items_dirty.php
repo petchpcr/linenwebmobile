@@ -98,21 +98,15 @@
         $Userid = $DATA['Userid'];
 
         $arr_old_i = $DATA['old_i'];
-        $arr_old_qty = $DATA['old_qty'];
-        $arr_old_unit = $DATA['old_unit'];
         $arr_old_weight = $DATA['old_weight'];
         $arr_new_i = $DATA['new_i'];
-        $arr_new_qty = $DATA['new_qty'];
-        $arr_new_unit = $DATA['new_unit'];
         $arr_new_weight = $DATA['new_weight'];
+        $arr_new_unit = $DATA['new_unit'];
         $arr_del_i = $DATA['del_i'];
 
         $old_i = explode(",", $arr_old_i);
-        $old_qty = explode(",", $arr_old_qty);
-        $old_unit = explode(",", $arr_old_unit);
         $old_weight = explode(",", $arr_old_weight);
         $new_i = explode(",", $arr_new_i);
-        $new_qty = explode(",", $arr_new_qty);
         $new_unit = explode(",", $arr_new_unit);
         $new_weight = explode(",", $arr_new_weight);
         $del_i = explode(",", $arr_del_i);
@@ -134,8 +128,8 @@
         }
 
         for ($i = 0; $i < $cnt_new; $i++) {
-            $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-                    VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_qty[$i],$new_weight[$i]) ";
+            $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`UnitCode`,`Weight`) 
+                    VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_weight[$i]) ";
             $return[$i]['Insert'] = $Sql;
             $return[$i]['Weight'] = $new_weight[$i];
             mysqli_query($conn,$Sql);

@@ -127,7 +127,7 @@
                             var Str = "<tr><td><div class='row'>";
                                 Str += "<div scope='row' class='col-5 d-flex align-items-center justify-content-center'>"+num+"</div>";
                                 Str += "<div class='col-7'><div class='row'><div class='col-12 text-truncate font-weight-bold mb-1'>"+temp[i]['ItemName']+"</div>";
-                                Str += "<div class='col-12 text-black-50 mb-1'><?php echo $array['numberSize'][$language]; ?> "+temp[i]['Qty']+" / <?php echo $array['weight'][$language]; ?> "+temp[i]['Weight']+" </div></div></div></div></td></tr>";
+                                Str += "<div class='col-12 text-black-50 mb-1'><?php echo $array['weight'][$language]; ?> "+temp[i]['Weight']+" </div></div></div></div></td></tr>";
 
                             $("#item").append(Str);
                         }

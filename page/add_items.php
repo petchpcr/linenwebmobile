@@ -110,12 +110,26 @@ $genarray = json_decode($json, TRUE);
                     var code = $(this).val();
                     var qty = 0;
                     var unit = 1;
-                    var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-                    Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
-                    Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-                    Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-                    Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-weight=0 value=0>";
-                    Str += "<img src='../img/kg.png' onclick='show_weight("+num+")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
+                    var Menu = '<?php echo $Menu; ?>';
+                    if (Menu == 'dirty') {
+                        var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
+                        Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
+                        Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
+                        Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
+                        Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-oldnum=0 value=0>";
+                        Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
+                    }else{
+                        var idqty= id+"qty";
+                        var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
+                        Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
+                        Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item numonly'";
+                        Str += "id='" + idqty + "' value='" + temp[i]['Qty']+"' placeholder='0'>";
+                        Str += "<button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
+                        Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
+                        Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
+                        Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
+                        Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
+                    }              
 
                     $("#items").append(Str);
                     arr_new_items.push(code);
@@ -159,17 +173,17 @@ $genarray = json_decode($json, TRUE);
         }
 
         function show_weight(num) {
-            var id = "#weight"+num;
+            var id = "#weight" + num;
             var val = $(id).val();
             $("#val_weight").val(val);
-            $("#val_weight").attr("data-num",num);
+            $("#val_weight").attr("data-num", num);
             $("#md_weight").modal('show');
         }
 
         function change_weight() {
             var num = $("#val_weight").attr("data-num");
             var val = $("#val_weight").val();
-            var id = "#weight"+num;
+            var id = "#weight" + num;
             $(id).val(val);
             cal_weight();
             $("#md_weight").modal('hide');
@@ -196,11 +210,11 @@ $genarray = json_decode($json, TRUE);
                 var num1 = this.value.length;
                 var num2 = (this.value.replace(/[^0-9]/g, '')).length;
                 if ((num1 - num2) >= 2) {
-                    this.value = $("#" + this.id).data("weight");
+                    this.value = $("#" + this.id).data("oldnum");
                 } else if ((num1 - num2) == 0) {
                     this.value = Number(this.value);
                 }
-                $("#" + this.id).data("weight", $("#" + this.id).val());
+                $("#" + this.id).data("oldnum", $("#" + this.id).val());
                 //console.log($("#"+this.id).data("weight"));
                 //console.log(num1);
                 //console.log(num2);
@@ -212,16 +226,24 @@ $genarray = json_decode($json, TRUE);
             var price = num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
             $("#sum_weight").val(price);
         }
+        
 
         function add_item() {
             var DocNo = "<?php echo $DocNo ?>";
             var Userid = "<?php echo $Userid ?>";
-
+            var Menu = '<?php echo $Menu; ?>';
             var arr_old_Qty = [];
             var arr_old_UnitCode = [];
             var arr_old_weight = [];
             $(".old").each(function() {
-                arr_old_Qty.push($(this).data("qty"));
+                var qtyid = $(this).attr("id")+'qty';
+                if (Menu == 'clean') {
+                    console.log($('#'+qtyid).val());
+                    arr_old_Qty.push($('#'+qtyid).val());
+                }else{
+                    arr_old_Qty.push(0);
+                }
+                console.log(qtyid);
                 arr_old_UnitCode.push($(this).data("unit"));
                 var val = $(this).val();
                 var weight = 0;
@@ -240,7 +262,12 @@ $genarray = json_decode($json, TRUE);
             var arr_new_UnitCode = [];
             var arr_new_weight = [];
             $(".new").each(function() {
-                arr_new_Qty.push($(this).data("qty"));
+                if (Menu == 'clean') {
+                    var qtyid = $(this).attr("id")+'qty';
+                    arr_new_Qty.push($('#'+qtyid).val());
+                }else{
+                    arr_new_Qty.push(0);
+                }
                 arr_new_UnitCode.push($(this).data("unit"));
                 var val = $(this).val();
                 var weight = 0;
@@ -322,18 +349,40 @@ $genarray = json_decode($json, TRUE);
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_items') {
                             $("#items").empty();
-                            for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                                var num = Number(i) + 1;
-                                var id = "weight" + num;
-                                var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-                                Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-                                Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-                                Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-weight=" + temp[i]['Weight'] + " value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
-                                Str += "<img src='../img/kg.png' onclick='show_weight("+num+")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
-                                $("#items").append(Str);
-                                arr_old_items.push(temp[i]['ItemCode']);
-                                cal_weight();
+                            if (Menu == 'dirty') {
+                                for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                                    var num = Number(i) + 1;
+                                    var id = "weight" + num;
+                                    var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
+                                    Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
+                                    Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+                                    Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
+                                    Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
+                                    $("#items").append(Str);
+                                    arr_old_items.push(temp[i]['ItemCode']);
+                                    
+                                }
+                            } else {
+                                for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                                    var num = Number(i) + 1;
+                                    var id = "weight" + num;
+                                    var idqty= id+"qty";
+                                    var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
+                                    Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
+                                    Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item numonly'";
+                                    Str += "id='" + idqty + "' value='" + temp[i]['Qty']+"' placeholder='0'>";
+                                    Str += "<button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";      
+                                    Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
+                                    Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+                                    Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + temp[i]['Weight'] + "' placeholder='0.0'>";
+                                    Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
+                                    $("#items").append(Str);
+                                    //console.log(Str);
+                                    arr_old_items.push(temp[i]['ItemCode']);
+                                }
+
                             }
+                            cal_weight();
                         } else if (temp["form"] == 'choose_items') {
                             var HptName = temp['HptName'];
                             var DepName = temp['DepName'];
@@ -372,17 +421,17 @@ $genarray = json_decode($json, TRUE);
                             }
                         } else if (temp["form"] == 'add_item') {
                             swal({
-                            title: '',
-                            text: '<?php echo $genarray['savesuccess'][$language]; ?>',
-                            type: 'success',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            showConfirmButton: false,
-                            timer: 1200,
-                            confirmButtonText: 'Error!!'
+                                title: '',
+                                text: '<?php echo $genarray['savesuccess'][$language]; ?>',
+                                type: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                showConfirmButton: false,
+                                timer: 1200,
+                                confirmButtonText: 'Error!!'
                             })
-                            setTimeout('back()',1500);
+                            //setTimeout('back()', 1500);
                             //load_items();
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
@@ -417,18 +466,7 @@ $genarray = json_decode($json, TRUE);
         </div>
         <div class="row justify-content-center px-3 mb-5">
             <div id="items" class="col-lg-9 col-md-10 col-sm-12 pb-3 mb-5">
-
-                <!-- <div id="item0" class="row alert alert-info mb-3 p-0">
-                    <div class="d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7">
-                        <div class="text-truncate font-weight-bold">12 X 12 สีขาว</div>
-                    </div>
-                    <div class="d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0">
-                        <input onkeyup="cal_weight()" type="text" class="form-control rounded text-center bg-white my-2 mr-1 item old numonly" data-code="BHQLPPPUT200001" id="weight0" data-num="1" placeholder="0.0">
-                        <img src="../img/kg.png" onclick="" height="40">
-                        <button onclick="del_items(0)" class="btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle">x</button>
-                    </div>
-                </div> -->
-
+            
             </div>
         </div>
     </div>
@@ -492,7 +530,7 @@ $genarray = json_decode($json, TRUE);
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="md_weight" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -510,7 +548,7 @@ $genarray = json_decode($json, TRUE);
                 <div class="modal-footer text-center">
                     <div class="w-100 d-flex justify-content-center m-0">
                         <!-- <div class="col-6 text-right"> -->
-                            <button id="btn_add_items" onclick="change_weight()" type="button" class="btn btn-success m-2"><?php echo $genarray['confirm'][$language]; ?></button>
+                        <button id="btn_add_items" onclick="change_weight()" type="button" class="btn btn-success m-2"><?php echo $genarray['confirm'][$language]; ?></button>
                         <!-- </div> -->
                     </div>
                 </div>
@@ -524,11 +562,11 @@ $genarray = json_decode($json, TRUE);
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['confirm'][$language]; ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body text-center">
-                        <?php echo $genarray['YNwantToExit'][$language]; ?>
+                    <?php echo $genarray['YNwantToExit'][$language]; ?>
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">

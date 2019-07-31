@@ -128,7 +128,7 @@
         }
 
         for ($i = 0; $i < $cnt_old; $i++) {
-            $Sql = "UPDATE clean_detail SET Weight = $old_weight[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
+            $Sql = "UPDATE clean_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
             $return[$i]['Update'] = $Sql;
             mysqli_query($conn,$Sql);
         }
