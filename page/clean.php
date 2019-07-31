@@ -101,11 +101,21 @@
             window.location.href="menu.php";
         }
 
-        function To_ref_dirty() {
+        function add_clean() {
             var siteCode = "<?php echo $siteCode?>";
-            // var DepCode = $("#DepName").val();
             var Menu = '<?php echo $Menu;?>';
-            window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            var slt = $("#DocName").val();
+            // var DepCode = $("#DepName").val(); 
+
+            if (slt == 1) {
+                window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            }
+            else if (slt == 2) {
+                window.location.href='ref_claim.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            }
+            else if (slt == 3) {
+                window.location.href='ref_rewash.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            }
         }
 
         function logout(num) {
@@ -270,16 +280,16 @@
                         </div>
                         <select onchange="change_doc()" id="DocName" class="custom-select">
                             <option value="0" selected><?php echo $genarray['docfirst'][$language]; ?></option>
-                            <option value="1" selected>เอกสารจากผ้าสกปรก</option>
-                            <option value="2" selected>เอกสารจากส่งเคลม</option>
-                            <option value="3" selected>เอกสารจากส่งซัก</option>
+                            <option value="1">เอกสารจากผ้าสกปรก</option>
+                            <option value="2">เอกสารจากส่งเคลม</option>
+                            <option value="3">เอกสารจากส่งซัก</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
                         <div class="col-6 text-right">
-                            <button id="btn_confirm" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+                            <button id="btn_confirm" onclick="add_clean()" type="button" class="btn btn-success m-2" disabled><?php echo $genarray['confirm'][$language]; ?></button>
                         </div>
                         <div class="col-6 text-left">
                             <button type="button" class="btn btn-danger m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
