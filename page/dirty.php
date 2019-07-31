@@ -54,6 +54,7 @@
             load_dep();
             load_site();
             load_doc();
+            load_Fac();
         });
 
         function load_dep(){
@@ -64,6 +65,15 @@
             };
             senddata(JSON.stringify(data));
         }
+
+        function load_Fac(){
+            var siteCode = "<?php echo $siteCode?>";
+            var data = {
+                'STATUS': 'load_Fac'
+            };
+            senddata(JSON.stringify(data));
+        }
+
 
         function load_site(){
             $('#datepicker').val("<?php echo date("Y-m-d"); ?>");
@@ -130,7 +140,8 @@
 
         function change_dep(){
             var slt = $("#DepName").val();
-            if (slt == 0) {
+            var sltFac = $("#FacName").val();
+            if (slt == 0 || sltFac == 0) {
                 $("#btn_add_dirty").prop('disabled',true);
             }
             else {
@@ -142,10 +153,12 @@
             var Userid = "<?php echo $Userid?>";
             var siteCode = "<?php echo $siteCode?>";
             var DepCode = $("#DepName").val();
+            var FacCode = $("#FacName").val();
             var data = {
                 'Userid': Userid,
                 'siteCode': siteCode,
                 'DepCode': DepCode,
+                'FacCode': FacCode,
                 'STATUS': 'add_dirty'
             };
             senddata(JSON.stringify(data));
@@ -188,6 +201,13 @@
                         for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
                             var Str = "<option value="+temp[i]['DepCode']+">"+temp[i]['DepName']+"</option>";
                             $("#DepName").append(Str);
+                        }
+
+                    }
+                    else if(temp["form"] == 'load_Fac'){
+                        for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+                            var Str = "<option value="+temp[i]['FacCode']+">"+temp[i]['FacName']+"</option>";
+                            $("#FacName").append(Str);
                         }
 
                     }
@@ -376,6 +396,14 @@
                         </div>
                         <select onchange="change_dep()" id="DepName" class="custom-select">
                             <option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
+                        </select>
+                    </div>
+                    <div class="input-group my-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $array['chooseFactory'][$language]; ?></label>
+                        </div>
+                        <select onchange="change_dep()" id="FacName" class="custom-select">
+                            <option value="0" selected><?php echo $array['chooseFactoryPl'][$language]; ?></option>
                         </select>
                     </div>
                 </div>
