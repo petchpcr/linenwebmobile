@@ -166,7 +166,13 @@
 
         function back(){
             var Menu = '<?php echo $Menu;?>';
-            window.location.href="menu.php";
+            if(Menu == "factory"){
+                window.location.href="hospital.php?Menu=factory";
+            }else{
+                window.location.href="menu.php";
+            }
+            
+           
         }
 
         function logout(num){
@@ -349,14 +355,7 @@
 <body>
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
-            <?php
-                $Menu = $_GET['Menu'];
-                if ($Menu == 'dirty') {
-                    echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>".$genarray['back'][$language]."</button>";
-                } else {
-                    echo "<div style='margin-right:75px'></div >";
-                }
-            ?>
+            <button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
             <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>

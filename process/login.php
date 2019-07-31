@@ -9,7 +9,7 @@ function checklogin($conn,$DATA)
     $user = $DATA['USERNAME'];
     $password = $DATA['PASSWORD'];
     $boolean = false;
-    $Sql = "SELECT    UserName,FName,ID,PmID,lang,HptCode,FacCode,TimeOut
+    $Sql = "SELECT    UserName,FName,ID,PmID,IFNULL(lang,'th') AS lang,HptCode,FacCode,TimeOut
             FROM      users
             WHERE     UserName = '$user'
             AND       Password = '$password' 

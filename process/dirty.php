@@ -66,6 +66,7 @@
             $search = date('Y-m-d');
         }
         $siteCode = $DATA["siteCode"];
+        $FacCode = $_SESSION['FacCode'];
         $boolean = false;
         $Sql = "SELECT
                     dirty.DocNo,
@@ -81,9 +82,10 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
+                AND dirty.FacCode = '$FacCode'
                 AND dirty.IsStatus > 0 
                 ORDER BY dirty.DocNo DESC";
-        $return['sql'] = $Sql;
+        //$return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
