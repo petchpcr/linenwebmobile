@@ -371,13 +371,18 @@ $genarray = json_decode($json, TRUE);
                                 }
                             }
                         } else if (temp["form"] == 'add_item') {
-                            var siteCode = '<?php echo $siteCode; ?>';
-                            var Menu = '<?php echo $Menu; ?>';
-                            if (Menu == 'dirty') {
-                                window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
-                            } else {
-                                window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
-                            }
+                            swal({
+                            title: '',
+                            text: '<?php echo $genarray['savesuccess'][$language]; ?>',
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            showConfirmButton: false,
+                            timer: 1200,
+                            confirmButtonText: 'Error!!'
+                            })
+                            setTimeout('back()',1500);
                             //load_items();
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
@@ -492,7 +497,7 @@ $genarray = json_decode($json, TRUE);
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">รับน้ำหนัก</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['Getweight'][$language]; ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
