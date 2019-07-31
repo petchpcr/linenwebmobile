@@ -213,4 +213,5 @@
 <datafail><en>Please fill in the information correctly.</en><th>กรูณากรอกข้อมูลให้ถูกต้อง</th></datafail>
 <savedoc><en>Save Doc</en><th>บันทึกเอกสาร</th></savedoc>
 <updateprice><en>Update price</en><th>อัพเดทราคา</th></updateprice>
+<selectdoc><en>Select document</en><th>เลือกเอกสาร</th></selectdoc>
 </lang>

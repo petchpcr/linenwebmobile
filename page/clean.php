@@ -58,14 +58,14 @@
             senddata(JSON.stringify(data));
         }
 
-        // function change_dep() {
-        //     var slt = $("#DepName").val();
-        //     if (slt == 0) {
-        //         $("#btn_confirm").prop('disabled', true);
-        //     } else {
-        //         $("#btn_confirm").prop('disabled', false);
-        //     }
-        // }
+        function change_doc() {
+            var slt = $("#DocName").val();
+            if (slt == 0) {
+                $("#btn_confirm").prop('disabled', true);
+            } else {
+                $("#btn_confirm").prop('disabled', false);
+            }
+        }
 
         function load_dep(){
             var siteCode = "<?php echo $siteCode?>";
@@ -245,7 +245,7 @@
                 <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
             <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-                <button onclick="To_ref_dirty()" class="btn btn-primary btn-block" type="button">
+                <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#choose_doc">
                     <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
                 </button>
             </div>
@@ -253,7 +253,7 @@
     </div>
 
     <!-- Modal -->
-    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="choose_doc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -263,13 +263,16 @@
                     </button>
                 </div>
                 <div class="modal-body text-center">
-                    <?php echo $genarray['chooseDepartment'][$language].$array['CreateCleanLinenDoc'][$language]; ?>
+                    <?php echo $genarray['docfirst'][$language].$array['CreateCleanLinenDoc'][$language]; ?>
                     <div class="input-group my-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>
+                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selectdoc'][$language]; ?></label>
                         </div>
-                        <select onchange="change_dep()" id="DepName" class="custom-select">
-                            <option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
+                        <select onchange="change_doc()" id="DocName" class="custom-select">
+                            <option value="0" selected><?php echo $genarray['docfirst'][$language]; ?></option>
+                            <option value="1" selected>เอกสารจากผ้าสกปรก</option>
+                            <option value="2" selected>เอกสารจากส่งเคลม</option>
+                            <option value="3" selected>เอกสารจากส่งซัก</option>
                         </select>
                     </div>
                 </div>
@@ -285,7 +288,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <script>
         $('#datepicker').datepicker({
