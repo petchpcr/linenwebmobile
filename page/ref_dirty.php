@@ -89,8 +89,9 @@
         }
 
         function back(){
+            var siteCode = "<?php echo $siteCode?>";
             var Menu = '<?php echo $Menu;?>';
-            window.location.href="hospital.php?Menu="+Menu;
+            window.location.href="clean.php?siteCode="+siteCode+"Menu="+Menu;
         }
 
         function logout(num){
