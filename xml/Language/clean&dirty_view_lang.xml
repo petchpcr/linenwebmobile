@@ -5,7 +5,9 @@
 <userEditer><en>Editer</en><th>ผู้บันทึก</th></userEditer>
 <referentDocument><en>Ref. Document</en><th>เอกสารอ้างอิง</th></referentDocument>
 <weightSum><en>Weight Sum</en><th>น้ำหนักรวม</th></weightSum>
+<numberSum><en>Sum</en><th>จำนวนรวม</th></numberSum>
 <KG><en>Kg</en><th>กิโลกรัม</th></KG>
+<piece><en>Piece</en><th>ชิ้น</th></piece>
 
 <no><en>No.</en><th>ลำดับ</th></no>
 <list><en>List</en><th>รายการ</th></list>
