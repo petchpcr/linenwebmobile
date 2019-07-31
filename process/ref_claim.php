@@ -50,6 +50,7 @@ function load_doc($conn, $DATA)
                 WHERE site.HptCode = '$siteCode' 
                 AND claim.DocDate LIKE '%$search%' 
                 AND claim.DepCode = 224 -- Handler
+                AND claim.IsStatus = 1
                 ORDER BY claim.DocNo DESC";
     $return['sql'] = $Sql;
 

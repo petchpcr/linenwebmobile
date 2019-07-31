@@ -48,6 +48,7 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND clean.DocDate LIKE '%$search%' 
+                AND clean.IsStatus > 0 
                 ORDER BY clean.DocNo DESC";
         $return['sql'] = $Sql;
 
