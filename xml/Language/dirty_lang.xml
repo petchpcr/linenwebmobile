@@ -2,5 +2,7 @@
 <lang>
 
 <CreateCleanLinenDoc><en> for create dirty document ?</en><th>เพื่อสร้างเอกสารผ้าสกปรก</th></CreateCleanLinenDoc>
+<chooseFactoryPl><en>Please Choose Factory</en><th>กรุณาเลือกโรงซัก</th></chooseFactoryPl>
+<chooseFactory><en>Choose Fac.</en><th>เลือกโรงซัก</th></chooseFactory>
 
 </lang>

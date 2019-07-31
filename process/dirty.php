@@ -199,6 +199,7 @@
         $Userid = $DATA["Userid"];
         $siteCode = $DATA["siteCode"];
         $DepCode = $DATA["DepCode"];
+        $FacCode = $DATA["FacCode"];
         $Sql = "    SELECT CONCAT('DT',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
@@ -237,7 +238,8 @@
                                             IsCancel,
                                             Detail,
                                             dirty.Modify_Code,
-                                            dirty.Modify_Date
+                                            dirty.Modify_Date,
+                                            FacCode
                                         )
                         VALUES
                                         (
@@ -249,7 +251,8 @@
                                             NOW(),0,0,
                                             0,0,'',
                                             $Userid,
-                                            NOW() 
+                                            NOW(),
+                                            $FacCode
                                         )";
 
             mysqli_query($conn,$Sql);
@@ -296,6 +299,34 @@
         }
     }
 
+    function load_Fac($conn, $DATA){
+        $count = 0;
+        $Sql = "SELECT FacCode,FacName FROM factory WHERE IsCancel=0";
+        $boolean = false;
+
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return[$count]['FacCode'] = $Result['FacCode'];
+            $return[$count]['FacName'] = $Result['FacName'];
+            $count++;
+            $boolean = true;
+        }
+        if ($boolean) {
+            $return['status'] = "success";
+            $return['form'] = "load_Fac";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "load_Fac";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
+
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -317,6 +348,9 @@
         }
         else if ($DATA['STATUS'] == 'add_dirty') {
             add_dirty($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'load_Fac') {
+            load_Fac($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

@@ -389,7 +389,7 @@
                                         $deptCode,
                                         '$DocNo',
                                         DATE(NOW()),
-                                        '',
+                                        '$cleanDocNo',
                                         null,
                                         DATE(NOW()),
                                         0,0,
@@ -582,7 +582,7 @@
                                         $deptCode,
                                         '$DocNo',
                                         DATE(NOW()),
-                                        '',
+                                        '$cleanDocNo',
                                         null,
                                         DATE(NOW()),
                                         0,0,
@@ -670,7 +670,7 @@
                                                     Weight,
                                                     IsCancel,
                                                     Price,
-                                                    Total
+                                                    Total,
                                             )
                             VALUES
                                             (
@@ -681,7 +681,8 @@
                                                     $rewash_qty[$i],
                                                     $rewash_qty[$i],
                                                     $rewash_weight[$i],
-                                                    0,0,0
+                                                    0,0,0,
+
                                             )";
                     
                 mysqli_query($conn, $Sql);
