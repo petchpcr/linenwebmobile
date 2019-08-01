@@ -6,6 +6,7 @@
 <Status><en>Status</en><th>สถานะ</th></Status>
 
 <Checktopic><en>Check topic</en><th>หัวข้อตรวจสอบ</th></Checktopic>
+<Checkamount><en>Check amount</en><th>ตรวจสอบจำนวน</th></Checkamount>
 <sendClaim><en>Send claim </en><th>ส่งเคลม</th></sendClaim>
 
 </lang>
