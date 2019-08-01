@@ -39,64 +39,10 @@
     <script src="../dist/js/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
-        var Total_Sec;
-        var Total_Time;
-        var stop_countdown;
 
         $(document).ready(function (e) {
             load_process();
         });
-
-        function countdown(){
-            var status = $("#h_status").text();
-            var stop = $("#hw_stop").text();
-            var cdnWash = new Date($("#hw_end").text());
-            var cur_date = new Date();
-            // cur_date.format("YYYY-MM-DD HH:mm");
-            
-            // alert("Now : "+cur_date);
-            // alert("Status : "+status);
-            if(status == 1 || status == 0 || status == "" || status == null){ // สถานะไม่ได้ทำอะไร หรือ กำลังซัก
-                // alert("Stop : "+stop);
-                if(stop != "" || stop != null){ // ไม่ได้หยุดเวลาไว้
-                    // alert("End Time : "+cdnWash);
-                    if(cdnWash != "" || cdnWash != null){ // มีเวลาสิ้นสุด(เคยกดเริ่มไปแล้ว)
-                        if(cur_date < cdnWash){ //ถ้ายังซักไม่เสร็จ
-                            var differ = Total_Sec;
-                            // console.log("Stop : "+stop_countdown+" Countdown : "+differ+" Total_Sec : "+Total_Sec);
-
-                            // var ms = differ % 1000;
-                            // differ = (differ - ms) / 1000;
-                            var secs = differ % 60;
-                            differ = (differ - secs) / 60;
-                            var mins = differ % 60;
-                            var hrs = (differ - mins) / 60;
-
-                            if(secs < 10){secs = "0" + secs;}
-                            if(mins < 10){mins = "0" + mins;}
-                            if(hrs < 10){hrs = "0" + hrs;}
-
-                            var countdown = hrs + ':' + mins + ':' + secs;
-                            $("#countdown").text(countdown);
-                            Total_Sec--;
-                        }
-                        else if(cur_date >= cdnWash) { // ถ้าซักเสร็จแล้ว
-                            var DocNo = "<?php echo $DocNo?>";
-                            auto_end_wash(DocNo);
-                        }
-                    }
-                }
-                
-            }
-
-            if (stop_countdown == 0) {
-                setTimeout('countdown()', 1000 );
-            }
-            else {
-                $("#countdown").text(Total_Time);
-            }
-            
-        }
 
         function load_process(){
             var DocNo = "<?php echo $DocNo?>";
@@ -105,16 +51,6 @@
                 'STATUS': 'load_process'
             };
             senddata(JSON.stringify(data));
-        }
-
-        function disable_btn(){
-            $("#W_Stop_btn_sub").prop("disabled",true);
-            $("#W_Start_btn_sub").prop("disabled",true);
-        }
-
-        function enable_btn(){
-            $("#W_Stop_btn_sub").prop("disabled",false);
-            $("#W_Start_btn_sub").prop("disabled",false);
         }
 
         function insert_process(){
@@ -134,28 +70,10 @@
             senddata(JSON.stringify(data));
         }
 
-        function stop_wash(DocNo){
-            var Time = $("#countdown").text();
+        function end_wash(DocNo){
             var data = {
                 'DocNo': DocNo,
-                'Time': Time,
-                'STATUS': 'stop_wash'
-            };
-            senddata(JSON.stringify(data));
-        }
-        
-        function do_end_wash(DocNo){
-            var data = {
-                'DocNo': DocNo,
-                'STATUS': 'do_end_wash'
-            };
-            senddata(JSON.stringify(data));
-        }
-
-        function auto_end_wash(DocNo){
-            var data = {
-                'DocNo': DocNo,
-                'STATUS': 'auto_end_wash'
+                'STATUS': 'end_wash'
             };
             senddata(JSON.stringify(data));
         }
@@ -231,8 +149,6 @@
                             $(".head-btn.btn-light").remove();
                             var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>";
                             $("#user").before(Back);
-                            $("#h_status").text("");
-                            $("#h_status").text(temp['IsStatus']);
                             if(temp['IsStatus'] == 0 || temp['IsStatus'] == null){ //-----ยังไม่ได้ทำอะไร
                                 $("#W_Status").attr("src","../img/Status_4.png");
                                 $("#P_Status").attr("src","../img/Status_4.png");
@@ -247,20 +163,16 @@
                                 $("#P_Sum_btn").hide();
                                 $("#S_Sum_btn").hide();
                                 $("#W_Start").text("--:--:--");
-                                $("#countdown").text("--:--:--");
                                 $("#W_End").text("--:--:--");
                                 $("#P_Start").text("--:--:--");
                                 $("#P_End").text("--:--:--");
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
 
-                                $("#W_First_btn").show();
-                                $("#W_Start_btn").hide();
-                                $("#W_Stop_btn").hide();
+                                $("#W_Start_btn").show();
                                 $("#W_End_btn").hide();
                             }
                             else if(temp['IsStatus'] == 1){ //-----กำลังซัก
-                                disable_btn();
                                 $("#W_Status").attr("src","../img/Status_1.png");
                                 $("#P_Status").attr("src","../img/Status_4.png");
                                 $("#S_Status").attr("src","../img/Status_4.png");
@@ -270,55 +182,21 @@
                                 $("#W_Use_text").hide();
                                 $("#P_Use_text").hide();
                                 $("#S_Use_text").hide();
-                                $("#W_First_btn").remove();
                                 $("#W_Sum_btn").show();
                                 $("#P_Sum_btn").hide();
                                 $("#S_Sum_btn").hide();
+                                $("#W_End").text("--:--:--");
                                 $("#P_Start").text("--:--:--");
                                 $("#P_End").text("--:--:--");
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
 
                                 var W_Start = new Date(temp['WashStartTime']);
-                                var W_End = new Date(temp['WashEndTime']);
-                                $("#W_Start").text(W_Start.toLocaleTimeString()); 
-                                $("#W_End").text(W_End.toLocaleTimeString());  
-                                $("#hw_start").text(temp['WashStartTime']);
-                                $("#hw_end").text(temp['WashEndTime']);
+                                $("#W_Start").text(W_Start.toLocaleTimeString());
 
-                                if(temp['IsStop'] == 1){ // ถ้าหยุด
-                                    stop_countdown = 1;
-                                    Total_Sec = null;
-                                    Total_Time = temp['Diff_Time'];
-                                    $("#hw_stop").text(temp['WashStopTime']);
-                                    $("#hw_stop").show();
-                                    $("#W_End").text("--:--:--");
-                                    $("#W_Stop_btn").hide();
-                                    $("#W_Start_btn").show();
-                                    setTimeout( 'enable_btn()', 1000 );
-                                    $("#W_Status").attr("src","../img/Status_2.png");
-                                    $("#W_Status_text").text("Stop Process");
-                                }else{
-                                    stop_countdown = 0;
-                                    Total_Sec = Number(temp['Diff_Sec']);
-                                    Total_Time = temp['Diff_Time'];
-                                    $("#hw_stop").text(null);
-                                    $("#hw_stop").hide();
-                                    if(temp['WashStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
-                                        $("#W_Stop_btn").hide();
-                                        $("#W_Start_btn").show();
-                                        $("#W_Status").attr("src","../img/Status_4.png");
-                                        $("#W_Status_text").text("No Process");
-                                    }else{                              // ถ้าเคยกดเริ่มแล้ว
-                                        $("#W_Stop_btn").show();
-                                        $("#W_Start_btn").hide();
-                                        $("#W_End_btn").show();
-                                        $("#W_Status").attr("src","../img/Status_1.png");
-                                        $("#W_Status_text").text("Wait Process");
-                                    }
-                                    setTimeout( 'enable_btn()', 1000 );
-                                }
-                                setTimeout( 'countdown()', 1000 );
+                                $("#W_Start_btn").remove();
+                                $("#W_End_btn").show();
+                                
                             }
                             else if(temp['IsStatus'] == 2){ //-----กำลังแพคของ
                                 $("#W_Status").attr("src","../img/Status_3.png");
@@ -327,12 +205,15 @@
                                 $("#W_Status_text").text("Success Process");
                                 $("#P_Status_text").text("Wait Process");
                                 $("#S_Status_text").text("No Process");
+                                $("#W_Start_text").removeClass("col-lg-6");
+                                $("#W_End_text").removeClass("col-lg-6");
+                                $("#W_Start_text").addClass("col-lg-4");
+                                $("#W_End_text").addClass("col-lg-4");
                                 $("#P_Use_text").hide();
                                 $("#S_Use_text").hide();
                                 $("#W_Sum_btn").remove();
                                 $("#P_Sum_btn").show();
                                 $("#S_Sum_btn").hide();
-                                $("#cnd").remove();
                                 $("#W_Use_text").show();
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
@@ -354,7 +235,6 @@
                                     $("#P_Start_btn").hide();
                                     $("#P_End_btn").show();
                                     var P_Start = new Date(temp['PackStartTime']);
-                                    $("#hp_start").text(temp['PackStartTime']);
                                     $("#P_Start").text(P_Start.toLocaleTimeString());
                                     $("#P_End").text("--:--:--");
                                 }
@@ -375,7 +255,6 @@
                                 $("#W_Sum_btn").remove();
                                 $("#P_Sum_btn").remove();
                                 $("#S_Sum_btn").show();
-                                $("#cnd").remove();
                                 $("#W_Use_text").show();
                                 
                                 var W_Start = new Date(temp['WashStartTime']);
@@ -401,7 +280,6 @@
                                     $("#S_Start_btn").hide();
                                     $("#S_End_btn").show();
                                     var S_Start = new Date(temp['SendStartTime']);
-                                    $("#hs_start").text(temp['SendStartTime']);
                                     $("#S_Start").text(S_Start.toLocaleTimeString());
                                     $("#S_End").text("--:--:--");
                                 }
@@ -440,6 +318,10 @@
                                 $("#W_Status_text").text("Success Process");
                                 $("#P_Status_text").text("Success Process");
                                 $("#S_Status_text").text("Success Process");
+                                $("#W_Start_text").removeClass("col-lg-6");
+                                $("#W_End_text").removeClass("col-lg-6");
+                                $("#W_Start_text").addClass("col-lg-4");
+                                $("#W_End_text").addClass("col-lg-4");
                                 $("#P_Start_text").removeClass("col-lg-6");
                                 $("#P_End_text").removeClass("col-lg-6");
                                 $("#P_Start_text").addClass("col-lg-4");
@@ -448,7 +330,6 @@
                                 $("#S_End_text").removeClass("col-lg-6");
                                 $("#S_Start_text").addClass("col-lg-4");
                                 $("#S_End_text").addClass("col-lg-4");
-                                $("#cnd").remove();
                                 $("#W_Use_text").show();
                                 $("#P_Use_text").show();
                                 $("#S_Use_text").show();
@@ -492,7 +373,7 @@
                         else if (temp["form"] == 'stop_wash'){
                             load_process();
                         }
-                        else if (temp["form"] == 'do_end_wash' || temp["form"] == 'auto_end_wash'){
+                        else if (temp["form"] == 'end_wash'){
                             load_process();
                         }
                         else if (temp["form"] == 'start_pack'){
@@ -546,13 +427,6 @@
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
         <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
-        <div id="h_status" hidden></div>
-        <div id="hw_start" hidden></div>
-        <div id="hw_stop" hidden></div>
-        <div id="hw_end" hidden></div>
-        <div id="hp_start" hidden></div>
-        <div id="hp_end" hidden></div>
-        <div id="hs_start" hidden></div>
 
         <div id="process">
             <div class="card mt-3" style="padding:1rem;">
@@ -568,15 +442,11 @@
 
                     <div class="col-4 text-left align-self-center text-center">
                         <div class="row">
-                            <div id="W_Start_text" class="col-lg-4 col-md-12 col-sm-12">
+                            <div id="W_Start_text" class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="head_text"><?php echo $array['Starttime'][$language]; ?></div>
                                 <label id="W_Start" class='font-weight-light'></label>
                             </div>
-                            <div id="cnd" class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="head_text"><?php echo $array['countdown'][$language]; ?></div>
-                                <label id="countdown" class='font-weight-light'>00:00:00</label>
-                            </div>
-                            <div id="W_End_text" class="col-lg-4 col-md-12 col-sm-12">
+                            <div id="W_End_text" class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="head_text"><?php echo $array['Finishtime'][$language]; ?></div>
                                 <label id="W_End" class='font-weight-light'></label>
                             </div>
@@ -598,10 +468,8 @@
                 </div>
                 <div id="W_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="W_First_btn"><button id="W_First_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
-                    <div class="col-md-4 col-sm-6" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Continue'][$language]; ?></button></div>
-                    <div class="col-md-4 col-sm-6" id="W_Stop_btn"><button id="W_Stop_btn_sub" onclick="stop_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-danger btn-block"><?php echo $array['Stop'][$language]; ?></button></div>
-                    <div class="col-md-4 col-sm-6" id="W_End_btn"><button id="W_End_btn_sub" onclick="do_end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="W_End_btn"><button id="W_End_btn_sub" onclick="end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
                 </div>
             </div>

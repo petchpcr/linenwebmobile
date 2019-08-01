@@ -50,9 +50,82 @@
         }
     }
 
+    function show_quantity($conn, $DATA){
+        $DocNo = $DATA['DocNo'];
+        $ItemCode = $DATA['ItemCode'];
+        $return['ItemCode'] = $ItemCode;
+        $boolean = false;
+
+        $Sql = "SELECT (SELECT ItemName FROM item WHERE ItemCode = '$ItemCode') AS itemname,Qty,
+                        (SELECT pass FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Pass,
+                        (SELECT fail FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Fail 
+                FROM clean_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
+        $return['Sql'] = $Sql;
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)){
+            $return['ItemName']	=  $Result['itemname'];
+            $return['Qty']	=  $Result['Qty'];
+            $return['Pass']	=  $Result['Pass'];
+            $return['Fail']	=  $Result['Fail'];
+            $boolean = true;
+        }
+
+        if ($boolean) {
+            $return['status'] = "success";
+            $return['form'] = "show_quantity";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "show_quantity";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
+    function save_checkpass($conn, $DATA) {
+        $DocNo = $DATA['DocNo'];
+        $ItemCode = $DATA['ItemCode'];
+        $pass = $DATA['pass'];
+        $fail = $DATA['fail'];
+        $Sql = "SELECT COUNT(ItemCode) AS cnt FROM qccheckpass WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+        $return['Sql'] = $Sql;
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)){
+            $cnt	=  $Result['cnt'];
+        }
+
+        if ($cnt > 0) {
+            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+        }
+        else {
+            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,QCDate) VALUES ('$DocNo','$ItemCode','$pass','$fail',NOW())";
+        }
+        $return['Sql'] = $Sql;
+
+        if (mysqli_query($conn, $Sql)) {
+            $return['ItemCode'] = $ItemCode;
+            $return['status'] = "success";
+            $return['form'] = "save_checkpass";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+             
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "save_checkpass";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function show_question($conn, $DATA){
         $DocNo = $DATA['DocNo'];
         $ItemCode = $DATA['ItemCode'];
+        $return['DocNo'] = $DocNo;
         $return['ItemCode'] = $ItemCode;
         $count = 0;
         $have = 0;
@@ -64,8 +137,7 @@
         }
 
         $Sql = "SELECT      qcquestion.Question,
-                            qcchecklist.QuestionId,
-                            IsStatus
+                            qcchecklist.QuestionId
 
                 FROM        qcchecklist,qcquestion
 
@@ -787,6 +859,12 @@
 
         if ($DATA['STATUS'] == 'load_items') {
             load_items($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'show_quantity') {
+            show_quantity($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'save_checkpass') {
+            save_checkpass($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'show_question') {
             show_question($conn, $DATA);

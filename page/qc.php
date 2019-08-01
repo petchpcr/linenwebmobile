@@ -65,7 +65,7 @@
             senddata(JSON.stringify(data));
         }
 
-        function show_process(DocNo){
+        function show_qc(DocNo){
             var siteCode = "<?php echo $siteCode?>";
             var Menu = '<?php echo $Menu;?>';
             window.location.href='qc_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
@@ -155,20 +155,13 @@
                                 status_line = "StatusLine_3";
                             }
 
-                            // if(temp[i]['IsStatus'] > 0){
-                                
-                                var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
-                                    Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
-                                    Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
-                                    Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
+                            var Str = "<button onclick='show_qc(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
+                                Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
+                                Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
+                                Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
 
-                                $("#document").append(Str);
-                            // }
-                            
+                            $("#document").append(Str);
                         }
-                    }
-                    else if(temp["form"] == 'show_process'){
-                        window.location.href='process.php?siteCode='+temp['siteCode'];
                     }
                     else if(temp["form"] == 'add_dirty'){
                         var Userid = temp['user']

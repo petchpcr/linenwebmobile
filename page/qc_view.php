@@ -72,6 +72,51 @@ $genarray = json_decode($json, TRUE);
             senddata(JSON.stringify(data));
         }
 
+        function make_number() {
+            $('.numonly').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, ''); //<-- replace all other than given set of values\
+                console.log(Number(this.value));
+                this.value = Number(this.value);
+            });
+        }
+
+        function show_quantity(ItemCode) {
+            var DocNo = '<?php echo $DocNo ?>';
+            var data = {
+                'DocNo': DocNo,
+                'ItemCode': ItemCode,
+                'STATUS': 'show_quantity'
+            };
+            senddata(JSON.stringify(data));
+        }
+
+        function save_checkpass() {
+            var qty = $("#qc_qty").val();
+            var pass = Number($("#qc_pass").val());
+            var fail = Number($("#qc_fail").val());
+            var sum = Number(pass+fail);
+            if (sum != qty) {
+                Title = "จำนวนไม่ถูกต้อง";
+                Text = "จำนวนข้อมูล "+sum+" จากทั้งหมด "+qty+" !";
+                Type = "warning";
+                AlertError(Title,Text,Type);
+            }
+            else {
+                var DocNo = '<?php echo $DocNo ?>';
+                var ItemCode = $("#qc_qty").attr("data-itemcode");
+                var data = {
+                    'DocNo': DocNo,
+                    'ItemCode': ItemCode,
+                    'pass': pass,
+                    'fail': fail,
+                    'STATUS': 'save_checkpass'
+                };
+                senddata(JSON.stringify(data));
+                console.log(ItemCode);
+            }
+            
+        }
+
         function show_question(ItemCode) {
             var DocNo = '<?php echo $DocNo ?>';
             var data = {
@@ -332,7 +377,7 @@ $genarray = json_decode($json, TRUE);
                                     }
                                     
                                     var num = i+1;
-                                    var Str = "<tr onclick='show_question(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
+                                    var Str = "<tr onclick='show_quantity(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
                                         Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>"+temp[i]['ItemName']+"</div>";
                                         Str += "<div class='col-12 text-black-50 p-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div>";
                                         Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'><button onclick='event.cancelBubble=true;show_claim_detail();' class='btn btn-info'>เรียกดู</button></div>";
@@ -358,14 +403,27 @@ $genarray = json_decode($json, TRUE);
                                 Type = "info";
                                 AlertError(Title,Text,Type);
                             }
-                            
-                            // alert(arr_rewash_code[0]);
-                            // alert(arr_rewash_code[1]);
-                            
+
+                        } else if (temp["form"] == 'show_quantity') {
+                            $(".item_name").text(temp['ItemName']);
+                            $("#qc_qty").attr("data-itemcode",temp['ItemCode']);
+                            $("#qc_qty").val(temp['Qty']);
+                            var Pass = temp['Pass'];
+                            var Fail = temp['Fail'];
+                            if (temp['Pass'] == null || temp['Pass'] == "") {
+                                Pass = 0;
+                            }
+                            if (temp['Fail'] == null || temp['Fail'] == "") {
+                                Fail = 0;
+                            }
+                            $("#qc_pass").val(Pass);
+                            $("#qc_fail").val(Fail);
+
+                            $("#md_checkpass").modal('show');
 
                         } else if (temp["form"] == 'show_question') {
                             $("#item_code").text(temp['ItemCode']);
-                            $("#item_name").text(temp['ItemName']);
+                            $(".item_name").text(temp['ItemName']);
                             $("#question").empty();
                             
                             for (var i = 0; i < temp['cnt']; i++) {
@@ -376,17 +434,17 @@ $genarray = json_decode($json, TRUE);
                                 } else if (temp[i]['IsStatus'] == 0) {
                                     unchk = "checked";
                                 }
-                                var Str = "<button onclick='chk_items("+i+")' id='question"+i+"' data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' class='my-btn btn-block alert alert-info py-1 px-3 mb-2'>";
-                                    Str += "<div class='col-12 text-left font-weight-bold pr-0'>";
-                                    Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate text-right p-0'><div class='form-check form-check-inline m-0'>";
-                                    Str += "<input class='form-check-input' type='radio' name='radio"+i+"' id='chk"+i+"' "+chk+">ผ่าน";
-                                    Str += "<input class='form-check-input ml-3' type='radio' name='radio"+i+"' id='unchk"+i+"' "+unchk+">ไม่ผ่าน</div></div></button>";
-
-                                // alert("array : "+i);
-                                // alert(temp[i]['QuestionId']);
+                                var Str = "<div id='question"+i+"' data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' ";
+                                    Str += "class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
+                                    Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
+                                    Str += "ไม่ผ่าน<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' value='0'>จำนวน</div></div></div>";
                                 $("#question").append(Str);
                             }
                             $("#md_question").modal('show');
+
+                        } else if (temp["form"] == 'save_checkpass') {
+                            $("#md_checkpass").modal('hide');
+                            show_question(temp['ItemCode']);
 
                         } else if (temp["form"] == 'close_question') {
                             // var DocNo = temp['DocNo'];
@@ -499,6 +557,48 @@ $genarray = json_decode($json, TRUE);
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="md_checkpass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-truncate"><?php echo $array['Checkamount'][$language]; ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+                    <div class="font-weight-bold mb-2 item_name"></div>
+                    <div id="amount">
+
+                        <div class="form-group text-left">
+                            <label>จำนวนทั้งหมด</label>
+                            <input type="text" class="form-control" id="qc_qty" disabled>
+                        </div>
+
+                        <div class="form-group text-left">
+                            <label>จำนวนที่ผ่าน</label>
+                            <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_pass">
+                        </div>
+
+                        <div class="form-group text-left">
+                            <label>จำนวนที่ไม่ผ่าน</label>
+                            <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_fail">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <div class="row w-100 d-flex align-items-center m-0">
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+                            <button onclick="save_checkpass()" type="button" class="btn btn-success mx-2"><?php echo $genarray['save'][$language]; ?></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="md_question" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
@@ -510,19 +610,18 @@ $genarray = json_decode($json, TRUE);
                 </div>
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
                     <div id="item_code" hidden></div>
-                    <div id="item_name" class="font-weight-bold mb-2"></div>
+                    <div class="font-weight-bold mb-2 item_name"></div>
                     <div id="question">
 
                         <!-- <button onclick="chk_items(10)" id="question0" data-itemcode="99999" data-question="121" class="my-btn btn-block alert alert-info py-1 px-3 mb-2">
                             <div class='col-12 text-left font-weight-bold pr-0'>
                                 Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec sed odio operae, eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac, sitientis piros Afros. Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus sit amet fermentum.
                             </div>
-                            <div class="col-12 text-truncate text-right p-0">
+                            <div class="col-12 text-truncate p-0">
                                 <div class="form-check form-check-inline m-0">
-                                    <input class="form-check-input" type="radio" name="radio10" id="chk10" value="option1" checked>
-                                    ผ่าน
-                                    <input class="form-check-input ml-3" type="radio" name="radio10" id="unchk10" value="option2">
                                     ไม่ผ่าน
+                                    <input class="form-control text-center m-2 numonly" type="text">
+                                    จำนวน
                                 </div>
                             </div>
                         </button> -->
@@ -532,7 +631,8 @@ $genarray = json_decode($json, TRUE);
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
                         <div class="col-12 text-right">
-                            <button type="button" class="btn btn-block btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
+                            <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+                            <button onclick="save_checkpass()" type="button" class="btn btn-success mx-2"><?php echo $genarray['save'][$language]; ?></button>
                         </div>
                     </div>
                 </div>
@@ -551,7 +651,7 @@ $genarray = json_decode($json, TRUE);
                 </div>
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
                     <div id="item_code" hidden></div>
-                    <div id="item_name" class="font-weight-bold mb-2"></div>
+                    <div class="font-weight-bold mb-2 item_name"></div>
                     <div id="question">
 
                         <div id="item0" class="row alert alert-info mb-3 mx-2 p-0">
