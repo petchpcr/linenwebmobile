@@ -44,11 +44,11 @@
                     site.HptCode,
                     site.HptName
                 FROM
-                    clean
-                INNER JOIN department ON department.DepCode = clean.DepCode AND department.DepCode = clean.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+                    clean,department,site
                 WHERE site.HptCode = '$siteCode' 
                 AND clean.DocDate = '$search' 
+                AND department.DepCode = clean.DepCode AND department.DepCode = clean.DepCode
+                AND site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 ORDER BY clean.DocNo DESC";
         $return['sql'] = $Sql;
 

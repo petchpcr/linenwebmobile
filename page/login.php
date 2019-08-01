@@ -38,6 +38,10 @@
 			alert("Go to back");
 		}
 
+		function sendTimeout() {
+			Android.setTimeout(<?php echo $_SESSION['TimeOut'];?>);
+		}
+
         function chklogin() {
             var user = $("#username").val();
 			var password = $("#password").val();
@@ -91,6 +95,7 @@
 					var PmID = temp['PmID'];
 					
 					swal.hideLoading()
+					sendTimeout();
 					swal({
 						title: '',
 						text: temp["msg"],
