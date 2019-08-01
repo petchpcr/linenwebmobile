@@ -8,6 +8,7 @@ $cfHost = "localhost";
 $cfUser = "root";
 $cfPassword = "A$192dijd";
 $cfDatabase = "linen";
+//$cfDatabase = "cssd_linen_P2";
 
 //linen
 //cssd_rm_test

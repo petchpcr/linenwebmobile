@@ -39,6 +39,10 @@
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
 
+        $(document).ready(function (e) {
+            sendTimeout();
+        });
+
         function menu_click(menu) {
             if (menu == 'tools') {
                 window.location.href='setting.php?';
@@ -54,8 +58,22 @@
             }
         }
 
+        function sendTimeout() {
+			console.log(<?php echo $_SESSION['TimeOut'];?>);
+			Android.setTimeout(<?php echo $_SESSION['TimeOut'];?>);
+		}
+
         function back() {
-			logout(1);
+            swal({
+                title: '',
+                text: 'Logout',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                showConfirmButton: true,
+                }).then(function () {
+                    logout(1);
+				});
 		}
 
         function logout(num){

@@ -106,16 +106,16 @@
             var Menu = '<?php echo $Menu;?>';
             var slt = $("#DocName").val();
             // var DepCode = $("#DepName").val(); 
-
-            if (slt == 1) {
-                window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
-            }
-            else if (slt == 2) {
-                window.location.href='ref_claim.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
-            }
-            else if (slt == 3) {
-                window.location.href='ref_rewash.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
-            }
+            window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            // if (slt == 1) {
+            //     window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            // }
+            // else if (slt == 2) {
+            //     window.location.href='ref_claim.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            // }
+            // else if (slt == 3) {
+            //     window.location.href='ref_rewash.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+            // }
         }
 
         function logout(num) {
@@ -255,7 +255,9 @@
                 <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
             <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-                <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#choose_doc">
+                
+                <button class="btn btn-primary btn-block" type="button" onclick="add_clean()"> 
+                <!-- <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#choose_doc">  -->
                     <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
                 </button>
             </div>
