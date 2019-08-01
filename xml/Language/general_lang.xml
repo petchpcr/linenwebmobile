@@ -44,6 +44,9 @@
 <YNwantToExit><en>Exit without save ?</en><th>ต้องการออกโดยไม่บันทึกข้อมูล ?</th></YNwantToExit>
 
 <savesuccess><en>Saved</en><th>บันทึกสำเร็จ</th></savesuccess>
+
+<selecttypedoc><en>Select type doc.</en><th>เลือกชนิดเอกสาร</th></selecttypedoc>
+<docfirst><en>Please select ref. document</en><th>กรุณาเลือกเอกสารอ้างอิง</th></docfirst>
 //old
 
 <activeItem><en>Active</en><th>Active</th></activeItem>
@@ -114,7 +117,6 @@
 <order><en>Order</en><th>ออเดอร์</th></order>
 <detail><en>Description</en><th>รายละเอียด</th></detail>
 <print><en>Print Report</en><th>พิมพ์รายงาน</th></print>
-<docfirst><en>Please select document.</en><th>กรุณาเลือกเอกสาร</th></docfirst>
 <datestart><en>Starting date</en><th>วันที่เริ่ม</th></datestart>
 <dateend><en>End date</en><th>วันที่สิ้นสุด</th></dateend>
 <percent><en>Percent</en><th>เปอร์เซ็นต์</th></percent>
@@ -214,5 +216,4 @@
 <datafail><en>Please fill in the information correctly.</en><th>กรูณากรอกข้อมูลให้ถูกต้อง</th></datafail>
 <savedoc><en>Save Doc</en><th>บันทึกเอกสาร</th></savedoc>
 <updateprice><en>Update price</en><th>อัพเดทราคา</th></updateprice>
-<selectdoc><en>Select document</en><th>เลือกเอกสาร</th></selectdoc>
 </lang>

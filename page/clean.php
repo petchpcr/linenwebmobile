@@ -276,13 +276,13 @@
                     <?php echo $genarray['docfirst'][$language].$array['CreateCleanLinenDoc'][$language]; ?>
                     <div class="input-group my-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selectdoc'][$language]; ?></label>
+                            <label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
                         </div>
                         <select onchange="change_doc()" id="DocName" class="custom-select">
                             <option value="0" selected><?php echo $genarray['docfirst'][$language]; ?></option>
-                            <option value="1">เอกสารจากผ้าสกปรก</option>
-                            <option value="2">เอกสารจากส่งเคลม</option>
-                            <option value="3">เอกสารจากส่งซัก</option>
+                            <option value="1"><?php echo $array['refDocDirty'][$language]; ?></option>
+                            <option value="2"><?php echo $array['refDocClaim'][$language]; ?></option>
+                            <option value="3"><?php echo $array['refDocRewash'][$language]; ?></option>
                         </select>
                     </div>
                 </div>
