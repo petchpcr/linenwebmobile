@@ -283,7 +283,7 @@
                         <select onchange="change_doc()" id="DocName" class="custom-select">
                             <option value="0" selected><?php echo $genarray['docfirst'][$language]; ?></option>
                             <option value="1"><?php echo $array['refDocDirty'][$language]; ?></option>
-                            <option value="2"><?php echo $array['refDocClaim'][$language]; ?></option>
+                            <!-- <option value="2"><?php echo $array['refDocClaim'][$language]; ?></option> -->
                             <option value="3"><?php echo $array['refDocRewash'][$language]; ?></option>
                         </select>
                     </div>
