@@ -44,23 +44,14 @@ $genarray = json_decode($json, TRUE);
     <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
 
-        var arr_claim_code = [];
-        var arr_claim_qty = [];
-        var arr_claim_weight = [];
-        var arr_claim_unit = [];
-
-        var arr_rewash_code = [];
-        var arr_rewash_qty = [];
-        var arr_rewash_weight = [];
-        var arr_rewash_unit = [];
-
         $(document).ready(function(e) {
             var DocNo = "<?php echo $DocNo ?>";
             $("#DocNo").text(DocNo);
             load_items();
-            $('#md_question').on('hidden.bs.modal', function (e) {
-                close_question();
-            })
+            // $('#md_question').on('hidden.bs.modal', function (e) {
+            //     close_question();
+            // })
+            // $("#md_detail").modal('show');
         });
 
         function load_items() {
@@ -127,31 +118,31 @@ $genarray = json_decode($json, TRUE);
             senddata(JSON.stringify(data));
         }
 
-        function chk_items(num) {
-            var DocNo = '<?php echo $DocNo ?>';
-            var ItemCode = $("#question"+num).data("itemcode");
-            var Question = $("#question"+num).data("question");
-            var chk_id = "#chk" + num;
-            var unchk_id = "#unchk" + num;
-            var IsStatus = 1;
+        // function chk_items(num) {
+        //     var DocNo = '<?php echo $DocNo ?>';
+        //     var ItemCode = $("#question"+num).data("itemcode");
+        //     var Question = $("#question"+num).data("question");
+        //     var chk_id = "#chk" + num;
+        //     var unchk_id = "#unchk" + num;
+        //     var IsStatus = 1;
 
-            if ($(chk_id).is(':checked') == true && $(unchk_id).is(':checked') == false) {
-                IsStatus = 0;
-                $(unchk_id).prop("checked", true);
+        //     if ($(chk_id).is(':checked') == true && $(unchk_id).is(':checked') == false) {
+        //         IsStatus = 0;
+        //         $(unchk_id).prop("checked", true);
 
-            } else if ($(chk_id).is(':checked') == false && $(unchk_id).is(':checked') == true) {
-                $(chk_id).prop("checked", true);
-            }
+        //     } else if ($(chk_id).is(':checked') == false && $(unchk_id).is(':checked') == true) {
+        //         $(chk_id).prop("checked", true);
+        //     }
 
-            var data = {
-                'DocNo': DocNo,
-                'IsStatus': IsStatus,
-                'ItemCode': ItemCode,
-                'question': Question,
-                'STATUS': 'chk_items'
-            };
-            senddata(JSON.stringify(data));
-        }
+        //     var data = {
+        //         'DocNo': DocNo,
+        //         'IsStatus': IsStatus,
+        //         'ItemCode': ItemCode,
+        //         'question': Question,
+        //         'STATUS': 'chk_items'
+        //     };
+        //     senddata(JSON.stringify(data));
+        // }
 
         function close_question() {
             var DocNo = '<?php echo $DocNo ?>';
@@ -165,6 +156,56 @@ $genarray = json_decode($json, TRUE);
             senddata(JSON.stringify(data));
         }
 
+        function save_checklist(){
+            var max = $("#qc_fail").val();
+            var over_max = 0;
+            var sum_amount = 0;
+            var DocNo = '<?php echo $DocNo ?>';
+            var ItemCode = $("#item_code").text();
+            var sum = Number($("#save_checklist").attr("data-sumquestion"));
+            var arr_question = [];
+            var arr_amount = [];
+            for (var i = 0; i < sum; i++) {
+                var id = "#question"+i;
+                var QuestID = $(id).attr("data-question");
+                var Amount = $(id).val();
+                sum_amount = Number(sum_amount) + Number(Amount);
+                arr_question.push(QuestID);
+                arr_amount.push(Amount);
+                if (Amount > max) {
+                    over_max = 1;
+                }
+            }
+            Title = "จำนวนไม่ถูกต้อง";
+            Type = "warning";
+            console.log("max : "+max);
+            if (over_max == 1) {
+                arr_question = [];
+                arr_amount = [];
+                Text = "จำนวนสูงสุดของแต่ละชิ้นคือ "+max+" !";
+                AlertError(Title,Text,Type);
+            }
+            else if (sum_amount < max) {
+                arr_question = [];
+                arr_amount = [];
+                Text = "จำนวนข้อมูล "+sum_amount+" จากทั้งหมด "+max+" !";
+                AlertError(Title,Text,Type);
+            }
+            else {
+                var question = arr_question.join(',');
+                var amount = arr_amount.join(',');
+
+                var data = {
+                    'DocNo': DocNo,
+                    'ItemCode': ItemCode,
+                    'question': question,
+                    'amount': amount,
+                    'STATUS': 'save_checklist'
+                };
+                senddata(JSON.stringify(data));
+            }
+        }
+
         function claim_detail(DocNo,ItemCode) {
             var data = {
                 'DocNo': DocNo,
@@ -174,73 +215,24 @@ $genarray = json_decode($json, TRUE);
             senddata(JSON.stringify(data));
         }
 
-        function show_claim_detail(){
-            // alert("show_claim_detail");
-        }
-
-        function claim_click() {
-            create_claim();
-            create_rewash();
-        }
-
-        function create_claim() {
-            if (arr_claim_code.length > 0) {
-                var DocNo = '<?php echo $DocNo ?>';
-                var Userid = '<?php echo $Userid ?>';
-
-                var data = {
-                    'DocNo': DocNo,
-                    'Userid': Userid,
-                    'STATUS': 'create_claim'
-                };
-                senddata(JSON.stringify(data));
-            }
-        }
-
-        function send_claim(NewDocNo) {
-            var claim_code = arr_claim_code.join(',');
-            var claim_qty = arr_claim_qty.join(',');
-            var claim_weight = arr_claim_weight.join(',');
-            var claim_unit = arr_claim_unit.join(',');
-
+        function show_claim_detail(ItemCode){
+            var DocNo = '<?php echo $DocNo ?>';
             var data = {
-                'DocNo': NewDocNo,
-                'claim_code': claim_code,
-                'claim_qty': claim_qty,
-                'claim_weight': claim_weight,
-                'claim_unit': claim_unit,
-                'STATUS': 'send_claim'
+                'DocNo': DocNo,
+                'ItemCode': ItemCode,
+                'STATUS': 'show_claim_detail'
             };
             senddata(JSON.stringify(data));
         }
 
-        function create_rewash() {
-            if (arr_rewash_code.length > 0) {
-                var DocNo = '<?php echo $DocNo ?>';
-                var Userid = '<?php echo $Userid ?>';
-
-                var data = {
-                    'DocNo': DocNo,
-                    'Userid': Userid,
-                    'STATUS': 'create_rewash'
-                };
-                senddata(JSON.stringify(data));
-            }
-        }
-
-        function send_rewash(NewDocNo) {
-            var rewash_code = arr_rewash_code.join(',');
-            var rewash_qty = arr_rewash_qty.join(',');
-            var rewash_weight = arr_rewash_weight.join(',');
-            var rewash_unit = arr_rewash_unit.join(',');
+        function create_claim() {
+            var DocNo = '<?php echo $DocNo ?>';
+            var Userid = '<?php echo $Userid ?>';
 
             var data = {
-                'DocNo': NewDocNo,
-                'rewash_code': rewash_code,
-                'rewash_qty': rewash_qty,
-                'rewash_weight': rewash_weight,
-                'rewash_unit': rewash_unit,
-                'STATUS': 'send_rewash'
+                'DocNo': DocNo,
+                'Userid': Userid,
+                'STATUS': 'create_claim'
             };
             senddata(JSON.stringify(data));
         }
@@ -300,16 +292,6 @@ $genarray = json_decode($json, TRUE);
 
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_items') {
-                            arr_claim_code = [];
-                            arr_claim_qty = [];
-                            arr_claim_weight = [];
-                            arr_claim_unit = [];
-
-                            arr_rewash_code = [];
-                            arr_rewash_qty = [];
-                            arr_rewash_weight = [];
-                            arr_rewash_unit = [];
-
                             $("#item").empty();
                             var op_claim = 0;
                             var test = temp['cnt'];
@@ -317,70 +299,35 @@ $genarray = json_decode($json, TRUE);
                                 for (var i = 0; i < temp['cnt']; i++) {
                                     var CheckList = Number(temp[i]['IsCheckList']);
                                     var img = "";
-
+                                    var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\""+temp[i]['ItemCode']+"\");' class='btn btn-info'>เรียกดู</button>";
                                     switch (CheckList) {
                                         case 0:
                                             img = "../img/Status_3.png"; // เขียว
+                                            detail = "-";
                                             break;
                                         case 1:
                                             img = "../img/Status_1.png"; // ส้ม
-                                            arr_claim_code.push(temp[i]['ItemCode']);
-                                            arr_claim_qty.push(temp[i]['Qty']);
-                                            arr_claim_weight.push(temp[i]['Weight']);
-                                            arr_claim_unit.push(temp[i]['UnitCode']);
                                             op_claim++;
                                             break;
                                         case 2:
-                                            img = "../img/Status_2.png"; // แดง
-                                            arr_claim_code.push(temp[i]['ItemCode']);
-                                            arr_claim_qty.push(temp[i]['Qty']);
-                                            arr_claim_weight.push(temp[i]['Weight']);
-                                            arr_claim_unit.push(temp[i]['UnitCode']);
+                                            img = "../img/Status_1.png"; 
                                             op_claim++;
                                             break;
                                         case 3:
-                                            img = "../img/Status_1.png";
-                                            arr_rewash_code.push(temp[i]['ItemCode']);
-                                            arr_rewash_qty.push(temp[i]['Qty']);
-                                            arr_rewash_weight.push(temp[i]['Weight']);
-                                            arr_rewash_unit.push(temp[i]['UnitCode']);
-                                            op_claim++;
-                                            break;
-                                        case 4:
-                                            img = "../img/Status_2.png";
-                                            arr_rewash_code.push(temp[i]['ItemCode']);
-                                            arr_rewash_qty.push(temp[i]['Qty']);
-                                            arr_rewash_weight.push(temp[i]['Weight']);
-                                            arr_rewash_unit.push(temp[i]['UnitCode']);
-                                            op_claim++;
-                                            break;
-                                        case 5:
-                                            img = "../img/Status_1.png";
-                                            arr_claim_code.push(temp[i]['ItemCode']);
-                                            arr_claim_qty.push(temp[i]['Qty']);
-                                            arr_claim_weight.push(temp[i]['Weight']);
-                                            arr_claim_unit.push(temp[i]['UnitCode']);
-                                            op_claim++;
-                                            break;
-                                        case 6:
-                                            img = "../img/Status_2.png";
-                                            arr_rewash_code.push(temp[i]['ItemCode']);
-                                            arr_rewash_qty.push(temp[i]['Qty']);
-                                            arr_rewash_weight.push(temp[i]['Weight']);
-                                            arr_rewash_unit.push(temp[i]['UnitCode']);
+                                            img = "../img/Status_2.png"; // แดง
                                             op_claim++;
                                             break;
                                         default:
                                             img = "../img/Status_4.png"; // เทา
-                                            op_claim++;
-
+                                            detail = "-";
                                     }
                                     
                                     var num = i+1;
-                                    var Str = "<tr onclick='show_quantity(\""+temp[i]['ItemCode']+"\")'><td><div class='row'><div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
+                                    var Str = "<tr onclick='show_quantity(\""+temp[i]['ItemCode']+"\")'><td><div class='row'>";
+                                        Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>"+num+"</div>";
                                         Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>"+temp[i]['ItemName']+"</div>";
                                         Str += "<div class='col-12 text-black-50 p-1'>จำนวน "+temp[i]['Qty']+" / น้ำหนัก "+temp[i]['Weight']+" </div></div></div>";
-                                        Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'><button onclick='event.cancelBubble=true;show_claim_detail();' class='btn btn-info'>เรียกดู</button></div>";
+                                        Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>"+detail+"</div>";
                                         Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='"+img+"' height='40px'></div></div></td></tr>";
 
                                     $("#item").append(Str);
@@ -425,7 +372,7 @@ $genarray = json_decode($json, TRUE);
                             $("#item_code").text(temp['ItemCode']);
                             $(".item_name").text(temp['ItemName']);
                             $("#question").empty();
-                            
+                            var sum_question = 0;
                             for (var i = 0; i < temp['cnt']; i++) {
                                 var chk = "";
                                 var unchk = "";
@@ -434,17 +381,23 @@ $genarray = json_decode($json, TRUE);
                                 } else if (temp[i]['IsStatus'] == 0) {
                                     unchk = "checked";
                                 }
-                                var Str = "<div id='question"+i+"' data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' ";
-                                    Str += "class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
+                                var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
                                     Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
-                                    Str += "ไม่ผ่าน<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' value='0'>จำนวน</div></div></div>";
+                                    Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question"+i+"' class='form-control text-center m-2 numonly' type='text' ";
+                                    Str += "data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' value='"+temp[i]['Qty']+"'>จำนวน</div></div></div>";
                                 $("#question").append(Str);
+                                sum_question++;
                             }
+                            $("#save_checklist").attr('data-sumquestion',sum_question);
                             $("#md_question").modal('show');
 
                         } else if (temp["form"] == 'save_checkpass') {
                             $("#md_checkpass").modal('hide');
-                            show_question(temp['ItemCode']);
+                            if (temp['unfail'] == 1) {
+                                load_items();
+                            } else {
+                                show_question(temp['ItemCode']);
+                            }
 
                         } else if (temp["form"] == 'close_question') {
                             // var DocNo = temp['DocNo'];
@@ -452,19 +405,36 @@ $genarray = json_decode($json, TRUE);
                             // claim_detail(DocNo,ItemCode);
                             load_items();
 
+                        } else if (temp["form"] == 'show_claim_detail') {
+                            if (temp['cnt'] > 0) {
+                                $("#detail").empty();
+                                for (var i = 0; i < temp['cnt']; i++) {
+                                    if (temp[i]['Qty'] != 0){
+                                        var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
+                                            Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
+                                            Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question"+i+"' class='form-control text-center m-2 numonly' type='text' ";
+                                            Str += "value='"+temp[i]['Qty']+"' disabled>จำนวน</div></div></div>";
+
+                                        $("#detail").append(Str);
+                                    }
+                                }
+                                $("#md_detail").modal('show');
+                            }
+                            
+
                         } else if (temp["form"] == 'claim_detail') {
                             $("#md_claim").modal('show');
 
+                        } else if (temp["form"] == 'save_checklist') {
+                            $("#md_question").modal('hide');
+                            load_items();
+
                         } else if (temp["form"] == 'create_claim') {
-                            var NewDocNo = temp['NewDocNo'];
-                            send_claim(NewDocNo);
+                            save_qc();
 
                         } else if (temp["form"] == 'create_rewash') {
                             var NewDocNo = temp['NewDocNo'];
                             send_rewash(NewDocNo);
-
-                        } else if (temp["form"] == 'send_claim' || temp["form"] == 'send_rewash') {
-                            save_qc();
 
                         } else if (temp["form"] == 'save_qc') {
                             var siteCode = '<?php echo $siteCode ?>';
@@ -479,6 +449,9 @@ $genarray = json_decode($json, TRUE);
                         var message = "";
                         if (temp["form"] == 'choose_items') {
                             $("#choose_item").empty();
+                        }
+                        else if (temp["form"] == 'save_checklist') {
+                            
                         }
                     }
                 }
@@ -545,10 +518,10 @@ $genarray = json_decode($json, TRUE);
     <div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
         <div class="col-lg-9 col-md-10 col-sm-12">
             <div class="row py-1 px-3">
-                    <button onclick="claim_click()" id="claim-btn" class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#">
+                    <button onclick="create_claim()" id="claim-btn" class="btn btn-danger btn-block" type="button">
                         <i class="fas fa-times mr-1"></i><?php echo $array['sendClaim'][$language]; ?>
                     </button>
-                    <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
+                    <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button">
                         <i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
                     </button>
                 </div>
@@ -632,7 +605,34 @@ $genarray = json_decode($json, TRUE);
                     <div class="row w-100 d-flex align-items-center m-0">
                         <div class="col-12 text-right">
                             <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
-                            <button onclick="save_checkpass()" type="button" class="btn btn-success mx-2"><?php echo $genarray['save'][$language]; ?></button>
+                            <button onclick="save_checklist()" type="button" id="save_checklist" class="btn btn-success mx-2"><?php echo $genarray['save'][$language]; ?></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="md_detail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-truncate"><?php echo $array['Notthrough'][$language]; ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+                    <div id="item_code" hidden></div>
+                    <div class="font-weight-bold mb-2 item_name"></div>
+
+                    <div id="detail"></div>
+
+                </div>
+                <div class="modal-footer text-center">
+                    <div class="row w-100 d-flex align-items-center m-0">
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-block btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
                         </div>
                     </div>
                 </div>
@@ -640,7 +640,7 @@ $genarray = json_decode($json, TRUE);
         </div>
     </div>
 
-    <div class="modal fade" id="md_claim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="md_claim_rewash" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -652,29 +652,45 @@ $genarray = json_decode($json, TRUE);
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
                     <div id="item_code" hidden></div>
                     <div class="font-weight-bold mb-2 item_name"></div>
-                    <div id="question">
 
-                        <div id="item0" class="row alert alert-info mb-3 mx-2 p-0">
-                            <div class="row w-100 mx-2">
-                                <div class="d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7">
-                                    <div class="text-truncate font-weight-bold">12 X 12 สีขาว</div>
-                                </div>
-                                <div class="d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group pl-0">
-                                    <input onkeyup="cal_weight()" type="text" class="form-control rounded text-center bg-white my-2 mr-1 item old numonly" data-code="BHQLPPPUT200001" id="weight0" data-num="1" placeholder="0">
-                                    <div class="">จำนวน</div>
-                                </div>
+                    <div class="row alert alert-info mb-3 mx-2 p-0">
+                        <div class="text-truncate font-weight-bold ml-3 mt-2">ส่งเคลม</div>
+
+                        <div class="row w-100 mx-2">
+                            <div class="d-flex align-items-center col-md-8 col-7">
+                                <div class="text-truncate">Repair</div>
                             </div>
-                            <div class="row w-100 mx-4 pb-3">
-                                <select class="form-control">
-                                    <option value="0">เลือกความเสียหาย...</option>
-                                    <option value="1">Reject</option>
-                                    <option value="2">Repair</option>
-                                    <option value="3">Damage</option>
-                                </select>
+                            <div class="d-flex align-items-center col-md-4 col-5 pl-0">
+                                <input type="text" class="form-control rounded text-center bg-white my-2 mr-1 numonly">
+                                <div class="">จำนวน</div>
                             </div>
                         </div>
 
+                        <div class="row w-100 mx-2">
+                            <div class="d-flex align-items-center col-md-8 col-7">
+                                <div class="text-truncate">Damage</div>
+                            </div>
+                            <div class="d-flex align-items-center col-md-4 col-5 pl-0">
+                                <input type="text" class="form-control rounded text-center bg-white my-2 mr-1 numonly">
+                                <div class="">จำนวน</div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="row alert alert-info mb-3 mx-2 p-0">
+                        <div class="text-truncate font-weight-bold ml-3 mt-2">ส่งซักอีกครั้ง</div>
+
+                        <div class="row w-100 mx-2">
+                            <div class="d-flex align-items-center col-md-8 col-7">
+                                <div class="text-truncate">Rewash</div>
+                            </div>
+                            <div class="d-flex align-items-center col-md-4 col-5 pl-0">
+                                <input type="text" class="form-control rounded text-center bg-white my-2 mr-1 numonly" disabled>
+                                <div class="">จำนวน</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">

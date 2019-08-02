@@ -7,6 +7,7 @@
 
 <Checktopic><en>Check topic</en><th>หัวข้อตรวจสอบ</th></Checktopic>
 <Checkamount><en>Check amount</en><th>ตรวจสอบจำนวน</th></Checkamount>
+<Notthrough><en>Not through quality</en><th>ไม่ผ่านคุณภาพ</th></Notthrough>
 <sendClaim><en>Send claim </en><th>ส่งเคลม</th></sendClaim>
 
 </lang>
