@@ -20,7 +20,7 @@
 
                 WHERE   item.ItemCode = clean_detail.ItemCode
 
-                AND     clean_detail.DocNo = '$DocNo' ";
+                AND     clean_detail.DocNo = '$DocNo'";
         $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -98,7 +98,17 @@
         }
 
         if ($cnt > 0) {
+            if ($fail == 0) {
+                $Sql = "UPDATE clean_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+                mysqli_query($conn, $Sql);
+    
+                $Sql = "DELETE FROM qcchecklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+                mysqli_query($conn, $Sql);
+
+                $return['unfail'] = 1;
+            }
             $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+
         }
         else {
             $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,QCDate) VALUES ('$DocNo','$ItemCode','$pass','$fail',NOW())";
@@ -137,19 +147,20 @@
         }
 
         $Sql = "SELECT      qcquestion.Question,
-                            qcchecklist.QuestionId
+                            qcchecklist.QuestionId,
+                            qcchecklist.Qty
 
                 FROM        qcchecklist,qcquestion
 
                 WHERE       DocNo = '$DocNo'
                 AND         ItemCode = '$ItemCode'
                 AND         qcquestion.CodeId=qcchecklist.QuestionId";
-        
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['Question']	=  $Result['Question'];
-            $return[$count]['IsStatus']	=  $Result['IsStatus'];
             $return[$count]['QuestionId']	=  $Result['QuestionId'];
+            $return[$count]['Qty']	=  $Result['Qty'];
             $count++;
             $have = 1;
             $success = 1;
@@ -173,24 +184,22 @@
                                         (
                                             DocNo ,
                                             ItemCode,
-                                            QCDate,
                                             QuestionId
                                         )
                         
                             VALUES      (   '$DocNo',
-                                            '$ItemCode', 
-                                            NOW() , 
+                                            '$ItemCode',
                                             $qid
                                         )    ";
                 mysqli_query($conn,$Sql_ins_checklist);
             }
+            $return['Sql'] = $Sql_ins_checklist;
 
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)){
                 $return[$count]['Question']	=  $Result['Question'];
-                $return[$count]['IsStatus']	=  $Result['IsStatus'];
                 $return[$count]['QuestionId']	=  $Result['QuestionId'];
-                $return[$count]['count'] = $count;
+                $return[$count]['Qty']	=  $Result['Qty'];
                 $count++;
                 $success = 1;
             }
@@ -384,6 +393,87 @@
         }
     }
 
+    function save_checklist($conn, $DATA){
+        $DocNo=$DATA["DocNo"];
+        $ItemCode=$DATA["ItemCode"];
+        $question=$DATA["question"];
+        $amount=$DATA["amount"];
+
+        $arr_question = explode(",", $question);
+        $arr_amount = explode(",", $amount);
+
+        $cnt_question = sizeof($arr_question, 0);
+        $return['cnt_question'] = $cnt_question;
+        $count = 0;
+
+        $claim = 0;
+        $rewash = 0;
+
+        for ($i = 0; $i < $cnt_question; $i++){
+            $Sql = "SELECT COUNT(QuestionId) AS cnt FROM qcchecklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND QuestionId = '$arr_question[$i]'";
+            $return['Sql'] = $Sql;
+            $meQuery = mysqli_query($conn,$Sql);
+            while ($Result = mysqli_fetch_assoc($meQuery)){
+                $cnt = $Result['cnt'];
+            }
+
+            if ($cnt > 0) {
+                $Sql = "UPDATE qcchecklist SET Qty = $arr_amount[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND QuestionId = '$arr_question[$i]'";
+            }
+            else {
+                $Sql = "INSERT INTO	qcchecklist(DocNo,ItemCode,QuestionId,Qty) VALUES ('$DocNo','$ItemCode','$arr_question[$i]',$arr_amount[$i])";
+            }
+            $return['Sql'] = $Sql;
+
+            if (mysqli_query($conn, $Sql)){
+                $count++;
+            }
+
+            $Sql = "SELECT CopeMethod FROM qcquestion WHERE CodeId = '$arr_question[$i]'";
+            $return['Sql'] = $Sql;
+            $meQuery = mysqli_query($conn,$Sql);
+            while ($Result = mysqli_fetch_assoc($meQuery)){
+                $CopeMethod = $Result['CopeMethod'];
+            }
+
+            if ($CopeMethod == 1) { // Claim
+                $claim = 1;
+            }
+            else if ($CopeMethod == 2) { // Rewash
+                $rewash = 1;
+            }
+        }
+
+        $checklist = 0;
+        if ($claim == 1 && $rewash == 1) { // Claim & Rewash
+            $checklist = 3;
+        }
+        else if ($claim == 0 && $rewash == 1) { // Rewash
+            $checklist = 2;
+        }
+        else if ($claim == 1 && $rewash == 0) { // Claim
+            $checklist = 1;
+        }
+        
+        $Sql = "UPDATE clean_detail SET IsCheckList = $checklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+        $return['Sql'] = $Sql;
+        mysqli_query($conn, $Sql);
+        if ($count == $cnt_question) {
+            $return['status'] = "success";
+            $return['form'] = "save_checklist";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+                
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "save_checklist";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function claim_detail($conn, $DATA){
         $DocNo=$DATA["DocNo"];
         $ItemCode=$DATA["ItemCode"];
@@ -397,9 +487,44 @@
         die;
     }
     
+    function show_claim_detail($conn, $DATA){
+        $DocNo=$DATA["DocNo"];
+        $ItemCode=$DATA["ItemCode"];
+        $count = 0;
+
+        $Sql = "SELECT qcquestion.Question,qcchecklist.Qty FROM qcchecklist 
+                INNER JOIN qcquestion ON qcchecklist.QuestionId = qcquestion.CodeId 
+                WHERE DocNo= '$DocNo' AND ItemCode = '$ItemCode'";
+        $return['Sql'] = $Sql;
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return[$count]['Question'] = $Result['Question'];
+            $return[$count]['Qty'] = $Result['Qty'];
+            $count++;
+        }
+        $return['cnt'] = $count;
+        
+        if ($count > 0) {
+            $return['status'] = "success";
+            $return['form'] = "show_claim_detail";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+                
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "show_claim_detail";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function create_claim($conn, $DATA){
         $cleanDocNo=$DATA["DocNo"];
         $userid=$DATA["Userid"];
+        $count = 0;
+        $Fail = 0;
 
         $Sql = "SELECT      department.HptCode,
                             clean.DepCode
@@ -415,373 +540,273 @@
         $hotpCode = $Result["HptCode"];
         $deptCode = $Result["DepCode"];
 
-        $Sql = "SELECT      CONCAT('CM',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
-                            LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
-                            DATE(NOW()) AS DocDate,
-                            CURRENT_TIME() AS RecNow
-                FROM        claim
-                WHERE       DocNo Like CONCAT('CM',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                AND         HptCode = '$hotpCode'
-                ORDER BY    DocNo DESC LIMIT 1";
-
+        $Sql = "SELECT ItemCode,UnitCode,Qty,Weight,IsCheckList FROM clean_detail WHERE DocNo = '$cleanDocNo'";
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $DocNo = $Result['DocNo'];
-            $count = 1;
-        }
-        $return['NewDocNo'] = $DocNo;
-
-        if ($count == 1) {
-
-            // $Sql = "DELETE FROM claim WHERE DocNo = '$DocNo'";
-            // $meQuery = mysqli_query($conn, $Sql);
-
-            $Sql = "INSERT INTO     claim
-                                    ( 
-                                        HptCode,
-                                        DepCode,
-                                        DocNo,
-                                        DocDate,
-                                        RefDocNo,
-                                        TaxNo,
-                                        TaxDate,
-                                        DiscountPercent,
-                                        DiscountBath,
-                                        Total,
-                                        IsCancel,
-                                        Detail,
-                                        Modify_Code,
-                                        Modify_Date
-                                    )
-                    VALUES          ( 
-                                        '$hotpCode',
-                                        $deptCode,
-                                        '$DocNo',
-                                        DATE(NOW()),
-                                        '$cleanDocNo',
-                                        null,
-                                        DATE(NOW()),
-                                        0,0,
-                                        0,0,'',
-                                        $userid,
-                                        NOW()
-                                    )";
-            $meQuery = mysqli_query($conn, $Sql);
-            $return['claim'] = $Sql;
-            
-            $Sql = "INSERT INTO     daily_request
-                                    (
-                                        DocNo,
-                                        DocDate,
-                                        DepCode,
-                                        RefDocNo,
-                                        Detail,
-                                        Modify_Code,
-                                        Modify_Date
-                                    )
-                    VALUES          (
-                                        '$DocNo',
-                                        DATE(NOW()),
-                                        $deptCode,
-                                        '',
-                                        'Claim',
-                                        $userid,
-                                        DATE(NOW())
-                                    )";
-
-            $meQuery = mysqli_query($conn, $Sql);
-
-            $return['status'] = "success";
-            $return['form'] = "create_claim";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-             
-        } else {
-            $return['status'] = "failed";
-            $return['form'] = "create_claim";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
-    }
-
-    function send_claim($conn, $DATA){
-        $DocNo=$DATA["DocNo"];
-
-        $arr_claim_code = $DATA['claim_code'];
-        $arr_claim_qty = $DATA['claim_qty'];
-        $arr_claim_weight = $DATA['claim_weight'];
-        $arr_claim_unit = $DATA['claim_unit'];
-
-        $claim_code = explode(",", $arr_claim_code);
-        $claim_qty = explode(",", $arr_claim_qty);
-        $claim_weight = explode(",", $arr_claim_weight);
-        $claim_unit = explode(",", $arr_claim_unit);
-
-        $cnt_claim = sizeof($claim_code, 0);
-        $return['cnt_claim'] = $cnt_claim;
-        $count = 0;
-
-        for ($i = 0; $i < $cnt_claim; $i++) {
-            $Sql = "    SELECT          COUNT(*) as Cnt
-                        FROM            claim_detail
-
-                        WHERE           claim_detail.DocNo = '$DocNo'
-                        AND             claim_detail.ItemCode = '$claim_code[$i]'";
-
-            $meQuery = mysqli_query($conn, $Sql);
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $chkUpdate = $Result['Cnt'];
+            $ItemCode[$count] = $Result['ItemCode'];
+            $UnitCode[$count] = $Result['UnitCode'];
+            $Qty[$count] = $Result['Qty'];
+            $Weight[$count] = $Result['Weight'];
+            $CheckList[$count] = $Result['IsCheckList'];
+            $return[$count]['count'] = $count;
+            $return[$count]['ItemCode'] = $ItemCode[$count];
+            $return[$count]['CheckList'] = $CheckList[$count];
+            if ($CheckList[$count] == 0) { // -------------- Pass -------------- 
+                
             }
+            else if ($CheckList[$count] == 1) { // -------------- Claim -------------- 
+                $itemCode = $ItemCode[$count];
+                $unitCode = $UnitCode[$count];
+                $qty = $Qty[$count];
+                $weight = $Weight[$count];
 
-            if ($chkUpdate == 0) {
-                $Sql = "    INSERT INTO     claim_detail
-                                            (
-                                                DocNo,
-                                                ItemCode,
-                                                UnitCode1,
-                                                UnitCode2,
-                                                Qty1,
-                                                Qty2,
-                                                Weight,
-                                                IsCancel,
-                                                Price,
-                                                Total
-                                            )
-                            VALUES
-                                            (
-                                                '$DocNo',
-                                                '$claim_code[$i]',
-                                                $claim_unit[$i],
-                                                $claim_unit[$i],
-                                                $claim_qty[$i],
-                                                $claim_qty[$i],
-                                                $claim_weight[$i],
-                                                0,0,0
-                                            )";
+                // สร้างเอกสาร claim
+                $Sql_claim = "SELECT      CONCAT('CM',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+                                        LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
+                            FROM        claim
+                            WHERE       DocNo Like CONCAT('CM',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                            AND         HptCode = '$hotpCode'
+                            ORDER BY    DocNo DESC LIMIT 1";
+                $meQuery2 = mysqli_query($conn, $Sql_claim);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $DocNo = $Result['DocNo'];
+                    $count_claim = 1;
+                }
+
+                if ($count_claim == 1) {
+                    $Sql_claim = "INSERT INTO claim(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW())";
+
+                    mysqli_query($conn, $Sql_claim);
                     
-                mysqli_query($conn, $Sql);
-                $count++;
-                $return[$i]['claim_detail'] = $Sql;
-            } else {
-                $Sql = "    UPDATE      claim_detail
-
-                            SET         Qty1 = $claim_qty[$i],
-                                        Qty2 = $claim_qty[$i],
-                                        Weight = $claim_weight[$i]
-
-                            WHERE       DocNo = '$DocNo'
-                            AND         ItemCode = '$claim_code[$i]'";
-
-                mysqli_query($conn, $Sql);
-                $count++;
-                $return[$i]['claim_detail'] = $Sql;
-            }
-        }
-
-        if ($count == $cnt_claim) {
-            $return['status'] = "success";
-            $return['form'] = "send_claim";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        } else {
-            $return['status'] = "failed";
-            $return['form'] = "send_claim";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
-    }
-
-    function create_rewash($conn, $DATA){
-        $cleanDocNo=$DATA["DocNo"];
-        $userid=$DATA["Userid"];
-
-        $Sql = "SELECT      department.HptCode,
-                            clean.DepCode
-
-                FROM        clean,department
-
-                WHERE       clean.DocNo = '$cleanDocNo'
-                AND         department.DepCode=clean.DepCode";
-
-        $meQuery = mysqli_query($conn, $Sql);
-        $Result = mysqli_fetch_assoc($meQuery);
+                    $Sql_claim = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Claim',$userid,DATE(NOW()))";
         
-        $hotpCode = $Result["HptCode"];
-        $deptCode = $Result["DepCode"];
+                    mysqli_query($conn, $Sql_claim);
+                }
+                else {
+                    $Fail++;
+                }
 
-        $Sql = "SELECT      CONCAT('RW',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
-                            LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
-                            DATE(NOW()) AS DocDate,
-                            CURRENT_TIME() AS RecNow
-                FROM        rewash
-                WHERE       DocNo Like CONCAT('RW',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                AND         HptCode = '$hotpCode'
-                ORDER BY    DocNo DESC LIMIT 1";
+                // สร้างเอกสาร claim_detail
+                $Sql_claim = "SELECT          COUNT(*) as Cnt
+                            FROM            claim_detail
 
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $DocNo = $Result['DocNo'];
-            $count = 1;
+                            WHERE           claim_detail.DocNo = '$DocNo'
+                            AND             claim_detail.ItemCode = '$itemCode'";
+                $return['Sql_claim 1'] = $Sql_claim;
+
+                $meQuery2 = mysqli_query($conn, $Sql_claim);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $chkUpdate = $Result['Cnt'];
+                }
+
+                if ($chkUpdate == 0) {
+                    $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+                                            VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
+                    $return['Sql_claim'] = $Sql_claim;
+                        
+                    mysqli_query($conn, $Sql_claim);
+                } else {
+                    $Sql_claim = "    UPDATE claim_detail SET Qty1 = $qty,Qty2 = 0,Weight = $weight 
+
+                                WHERE       DocNo = '$DocNo'
+                                AND         ItemCode = '$itemCode'";
+                    $return['Sql_claim'] = $Sql_claim;
+
+                    mysqli_query($conn, $Sql_claim);
+                }
+            }
+            else if ($CheckList[$count] == 2) { // -------------- Rewash -------------- 
+                $itemCode = $ItemCode[$count];
+                $unitCode = $UnitCode[$count];
+                $qty = $Qty[$count];
+                $weight = $Weight[$count];
+
+                // สร้างเอกสาร rewash
+                $Sql_rewash = "SELECT      CONCAT('RW',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+                                    LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
+                        FROM        rewash
+                        WHERE       DocNo Like CONCAT('RW',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                        AND         HptCode = '$hotpCode'
+                        ORDER BY    DocNo DESC LIMIT 1";
+
+                $meQuery2 = mysqli_query($conn, $Sql_rewash);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $DocNo = $Result['DocNo'];
+                    $count_rewash = 1;
+                }
+
+                if ($count_rewash == 1) {
+                    $Sql_rewash = "INSERT INTO rewash(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW())";
+
+                    mysqli_query($conn, $Sql_rewash);
+                    
+                    $Sql_rewash = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Rewash',$userid,DATE(NOW()))";
+        
+                    mysqli_query($conn, $Sql_rewash);
+                }
+                else {
+                    $Fail++;
+                }
+
+                // สร้างเอกสาร rewash_detail
+                $Sql_rewash = "SELECT          COUNT(*) as Cnt FROM rewash_detail
+
+                                WHERE           rewash_detail.DocNo = '$DocNo'
+                                AND             rewash_detail.ItemCode = '$ItemCode[$count]'";
+
+                $meQuery2 = mysqli_query($conn, $Sql_rewash);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $chkUpdate = $Result['Cnt'];
+                }
+
+                if ($chkUpdate == 0) {
+                    $Sql_rewash = "    INSERT INTO rewash_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+                                            VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
+                        
+                    mysqli_query($conn, $Sql_rewash);
+                } else {
+                    $Sql_rewash = "UPDATE rewash_detail SET Qty1 = $qty,Qty2 = 0,Weight = $weight 
+
+                                    WHERE       DocNo = '$DocNo'
+                                    AND         ItemCode = '$itemCode'";
+
+                    mysqli_query($conn, $Sql_rewash);
+                }
+            }
+            else if ($CheckList[$count] == 3) { // -------------- Claim & Rewash -------------- 
+                $itemCode = $ItemCode[$count];
+                $unitCode = $UnitCode[$count];
+                $qty = $Qty[$count];
+                $weight = $Weight[$count];
+
+                // สร้างเอกสาร claim
+                $Sql_claim = "SELECT      CONCAT('CM',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+                                        LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
+                            FROM        claim
+                            WHERE       DocNo Like CONCAT('CM',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                            AND         HptCode = '$hotpCode'
+                            ORDER BY    DocNo DESC LIMIT 1";
+                $meQuery2 = mysqli_query($conn, $Sql_claim);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $DocNo = $Result['DocNo'];
+                    $count_claim = 1;
+                }
+
+                if ($count_claim == 1) {
+                    $Sql_claim = "INSERT INTO claim(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW())";
+
+                    mysqli_query($conn, $Sql_claim);
+                    
+                    $Sql_claim = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Claim',$userid,DATE(NOW()))";
+        
+                    mysqli_query($conn, $Sql_claim);
+                }
+                else {
+                    $Fail++;
+                }
+
+                // สร้างเอกสาร claim_detail
+                $Sql_claim = "SELECT          COUNT(*) as Cnt
+                            FROM            claim_detail
+
+                            WHERE           claim_detail.DocNo = '$DocNo'
+                            AND             claim_detail.ItemCode = '$itemCode'";
+                $return['Sql_claim 1'] = $Sql_claim;
+
+                $meQuery2 = mysqli_query($conn, $Sql_claim);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $chkUpdate = $Result['Cnt'];
+                }
+
+                if ($chkUpdate == 0) {
+                    $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+                                            VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
+                    $return['Sql_claim'] = $Sql_claim;
+                        
+                    mysqli_query($conn, $Sql_claim);
+                } else {
+                    $Sql_claim = "    UPDATE claim_detail SET Qty1 = $qty,Qty2 = 0,Weight = $weight 
+
+                                WHERE       DocNo = '$DocNo'
+                                AND         ItemCode = '$itemCode'";
+                    $return['Sql_claim'] = $Sql_claim;
+
+                    mysqli_query($conn, $Sql_claim);
+                }
+
+                // สร้างเอกสาร rewash
+                $Sql_rewash = "SELECT      CONCAT('RW',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+                                    LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
+                        FROM        rewash
+                        WHERE       DocNo Like CONCAT('RW',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                        AND         HptCode = '$hotpCode'
+                        ORDER BY    DocNo DESC LIMIT 1";
+
+                $meQuery2 = mysqli_query($conn, $Sql_rewash);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $DocNo = $Result['DocNo'];
+                    $count_rewash = 1;
+                }
+
+                if ($count_rewash == 1) {
+                    $Sql_rewash = "INSERT INTO rewash(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW())";
+
+                    mysqli_query($conn, $Sql_rewash);
+                    
+                    $Sql_rewash = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Rewash',$userid,DATE(NOW()))";
+        
+                    mysqli_query($conn, $Sql_rewash);
+                }
+                else {
+                    $Fail++;
+                }
+
+                // สร้างเอกสาร rewash_detail
+                $Sql_rewash = "SELECT          COUNT(*) as Cnt FROM rewash_detail
+
+                                WHERE           rewash_detail.DocNo = '$DocNo'
+                                AND             rewash_detail.ItemCode = '$ItemCode[$count]'";
+
+                $meQuery2 = mysqli_query($conn, $Sql_rewash);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $chkUpdate = $Result['Cnt'];
+                }
+
+                if ($chkUpdate == 0) {
+                    $Sql_rewash = "    INSERT INTO rewash_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+                                            VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
+                        
+                    mysqli_query($conn, $Sql_rewash);
+                } else {
+                    $Sql_rewash = "UPDATE rewash_detail SET Qty1 = $qty,Qty2 = 0,Weight = $weight 
+
+                                    WHERE       DocNo = '$DocNo'
+                                    AND         ItemCode = '$itemCode'";
+
+                    mysqli_query($conn, $Sql_rewash);
+                }
+            }
+            $count++;
         }
-        $return['NewDocNo'] = $DocNo;
-        if ($count == 1) {
-            $Sql = "INSERT INTO     rewash
-                                    ( 
-                                        HptCode,
-                                        DepCode,
-                                        DocNo,
-                                        DocDate,
-                                        RefDocNo,
-                                        TaxNo,
-                                        TaxDate,
-                                        DiscountPercent,
-                                        DiscountBath,
-                                        Total,
-                                        IsCancel,
-                                        Detail,
-                                        Modify_Code,
-                                        Modify_Date
-                                    )
-                    VALUES          ( 
-                                        '$hotpCode',
-                                        $deptCode,
-                                        '$DocNo',
-                                        DATE(NOW()),
-                                        '$cleanDocNo',
-                                        null,
-                                        DATE(NOW()),
-                                        0,0,
-                                        0,0,'',
-                                        $userid,
-                                        NOW()
-                                    )";
-            $meQuery = mysqli_query($conn, $Sql);
-            $return['rewash'] = $Sql;
-
-            $Sql = "INSERT INTO     daily_request
-                                    (
-                                        DocNo,
-                                        DocDate,
-                                        DepCode,
-                                        RefDocNo,
-                                        Detail,
-                                        Modify_Code,
-                                        Modify_Date
-                                    )
-                    VALUES          (
-                                        '$DocNo',
-                                        DATE(NOW()),
-                                        $deptCode,
-                                        '',
-                                        'Rewash',
-                                        $userid,
-                                        DATE(NOW())
-                                    )";
-
-            $meQuery = mysqli_query($conn, $Sql);
-
+        if ($Fail == 0) {
             $return['status'] = "success";
-            $return['form'] = "create_rewash";
+            $return['form'] = "create_claim";
             echo json_encode($return);
             mysqli_close($conn);
             die;
              
         } else {
             $return['status'] = "failed";
-            $return['form'] = "create_rewash";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
-    }
-
-    function send_rewash($conn, $DATA){
-        $DocNo=$DATA["DocNo"];
-
-        $arr_rewash_code = $DATA['rewash_code'];
-        $arr_rewash_qty = $DATA['rewash_qty'];
-        $arr_rewash_weight = $DATA['rewash_weight'];
-        $arr_rewash_unit = $DATA['rewash_unit'];
-
-        $rewash_code = explode(",", $arr_rewash_code);
-        $rewash_qty = explode(",", $arr_rewash_qty);
-        $rewash_weight = explode(",", $arr_rewash_weight);
-        $rewash_unit = explode(",", $arr_rewash_unit);
-
-        $cnt_rewash = sizeof($rewash_code, 0);
-        $count = 0;
-
-        for ($i = 0; $i < $cnt_rewash; $i++) {
-            $Sql = "    SELECT          COUNT(*) as Cnt
-                        FROM            rewash_detail
-
-                        WHERE           rewash_detail.DocNo = '$DocNo'
-                        AND             rewash_detail.ItemCode = '$rewash_code[$i]'";
-
-            $meQuery = mysqli_query($conn, $Sql);
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $chkUpdate = $Result['Cnt'];
-            }
-
-            if ($chkUpdate == 0) {
-                $Sql = "    INSERT INTO     rewash_detail
-                                            (
-                                                    DocNo,
-                                                    ItemCode,
-                                                    UnitCode1,
-                                                    UnitCode2,
-                                                    Qty1,
-                                                    Qty2,
-                                                    Weight,
-                                                    IsCancel,
-                                                    Price,
-                                                    Total,
-                                            )
-                            VALUES
-                                            (
-                                                    '$DocNo',
-                                                    '$rewash_code[$i]',
-                                                    $rewash_unit[$i],
-                                                    $rewash_unit[$i],
-                                                    $rewash_qty[$i],
-                                                    $rewash_qty[$i],
-                                                    $rewash_weight[$i],
-                                                    0,0,0,
-
-                                            )";
-                    
-                mysqli_query($conn, $Sql);
-                $count++;
-                $return['rewash_detail'] = $Sql;
-            } else {
-                $Sql = "    UPDATE      rewash_detail
-
-                            SET         Qty1 = $rewash_qty[$i],
-                                        Qty2 = $rewash_qty[$i],
-                                        Weight = $rewash_weight[$i]
-
-                            WHERE       DocNo = '$DocNo'
-                            AND         ItemCode = '$rewash_code[$i]'";
-
-                mysqli_query($conn, $Sql);
-                $count++;
-                $return['rewash_detail'] = $Sql;
-            }
-        }
-
-        if ($count == $cnt_rewash) {
-            $return['status'] = "success";
-            $return['form'] = "send_rewash";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        } else {
-            $return['status'] = "failed";
-            $return['form'] = "send_rewash";
+            $return['form'] = "create_claim";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -792,12 +817,7 @@
         $pDocNo = $DATA["DocNo"];
 
         //get number of QC pass
-        $Sql = "    SELECT      COUNT(*) AS pNum
-
-                    FROM	    clean_detail
-                                    
-                    WHERE       DocNo= '$pDocNo'
-                    AND         IsCheckList=0";
+        $Sql = "SELECT COUNT(*) AS pNum FROM clean_detail WHERE DocNo= '$pDocNo' AND IsCheckList = 0";
             
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
@@ -805,36 +825,23 @@
         $pNum = $Result['pNum'];
 
         //get number of all item
-        $Sql = "    SELECT      COUNT(*) AS itemNum
-
-                    FROM	    clean_detail
-                        
-                    WHERE       DocNo= '$pDocNo'";
+        $Sql = "SELECT COUNT(*) AS itemNum FROM clean_detail WHERE DocNo= '$pDocNo'";
         
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
 
         $itemNum = $Result['itemNum'];
 
-//0=ยังไม่ได้ตรวจสอบ QC , 1=ผ่าน QC , 2=ส่งเครม
-
+        //0=ยังไม่ได้ตรวจสอบ QC , 1=ผ่าน QC , 2=ส่งเครม
 
         if($pNum==$itemNum){
 
-//IsCheckList = 1 QC pass all  
-            $Sql = "    UPDATE      clean
-                
-            SET         IsCheckList = 1
-                
-            WHERE       DocNo= '$pDocNo'";
+        //IsCheckList = 1 QC pass all  
+            $Sql = "UPDATE clean SET IsCheckList = 1 WHERE DocNo= '$pDocNo'";
 
-//IsCheckList = 2 some send claim
+        //IsCheckList = 2 some send claim
         }else{
-            $Sql = "    UPDATE      clean
-                
-            SET         IsCheckList = 2
-                
-            WHERE       DocNo= '$pDocNo'";
+            $Sql = "UPDATE clean SET IsCheckList = 2 WHERE DocNo= '$pDocNo'";
         }
         $return['Sql'] = $Sql;
 
@@ -875,8 +882,14 @@
         else if ($DATA['STATUS'] == 'close_question') {
             close_question($conn, $DATA);
         }
+        else if ($DATA['STATUS'] == 'save_checklist') {
+            save_checklist($conn, $DATA);
+        }
         else if ($DATA['STATUS'] == 'claim_detail') {
             claim_detail($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'show_claim_detail') {
+            show_claim_detail($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'create_claim') {
             create_claim($conn, $DATA);
