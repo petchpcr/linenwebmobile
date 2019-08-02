@@ -59,6 +59,12 @@
 			}
         }
 
+		function make_char() {
+            $('.nonspa').on('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');; //<-- replace all other than given set of values
+            });
+        }
+
         function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
@@ -168,13 +174,13 @@
 			<div class="mb-3" align="center"><img src="../img/logo.png" width="240" height="60" /></div>
 
 			<div class="form-group">
-				<label>User Name :</label>
-				<input type="text" class="form-control" id="username">
+				<label>User Name :(<?php echo "http://{$_SERVER['HTTP_HOST']}";?>)</label>
+				<input type="text" onkeyup='make_char()' class="form-control nonspa" id="username">
 			</div>
 
 			<div class="form-group mb-4">
 				<label>Password :</label>
-				<input type="password" class="form-control" id="password">
+				<input type="password" onkeyup='make_char()' class="form-control nonspa" id="password">
 			</div>
 
 			<div class="form-group">
