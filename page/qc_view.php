@@ -66,7 +66,6 @@ $genarray = json_decode($json, TRUE);
         function make_number() {
             $('.numonly').on('input', function() {
                 this.value = this.value.replace(/[^0-9]/g, ''); //<-- replace all other than given set of values\
-                console.log(Number(this.value));
                 this.value = Number(this.value);
             });
         }
@@ -103,7 +102,6 @@ $genarray = json_decode($json, TRUE);
                     'STATUS': 'save_checkpass'
                 };
                 senddata(JSON.stringify(data));
-                console.log(ItemCode);
             }
             
         }
@@ -157,7 +155,7 @@ $genarray = json_decode($json, TRUE);
         }
 
         function save_checklist(){
-            var max = $("#qc_fail").val();
+            var max = Number($("#qc_fail").val());
             var over_max = 0;
             var sum_amount = 0;
             var DocNo = '<?php echo $DocNo ?>';
@@ -168,7 +166,7 @@ $genarray = json_decode($json, TRUE);
             for (var i = 0; i < sum; i++) {
                 var id = "#question"+i;
                 var QuestID = $(id).attr("data-question");
-                var Amount = $(id).val();
+                var Amount = Number($(id).val());
                 sum_amount = Number(sum_amount) + Number(Amount);
                 arr_question.push(QuestID);
                 arr_amount.push(Amount);
@@ -178,7 +176,6 @@ $genarray = json_decode($json, TRUE);
             }
             Title = "จำนวนไม่ถูกต้อง";
             Type = "warning";
-            console.log("max : "+max);
             if (over_max == 1) {
                 arr_question = [];
                 arr_amount = [];

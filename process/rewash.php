@@ -18,7 +18,6 @@
             $count++;
             $boolean = true;
         }
-        
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_dep";
@@ -96,7 +95,6 @@
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['From'] = "dirty";
 
             $DocNo = $Result['DocNo'];
             $Sql2 = "SELECT Signature FROM process WHERE DocNo = '$DocNo'";
@@ -109,35 +107,6 @@
             $boolean = true;
         }
 
-        $Sql = "SELECT
-                    rewash.DocNo,
-                    rewash.IsReceive,
-                    rewash.IsProcess,
-                    rewash.IsStatus,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName
-                FROM rewash
-                INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND rewash.DocDate LIKE '%$search%'
-                ORDER BY rewash.DocNo DESC";
-        $return['sql 2'] = $Sql;
-
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DocNo'] = $Result['DocNo'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $return[$count]['HptName'] = $Result['HptName'];
-            $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['From'] = "rewash";
-
-            $count++;
-            $boolean = true;
-        }
         
         if ($boolean) {
             $return['status'] = "success";
@@ -171,7 +140,8 @@
                     department.DepName,
                     site.HptCode,
                     site.HptName
-                FROM dirty
+                FROM
+                    dirty
                 INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
@@ -191,7 +161,6 @@
             $count++;
             $boolean = true;
         }
-
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_doc";
@@ -210,10 +179,7 @@
     function confirm_yes($conn, $DATA){
         $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
-        $From = $DATA["From"];
-        $return['From'] = $From;
-        $Sql = "UPDATE $From SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
-        $return['Sql'] = $Sql;
+        $Sql = "UPDATE dirty SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn, $Sql)){
             $return['DocNo'] = $DocNo;

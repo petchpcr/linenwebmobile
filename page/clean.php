@@ -102,8 +102,8 @@
         }
 
         function add_clean() {
-            var siteCode = "<?php echo $siteCode?>";
-            var Menu = '<?php echo $Menu;?>';
+            var siteCode = "<?php echo $siteCode ?>";
+            var Menu = '<?php echo $Menu ?>';
             var slt = $("#DocName").val();
             //var DepCode = $("#DepName").val(); 
             //window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)

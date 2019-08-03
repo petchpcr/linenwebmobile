@@ -6,6 +6,7 @@
     function load_process($conn, $DATA){
         $count = 0;
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $boolean = false;
         $Sql = "SELECT
                     process.DocNo,
@@ -28,8 +29,8 @@
                     department.HptCode
                 FROM
                     process
-                INNER JOIN dirty ON dirty.DocNo = process.DocNo
-                INNER JOIN department ON department.DepCode = dirty.DepCode
+                INNER JOIN $From ON $From.DocNo = process.DocNo
+                INNER JOIN department ON department.DepCode = $From.DepCode
                 WHERE process.DocNo = '$DocNo'";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
@@ -115,6 +116,7 @@
 
     function end_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $boolean = false;
 
         $Sql = "UPDATE process SET WashEndTime = NOW() WHERE DocNo = '$DocNo'";
@@ -136,7 +138,7 @@
             $Sql = "UPDATE process SET WashUseTime = '$UseTime',IsStatus = 2 WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
-            $Sql = "UPDATE dirty SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
+            $Sql = "UPDATE $From SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
             mysqli_query($conn,$Sql);
 
             $return['status'] = "success";
@@ -260,6 +262,7 @@
         $SiteCode = $DATA["siteCode"];
         $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $boolean = false;
 
         $Sql = "UPDATE process SET SendEndTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
@@ -285,7 +288,7 @@
             $Sql = "UPDATE process SET SendUseTime = '$UseTime',SendOverTime = '$Overtime' WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
-            $Sql = "UPDATE dirty SET IsProcess = 3 WHERE DocNo = '$DocNo'";
+            $Sql = "UPDATE $From SET IsProcess = 3 WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
             if (mysqli_query($conn,$Sql)) {

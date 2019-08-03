@@ -540,7 +540,10 @@
         $hotpCode = $Result["HptCode"];
         $deptCode = $Result["DepCode"];
 
-        $Sql = "SELECT ItemCode,UnitCode,Qty,Weight,IsCheckList FROM clean_detail WHERE DocNo = '$cleanDocNo'";
+        $Sql = "SELECT clean_detail.ItemCode,clean_detail.UnitCode,clean_detail.Qty,clean_detail.Weight,clean_detail.IsCheckList,clean.FacCode 
+                FROM clean_detail
+                INNER JOIN clean ON clean_detail.DocNo = clean.DocNo 
+                WHERE clean_detail.DocNo = '$cleanDocNo'";
         $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -549,9 +552,8 @@
             $Qty[$count] = $Result['Qty'];
             $Weight[$count] = $Result['Weight'];
             $CheckList[$count] = $Result['IsCheckList'];
-            $return[$count]['count'] = $count;
-            $return[$count]['ItemCode'] = $ItemCode[$count];
-            $return[$count]['CheckList'] = $CheckList[$count];
+            $FacCode[$count] = $Result['FacCode'];
+            
             if ($CheckList[$count] == 0) { // -------------- Pass -------------- 
                 
             }
@@ -629,7 +631,6 @@
                                     LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
                         FROM        rewash
                         WHERE       DocNo Like CONCAT('RW',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                        AND         HptCode = '$hotpCode'
                         ORDER BY    DocNo DESC LIMIT 1";
 
                 $meQuery2 = mysqli_query($conn, $Sql_rewash);
@@ -639,8 +640,8 @@
                 }
 
                 if ($count_rewash == 1) {
-                    $Sql_rewash = "INSERT INTO rewash(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date)
-                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW())";
+                    $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus)
+                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1)";
 
                     mysqli_query($conn, $Sql_rewash);
                     
@@ -746,7 +747,6 @@
                                     LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
                         FROM        rewash
                         WHERE       DocNo Like CONCAT('RW',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                        AND         HptCode = '$hotpCode'
                         ORDER BY    DocNo DESC LIMIT 1";
 
                 $meQuery2 = mysqli_query($conn, $Sql_rewash);
@@ -756,8 +756,8 @@
                 }
 
                 if ($count_rewash == 1) {
-                    $Sql_rewash = "INSERT INTO rewash(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date)
-                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW())";
+                    $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus)
+                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1)";
 
                     mysqli_query($conn, $Sql_rewash);
                     

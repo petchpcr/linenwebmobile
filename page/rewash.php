@@ -104,19 +104,18 @@
             senddata(JSON.stringify(data));
         }
 
-        function show_process(DocNo,From){
+        function show_process(DocNo){
             var siteCode = '<?php echo $siteCode ?>';
             var Menu = '<?php echo $Menu ?>';
-
             if(Menu == 'dirty'){
                 window.location.href='dirty_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
             }
             else if(Menu == 'factory'){
-                window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&From='+From;
+                window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
             }
         }
 
-        function receive_zero(DocNo,From){
+        function receive_zero(DocNo){
             swal({
                 title: 'ยืนยันการรับเอกสาร',
                 text: "คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?",
@@ -127,14 +126,13 @@
                 confirmButtonText: 'ใช่',
                 cancelButtonText: 'ไม่ใช่'
                 }).then((result) => {
-                    confirm_yes(DocNo,From);
+                    confirm_yes(DocNo);
                 })
         }
 
-        function confirm_yes(DocNo,From){
+        function confirm_yes(DocNo){
             var data = {
                 'DocNo': DocNo,
-                'From': From,
                 'STATUS': 'confirm_yes'
             };
             senddata(JSON.stringify(data));
@@ -248,7 +246,7 @@
                                     status_line = "StatusLine_3";
                                 }
 
-                                var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\",'')' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
+                                var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                     Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
                                     Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                     Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
@@ -285,9 +283,9 @@
                                     }
                                 }
                                 
-                                var onclick = "show_process(\""+temp[i]['DocNo']+"\",\""+temp[i]['From']+"\")";
+                                var onclick = "show_process(\""+temp[i]['DocNo']+"\")";
                                 if (temp[i]['IsReceive'] == 0) {
-                                    onclick = "receive_zero(\""+temp[i]['DocNo']+"\",\""+temp[i]['From']+"\")";
+                                    onclick = "receive_zero(\""+temp[i]['DocNo']+"\")";
                                 }
 
                                 if(temp[i]['IsStatus'] > 0){
@@ -303,7 +301,7 @@
                         }
                     } 
                     else if(temp["form"] == 'confirm_yes'){
-                        show_process(temp['DocNo'],temp['From']);
+                        show_process(temp['DocNo']);
                     }
                     else if(temp["form"] == 'add_dirty'){
                         var Userid = temp['user']

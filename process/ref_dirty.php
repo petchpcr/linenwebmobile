@@ -38,6 +38,7 @@ function load_doc($conn, $DATA)
         $search = date('Y-m-d');
     }
     $siteCode = $DATA["siteCode"];
+    $return['siteCode'] = $siteCode;
     $boolean = false;
     $Sql = "SELECT
                     dirty.DocNo,

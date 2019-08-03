@@ -6,8 +6,10 @@
     if($Userid==""){
       header("location:../index.html");
     }
+    $siteCode = $_GET['siteCode'];
     $Menu = $_GET['Menu'];
     $DocNo = $_GET['DocNo'];
+    $From = $_GET['From'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -671,7 +673,9 @@
     }
 
     function add_signature(dataURL) {
+      var siteCode = "<?php echo $siteCode?>";
       var DocNo = "<?php echo $DocNo?>";
+      var From = "<?php echo $From?>";
       var SigCode = dataURL;
       document.getElementById("h_code").value = SigCode;
       var URL = '../process/signature.php';
@@ -679,12 +683,13 @@
         url: URL,
         method:"POST",
         data:{
-              DocNo:DocNo, 
+              DocNo:DocNo,
+              From:From,
               SigCode:SigCode
           },
           success: function (data) {
               var Menu = "<?php echo $Menu?>";
-              window.location.href='process.php?Menu='+Menu+'&DocNo='+DocNo;
+              window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&From='+From;
           }
       });
     }

@@ -7,8 +7,9 @@
     if($Userid==""){
       header("location:../index.html");
     }
+    $From = $_GET['From'];
     $Menu = $_GET['Menu'];
-    $siteCode = $_GET['siteCode'];    
+    $siteCode = $_GET['siteCode'];
     $DocNo = $_GET['DocNo'];
     $language = $_SESSION['lang'];
     $xml = simplexml_load_file('../xml/Language/fac_process_lang.xml');
@@ -46,8 +47,10 @@
 
         function load_process(){
             var DocNo = "<?php echo $DocNo?>";
+            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'load_process'
             };
             senddata(JSON.stringify(data));
@@ -71,8 +74,10 @@
         }
 
         function end_wash(DocNo){
+            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'end_wash'
             };
             senddata(JSON.stringify(data));
@@ -104,9 +109,11 @@
 
         function end_send(DocNo){
             var siteCode = '<?php echo $siteCode;?>';
+            var From = "<?php echo $From?>";
             var data = {
                 'siteCode': siteCode,
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'end_send'
             };
             senddata(JSON.stringify(data));
@@ -300,7 +307,8 @@
                                         closeOnCancel: true,
                                     }).then(result => {
                                         var Menu = "<?php echo $Menu?>";
-                                        window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo'];
+                                        var From = "<?php echo $From?>";
+                                        window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo']+'&From='+From;
                                     })
                                 }
                                 else{
