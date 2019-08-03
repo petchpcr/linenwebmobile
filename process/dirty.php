@@ -86,7 +86,6 @@
                 AND dirty.FacCode = '$FacCode'
                 AND dirty.IsStatus > 0 
                 ORDER BY dirty.DocNo DESC";
-        //$return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -123,7 +122,6 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.DocDate LIKE '%$search%'
                 ORDER BY rewash.DocNo DESC";
-        $return['sql 2'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -177,7 +175,6 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
                 ORDER BY dirty.DocNo DESC";
-        $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -213,7 +210,6 @@
         $From = $DATA["From"];
         $return['From'] = $From;
         $Sql = "UPDATE $From SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
-        $return['Sql'] = $Sql;
 
         if(mysqli_query($conn, $Sql)){
             $return['DocNo'] = $DocNo;
@@ -290,9 +286,8 @@
                                             NOW(),
                                             $FacCode
                                         )";
-
             mysqli_query($conn,$Sql);
-            $return['sql'] = $Sql;
+
             $Sql2 = "    INSERT INTO     daily_request
                                         (
                                             DocNo,
@@ -312,7 +307,6 @@
                                             $Userid,
                                             DATE(NOW())
                                         )";
-            $return['sql2'] = $Sql2;
             mysqli_query($conn, $Sql2);
             
             $return['user'] = $Userid;

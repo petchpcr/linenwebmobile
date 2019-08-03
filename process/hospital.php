@@ -38,7 +38,6 @@
                 FROM dirty 
                 INNER JOIN department ON dirty.DepCode = department.DepCode 
                 WHERE department.HptCode = '$siteCode'";
-        $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $cntDocNo = $Result['cnt'];

@@ -25,7 +25,6 @@
                 WHERE               DepCode='$DepCode'
                 AND                 item_stock.ItemCode=item.ItemCode
                 AND                 item.ItemName LIKE '%$Search%' ";
-        $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];
@@ -65,7 +64,6 @@
                 WHERE DocNo = '$DocNo'
                 AND	  item.ItemCode = dirty_detail.ItemCode
                 ORDER BY ItemName ASC";
-        $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -123,20 +121,17 @@
 
         for ($i = 0; $i < $cnt_del; $i++) {
             $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
-            $return[$i]['Delete'] = $Sql;
             mysqli_query($conn,$Sql);
         }
 
         for ($i = 0; $i < $cnt_old; $i++) {
             $Sql = "UPDATE dirty_detail SET Weight = $old_weight[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
-            $return[$i]['Update'] = $Sql;
             mysqli_query($conn,$Sql);
         }
 
         for ($i = 0; $i < $cnt_new; $i++) {
             $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
                     VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_qty[$i],$new_weight[$i]) ";
-            $return[$i]['Insert'] = $Sql;
             $return[$i]['Weight'] = $new_weight[$i];
             mysqli_query($conn,$Sql);
         }
@@ -147,7 +142,6 @@
         $total = $Result['total'];
 
         $Sql = "UPDATE dirty SET Total = $total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1 WHERE DocNo = '$DocNo'";
-        $return['Last Update'] = $Sql;
         mysqli_query($conn,$Sql);
 
         $return['status'] = "success";

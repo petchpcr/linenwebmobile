@@ -17,7 +17,6 @@ function checklogin($conn,$DATA)
             AND       IsActive = 0
             AND       (PmID=2 OR PmID=3 OR PmID=4)";
 
-    //$return['sql'] = $Sql;
     $meQuery = mysqli_query($conn,$Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
       $_SESSION['Userid'] = $Result['ID'];

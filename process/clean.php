@@ -50,7 +50,6 @@
                 AND department.DepCode = clean.DepCode AND department.DepCode = clean.DepCode
                 AND site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 ORDER BY clean.DocNo DESC";
-        $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

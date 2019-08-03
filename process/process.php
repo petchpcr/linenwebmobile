@@ -32,7 +32,6 @@
                 INNER JOIN $From ON $From.DocNo = process.DocNo
                 INNER JOIN department ON department.DepCode = $From.DepCode
                 WHERE process.DocNo = '$DocNo'";
-        $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return['DocNo'] = $Result['DocNo'];
@@ -126,7 +125,6 @@
 
                 FROM    process 
                 WHERE   DocNo = '$DocNo'";
-        $return['Sql'] = $Sql;
 
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -185,7 +183,6 @@
 
                 FROM    process 
                 WHERE   DocNo = '$DocNo'";
-        $return['Sql'] = $Sql;
 
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -275,7 +272,6 @@
                 WHERE   process.DocNo = '$DocNo'
                 AND     delivery_time.HptCode = '$SiteCode'
                 AND     delivery_time.FacCode = '$FacCode'";
-        $return['Sql'] = $Sql;
 
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

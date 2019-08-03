@@ -58,7 +58,6 @@
                 WHERE DocNo ='$DocNo'
                 AND users.ID = dirty.Modify_Code
                 AND users.HptCode = site.HptCode";
-        $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -81,7 +80,6 @@
                      item 
                 WHERE DocNo = '$DocNo'
                 AND	  item.ItemCode = dirty_detail.ItemCode";
-        $return['sql2'] = $Sql2;
 
         $meQuery2 = mysqli_query($conn, $Sql2);
         while ($Result = mysqli_fetch_assoc($meQuery2)) {

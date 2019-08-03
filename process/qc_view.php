@@ -21,7 +21,6 @@
                 WHERE   item.ItemCode = clean_detail.ItemCode
 
                 AND     clean_detail.DocNo = '$DocNo'";
-        $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -60,7 +59,6 @@
                         (SELECT pass FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Pass,
                         (SELECT fail FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Fail 
                 FROM clean_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return['ItemName']	=  $Result['itemname'];
@@ -91,7 +89,6 @@
         $pass = $DATA['pass'];
         $fail = $DATA['fail'];
         $Sql = "SELECT COUNT(ItemCode) AS cnt FROM qccheckpass WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $cnt	=  $Result['cnt'];
@@ -113,7 +110,6 @@
         else {
             $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,QCDate) VALUES ('$DocNo','$ItemCode','$pass','$fail',NOW())";
         }
-        $return['Sql'] = $Sql;
 
         if (mysqli_query($conn, $Sql)) {
             $return['ItemCode'] = $ItemCode;
@@ -155,7 +151,6 @@
                 WHERE       DocNo = '$DocNo'
                 AND         ItemCode = '$ItemCode'
                 AND         qcquestion.CodeId=qcchecklist.QuestionId";
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['Question']	=  $Result['Question'];
@@ -193,7 +188,6 @@
                                         )    ";
                 mysqli_query($conn,$Sql_ins_checklist);
             }
-            $return['Sql'] = $Sql_ins_checklist;
 
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)){
@@ -234,7 +228,6 @@
                     WHERE       DocNo= '$DocNo'
                     AND         ItemCode='$ItemCode'
                     AND         QuestionId='$question'";
-        $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
 
         if ($meQuery = mysqli_query($conn,$Sql)) {
@@ -310,7 +303,6 @@
 
             //all list num
             $qcqnum = $Result['qcqNum'];
-            $return['select QCnum'] = $Sql;
             //0=ผ่าน QC ,1=ส่งเครมบางส่วน , 2=ส่งเครมทั้งหมด ,3 = ส่งซักบางส่วน ,4 =ส่งซักทั้งหมด ,5= ส่งเคลมและซักบางส่วน,6= ส่งเคลมและซักทั้งหมด
 
             if($cnum==0){
@@ -411,7 +403,6 @@
 
         for ($i = 0; $i < $cnt_question; $i++){
             $Sql = "SELECT COUNT(QuestionId) AS cnt FROM qcchecklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND QuestionId = '$arr_question[$i]'";
-            $return['Sql'] = $Sql;
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)){
                 $cnt = $Result['cnt'];
@@ -423,14 +414,12 @@
             else {
                 $Sql = "INSERT INTO	qcchecklist(DocNo,ItemCode,QuestionId,Qty) VALUES ('$DocNo','$ItemCode','$arr_question[$i]',$arr_amount[$i])";
             }
-            $return['Sql'] = $Sql;
 
             if (mysqli_query($conn, $Sql)){
                 $count++;
             }
 
             $Sql = "SELECT CopeMethod FROM qcquestion WHERE CodeId = '$arr_question[$i]'";
-            $return['Sql'] = $Sql;
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)){
                 $CopeMethod = $Result['CopeMethod'];
@@ -456,7 +445,6 @@
         }
         
         $Sql = "UPDATE clean_detail SET IsCheckList = $checklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
-        $return['Sql'] = $Sql;
         mysqli_query($conn, $Sql);
         if ($count == $cnt_question) {
             $return['status'] = "success";
@@ -544,7 +532,6 @@
                 FROM clean_detail
                 INNER JOIN clean ON clean_detail.DocNo = clean.DocNo 
                 WHERE clean_detail.DocNo = '$cleanDocNo'";
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $ItemCode[$count] = $Result['ItemCode'];
@@ -597,7 +584,6 @@
 
                             WHERE           claim_detail.DocNo = '$DocNo'
                             AND             claim_detail.ItemCode = '$itemCode'";
-                $return['Sql_claim 1'] = $Sql_claim;
 
                 $meQuery2 = mysqli_query($conn, $Sql_claim);
                 while ($Result = mysqli_fetch_assoc($meQuery2)) {
@@ -607,7 +593,6 @@
                 if ($chkUpdate == 0) {
                     $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
                                             VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
-                    $return['Sql_claim'] = $Sql_claim;
                         
                     mysqli_query($conn, $Sql_claim);
                 } else {
@@ -615,7 +600,6 @@
 
                                 WHERE       DocNo = '$DocNo'
                                 AND         ItemCode = '$itemCode'";
-                    $return['Sql_claim'] = $Sql_claim;
 
                     mysqli_query($conn, $Sql_claim);
                 }
@@ -719,7 +703,6 @@
 
                             WHERE           claim_detail.DocNo = '$DocNo'
                             AND             claim_detail.ItemCode = '$itemCode'";
-                $return['Sql_claim 1'] = $Sql_claim;
 
                 $meQuery2 = mysqli_query($conn, $Sql_claim);
                 while ($Result = mysqli_fetch_assoc($meQuery2)) {
@@ -729,7 +712,6 @@
                 if ($chkUpdate == 0) {
                     $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
                                             VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
-                    $return['Sql_claim'] = $Sql_claim;
                         
                     mysqli_query($conn, $Sql_claim);
                 } else {
@@ -737,7 +719,6 @@
 
                                 WHERE       DocNo = '$DocNo'
                                 AND         ItemCode = '$itemCode'";
-                    $return['Sql_claim'] = $Sql_claim;
 
                     mysqli_query($conn, $Sql_claim);
                 }
@@ -843,7 +824,6 @@
         }else{
             $Sql = "UPDATE clean SET IsCheckList = 2 WHERE DocNo= '$pDocNo'";
         }
-        $return['Sql'] = $Sql;
 
         if ($meQuery = mysqli_query($conn,$Sql)) {
             $return['status'] = "success";

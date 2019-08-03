@@ -56,7 +56,6 @@ function load_doc($conn, $DATA)
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.IsStatus = 3
                 ORDER BY dirty.DocNo DESC";
-    $return['sql'] = $Sql;
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -153,7 +152,6 @@ function add_dirty($conn, $DATA)
                                         )";
 
         mysqli_query($conn, $Sql);
-        $return['sql'] = $Sql;
         $Sql2 = "    INSERT INTO     daily_request
                             (
                                 DocNo,
@@ -172,8 +170,7 @@ function add_dirty($conn, $DATA)
                                 'Clean',
                                 $Userid,
                                 DATE(NOW())
-        )";
-        $return['sql2'] = $Sql2;
+                            )";
         mysqli_query($conn, $Sql2);
 
         $return['user'] = $Userid;
