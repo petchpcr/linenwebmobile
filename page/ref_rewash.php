@@ -153,14 +153,14 @@
                             var status_text = "เสร็จสิ้น";
                             var status_line = "StatusLine_2";
 
-                            if(temp[i]['IsStatus'] == 1){
+                            // if(temp[i]['IsStatus'] == 1){
                                 var Str = "<button onclick='add_clean(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
                                     Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
                                     Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                     Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
 
                                 $("#document").append(Str);
-                            }
+                            // }
                             
                         }
                     }

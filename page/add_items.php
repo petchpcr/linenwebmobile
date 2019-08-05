@@ -257,12 +257,12 @@ $genarray = json_decode($json, TRUE);
             $(".old").each(function() {
                 var qtyid = $(this).attr("id")+'qty';
                 if (Menu == 'clean') {
-                    console.log($('#'+qtyid).val());
+                    // console.log($('#'+qtyid).val());
                     arr_old_Qty.push($('#'+qtyid).val());
                 }else{
                     arr_old_Qty.push(0);
                 }
-                console.log(qtyid);
+                // console.log(qtyid);
                 arr_old_UnitCode.push($(this).data("unit"));
                 var val = $(this).val();
                 var weight = 0;
@@ -482,7 +482,12 @@ $genarray = json_decode($json, TRUE);
                         var message = "";
                         if (temp["form"] == 'choose_items') {
                             $("#choose_item").empty();
-                        } else if (temp["form"] == 'add_item') {
+                        }
+                        else if (temp["form"] == 'load_items') {
+                            choose_items();
+                            $("#md_item").modal('show');
+                        }
+                        else if (temp["form"] == 'add_item') {
                             alert("error ADD ITEM");
                         }
                     }

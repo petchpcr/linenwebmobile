@@ -410,7 +410,7 @@ $genarray = json_decode($json, TRUE);
 
                         } else if (temp["form"] == 'save_checkpass') {
                             $("#md_checkpass").modal('hide');
-                            if (temp['unfail'] == 1) {
+                            if (temp['unfail'] == 1 || temp['unfail'] == '1') {
                                 load_items();
                             } else {
                                 show_question(temp['ItemCode']);

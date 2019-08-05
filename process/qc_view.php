@@ -89,13 +89,22 @@
         $ItemCode = $DATA['ItemCode'];
         $pass = $DATA['pass'];
         $fail = $DATA['fail'];
+        $return['check'] = $fail;
         $Sql = "SELECT COUNT(ItemCode) AS cnt FROM qccheckpass WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)){
-            $cnt	=  $Result['cnt'];
-        }
+        $Result = mysqli_fetch_assoc($meQuery);
+        $cnt = $Result['cnt'];
+        $return['cnt'] = $cnt;
 
         if ($cnt > 0) {
+            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+        }
+        else {
+            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,QCDate) VALUES ('$DocNo','$ItemCode','$pass','$fail',NOW())";
+        }
+
+        if (mysqli_query($conn, $Sql)) {
             if ($fail == 0) {
                 $Sql = "UPDATE clean_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
                 mysqli_query($conn, $Sql);
@@ -105,14 +114,6 @@
 
                 $return['unfail'] = 1;
             }
-            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
-
-        }
-        else {
-            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,QCDate) VALUES ('$DocNo','$ItemCode','$pass','$fail',NOW())";
-        }
-
-        if (mysqli_query($conn, $Sql)) {
             $return['ItemCode'] = $ItemCode;
             $return['status'] = "success";
             $return['form'] = "save_checkpass";
