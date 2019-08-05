@@ -540,11 +540,23 @@
             $CheckList = $Result['IsCheckList'];
 
             $Sql_qty = "SELECT Fail FROM qccheckpass WHERE DocNo = '$cleanDocNo' AND ItemCode = '$itemCode'";
-            $return[$count]['Sql Fail'] = $Sql_qty;
             $meQuery_qty = mysqli_query($conn, $Sql_qty);
             $Result_qty = mysqli_fetch_assoc($meQuery_qty);
             $qty = $Result_qty['Fail'];
 
+            $Sql_ref = "SELECT RefDocNo FROM clean
+                        WHERE DocNo = '$cleanDocNo'";
+            $meQuery_ref = mysqli_query($conn, $Sql_ref);
+            $Result_ref = mysqli_fetch_assoc($meQuery_ref);
+            $ref = $Result_ref['RefDocNo'];
+
+            $Sql_fac = "SELECT FacCode FROM dirty WHERE dirty.DocNo = '$ref'
+                        UNION ALL
+                        SELECT FacCode FROM rewash WHERE rewash.DocNo = '$ref'";
+            $return[$count]['Sql Fac'] = $Sql_fac;
+            $meQuery_fac = mysqli_query($conn, $Sql_fac);
+            $Result_fac = mysqli_fetch_assoc($meQuery_fac);
+            $fac = $Result_fac['FacCode'];
             if ($CheckList == 0) { // -------------- Pass -------------- 
                 
             }
@@ -620,13 +632,13 @@
                 }
 
                 if ($count_rewash == 1) {
-                    $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus)
-                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1)";
+                    $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
+                                    VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
 
                     mysqli_query($conn, $Sql_rewash);
                     
                     $Sql_rewash = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
-                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Rewash',$userid,DATE(NOW()))";
+                                    VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Rewash',$userid,DATE(NOW()))";
         
                     mysqli_query($conn, $Sql_rewash);
                 }
@@ -638,7 +650,7 @@
                 $Sql_rewash = "SELECT          COUNT(*) as Cnt FROM rewash_detail
 
                                 WHERE           rewash_detail.DocNo = '$DocNo'
-                                AND             rewash_detail.ItemCode = '$ItemCode[$count]'";
+                                AND             rewash_detail.ItemCode = '$itemCode'";
 
                 $meQuery2 = mysqli_query($conn, $Sql_rewash);
                 while ($Result = mysqli_fetch_assoc($meQuery2)) {
@@ -729,8 +741,8 @@
                 }
 
                 if ($count_rewash == 1) {
-                    $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus)
-                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1)";
+                    $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
+                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
 
                     mysqli_query($conn, $Sql_rewash);
                     
@@ -747,7 +759,7 @@
                 $Sql_rewash = "SELECT          COUNT(*) as Cnt FROM rewash_detail
 
                                 WHERE           rewash_detail.DocNo = '$DocNo'
-                                AND             rewash_detail.ItemCode = '$ItemCode[$count]'";
+                                AND             rewash_detail.ItemCode = '$itemCode'";
 
                 $meQuery2 = mysqli_query($conn, $Sql_rewash);
                 while ($Result = mysqli_fetch_assoc($meQuery2)) {
