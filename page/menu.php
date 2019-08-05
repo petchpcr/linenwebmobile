@@ -77,11 +77,22 @@
 		}
 
         function logout(num){
-            var data = {
-                'Confirm': num,
-                'STATUS': 'logout'
-            };
-            senddata(JSON.stringify(data));
+            swal({
+            title: '<?php echo $genarray['logout'][$language]; ?>',
+            text: '<?php echo $genarray['wantlogout'][$language]; ?>',
+            type: 'question',
+            showCancelButton: true,
+            showConfirmButton: true,
+            cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>',
+            confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
+            reverseButton:true,
+            }).then(function () {
+                var data = {
+                    'Confirm': num,
+                    'STATUS': 'logout'
+                };
+                senddata(JSON.stringify(data));
+            });
         }
 
         function senddata(data) {

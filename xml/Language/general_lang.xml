@@ -47,6 +47,8 @@
 
 <selecttypedoc><en>Select type doc.</en><th>เลือกชนิดเอกสาร</th></selecttypedoc>
 <docfirst><en>Please select ref. document</en><th>กรุณาเลือกเอกสารอ้างอิง</th></docfirst>
+<wantlogout><en>Do you want to logout ?</en><th>ต้องการออกจากระบบใช่หรือไม่ ?</th></wantlogout>
+
 //old
 
 <activeItem><en>Active</en><th>Active</th></activeItem>
