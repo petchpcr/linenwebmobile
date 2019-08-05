@@ -49,7 +49,7 @@ function load_doc($conn, $DATA)
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.DocDate LIKE '%$search%'
-                AND rewash.IsStatus = 1
+                AND rewash.IsStatus = 3
                 ORDER BY rewash.DocNo DESC";
 
     $meQuery = mysqli_query($conn, $Sql);
