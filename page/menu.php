@@ -187,7 +187,7 @@
                     <div class="my-col-menu">
                         <button onclick="menu_click('."'track'".')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/tracking.png">
-                            <div class="text-truncate">'.$array["factory"][$language].'</div>
+                            <div class="text-truncate">'.$array["tracking"][$language].'</div>
                         </button>
                     </div>
                     <div class="my-col-menu">
