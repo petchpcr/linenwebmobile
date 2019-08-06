@@ -507,18 +507,22 @@ $genarray = json_decode($json, TRUE);
 
     <div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
         <div class="col-lg-9 col-md-10 col-sm-12">
-            <div class="form-row my-2">
-                <div class="col-12 input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><?php echo $array['numberSum'][$language]; ?></span>
-                    </div>
-                    <input id="sum_num" type="text" class="form-control text-center bg-white" placeholder="0.0" disabled>
-                    <div class="input-group-append">
-                        <span class="input-group-text"><?php echo $array['piece'][$language]; ?></span>
-                    </div>
+            <?php
+                if ($Menu == 'clean') {
+                    echo '<div class="form-row my-2">
+                            <div class="col-12 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">'.$array['numberSum'][$language].'</span>
+                            </div>
+                            <input id="sum_num" type="text" class="form-control text-center bg-white" placeholder="0.0" disabled>
+                            <div class="input-group-append">
+                                <span class="input-group-text">'.$array['piece'][$language].'</span>
+                            </div>
 
-                </div>
-            </div>
+                        </div>
+                    </div>';
+                }
+            ?>
             <div class="form-row my-2">
                 <div class="col-12 input-group">
                     <div class="input-group-prepend">
