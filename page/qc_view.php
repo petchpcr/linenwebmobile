@@ -27,21 +27,8 @@ $genarray = json_decode($json, TRUE);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
 
-    <script src="../js/jquery-3.3.1.min.js"></script>
+    <?php require 'script_css.php'; ?>
 
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="../css/themes/default/nhealth.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-
-    <script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-
-    <script src="../js/gijgo.min.js" type="text/javascript"></script>
-    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css" />
-
-    <script src="../dist/js/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
 
         $(document).ready(function(e) {
@@ -485,7 +472,7 @@ $genarray = json_decode($json, TRUE);
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
-    <div class="px-3 mb-5" style="font-family:sans-serif;">
+    <div class="px-3 mb-5">
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
         <div class="text-center mb-3">
             <h4 class="text-truncate"><?php echo $genarray['Document'][$language]; ?></h4>
@@ -547,7 +534,7 @@ $genarray = json_decode($json, TRUE);
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="md_checkpass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="md_checkpass" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -579,9 +566,9 @@ $genarray = json_decode($json, TRUE);
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
-                        <div class="col-12 text-right">
-                            <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
-                            <button onclick="save_checkpass()" type="button" class="btn btn-success mx-2"><?php echo $genarray['save'][$language]; ?></button>
+                        <div class="col-12 text-center">
+                            <button onclick="save_checkpass()" type="button" class="btn btn-primary mx-3"><?php echo $genarray['yes'][$language]; ?></button>
+                            <button type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['isno'][$language]; ?></button>
                         </div>
                     </div>
                 </div>
@@ -589,7 +576,7 @@ $genarray = json_decode($json, TRUE);
         </div>
     </div>
 
-    <div class="modal fade" id="md_question" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="md_question" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -620,9 +607,9 @@ $genarray = json_decode($json, TRUE);
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
-                        <div class="col-12 text-right">
-                            <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
-                            <button onclick="save_checklist()" type="button" id="save_checklist" class="btn btn-success mx-2"><?php echo $genarray['save'][$language]; ?></button>
+                        <div class="col-12 text-center">
+                            <button onclick="save_checklist()" type="button" id="save_checklist" class="btn btn-primary mx-3"><?php echo $genarray['yes'][$language]; ?></button>
+                            <button type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['isno'][$language]; ?></button>
                         </div>
                     </div>
                 </div>

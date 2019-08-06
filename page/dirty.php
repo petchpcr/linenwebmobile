@@ -29,23 +29,9 @@
         }else{
             echo "<title>" . $genarray['titlefactory'][$language] . $genarray['titleDocument'][$language] . "</title>";
         }
+        require 'script_css.php';
     ?>
 
-    <script src="../js/jquery-3.3.1.min.js"></script>
-    
-	<link rel="shortcut icon" href="../favicon.ico">
-	<link rel="stylesheet" href="../fontawesome/css/all.min.css">
-	<link rel="stylesheet" href="../css/themes/default/nhealth.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-
-	<script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-
-	<script src="../js/gijgo.min.js" type="text/javascript"></script>
-    <link href="../css/gijgo.min.css" rel="stylesheet" type="text/css"/>
-    
-    <script src="../dist/js/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
     <script>
         $(document).ready(function (e) {
             
@@ -382,7 +368,7 @@
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
-    <div class="px-3 pb-4 mb-5" style="font-family:sans-serif;">
+    <div class="px-3 pb-4 mb-5">
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
         <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
@@ -431,10 +417,10 @@
             <div class="modal-footer text-center">
                 <div class="row w-100 d-flex align-items-center m-0">
                     <div class="col-6 text-right">
-                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
                     </div>
                     <div class="col-6 text-left">
-                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
                     </div>
                 </div>
             </div>
