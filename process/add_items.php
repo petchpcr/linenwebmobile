@@ -25,6 +25,7 @@
                 WHERE               DepCode='$DepCode'
                 AND                 item_stock.ItemCode=item.ItemCode
                 AND                 item.ItemName LIKE '%$Search%' ";
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];

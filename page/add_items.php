@@ -103,18 +103,18 @@ $genarray = json_decode($json, TRUE);
                         Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
                         Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
                         Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-                        Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-oldnum=0 value=0>";
+                        Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-oldnum=0 placeholder='0.0'>";
                         Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
                     }else{
                         var idqty= id+"qty";
                         var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                         Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
                         Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
-                        Str += "id='" + idqty + "' value='" + qty+"' placeholder='0'>";
+                        Str += "id='" + idqty + "' placeholder='0'>";
                         Str += "<button onclick='del_items(" + num + ")' class='btn btn-danger align-self-start mt-1 mr-1 px-2 py-0 rounded-circle'>x</button></div></div>";
                         Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
                         Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-                        Str += "data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0value=0 placeholder='0.0'>";
+                        Str += "data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
                         Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
                     }              
 
@@ -154,9 +154,9 @@ $genarray = json_decode($json, TRUE);
             }
 
             $(item).remove();
-            console.log("Del : " + arr_del_items);
-            console.log("Old : " + arr_old_items);
-            console.log("New : " + arr_new_items);
+            // console.log("Del : " + arr_del_items);
+            // console.log("Old : " + arr_old_items);
+            // console.log("New : " + arr_new_items);
             cal_weight();
             cal_num();
         }
@@ -188,6 +188,7 @@ $genarray = json_decode($json, TRUE);
                 if (weight == null || weight == "") {
                     weight = Number(0);
                 }
+                // console.log(weight);
                 sum_weight = Number(sum_weight) + Number(weight);
             });
             currencyFormat(sum_weight);
@@ -243,9 +244,13 @@ $genarray = json_decode($json, TRUE);
             var arr_old_weight = [];
             $(".old").each(function() {
                 var qtyid = $(this).attr("id")+'qty';
+                var qty = $('#'+qtyid).val();
                 if (Menu == 'clean') {
-                    // console.log($('#'+qtyid).val());
-                    arr_old_Qty.push($('#'+qtyid).val());
+                    if (qty == null || qty == "") {
+                        qty = 0;
+                    }
+                    // console.log(qty);
+                    arr_old_Qty.push(qty);
                 }else{
                     arr_old_Qty.push(0);
                 }
@@ -256,8 +261,11 @@ $genarray = json_decode($json, TRUE);
                 if (val != null && val != "") {
                     weight = val;
                 }
+                // console.log(weight);
+
                 arr_old_weight.push(weight);
             });
+            // console.log(arr_old_weight);
 
             var old_i = arr_old_items.join(',');
             var old_qty = arr_old_Qty.join(',');
@@ -268,9 +276,14 @@ $genarray = json_decode($json, TRUE);
             var arr_new_UnitCode = [];
             var arr_new_weight = [];
             $(".new").each(function() {
+                var qtyid = $(this).attr("id")+'qty';
+                var qty = $('#'+qtyid).val();
                 if (Menu == 'clean') {
-                    var qtyid = $(this).attr("id")+'qty';
-                    arr_new_Qty.push($('#'+qtyid).val());
+                    if (qty == null || qty == "") {
+                        qty = 0;
+                    }
+                    // console.log(qty);
+                    arr_new_Qty.push(qty);
                 }else{
                     arr_new_Qty.push(0);
                 }

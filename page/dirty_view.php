@@ -208,14 +208,12 @@
                     <th scope="col">
                         <div class="row">
                             <div class="col-5 text-center"><?php echo $array['no'][$language]; ?></div>
-                            <div class="col-7 text-center"><?php echo $array['list'][$language]; ?></div>
+                            <div class="col-7 text-left"><?php echo $array['list'][$language]; ?></div>
                         </div>
                     </th>
                     </tr>
                 </thead>
-                <tbody id="item">
-
-                </tbody>
+                <tbody id="item"></tbody>
             </table>
         </div>
 
