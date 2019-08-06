@@ -116,18 +116,13 @@
                                 $("#W_Use_text").hide();
                                 $("#P_Use_text").hide();
                                 $("#S_Use_text").hide();
-                                $("#W_Sum_btn").show();
-                                $("#P_Sum_btn").hide();
-                                $("#S_Sum_btn").hide();
+
                                 $("#W_Start").text("--:--:--");
                                 $("#W_End").text("--:--:--");
                                 $("#P_Start").text("--:--:--");
                                 $("#P_End").text("--:--:--");
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
-
-                                $("#W_Start_btn").show();
-                                $("#W_End_btn").hide();
                             }
                             else if(temp['IsStatus'] == 1){ //-----กำลังซัก
                                 $("#W_Status").attr("src","../img/Status_1.png");
@@ -139,9 +134,6 @@
                                 $("#W_Use_text").hide();
                                 $("#P_Use_text").hide();
                                 $("#S_Use_text").hide();
-                                $("#W_Sum_btn").show();
-                                $("#P_Sum_btn").hide();
-                                $("#S_Sum_btn").hide();
                                 $("#W_End").text("--:--:--");
                                 $("#P_Start").text("--:--:--");
                                 $("#P_End").text("--:--:--");
@@ -150,9 +142,6 @@
 
                                 var W_Start = new Date(temp['WashStartTime']);
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
-
-                                $("#W_Start_btn").remove();
-                                $("#W_End_btn").show();
                                 
                             }
                             else if(temp['IsStatus'] == 2){ //-----กำลังแพคของ
@@ -168,9 +157,6 @@
                                 $("#W_End_text").addClass("col-lg-4");
                                 $("#P_Use_text").hide();
                                 $("#S_Use_text").hide();
-                                $("#W_Sum_btn").remove();
-                                $("#P_Sum_btn").show();
-                                $("#S_Sum_btn").hide();
                                 $("#W_Use_text").show();
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
@@ -183,14 +169,10 @@
                                 $("#W_End").text(W_End.toLocaleTimeString());
 
                                 if(temp['PackStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
-                                    $("#P_Start_btn").show();
-                                    $("#P_End_btn").hide();
                                     $("#P_Start").text("--:--:--");
                                     $("#P_End").text("--:--:--");
                                 }
                                 else if(temp['PackStartTime'] != null){ // ถ้าเคยกดเริ่มแล้ว
-                                    $("#P_Start_btn").hide();
-                                    $("#P_End_btn").show();
                                     var P_Start = new Date(temp['PackStartTime']);
                                     $("#P_Start").text(P_Start.toLocaleTimeString());
                                     $("#P_End").text("--:--:--");
@@ -209,9 +191,6 @@
                                 $("#P_End_text").addClass("col-lg-4");
                                 $("#P_Use_text").show();
                                 $("#S_Use_text").hide();
-                                $("#W_Sum_btn").remove();
-                                $("#P_Sum_btn").remove();
-                                $("#S_Sum_btn").show();
                                 $("#W_Use_text").show();
                                 
                                 var W_Start = new Date(temp['WashStartTime']);
@@ -228,14 +207,10 @@
 
                                 
                                 if(temp['SendStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
-                                    $("#S_Start_btn").show();
-                                    $("#S_End_btn").hide();
                                     $("#S_Start").text("--:--:--");
                                     $("#S_End").text("--:--:--");
                                 }
                                 else if(temp['SendStartTime'] != null){ // ถ้าเคยกดเริ่มแล้ว
-                                    $("#S_Start_btn").hide();
-                                    $("#S_End_btn").show();
                                     var S_Start = new Date(temp['SendStartTime']);
                                     $("#S_Start").text(S_Start.toLocaleTimeString());
                                     $("#S_End").text("--:--:--");
@@ -267,9 +242,6 @@
                                     $("#sign_zone").removeAttr("hidden");
                                 }
 
-                                $("#W_Sum_btn").remove();
-                                $("#P_Sum_btn").remove();
-                                $("#S_Sum_btn").remove();
                                 $("#W_Status").attr("src","../img/Status_3.png");
                                 $("#P_Status").attr("src","../img/Status_3.png");
                                 $("#S_Status").attr("src","../img/Status_3.png");
@@ -396,12 +368,6 @@
                             <div class="col-md-6 col-sm-none"></div>
                         </div>
                     </div>
-                </div>
-                <div id="W_Sum_btn" class="row mt-4">
-                    <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
-                    <div class="col-md-8 col-sm-12" id="W_End_btn"><button id="W_End_btn_sub" onclick="end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
-                    <div class="col-md-2 col-sm-none"></div>
                 </div>
             </div>
 
