@@ -42,6 +42,8 @@
                 window.location.href='clean.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
             } else if(menu == 'qc'){
                 window.location.href='qc.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
+            }else if(menu == 'track'){
+                window.location.href='dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
             } else {
                 window.location.href='hospital.php?Menu='+menu;
             }
@@ -182,12 +184,12 @@
                             <div class="text-truncate">'.$array["QC"][$language].'</div>
                         </button>
                     </div>
-                    <!-- <div class="my-col-menu">
-                        <button onclick="menu_click(5)" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/Report.png">
-                            <div class="text-truncate">'.$array["report"][$language].'</div>
+                    <div class="my-col-menu">
+                        <button onclick="menu_click('."'track'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/tracking.png">
+                            <div class="text-truncate">'.$array["factory"][$language].'</div>
                         </button>
-                    </div> -->
+                    </div>
                     <div class="my-col-menu">
                         <button onclick="menu_click('."'tools'".')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/Tools.png">
