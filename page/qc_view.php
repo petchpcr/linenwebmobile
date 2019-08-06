@@ -361,12 +361,6 @@ $genarray = json_decode($json, TRUE);
                             $("#qc_qty").val(temp['Qty']);
                             var Pass = temp['Pass'];
                             var Fail = temp['Fail'];
-                            if (temp['Pass'] == null || temp['Pass'] == "") {
-                                Pass = 0;
-                            }
-                            if (temp['Fail'] == null || temp['Fail'] == "") {
-                                Fail = 0;
-                            }
                             $("#qc_pass").val(Pass);
                             $("#qc_fail").val(Fail);
 
@@ -554,12 +548,12 @@ $genarray = json_decode($json, TRUE);
 
                         <div class="form-group text-left">
                             <label>จำนวนที่ผ่าน</label>
-                            <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_pass">
+                            <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_pass" placeholder="0">
                         </div>
 
                         <div class="form-group text-left">
                             <label>จำนวนที่ไม่ผ่าน</label>
-                            <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_fail">
+                            <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_fail" placeholder="0">
                         </div>
 
                     </div>
