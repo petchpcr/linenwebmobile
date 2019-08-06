@@ -18,13 +18,11 @@
             $return['HptName']	=  $Result['HptName'];
         }
 
-        $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
-
-                FROM                item_stock,item
-
-                WHERE               DepCode='$DepCode'
-                AND                 item_stock.ItemCode=item.ItemCode
-                AND                 item.ItemName LIKE '%$Search%' ";
+        $Sql = "SELECT  * 
+                FROM    item 
+                WHERE   IsDirtyBag = 1 
+                AND     IsActive =1
+                AND     item.ItemName LIKE '%$Search%' ";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];
