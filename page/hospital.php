@@ -74,7 +74,8 @@ $genarray = json_decode($json, TRUE);
         }
 
         function back() {
-            window.location.href = "menu.php";
+            // window.location.href = "menu.php";
+            logout(1);
         }
 
         function logout(num) {

@@ -47,7 +47,6 @@
 
         var x = setInterval(function() {
             load_process();
-            console.log(1);
         }, 1000);
 
         function logout(num){
@@ -218,29 +217,9 @@
                             }
                             else if(temp['IsStatus'] == 4){ //-----เสร็จสิ้น
 
-                                if(temp['Signature'] == null || temp['Signature'] == ""){
-                                    swal({
-                                        title: "ยืนยันการขนส่ง",
-                                        text: "การขนส่งเสร็จสิ้น โปรดเซ็นต์ชื่อเพื่อยืนยัน",
-                                        type: "warning",
-                                        showCancelButton: false,
-                                        confirmButtonClass: "btn-success",
-                                        cancelButtonClass: "btn-danger",
-                                        confirmButtonText: "ตกลง",
-                                        cancelButtonText: "ไม่ใช่",
-                                        closeOnConfirm: true,
-                                        closeOnCancel: true,
-                                    }).then(result => {
-                                        var Menu = "<?php echo $Menu?>";
-                                        var From = "<?php echo $From?>";
-                                        window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo']+'&From='+From;
-                                    })
-                                }
-                                else{
-                                    var ck = temp['Signature'];
-                                    $("#show_sign").html(ck);
-                                    $("#sign_zone").removeAttr("hidden");
-                                }
+                                var ck = temp['Signature'];
+                                $("#show_sign").html(ck);
+                                $("#sign_zone").removeAttr("hidden");
 
                                 $("#W_Status").attr("src","../img/Status_3.png");
                                 $("#P_Status").attr("src","../img/Status_3.png");
@@ -295,22 +274,6 @@
                             }
                         }
                     } else if (temp['status'] == "failed") {
-                        if(temp["form"] == 'load_process'){
-                            insert_process();
-                        }
-                        else if(temp["form"] == 'insert_process'){
-                            swal({
-                            title: '',
-                            text: '<?php echo $genarray['errorToAddData'][$language];?>',
-                            type: 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            confirmButtonText: 'Error!!'
-                            })
-                        }
                     }
                 }
             });

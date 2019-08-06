@@ -28,6 +28,7 @@ require '../getTimeZone.php';
         require 'script_css.php';
     ?>
     <script>
+        var f =true;
         $(document).ready(function(e) {
             load_site();
             load_doc();
@@ -45,7 +46,6 @@ require '../getTimeZone.php';
 
         function load_doc() {
             var search = $('#datepicker').val();
-            // var searchDate = new Date(search);
             var siteCode = "<?php echo $siteCode ?>";
             var status = 'load_doc_tracking';
             var Menu = "<?php echo $Menu?>";
@@ -57,6 +57,11 @@ require '../getTimeZone.php';
             };
             senddata(JSON.stringify(data));
         }
+
+        var x = setInterval(function() {
+            load_doc();
+            console.log(111);
+        }, 1000);
 
         function show_process(DocNo, From) {
             var siteCode = '<?php echo $siteCode ?>';
@@ -114,37 +119,41 @@ require '../getTimeZone.php';
                     } catch (e) {
                         console.log('Error#542-decode error');
                     }
-
+                    console.log(555);
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_site') {
                             $("#HptName").text(temp['HptName']);
                         } else if (temp["form"] == 'load_doc') {
-
+                            f=true;
                             $(".btn.btn-mylight.btn-block").remove();
                             for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
                                 var status_class = "";
                                 var status_text = "";
                                 var status_line = "";
+                                var onclick = "show_process(\"" + temp[i]['DocNo'] + "\",\"" + temp[i]['From'] + "\")";
 
                                 if (temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null) {
                                     status_class = "status4";
-                                    status_text = "ไม่ทำงาน";
+                                    status_text = "โรงซักรับเอกสาร";
                                     status_line = "StatusLine_4";
+                                    var onclick = "";
                                 } else if (temp[i]['IsProcess'] == 1) {
                                     status_class = "status3";
-                                    status_text = "กำลังดำเนินการ";
+                                    status_text = "กำลังดำเนินการซัก";
                                     status_line = "StatusLine_3";
                                 } else if (temp[i]['IsProcess'] == 2) {
-                                    status_class = "status1";
-                                    status_text = "กำลังดำเนินการ";
+                                    status_class = "status3";
+                                    status_text = "กำลังดำเนินการแพ็ค";
                                     status_line = "StatusLine_3";
                                 } else if (temp[i]['IsProcess'] == 3) {
+                                    status_class = "status3";
+                                    status_text = "กำลังดำเนินการขนส่ง";
+                                    status_line = "StatusLine_3";
+                                } else if (temp[i]['IsProcess'] == 4) {
                                     status_class = "status2";
                                     status_text = "เสร็จสิ้น";
                                     status_line = "StatusLine_2";
                                 }
-
-                                var onclick = "show_process(\"" + temp[i]['DocNo'] + "\",\"" + temp[i]['From'] + "\")";
 
                                 if (temp[i]['IsStatus'] > 0) {
 
@@ -161,18 +170,21 @@ require '../getTimeZone.php';
                         }
                     } else if (temp['status'] == "failed") {
                         if (temp["form"] == 'load_doc') {
-                            $(".btn.btn-mylight.btn-block").remove();
-                            swal({
-                                title: '',
-                                text: '<?php echo $genarray['notfoundDocInDate'][$language]; ?>' + $('#datepicker').val(),
-                                type: 'warning',
-                                showCancelButton: false,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                confirmButtonText: 'Data found'
-                            })
+                            if(f){
+                                $(".btn.btn-mylight.btn-block").remove();
+                                swal({
+                                    title: '',
+                                    text: '<?php echo $genarray['notfoundDocInDate'][$language]; ?>' + $('#datepicker').val(),
+                                    type: 'warning',
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    confirmButtonText: 'Data found'
+                                })
+                                f=false;
+                            }
 
                         } else {
                             swal({

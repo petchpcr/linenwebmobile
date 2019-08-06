@@ -164,7 +164,6 @@
         $Sql = "SELECT
                     dirty.DocNo,
                     dirty.IsReceive,
-                    dirty.IsProcess,
                     dirty.IsStatus,
                     department.DepName,
                     site.HptCode,
@@ -184,15 +183,14 @@
             $return[$count]['DepName'] = $Result['DepName'];
             $return[$count]['HptName'] = $Result['HptName'];
             $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
             $return[$count]['From'] = "dirty";
 
             $DocNo = $Result['DocNo'];
-            $Sql2 = "SELECT Signature FROM process WHERE DocNo = '$DocNo'";
+            $Sql2 = "SELECT IsStatus FROM process WHERE DocNo = '$DocNo'";
             $meQuery2 = mysqli_query($conn, $Sql2);
             while ($Result = mysqli_fetch_assoc($meQuery2)) {
-                $return[$count]['Signature'] = $Result['Signature'];
+                $return[$count]['IsProcess'] = $Result['IsStatus'];
             }
 
             $count++;
@@ -202,7 +200,6 @@
         $Sql = "SELECT
                     rewash.DocNo,
                     rewash.IsReceive,
-                    rewash.IsProcess,
                     rewash.IsStatus,
                     department.DepName,
                     site.HptCode,
@@ -224,6 +221,13 @@
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
             $return[$count]['From'] = "rewash";
+
+            $DocNo = $Result['DocNo'];
+            $Sql2 = "SELECT IsStatus FROM process WHERE DocNo = '$DocNo'";
+            $meQuery2 = mysqli_query($conn, $Sql2);
+            while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                $return[$count]['IsProcess'] = $Result['IsStatus'];
+            }
 
             $count++;
             $boolean = true;
