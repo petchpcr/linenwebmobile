@@ -4,9 +4,27 @@
     require 'logout.php';
 
     function load_site($conn, $DATA){
+        $FacCode = $_SESSION['FacCode'];
         $count = 0;
         $boolean = false;
-        $Sql = "SELECT site.HptCode,site.HptName,site.picture FROM site WHERE site.IsStatus = 0 ORDER BY HptName ASC";
+        $Sql = "SELECT * 
+                FROM    (
+                            SELECT site.HptCode,site.HptName,site.picture 
+                            FROM site,dirty,department 
+                            WHERE site.IsStatus = 0
+                            AND dirty.DepCode = department.DepCode
+                            AND dirty.FacCode = $FacCode
+                            AND department.HptCode = site.HptCode
+                        UNION All
+                            SELECT site.HptCode,site.HptName,site.picture 
+                            FROM site,rewash,department 
+                            WHERE site.IsStatus = 0
+                            AND rewash.DepCode = department.DepCode
+                            AND rewash.FacCode = $FacCode
+                            AND department.HptCode = site.HptCode
+                        ) h
+                GROUP BY HptCode
+                ORDER BY HptName ASC";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['HptCode'] = $Result['HptCode'];

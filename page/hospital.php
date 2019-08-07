@@ -62,15 +62,8 @@ $genarray = json_decode($json, TRUE);
             // senddata(JSON.stringify(data));
 
             var Menu = '<?php echo $Menu; ?>';
-            if (Menu == 'dirty' || Menu == 'factory') {
-                window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 'clean') {
-                window.location.href = 'clean.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 'qc') {
-                window.location.href = 'qc.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            } else if (Menu == 'tools') {
-                window.location.href = 'tools.php?siteCode=' + SiteCode + '&Menu=' + Menu;
-            }
+            window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+
         }
 
         function back() {
