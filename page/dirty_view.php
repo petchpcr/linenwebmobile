@@ -114,22 +114,21 @@
 
                 if (temp["status"] == 'success') {
                     if (temp["form"] == 'load_site') {
-                        var HosDep = "<b><?php echo $genarray['Hospital'][$language]; ?> : </b>"+temp['HptName']+" / "+temp['DepName'];
+                        var HosDep = temp['HptName']+" / "+temp['DepName'];
                         $("#add_doc").attr("data-depcode",temp['DepCode']);
-                        $("#HptName").html(HosDep);
+                        $("#HptName").val(HosDep);
                     }
                     else if (temp["form"] == 'load_doc') {
                         // var RefDocNo = "<b><?php echo $array['referentDocument'][$language]; ?> : </b>"+temp['RefDocNo'];
                         // if(temp['RefDocNo'] == null || temp['RefDocNo'] == ""){
                         //     RefDocNo = "<b><?php echo $array['referentDocument'][$language]; ?> : </b>";
                         // }
-                        $("#RefDocNo").html(RefDocNo);
-                        var FName = "<b><?php echo $array['userEditer'][$language]; ?> : </b>"+temp['FName'];
-                        $("#FName").html(FName);
-                        var Date = "<b><?php echo $genarray['date'][$language]; ?> : </b>"+temp['xdate']+" <b><?php echo $genarray['time'][$language]; ?> : </b>"+temp['xtime'];
-                        $("#Date").html(Date);
-                        var Weight = "<b><?php echo $array['weightSum'][$language]; ?> : </b>"+temp['Total']+" <?php echo $array['KG'][$language]; ?>";
-                        $("#Weight").html(Weight);
+                        // $("#RefDocNo").html(RefDocNo);
+                        $("#FName").val(temp['FName']);
+                        $("#Date").val(temp['xdate']);
+                        $("#Time").val(temp['xtime']);
+                        var Weight = temp['Total']+" <?php echo $array['KG'][$language] ?>";
+                        $("#Weight").val(Weight);
                         for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
                             var num = i+1;
                             var Str = "<tr><td><div class='row'>";
@@ -189,18 +188,75 @@
         </div>
     </header>
     <div class="px-3">
-            <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
+        <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
+        <!-- 00 -->
+        <!-- <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-10 col-sm-12 mb-3">
+                <div class="row">
+                    <div class="col-sm-6 col-12 text-left">
+                        <div><b><?php echo $genarray['docno'][$language]." : "; ?></b><?php echo $DocNo; ?></div>
+                        <div id="HptName" class="text-truncate"></div>
+                        <div id="RefDocNo"></div>
+                    </div>
+                    <div class="col-sm-6 col-12 text-left">
+                        <div id="FName" class=""></div>
+                        <div id="Date"></div>
+                        <div id="Weight"></div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- 01 --> 
         <div class="row justify-content-center">
             <div class="col-lg-9 col-md-10 col-sm-12 mb-3">
-                <div><b><?php echo $genarray['docno'][$language]." : "; ?></b><?php echo $DocNo; ?></div>
-                <div id="HptName" class="text-truncate"></div>
-                <div id="HptName" class="text-truncate"></div>
-                <div id="RefDocNo"></div>
-                <div id="FName"></div>
-                <div id="Date"></div>
-                <div id="Weight"></div>
+                <div class="row">
+                    <div class="col-sm-6 col-12 text-left">
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><?php echo $genarray['docno'][$language] ?></span>
+                            </div>
+                            <input type="text" class="form-control bg-white" value="<?php echo $DocNo; ?>" style="color:#1659a2;" readonly>
+                        </div>
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><?php echo $genarray['Hospital'][$language] ?></span>
+                            </div>
+                            <input type="text" id="HptName" class="form-control bg-white" style="color:#1659a2;" readonly>
+                        </div>
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><?php echo $array['userEditer'][$language] ?></span>
+                            </div>
+                            <input type="text" id="FName" class="form-control bg-white" style="color:#1659a2;" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-12 text-left">
+                        <div class="row">
+                            <div class="input-group col-md-7 col-sm-12 col-6 mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><?php echo $genarray['date'][$language] ?></span>
+                                </div>
+                                <input type="text" id="Date" class="form-control bg-white" style="color:#1659a2;" readonly>
+                            </div>
+                            <div class="input-group col-md-5 col-sm-12 col-6 mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><?php echo $genarray['time'][$language] ?></span>
+                                </div>
+                                <input type="text" id="Time" class="form-control bg-white" style="color:#1659a2;" readonly>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><?php echo $array['weightSum'][$language] ?></span>
+                            </div>
+                            <input type="text" id="Weight" class="form-control bg-white" style="color:#1659a2;" readonly>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="row justify-content-center mb-5 px-3">
             <table class="table table-hover col-lg-9 col-md-10 col-sm-12">
                 <thead>
