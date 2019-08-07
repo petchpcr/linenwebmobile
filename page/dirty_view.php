@@ -246,7 +246,7 @@
                                 <input type="text" id="Time" class="form-control bg-white" style="color:#1659a2;" readonly>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><?php echo $array['weightSum'][$language] ?></span>
                             </div>

@@ -479,7 +479,7 @@ $genarray = json_decode($json, TRUE);
                     <th scope="col">
                         <div class="row">
                             <div class="col-2 text-center p-0"><?php echo $array['no'][$language]; ?></div>
-                            <div class="col-6 text-center p-0"><?php echo $array['List'][$language]; ?></div>
+                            <div class="col-6 text-left p-0"><?php echo $array['List'][$language]; ?></div>
                             <div class="col-2 text-center p-0">สาเหตุ</div>
                             <div class="col-2 text-center p-0"><?php echo $array['Status'][$language]; ?></div>
                         </div>

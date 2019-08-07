@@ -410,10 +410,10 @@
             <div class="modal-footer text-center">
                 <div class="row w-100 d-flex align-items-center m-0">
                     <div class="col-6 text-right">
-                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-success m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+                        <button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-primary m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
                     </div>
                     <div class="col-6 text-left">
-                        <button type="button" class="btn btn-danger m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
+                        <button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
                     </div>
                 </div>
             </div>
