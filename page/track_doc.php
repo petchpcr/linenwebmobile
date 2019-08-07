@@ -26,7 +26,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $genarray['titlefactory'][$language].$array['title'][$language];?></title>
 
-    <?php require 'script_css.php'; ?>
+    <?php 
+        require 'script_css.php'; 
+        require 'logout_fun.php';
+    ?>
 
     <script>
 
@@ -48,34 +51,6 @@
         var x = setInterval(function() {
             load_process();
         }, 1000);
-
-        function logout(num){
-            if (num == 0) {
-                var data = {
-                    'Confirm': 1,
-                    'STATUS': 'logout'
-                };
-                senddata(JSON.stringify(data));
-            }
-            else if (num == 1) {
-                swal({
-                title: '<?php echo $genarray['logout'][$language]; ?>',
-                text: '<?php echo $genarray['wantlogout'][$language]; ?>',
-                type: 'question',
-                showCancelButton: true,
-                showConfirmButton: true,
-                cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>',
-                confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
-                reverseButton:true,
-                }).then(function () {
-                    var data = {
-                        'Confirm': num,
-                        'STATUS': 'logout'
-                    };
-                    senddata(JSON.stringify(data));
-                });
-            }
-        }
 
         function back() {
             window.location.href = "dirty_to_track.php?siteCode=<?php echo $siteCode?>&Menu=track";
