@@ -66,10 +66,13 @@ $genarray = json_decode($json, TRUE);
 
         function choose_items() {
             var DepCode = "<?php echo $DepCode ?>";
+            var refDoc = "<?php echo $refDoc ?>";
+            console.log(refDoc);
             var Search = $("#search_items").val();
             var data = {
                 'DepCode': DepCode,
                 'Search': Search,
+                'refDoc' : refDoc,
                 'STATUS': 'choose_items'
             };
             senddata(JSON.stringify(data));

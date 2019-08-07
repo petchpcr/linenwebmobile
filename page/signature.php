@@ -670,20 +670,38 @@
       var From = "<?php echo $From?>";
       var SigCode = dataURL;
       document.getElementById("h_code").value = SigCode;
-      var URL = '../process/signature.php';
-      $.ajax({  
-        url: URL,
-        method:"POST",
-        data:{
-              DocNo:DocNo,
-              From:From,
-              SigCode:SigCode
-          },
-          success: function (data) {
-              var Menu = "<?php echo $Menu?>";
-              window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&From='+From;
-          }
-      });
+      var Menu = "<?php echo $Menu?>";
+      if(Menu=="qc"){
+        var siteCode = "<?php echo $siteCode?>";
+        var URL = '../process/signature_qc.php';
+        $.ajax({  
+            url: URL,
+            method:"POST",
+            data:{
+                DocNo:DocNo,
+                SigCode:SigCode
+            },
+            success: function (data) {
+                window.location.href='qc.php?siteCode='+siteCode+'&Menu=qc';
+            }
+        });
+      }else{
+        var URL = '../process/signature.php';
+              
+        $.ajax({  
+            url: URL,
+            method:"POST",
+            data:{
+                DocNo:DocNo,
+                From:From,
+                SigCode:SigCode
+            },
+            success: function (data) {
+                window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&From='+From;
+            }
+        });
+      }
+
     }
 
     // One could simply use Canvas#toBlob method instead, but it's just to show

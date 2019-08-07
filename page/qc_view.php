@@ -410,9 +410,12 @@ $genarray = json_decode($json, TRUE);
                             send_rewash(NewDocNo);
 
                         } else if (temp["form"] == 'save_qc') {
-                            var siteCode = '<?php echo $siteCode ?>';
-                            var Menu = '<?php echo $Menu ?>';
-                            window.location.href = 'qc.php?siteCode='+siteCode+'&Menu='+Menu;
+                            var Menu = "<?php echo $Menu?>";
+                            var DocNo = "<?php echo $DocNo?>";
+                            var siteCode = "<?php echo $siteCode?>";
+                            
+                            
+                            window.location.href='signature.php?Menu='+Menu+'&DocNo='+DocNo+'&siteCode='+siteCode;
                             
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';

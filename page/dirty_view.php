@@ -24,7 +24,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $genarray['titledirty'][$language].$array['title'][$language];?></title>
 
-    <?php require 'script_css.php'; ?>
+   
+    <?php 
+        require 'script_css.php'; 
+        require 'logout_fun.php';
+    ?>
     <script>
         $(document).ready(function (e) {
             load_site();

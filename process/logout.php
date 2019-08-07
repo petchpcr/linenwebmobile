@@ -2,8 +2,9 @@
 function logout($conn, $DATA){
   $logout = $DATA["Confirm"];
   $Sql = "UPDATE users SET IsActive = 0 WHERE ID = ".$_SESSION['Userid'];
-
-  if($logout == 3){
+  if ($logout == 1 || $logout == 2) {
+    mysqli_query($conn,$Sql);
+  }else if($logout == 3){
     $Sql2 = "SELECT IsActive FROM users WHERE ID = ".$_SESSION['Userid'];
     $meQuery = mysqli_query($conn,$Sql2);
     $Result = mysqli_fetch_assoc($meQuery);
@@ -14,12 +15,9 @@ function logout($conn, $DATA){
     }else{
       $logout=1;
     }
-  }else if($logout == 2){
-    mysqli_query($conn,$Sql);
   }
 
   if ($logout == 1) {
-    mysqli_query($conn,$Sql);
     unset($_SESSION['Userid']);
     unset($_SESSION['Username']);
     unset($_SESSION['FName']);

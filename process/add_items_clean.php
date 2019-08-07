@@ -6,33 +6,62 @@
     function choose_items($conn, $DATA){
         $DepCode = $DATA["DepCode"];
         $Search = $DATA["Search"];
-        $count = 0;
-        $boolean = false;
+        $refDoc = $DATA["refDoc"];
+
+        $Sql = "SELECT Count(*) AS c FROM rewash WHERE docNo= '$refDoc'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $c	=  $Result['c'];
+
         $Sql = "SELECT department.DepName,site.HptName
-                FROM department 
-                INNER JOIN site ON department.HptCode = site.HptCode 
-                WHERE department.DepCode = '$DepCode'";
+        FROM department 
+        INNER JOIN site ON department.HptCode = site.HptCode 
+        WHERE department.DepCode = '$DepCode'";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return['DepName']	=  $Result['DepName'];
             $return['HptName']	=  $Result['HptName'];
         }
 
-        $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
+        if($c==0){
+            $count = 0;
+            $boolean = false;   
+            $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
+    
+                    FROM                item_stock,item
+    
+                    WHERE               DepCode='$DepCode'
+                    AND                 item_stock.ItemCode=item.ItemCode
+                    AND                 item.ItemName LIKE '%$Search%' ";
+            $meQuery = mysqli_query($conn,$Sql);
+            while ($Result = mysqli_fetch_assoc($meQuery)){
+                $return[$count]['ItemCode']	=  $Result['ItemCode'];
+                $return[$count]['ItemName']	=  $Result['ItemName'];
+                $return[$count]['UnitCode']	=  $Result['UnitCode'];
+                $count++;
+                $boolean = true;
+            }
+        }else{
+            $count = 0;
+            $boolean = false;
+    
+            $Sql = "SELECT DISTINCT     rewash_detail.ItemCode,ItemName,item.UnitCode
+    
+                    FROM                rewash_detail,item
 
-                FROM                item_stock,item
-
-                WHERE               DepCode='$DepCode'
-                AND                 item_stock.ItemCode=item.ItemCode
-                AND                 item.ItemName LIKE '%$Search%' ";
-        $meQuery = mysqli_query($conn,$Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)){
-            $return[$count]['ItemCode']	=  $Result['ItemCode'];
-            $return[$count]['ItemName']	=  $Result['ItemName'];
-            $return[$count]['UnitCode']	=  $Result['UnitCode'];
-            $count++;
-            $boolean = true;
+                    WHERE               rewash_detail.DocNo='$refDoc'
+                    AND                 rewash_detail.ItemCode=item.ItemCode
+                    AND                 item.ItemName LIKE '%$Search%'";
+            $meQuery = mysqli_query($conn,$Sql);
+            while ($Result = mysqli_fetch_assoc($meQuery)){
+                $return[$count]['ItemCode']	=  $Result['ItemCode'];
+                $return[$count]['ItemName']	=  $Result['ItemName'];
+                $return[$count]['UnitCode']	=  $Result['UnitCode'];
+                $count++;
+                $boolean = true;
+            }
         }
+
 
         if ($boolean) {
             $return['status'] = "success";

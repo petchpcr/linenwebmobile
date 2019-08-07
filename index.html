@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>Title</title>
 
@@ -12,30 +13,30 @@
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript">
+        function chageTimeout() {
+            window.location.href = 'page/login.php';
+        }
 
-      function chageTimeout(){
-          window.location.href = 'page/login.php';
-      }
-
-      $(document).ready(function(e) {
-          setTimeout( 'chageTimeout()', 2000 ); // กำหนดเวลาตรวจเช็คเริ่มต้น
-      });
-
+        $(document).ready(function(e) {
+            setTimeout('chageTimeout()', 2000); // กำหนดเวลาตรวจเช็คเริ่มต้น
+        });
     </script>
     <style>
-        .bg{
-          position:absolute;
-          width:100vw;
-          height:100vh;
-          object-fit: cover;
+        .bg {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
         }
     </style>
     <title>Title</title>
-  </head>
-  <body >
-    <img class="bg" src="img/background01.png">
+</head>
+
+<body>
+    <img class="bg" src="img/background.png">
     <div class="logo d-flex justify-content-center">
-      <img class="index_logo" src="img/logo.png">
+        <img class="index_logo" src="img/logo.png">
     </div>
-  </body>
+</body>
+
 </html>

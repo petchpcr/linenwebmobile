@@ -24,7 +24,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $genarray['titleclean'][$language].$array['title'][$language];?></title>
 
-    <?php require 'script_css.php'; ?>
+    
+    <?php 
+        require 'script_css.php'; 
+        require 'logout_fun.php';
+    ?>
 
     <script>
         $(document).ready(function (e) {
@@ -82,7 +86,8 @@
           var siteCode = '<?php echo $siteCode;?>';
           var Menu = '<?php echo $Menu;?>';
           var DepCode = $("#add_doc").data("depcode");
-          window.location.href='add_items.php?siteCode='+siteCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid+'&DepCode='+DepCode;
+          var RefDocNo = $("#RefDocNo").val();
+          window.location.href='add_items.php?siteCode='+siteCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid+'&DepCode='+DepCode+'&RefDocNo='+RefDocNo ;
         }
 
         function senddata(data) {
