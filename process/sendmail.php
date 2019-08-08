@@ -1,19 +1,14 @@
 <?php
-    session_start();
-    require '../connect/connect.php';
-    date_default_timezone_set('Asia/Bangkok');
-    require 'PHPMailer/PHPMailerAutoload.php';
+
+date_default_timezone_set('Asia/Bangkok');
+require 'PHPMailer/PHPMailerAutoload.php';
+
+if(isset($_POST['DATA']))
+{
+    $data = $_POST['DATA'];
+    $DATA = json_decode(str_replace ('\"','"', $data), true);
+    $Docno = $DATA['Docno'];
     
-    $DocNo = $_POST['DocNo'];
-    $From = $_POST['From'];
-    $SigCode = $_POST['SigCode'];
-
-    $Sql = "UPDATE process SET IsStatus = 4,Signature = '$SigCode' WHERE DocNo = '$DocNo'";
-    mysqli_query($conn,$Sql);
-
-    $Sql = "UPDATE $From SET IsStatus = 3 WHERE DocNo = '$DocNo'";
-    mysqli_query($conn,$Sql);
-
     $Sql = "SELECT IF(SendOverTime<0, 'TRUE', 'FALSE'),SendOverTime AS t FROM process WHERE DocNo='$Docno'";
     $meQuery=mysqli_query($conn,$Sql);
     $Result = mysqli_fetch_assoc($meQuery);
@@ -83,4 +78,6 @@
             die;
         }
     }
+    
+}
 ?>

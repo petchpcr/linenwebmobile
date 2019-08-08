@@ -57,8 +57,10 @@ $genarray = json_decode($json, TRUE);
             arr_new_items = [];
             arr_del_items = [];
             var DocNo = "<?php echo $DocNo ?>";
+            var refDoc = "<?php echo $refDoc ?>";
             var data = {
                 'DocNo': DocNo,
+                'refDoc' : refDoc,
                 'STATUS': 'load_items'
             };
             senddata(JSON.stringify(data));

@@ -82,6 +82,31 @@
         $count = 0;
         $DocNo = $DATA["DocNo"];
         $boolean = false;
+        $refDoc = $DATA["refDoc"];
+
+        $Sql = "SELECT Count(*) AS c FROM rewash WHERE docNo= '$refDoc'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $c	=  $Result['c'];
+        if($c==1){
+            $boolean = false;
+    
+            $Sql = "SELECT     ItemCode,UnitCode1,Qty1,Weight
+                    FROM       rewash_detail
+                    WHERE      DocNo='$refDoc'";
+
+            $meQuery = mysqli_query($conn,$Sql);
+            while ($Result = mysqli_fetch_assoc($meQuery)){
+                $new_i	=  $Result['ItemCode'];
+                $new_unit	=  $Result['UnitCode1'];
+                $new_qty	=  $Result['Qty1'];
+                $new_weight	=  $Result['Weight'];
+                $boolean = true;
+                $Sql = "INSERT INTO clean_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
+                    VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
+                mysqli_query($conn,$Sql);
+            }
+        }
 
         $Sql = "SELECT clean_detail.ItemCode,
                         item.ItemName,
