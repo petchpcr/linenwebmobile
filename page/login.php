@@ -18,7 +18,10 @@
 	<link rel="stylesheet" href="../dist/css/sweetalert2.min.css"> -->
 	
 	<?php require 'script_css.php'; ?>
-	
+	<link rel="stylesheet" href="../css/bootstrap-material-design.css">
+	<link rel="stylesheet" href="../css/docs.min.css">
+	<link rel="stylesheet" href="../css/style_login.css">
+
 	<script type="text/javascript">
 		function back() {
 			alert("Go to back");
@@ -144,37 +147,65 @@
 			});
 		}
 	</script>
-	<style>
-		body, html {
-			height: 100% !important;
-			margin: 0 !important;
-			background-image: url("../img/background01.png") !important;
-		}
-	</style>
 </head>
 
 <body>
-	<div class="d-flex justify-content-center" style="height:100%;padding-top:10rem;">
-		<div class="col-lg-9 col-md-10 col-sm-12">
-
-			<div class="mb-3" align="center"><img src="../img/logo.png" width="240" height="60" /></div>
-
-			<div class="form-group">
-				<label>User Name :(<?php echo "http://{$_SERVER['HTTP_HOST']}";?>)</label>
-				<input type="text" onkeyup='make_char()' class="form-control nonspa" id="username">
+	<div class="row p-0 m-0 d-flex justify-content-center">
+		<div class="col-lg-7 col-md-9 col-sm-11 col-11 p-0">
+			<img src="../img/head_login.png" class="head_login_img" style="border-radius:30px 30px 0 0;">
+		</div>
+		<div class="col-lg-7 col-md-9 col-sm-11 col-11 p-0">
+			<div class="card card-body" style="border-radius:0 0 30px 30px;">
+			<div class="row mb-3 p-0" align="center">
+				<div class="col-12 mb-4"><img src="../img/logo.png" class="logo_login_img"/></div>
+				<div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;"/></div>
 			</div>
 
-			<div class="form-group mb-4">
-				<label>Password :</label>
-				<input type="password" onkeyup='make_char()' class="form-control nonspa" id="password">
+			<div id="row p-0">
+				<div class="col-12">
+					<div id="icon_user">
+						<i class="fas fa-user"></i>
+					</div>
+					<div class="form-group bmd-form-group">
+						<label for="username" id="label_username" class="bmd-label-floating">Username (<?php echo "http://{$_SERVER['HTTP_HOST']}";?>)</label>
+						<input onkeyup='make_char()' type="text" autocomplete="off" class="form-control" id="username">
+					</div>
+				</div>
 			</div>
-
-			<div class="form-group">
-				<button class="btn btn-info btn-block font-weight-bold" onclick="chklogin();" >Login</button>	
+			
+			<div id="row">
+				<div class="col-12">
+					<div id="icon_password">
+						<i class="fas fa-lock"></i>
+					</div>
+					<div class="form-group bmd-form-group">
+						<label for="password" id="label_password" class="bmd-label-floating">Password</label>
+						<input type="password" autocomplete="off" class="form-control" id="password">
+					</div>
+				</div>
+			</div>
+			
+			<div class="text-center mt-2">
+				<div id="btn_login">
+					<button onclick="chklogin()" class="btn btn_custom">
+					<div class="row align-items-center px-4">
+						<div class="ml-3 mr-auto">LOGIN</div>	
+						<i class="fas fa-arrow-right mr-3"></i>
+					</div>
+					
+					</button>
+				</div>
+			</div>
 			</div>
 		</div>
-		
-	</div>	
+	</div>
+	<script src="../js/popper.min.js"></script>
+	<script src="../js/bootstrap-material-design.js"></script>
+	
+	<script src="../js/anchor.min.js"></script>
+    <script src="../js/clipboard.min.js"></script>
+    <script src="../js/holder.min.js"></script>
+    <script src="../js/application.js"></script>
 </body>
 
 </html>
