@@ -37,6 +37,7 @@
         $Result = mysqli_fetch_assoc($meQuery);
 
         $email = $Result['email'];
+        //$email = "sarantoy101@gmail.com";
         $FName = $Result['FName'];;
         $Subject = "Delivery over time";
     
