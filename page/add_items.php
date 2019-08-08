@@ -413,18 +413,20 @@ $genarray = json_decode($json, TRUE);
                                 var have_old = 0;
                                 var have_new = 0;
 
-                                if (arr_old_items.length > 0) {
+                                if(Menu != 'dirty'){
+                                    if (arr_old_items.length > 0) {
                                     for (var ii = 0; ii < arr_old_items.length; ii++) {
                                         if (arr_old_items[ii] == temp[i]['ItemCode']) {
                                             have_old = 1;
                                         }
                                     }
-                                }
+                                    }
 
-                                if (arr_new_items.length > 0) {
-                                    for (var iii = 0; iii < arr_new_items.length; iii++) {
-                                        if (arr_new_items[iii] == temp[i]['ItemCode']) {
-                                            have_new = 1;
+                                    if (arr_new_items.length > 0) {
+                                        for (var iii = 0; iii < arr_new_items.length; iii++) {
+                                            if (arr_new_items[iii] == temp[i]['ItemCode']) {
+                                                have_new = 1;
+                                            }
                                         }
                                     }
                                 }
