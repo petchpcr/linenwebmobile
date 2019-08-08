@@ -354,10 +354,14 @@ $genarray = json_decode($json, TRUE);
                                 } else if (temp[i]['IsStatus'] == 0) {
                                     unchk = "checked";
                                 }
+                                var qty = temp[i]['Qty'];
+                                if (temp[i]['Qty'] == 0) {
+                                    qty = "";
+                                }
                                 var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
                                     Str += "<div>"+temp[i]['Question']+"</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
                                     Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question"+i+"' class='form-control text-center m-2 numonly' type='text' ";
-                                    Str += "data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' value='"+temp[i]['Qty']+"'>จำนวน</div></div></div>";
+                                    Str += "data-itemcode='"+temp['ItemCode']+"' data-question='"+temp[i]['QuestionId']+"' value='"+qty+"' placeholder='0'>จำนวน</div></div></div>";
                                 $("#question").append(Str);
                                 sum_question++;
                             }
