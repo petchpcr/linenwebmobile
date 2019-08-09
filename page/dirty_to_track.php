@@ -111,21 +111,33 @@ require '../getTimeZone.php';
                                     status_line = "StatusLine_4";
                                     var onclick = "";
                                 } else if (temp[i]['IsProcess'] == 1) {
-                                    status_class = "status3";
+                                    status_class = "status1";
                                     status_text = "กำลังดำเนินการซัก";
-                                    status_line = "StatusLine_3";
+                                    status_line = "StatusLine_1";
                                 } else if (temp[i]['IsProcess'] == 2) {
-                                    status_class = "status3";
-                                    status_text = "กำลังดำเนินการแพ็ค";
-                                    status_line = "StatusLine_3";
+                                    status_class = "status1";
+                                    status_text = "เสร็จสิ้นการซัก";
+                                    status_line = "StatusLine_1";
                                 } else if (temp[i]['IsProcess'] == 3) {
-                                    status_class = "status3";
-                                    status_text = "กำลังดำเนินการขนส่ง";
-                                    status_line = "StatusLine_3";
+                                    status_class = "status1";
+                                    status_text = "กำลังดำเนินการแพ็ค";
+                                    status_line = "StatusLine_1";
                                 } else if (temp[i]['IsProcess'] == 4) {
-                                    status_class = "status2";
+                                    status_class = "status1";
+                                    status_text = "เสร็จสิ้นการแพ็ค";
+                                    status_line = "StatusLine_1";
+                                }else if (temp[i]['IsProcess'] == 5) {
+                                    status_class = "status1";
+                                    status_text = "กำลังดำเนินการขนส่ง";
+                                    status_line = "StatusLine_1";
+                                } else if (temp[i]['IsProcess'] == 6) {
+                                    status_class = "status1";
+                                    status_text = "เสร็จสิ้นการขนส่ง";
+                                    status_line = "StatusLine_1";
+                                } else if (temp[i]['IsProcess'] == 7) {
+                                    status_class = "status3";
                                     status_text = "เสร็จสิ้น";
-                                    status_line = "StatusLine_2";
+                                    status_line = "StatusLine_3";
                                 }
 
                                 if (temp[i]['IsStatus'] > 0) {
