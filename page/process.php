@@ -111,10 +111,10 @@
             senddata(JSON.stringify(data));
         }
 
-        function back(site){
+        function back(){
             var Menu = '<?php echo $Menu;?>';
-            var siteCode = '<?php echo $siteCode;?>';
-            window.location.href='dirty.php?Menu='+Menu+'&siteCode='+siteCode;
+            var site = '<?php echo $siteCode;?>';
+            window.location.href='dirty.php?Menu='+Menu+'&siteCode='+site;
         }
         
         function senddata(data) {
@@ -422,14 +422,14 @@
         <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
 
         <div id="process">
-            <div class="card mt-3" style="padding:1rem;">
+            <div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">
                 <div class="row">
                     <div class="col-4 align-self-center">
                         <div class="row">
                             <div class="col-md-6 col-sm-none"></div>
                             <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_1.png" height="90px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div class="col-md-6 col-sm-12 text-center font-weight-light"><?php echo $array['Wash'][$language]; ?></div>
+                            <div class="col-md-6 col-sm-12 text-center"><?php echo $array['Wash'][$language]; ?></div>
                         </div>
                     </div>
 
@@ -454,7 +454,7 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12 text-center"><img id="W_Status" height="40px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div id="W_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
+                            <div id="W_Status_text" class="col-md-6 col-sm-12 text-center"></div>
                             <div class="col-md-6 col-sm-none"></div>
                         </div>
                     </div>
@@ -467,14 +467,14 @@
                 </div>
             </div>
 
-            <div class="card mt-4" style="padding:1rem;">
+            <div class="card alert alert-info mx-3 mt-4" style="padding:1rem;">
                 <div class="row">
                     <div class="col-4 align-self-center">
                         <div class="row">
                             <div class="col-md-6 col-sm-none"></div>
                             <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_2.png" height="90px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div class="col-md-6 col-sm-12 text-center font-weight-light"><?php echo $array['pack'][$language]; ?></div>
+                            <div class="col-md-6 col-sm-12 text-center"><?php echo $array['pack'][$language]; ?></div>
                         </div>
                     </div>
 
@@ -499,7 +499,7 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12 text-center"><img id="P_Status" height="40px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div id="P_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
+                            <div id="P_Status_text" class="col-md-6 col-sm-12 text-center"></div>
                             <div class="col-md-6 col-sm-none"></div>
                         </div>
                     </div>
@@ -513,14 +513,14 @@
                 </div>
             </div>
 
-            <div class="card mt-4" style="padding:1rem;">
+            <div class="card alert alert-info mx-3 mt-4" style="padding:1rem;">
                 <div class="row">
                     <div class="col-4 align-self-center">
                         <div class="row">
                             <div class="col-md-6 col-sm-none"></div>
                             <div class="col-md-6 col-sm-12 text-center"><img src="../img/icon_3.png" height="90px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div class="col-md-6 col-sm-12 text-center font-weight-light"><?php echo $array['shipping'][$language]; ?></div>
+                            <div class="col-md-6 col-sm-12 text-center"><?php echo $array['shipping'][$language]; ?></div>
                         </div>
                     </div>
 
@@ -545,7 +545,7 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12 text-center"><img id="S_Status" height="40px"/></div>
                             <div class="col-md-6 col-sm-none"></div>
-                            <div id="S_Status_text" class="col-md-6 col-sm-12 text-center font-weight-light"></div>
+                            <div id="S_Status_text" class="col-md-6 col-sm-12 text-center"></div>
                             <div class="col-md-6 col-sm-none"></div>
                         </div>
                     </div>
