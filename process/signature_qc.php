@@ -26,9 +26,9 @@
         
         if(c>0){
             $s=0;
-            $Sql = "SELECT IF(IsStatus=3, TRUE, FALSE) as s FROM rewash WHERE RefDocNo = '$cleanRefDocNo'
+            $Sql = "SELECT IF(IsStatus=3, 1, 0) as s FROM rewash WHERE RefDocNo = '$cleanRefDocNo'
                     UNION ALL
-                    SELECT IF(IsStatus=3, TRUE, FALSE) as s FROM claim WHERE RefDocNo = '$cleanRefDocNo'";
+                    SELECT IF(IsStatus=3, 1, 0) as s FROM claim WHERE RefDocNo = '$cleanRefDocNo'";
             while ($Result = mysqli_fetch_assoc($meQuery)) {
                 $s += $Result['s'];
             }
