@@ -427,14 +427,16 @@
                 $CopeMethod = $Result['CopeMethod'];
             }
 
-            if ($CopeMethod == 1) { // Claim
+            if ($CopeMethod == 1 && $arr_amount[$i] > 0) { // Claim
                 $claim = 1;
             }
-            else if ($CopeMethod == 2) { // Rewash
+            else if ($CopeMethod == 2 && $arr_amount[$i] > 0) { // Rewash
                 $rewash = 1;
             }
         }
-
+        $return['claim'] = $claim;
+        $return['rewash'] = $rewash;
+        
         $checklist = 0;
         if ($claim == 1 && $rewash == 1) { // Claim & Rewash
             $checklist = 3;
@@ -592,8 +594,8 @@
                     $count_claim = 1;
                 }
 
-                if ($count_claim == 1) {
-                    if ($chkClaim == 0) {
+                if ($count_claim == 1) { // ถ้าสร้างเลขใหม่ได้
+                    if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารนี้
                         $Sql_claim = "INSERT INTO claim(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsStatus,IsCancel,Detail,Modify_Code,Modify_Date)
                                         VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,1,0,'',$userid,NOW())";
 
@@ -622,7 +624,7 @@
                 }
 
                 if ($chkUpdate == 0) {
-                    if ($chkClaim == 0) {
+                    if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารนี้
                         $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
                                             VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
                     }
@@ -716,7 +718,7 @@
                 }
 
                 if ($count_claim == 1) {
-                    if ($chkClaim == 0) {
+                    if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารนี้
                         $Sql_claim = "INSERT INTO claim(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsStatus,IsCancel,Detail,Modify_Code,Modify_Date)
                                         VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,1,0,'',$userid,NOW())";
 
@@ -745,7 +747,7 @@
                 }
 
                 if ($chkUpdate == 0) {
-                    if ($chkClaim == 0) {
+                    if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารนี้
                         $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
                                             VALUES ('$DocNo','$itemCode',$unitCode,1,$qty,0,$weight,0,0,0)";
                     }

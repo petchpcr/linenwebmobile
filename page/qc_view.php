@@ -336,6 +336,12 @@ $genarray = json_decode($json, TRUE);
                             $("#qc_qty").val(temp['Qty']);
                             var Pass = temp['Pass'];
                             var Fail = temp['Fail'];
+                            if (temp['Pass'] == 0) {
+                                Pass = "";
+                            }
+                            if (temp['Fail'] == 0) {
+                                Fail = "";
+                            }
                             $("#qc_pass").val(Pass);
                             $("#qc_fail").val(Fail);
 
