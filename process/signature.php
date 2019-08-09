@@ -7,6 +7,10 @@
     $DocNo = $_POST['DocNo'];
     $From = $_POST['From'];
     $SigCode = $_POST['SigCode'];
+    
+    // $DocNo = "DTBHQ1908-00006";
+    // $From = "dirty";
+    // $SigCode = "45154";
 
     $Sql = "UPDATE process SET IsStatus = 4,Signature = '$SigCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
@@ -14,11 +18,13 @@
     $Sql = "UPDATE $From SET IsStatus = 3 WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
 
-    $Sql = "SELECT IF(SendOverTime<0, 'TRUE', 'FALSE'),SendOverTime AS t FROM process WHERE DocNo='$Docno'";
+    $Sql = "SELECT IF(SendOverTime<0, TRUE, FALSE) AS t,SendOverTime FROM process WHERE DocNo='$DocNo'";
     $meQuery=mysqli_query($conn,$Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $Time = $Result['t'];
     $SendOverTime = $Result['SendOverTime'];
+
+   // echo json_encode($Time);
 
     if($Time==1){
         $Sql = "SELECT FName,email
@@ -26,15 +32,17 @@
         WHERE users.HptCode = department.HptCode
         AND department.DepCode = (SELECT DepCode 
                                 FROM dirty 
-                                WHERE DocNo = '$Docno' 
+                                WHERE DocNo = '$DocNo' 
                                 UNION ALL 
                                 SELECT DepCode 
                                 FROM rewash 
-                                WHERE DocNo = '$Docno'
+                                WHERE DocNo = '$DocNo'
                                 )
         AND users.Active_mail = 1";
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
+
+        //echo json_encode($Sql);
 
         $email = $Result['email'];
         //$email = "sarantoy101@gmail.com";
@@ -47,9 +55,10 @@
         <body>
         <br>
         ___________________________________________________________________<br>
-        Document : $Docno
-        Over time : $SendOverTime
-        ___________________________________________________________________<br>
+        <br>
+        Document : '.$DocNo.'<br>
+        Over time : '.$SendOverTime.'
+        <br>___________________________________________________________________<br>
         <br>
         Thanks...<br>
         </body>

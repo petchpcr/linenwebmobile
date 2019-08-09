@@ -138,13 +138,13 @@
                                 var status_line = "";
 
                                 if (temp[i]['IsStatus'] == 0) {
-                                    status_class = "status1";
-                                    status_text = "หยุดชั่วขณะ";
-                                    status_line = "StatusLine_1";
+                                    status_class = "status4";
+                                    status_text = "ไม่ทำงาน";
+                                    status_line = "StatusLine_4";
                                 } 
                                 else if (temp[i]['IsStatus'] == 1) {
                                     status_class = "status2";
-                                    status_text = "เสร็จสิ้น";
+                                    status_text = "สร้างเสร็จสิ้น";
                                     status_line = "StatusLine_2";
                                 } 
                                 else if (temp[i]['IsStatus'] == 2) {
@@ -154,7 +154,7 @@
                                 }
                                 else {
                                     status_class = "status3";
-                                    status_text = "กำลังดำเนินการ";
+                                    status_text = "เสร็จสิ้น";
                                     status_line = "StatusLine_3";
                                 }
 
