@@ -77,7 +77,6 @@
         $Sql = "INSERT INTO process (DocNo) VALUES ('$DocNo') ";
     
         if($meQuery = mysqli_query($conn,$Sql)){
-            //$meQuery = mysqli_query($conn,$Sql);
 
             $return['status'] = "success";
             $return['form'] = "insert_process";
@@ -95,9 +94,13 @@
 
     function start_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $Sql = "UPDATE process SET WashStartTime = NOW(),IsStatus = 1 WHERE DocNo = '$DocNo'";
         
         if(mysqli_query($conn,$Sql)){
+            $Sql = "UPDATE $From SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
+            mysqli_query($conn,$Sql);
+
             $return['status'] = "success";
             $return['form'] = "start_wash";
             echo json_encode($return);
@@ -121,7 +124,7 @@
         $Sql = "UPDATE process SET WashEndTime = NOW() WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
 
-        $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime 
+        $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime
 
                 FROM    process 
                 WHERE   DocNo = '$DocNo'";
@@ -136,7 +139,7 @@
             $Sql = "UPDATE process SET WashUseTime = '$UseTime',IsStatus = 2 WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
-            $Sql = "UPDATE $From SET IsProcess = 1 WHERE DocNo = '$DocNo' ";
+            $Sql = "UPDATE $From SET IsProcess = 2 WHERE DocNo = '$DocNo' ";
             mysqli_query($conn,$Sql);
 
             $return['status'] = "success";
@@ -155,9 +158,13 @@
 
     function start_pack($conn, $DATA){
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $Sql = "UPDATE process SET PackStartTime = NOW() WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn,$Sql)){
+            $Sql = "UPDATE $From SET IsProcess = 3 WHERE DocNo = '$DocNo' ";
+            mysqli_query($conn,$Sql);
+
             $return['status'] = "success";
             $return['form'] = "start_pack";
             echo json_encode($return);
@@ -174,6 +181,7 @@
 
     function end_pack($conn, $DATA){
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $boolean = false;
 
         $Sql = "UPDATE process SET PackEndTime = NOW(),IsStatus = 3 WHERE DocNo = '$DocNo'";
@@ -192,6 +200,9 @@
 
         if($boolean){
             $Sql = "UPDATE process SET PackUseTime = '$UseTime' WHERE DocNo = '$DocNo'";
+            mysqli_query($conn,$Sql);
+
+            $Sql = "UPDATE $From SET IsProcess = 4 WHERE DocNo = '$DocNo' ";
             mysqli_query($conn,$Sql);
 
             $return['status'] = "success";
@@ -234,11 +245,13 @@
 
     function start_send($conn, $DATA){
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $nowdate = date('Y-m-d H:i:s');
         $Sql = "UPDATE process SET SendStartTime = '$nowdate' WHERE DocNo = '$DocNo'";
 
-        if($meQuery = mysqli_query($conn,$Sql)){
-            $meQuery = mysqli_query($conn,$Sql);
+        if(mysqli_query($conn,$Sql)){
+            $Sql = "UPDATE $From SET IsProcess = 5 WHERE DocNo = '$DocNo' ";
+            mysqli_query($conn,$Sql);
 
             $return['SendStartTime'] = $nowdate;
             $return['status'] = "success";
@@ -266,12 +279,12 @@
         mysqli_query($conn,$Sql);
 
         $Sql = "SELECT  TIMEDIFF(process.SendEndTime,process.SendStartTime) AS UseTime,
-                        TIMEDIFF((delivery_time.SendTime)*100,TIMEDIFF(process.SendEndTime,process.SendStartTime)) AS Overtime 
+                        TIMEDIFF((delivery_fac_nhealth.SendTime)*100,TIMEDIFF(process.SendEndTime,process.SendStartTime)) AS Overtime 
 
-                FROM    process,delivery_time 
+                FROM    process,delivery_fac_nhealth 
                 WHERE   process.DocNo = '$DocNo'
-                AND     delivery_time.HptCode = '$SiteCode'
-                AND     delivery_time.FacCode = '$FacCode'";
+                AND     delivery_fac_nhealth.HptCode = '$SiteCode'
+                AND     delivery_fac_nhealth.FacCode = '$FacCode'";
 
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -284,22 +297,20 @@
             $Sql = "UPDATE process SET SendUseTime = '$UseTime',SendOverTime = '$Overtime' WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
-            $Sql = "UPDATE $From SET IsProcess = 3 WHERE DocNo = '$DocNo'";
+            $Sql = "UPDATE $From SET IsProcess = 6 WHERE DocNo = '$DocNo'";
             mysqli_query($conn,$Sql);
 
-            if (mysqli_query($conn,$Sql)) {
-                $return['status'] = "success";
-                $return['form'] = "end_send";
-                echo json_encode($return);
-                mysqli_close($conn);
-                die;
-            } else {
-                $return['status'] = "failed";
-                $return['form'] = "end_send";
-                echo json_encode($return);
-                mysqli_close($conn);
-                die;
-            }
+            $return['status'] = "success";
+            $return['form'] = "end_send";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "end_send";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
         }
     }
 

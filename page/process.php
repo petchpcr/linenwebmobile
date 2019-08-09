@@ -58,8 +58,10 @@
         }
 
         function start_wash(DocNo){
+            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'start_wash'
             };
             senddata(JSON.stringify(data));
@@ -76,24 +78,30 @@
         }
 
         function start_pack(DocNo){
+            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'start_pack'
             };
             senddata(JSON.stringify(data));
         }
 
         function end_pack(DocNo){
+            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'end_pack'
             };
             senddata(JSON.stringify(data));
         }
 
         function start_send(DocNo){
+            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
+                'From': From,
                 'STATUS': 'start_send'
             };
             senddata(JSON.stringify(data));
