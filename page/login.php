@@ -155,8 +155,8 @@
 			<img src="../img/head_login.png" class="head_login_img" style="border-radius:30px 30px 0 0;">
 		</div>
 		<div class="col-lg-7 col-md-9 col-sm-11 col-11 p-0">
-			<div class="card card-body" style="border-radius:0 0 30px 30px;">
-			<div class="row mb-3 p-0" align="center">
+			<div class="bg-white card-body" style="border-radius:0 0 30px 30px;">
+			<div class="row text-center mb-3 p-0">
 				<div class="col-12 mb-4"><img src="../img/logo.png" class="logo_login_img"/></div>
 				<div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;"/></div>
 			</div>
