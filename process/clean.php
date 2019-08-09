@@ -100,18 +100,16 @@
     }
 
     function load_dep($conn, $DATA){
-        $count = 0;
         $siteCode = $DATA["siteCode"];
-        $Sql = "SELECT DepCode, DepName FROM department
-                WHERE department.HptCode='$siteCode' AND IsStatus = 0
-                ORDER BY DepName ASC";
+        $Sql = "SELECT DepCode FROM department
+                WHERE department.HptCode='$siteCode' 
+                AND IsStatus = 0
+                AND IsDefault = 1";
         $boolean = false;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DepCode'] = $Result['DepCode'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $count++;
+            $return['DepCode'] = $Result['DepCode'];
             $boolean = true;
         }
         if ($boolean) {

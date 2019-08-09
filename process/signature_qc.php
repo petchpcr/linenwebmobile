@@ -25,15 +25,17 @@
         }
         
         if(c>0){
-            $s=0;
-            $Sql = "SELECT IF(IsStatus=3, 1, 0) as s FROM rewash WHERE RefDocNo = '$cleanRefDocNo'
+            $s=true;
+            $Sql = "SELECT IF(IsStatus=3, TRUE, FALSE) as s FROM rewash WHERE RefDocNo = '$cleanRefDocNo'
                     UNION ALL
-                    SELECT IF(IsStatus=3, 1, 0) as s FROM claim WHERE RefDocNo = '$cleanRefDocNo'";
+                    SELECT IF(IsStatus=3, TRUE, FALSE) as s FROM claim WHERE RefDocNo = '$cleanRefDocNo'";
             while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $s += $Result['s'];
+                if($Result['s']==0){
+                    $s=false;
+                }
             }
 
-            if(s==2){
+            if($s){
                 $Sql = "UPDATE clean SET IsStatus = 4 WHERE DocNo= '$cleanRefDocNo'";
                 mysqli_query($conn,$Sql);
             }

@@ -37,6 +37,8 @@
             load_site();
         });
 
+        var depCode;
+
         function load_site() {
             console.log("<?php echo date("Y-m-d"); ?>");
             $('#datepicker').val("<?php echo date("Y-m-d"); ?>");
@@ -98,13 +100,13 @@
             //var DepCode = $("#DepName").val(); 
             //window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
             if (slt == 1) {
-                window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+                window.location.href='ref_dirty.php?siteCode='+siteCode+'&DepCode='+depCode+'&Menu='+Menu; // Handle(DepCode = 224)
             }
             // else if (slt == 2) {
             //     window.location.href='ref_claim.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
             // }
             else if (slt == 3) {
-                window.location.href='ref_rewash.php?siteCode='+siteCode+'&DepCode=224&Menu='+Menu; // Handle(DepCode = 224)
+                window.location.href='ref_rewash.php?siteCode='+siteCode+'&DepCode='+depCode+'&Menu='+Menu; // Handle(DepCode = 224)
             }
         }
 
@@ -175,12 +177,9 @@
                         } else if (temp["form"] == 'logout') {
                             window.location.href = '../index.html';
                         }
-                        // else if(temp["form"] == 'load_dep'){
-                        //     for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
-                        //         var Str = "<option value="+temp[i]['DepCode']+">"+temp[i]['DepName']+"</option>";
-                        //         $("#DepName").append(Str);
-                        //     }
-                        // }
+                        else if(temp["form"] == 'load_dep'){
+                            depCode = temp["DepCode"];
+                        }
                     } else if (temp['status'] == "failed") {
                         if (temp["form"] == 'load_doc') {
                             $(".btn.btn-mylight.btn-block").remove();
