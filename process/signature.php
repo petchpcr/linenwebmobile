@@ -15,7 +15,7 @@
     $Sql = "UPDATE process SET IsStatus = 4,Signature = '$SigCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
 
-    $Sql = "UPDATE $From SET IsStatus = 3 WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE $From SET IsStatus = 3,IsProcess = 7 WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
 
     $Sql = "SELECT IF(SendOverTime<0, TRUE, FALSE) AS t,SendOverTime FROM process WHERE DocNo='$DocNo'";

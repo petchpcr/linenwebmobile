@@ -864,11 +864,11 @@
         if($pNum==$itemNum){
 
         //IsCheckList = 1 QC pass all  
-            $Sql = "UPDATE clean SET IsCheckList = 1 WHERE DocNo= '$pDocNo'";
+            $Sql = "UPDATE clean SET IsCheckList = 1,IsStatus = 4 WHERE DocNo= '$pDocNo'";
 
         //IsCheckList = 2 some send claim
         }else{
-            $Sql = "UPDATE clean SET IsCheckList = 2 WHERE DocNo= '$pDocNo'";
+            $Sql = "UPDATE clean SET IsCheckList = 2,IsStatus = 3 WHERE DocNo= '$pDocNo'";
         }
 
         if ($meQuery = mysqli_query($conn,$Sql)) {

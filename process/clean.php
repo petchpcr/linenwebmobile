@@ -40,6 +40,7 @@
         $Sql = "SELECT
                     clean.DocNo,
                     clean.IsStatus,
+                    clean.IsCheckList,
                     department.DepName,
                     site.HptCode,
                     site.HptName
@@ -57,7 +58,7 @@
             $return[$count]['DepName'] = $Result['DepName'];
             $return[$count]['HptName'] = $Result['HptName'];
             $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
+            $return[$count]['IsCheckList'] = $Result['IsCheckList'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
 
             $count++;

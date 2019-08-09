@@ -139,7 +139,7 @@
 
                                 if (temp[i]['IsStatus'] == 0) {
                                     status_class = "status4";
-                                    status_text = "ไม่ทำงาน";
+                                    status_text = "ว่าง";
                                     status_line = "StatusLine_4";
                                 } 
                                 else if (temp[i]['IsStatus'] == 1) {
@@ -149,8 +149,12 @@
                                 } 
                                 else if (temp[i]['IsStatus'] == 2) {
                                     status_class = "status4";
-                                    status_text = "ไม่ทำงาน";
+                                    status_text = "กำลังตรวจสอบคุณภาพ";
                                     status_line = "StatusLine_4";
+                                }else if (temp[i]['IsStatus'] == 3) {
+                                    status_class = "status3";
+                                    status_text = "ส่งเคลม";
+                                    status_line = "StatusLine_3";
                                 }
                                 else {
                                     status_class = "status3";
