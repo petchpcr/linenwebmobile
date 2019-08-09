@@ -424,7 +424,6 @@ $genarray = json_decode($json, TRUE);
                             var DocNo = "<?php echo $DocNo?>";
                             var siteCode = "<?php echo $siteCode?>";
                             
-                            
                             window.location.href='signature.php?Menu='+Menu+'&DocNo='+DocNo+'&siteCode='+siteCode;
                             
                         } else if (temp["form"] == 'logout') {
