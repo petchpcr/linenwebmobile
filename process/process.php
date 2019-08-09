@@ -121,7 +121,7 @@
         $Sql = "UPDATE process SET WashEndTime = NOW() WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
 
-        $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime
+        $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime 
 
                 FROM    process 
                 WHERE   DocNo = '$DocNo'";
