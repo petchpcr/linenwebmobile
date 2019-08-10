@@ -4,60 +4,70 @@
     require 'logout.php';
 
     function load_site_fac($conn) {
-        $boolean1 = false;
-        $boolean2 = false;
-        $cnt_Hpt = 0;
+        $HptCode = $_SESSION['HptCode'];
         $cnt_Fac = 0;
-        $Sql = "SELECT HptCode,HptName FROM site WHERE IsStatus = 0";
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$cnt_Hpt]['HptCode'] = $Result['HptCode'];
-            $return[$cnt_Hpt]['HptName'] = $Result['HptName'];
-            $cnt_Hpt++;
-            $boolean1 = true;
-        }
-        $return['cnt_Hpt'] = $cnt_Hpt;
 
-        $Sql = "SELECT FacCode,FacName FROM factory WHERE IsCancel = 0";
+        $Sql = "SELECT factory.FacCode,factory.FacName FROM factory WHERE IsCancel = 0 
+                AND FacCode NOT IN(SELECT FacCode FROM delivery_fac_nhealth WHERE delivery_fac_nhealth.HptCode = '$HptCode')";
         $meQuery = mysqli_query($conn, $Sql);
+        $return['Faode'] = $Sql;
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$cnt_Fac]['FacCode'] = $Result['FacCode'];
             $return[$cnt_Fac]['FacName'] = $Result['FacName'];
             $cnt_Fac++;
-            $boolean2 = true;
         }
         $return['cnt_Fac'] = $cnt_Fac;
 
-        if ($boolean1 && $boolean2) {
-            $return['status'] = "success";
-            $return['form'] = "load_site_fac";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        } else {
-            $return['status'] = "failed";
-            $return['form'] = "load_site_fac";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
+        $return['status'] = "success";
+        $return['form'] = "load_site_fac";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
     }
 
-    function load_site($conn) {
+    // function load_site($conn) {
+    //     $count = 0;
+    //     $Sql = "SELECT HptCode,HptName,picture FROM site WHERE IsStatus = 0";
+    //     $meQuery = mysqli_query($conn, $Sql);
+    //     while ($Result = mysqli_fetch_assoc($meQuery)) {
+    //         $return[$count]['HptCode'] = $Result['HptCode'];
+    //         $return[$count]['HptName'] = $Result['HptName'];
+    //         $return[$count]['picture'] = $Result['picture'];
+    //         $count++;
+    //     }
+    //     $return['count'] = $count;
+
+    //     if ($count > 0) {
+    //         $return['status'] = "success";
+    //         $return['form'] = "load_site";
+    //         echo json_encode($return);
+    //         mysqli_close($conn);
+    //         die;
+    //     } else {
+    //         $return['status'] = "failed";
+    //         $return['form'] = "load_site";
+    //         echo json_encode($return);
+    //         mysqli_close($conn);
+    //         die;
+    //     }
+    // }
+
+    function load_site_time($conn) {
+        
+        $FacCode = $_SESSION['FacCode'];
         $count = 0;
-        $Sql = "SELECT HptCode,HptName,picture FROM site WHERE IsStatus = 0";
+        $Sql = "SELECT site.HptName,SendTime FROM delivery_fac_nhealth,site WHERE FacCode = '$FacCode' AND site.HptCode = delivery_fac_nhealth.HptCode";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['HptCode'] = $Result['HptCode'];
-            $return[$count]['HptName'] = $Result['HptName'];
-            $return[$count]['picture'] = $Result['picture'];
+            $return[$count]['HptCode'] = $Result['HptName'];
+            $return[$count]['SendTime'] = $Result['SendTime'];
             $count++;
         }
         $return['count'] = $count;
 
         if ($count > 0) {
             $return['status'] = "success";
-            $return['form'] = "load_site";
+            $return['form'] = "load_site_time";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -203,6 +213,9 @@
         }
         else if ($DATA['STATUS'] == 'load_site') {
             load_site($conn);
+        }
+        else if ($DATA['STATUS'] == 'load_site_time') {
+            load_site_time($conn);
         }
         else if ($DATA['STATUS'] == 'show_fac') {
             show_fac($conn, $DATA);

@@ -70,8 +70,8 @@ $genarray = json_decode($json, TRUE);
         }
 
         function back() {
-            // window.location.href = "menu.php";
-            logout(1);
+            window.location.href = "menu.php";
+            //logout(1);
         }
 
         function senddata(data) {
@@ -138,9 +138,9 @@ $genarray = json_decode($json, TRUE);
             <?php
                 $Menu = $_GET['Menu'];
                 if ($Menu == 'dirty') {
-                    echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>".$genarray['back'][$language].$Menu."</button>";
+                    echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>".$genarray['back'][$language]."</button>";
                 }else{
-                    echo "<div style='margin-right:75px'></div >";
+                    echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>".$genarray['back'][$language]."</button>";
                 }
             ?>
             

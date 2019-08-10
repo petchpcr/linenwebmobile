@@ -42,13 +42,21 @@
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
 
-        //echo json_encode($Sql);
-
         $email = $Result['email'];
-        //$email = "sarantoy101@gmail.com";
-        $FName = $Result['FName'];;
+        $FName = $Result['FName'];
+
+        $Sql = "SELECT FacName,HptName 
+        FROM dirty,department,site,factory 
+        WHERE DocNo='$DocNo' 
+        AND dirty.DepCode = department.DepCode 
+        AND factory.FacCode = dirty.FacCode 
+        AND department.HptCode=site.HptCode";
+        $meQuery=mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $FacName = $Result['FacName'];
+        $HptName = $Result['HptName'];
+        
         $Subject = "Delivery over time";
-    
         // build message body
         $body = '
         <html>
@@ -57,6 +65,7 @@
         ___________________________________________________________________<br>
         <br>
         Document : '.$DocNo.'<br>
+        From : '.$FacName.' To : '.$HptName.'<br>
         Over time : '.$SendOverTime.'
         <br>___________________________________________________________________<br>
         <br>
