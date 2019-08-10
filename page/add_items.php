@@ -490,8 +490,8 @@ $genarray = json_decode($json, TRUE);
     <div class="px-3 mb-5">
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
         <div class="text-center mb-3">
-            <h4 class="text-truncate"><?php echo $genarray['docno'][$language]; ?></h4>
-            <div id="DocNo" class="text-truncate"></div>
+            <div class="text-truncate font-weight-bold" style="font-size:25px;"><?php echo $genarray['docno'][$language]; ?></div>
+            <div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
         </div>
         <div class="row justify-content-center px-3 mb-5">
             <div id="items" class="col-lg-9 col-md-10 col-sm-12 pb-3" style = "margin-bottom:100px;">
