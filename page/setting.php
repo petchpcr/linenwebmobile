@@ -58,7 +58,8 @@ $genarray = json_decode($json, TRUE);
         }
 
 
-        function show_fac(HptCode) {
+        function show_fac() {
+            var HptCode = '<?php echo $_SESSION['HptCode']; ?>';
             var data = {
                 'HptCode' : HptCode,
                 'STATUS': 'show_fac'
@@ -75,7 +76,8 @@ $genarray = json_decode($json, TRUE);
         
         function AddFacNhealth() {
             var FacCode = $("#from_fac").val();
-            var HptCode = $("#to_hpt").val();
+            // var HptCode = $("#to_hpt").val();
+            var HptCode = '<?php echo $_SESSION['HptCode']; ?>';
             var SendTime = $("#new_send_time").val();
             if (SendTime == null || SendTime == "" || SendTime == 0) {
                 Title = "เวลาไม่ถูกต้อง";
@@ -179,51 +181,55 @@ $genarray = json_decode($json, TRUE);
                     }
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_site_fac') {
-                            if (temp['cnt_Hpt'] > 0) {
-                                $("#to_hpt").empty();
-                                for (var i = 0; i < temp['cnt_Hpt']; i++) {
-                                    var Str = "<option value='"+temp[i]['HptCode']+"'>"+temp[i]['HptName']+"</option>";
-                                    $("#to_hpt").append(Str);
-                                }
-                            }
+                            // if (temp['cnt_Hpt'] > 0) {
+                            //     $("#to_hpt").empty();
+                            //     for (var i = 0; i < temp['cnt_Hpt']; i++) {
+                            //         var Str = "<option value='"+temp[i]['HptCode']+"'>"+temp[i]['HptName']+"</option>";
+                            //         $("#to_hpt").append(Str);
+                            //     }
+                            // }
                             if (temp['cnt_Fac'] > 0) {
                                 $("#from_fac").empty();
                                 for (var i = 0; i < temp['cnt_Fac']; i++) {
                                     var Str = "<option value='"+temp[i]['FacCode']+"'>"+temp[i]['FacName']+"</option>";
                                     $("#from_fac").append(Str);
                                 }
+                            }else{
+                                var Str = "<option value='false'>ไม่มีโรงซักที่ยังไม่ได้กำหนดเวลา</option>";
+                                $("#from_fac").append(Str);
+                                $("#AddFacNhealth").hide();
                             }
                             $("#new_send_time").val("");
                             $("#md_add_fac_nhealth").modal("show");
-                        }
-                        else if (temp["form"] == 'load_site') {
-                            if (temp['count'] > 0) {
-                                $("#show_hpt_fac").empty();
-                                for (var i = 0; i < temp['count']; i++) {
-                                    var picture = temp[i]['picture'];
-                                    if (temp[i]['picture'] == null || temp[i]['picture'] == "") {
-                                        picture = "logo.png";
-                                    }
+                        //}
+                        // else if (temp["form"] == 'load_site') {
+                        //     if (temp['count'] > 0) {
+                        //         $("#show_hpt_fac").empty();
+                        //         for (var i = 0; i < temp['count']; i++) {
+                        //             var picture = temp[i]['picture'];
+                        //             if (temp[i]['picture'] == null || temp[i]['picture'] == "") {
+                        //                 picture = "logo.png";
+                        //             }
                                     
-                                    var Str = "<button onclick='show_fac(\"" + temp[i]['HptCode'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
-                                        Str += "<div class='row'><div class='col-6'><div class='row d-flex justify-content-end'><div style='width:200px !important;'>";
-                                        Str += "<img class='hpt_img' src='../img/" + picture + "'/></div></div></div><div class='col-6 d-flex justify-content-start align-items-center' style='padding-left:0;color:black;'>";
-                                        Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name'>" + temp[i]['HptName'] + "</div></div></div></button>";
-                                    $("#show_hpt_fac").append(Str);
-                                }
+                        //             var Str = "<button onclick='show_fac(\"" + temp[i]['HptCode'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
+                        //                 Str += "<div class='row'><div class='col-6'><div class='row d-flex justify-content-end'><div style='width:200px !important;'>";
+                        //                 Str += "<img class='hpt_img' src='../img/" + picture + "'/></div></div></div><div class='col-6 d-flex justify-content-start align-items-center' style='padding-left:0;color:black;'>";
+                        //                 Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name'>" + temp[i]['HptName'] + "</div></div></div></button>";
+                        //             $("#show_hpt_fac").append(Str);
+                        //         }
                                 
-                                $("#btn_edit_fac_send_time").prop("disabled",true);
-                                $("#show_hpt_fac").show();
-                                $("#show_fac_nhealth_time").hide();
-                                $("#md_fac_nhealth").modal("show");
-                            }
+                        //         $("#btn_edit_fac_send_time").prop("disabled",true);
+                        //         $("#show_hpt_fac").show();
+                        //         $("#show_fac_nhealth_time").hide();
+                        //         $("#md_fac_nhealth").modal("show");
+                        //     }
                         }else if (temp["form"] == 'load_site_time') {
                             if (temp['count'] > 0) {
                                 $("#show_hpt_fac_time").empty();
                                 for (var i = 0; i < temp['count']; i++) {
                                     
                                     var Str = "<div class='input-group my-3'><div class='input-group-prepend '><label class='input-group-text' style='width:150px;' >"+temp[i]['HptCode']+"</label></div>";
-                                        Str += "<input type='text' class='form-control' value='"+temp[i]['SendTime']+"'>";
+                                        Str += "<input type='text' class='form-control ' value='"+temp[i]['SendTime']+"' readonly >";
                                         Str += "<div class='input-group-append'><span class='input-group-text'>นาที</span></div></div>";
                                     $("#show_hpt_fac_time").append(Str);
                                 }
@@ -234,12 +240,14 @@ $genarray = json_decode($json, TRUE);
                             if (temp['count'] > 0) {
                                 $("#show_fac_nhealth_time").empty();
                                 for (var i = 0; i < temp['count']; i++) {
-                                    var Str = "<div class='input-group my-3'><div class='input-group-prepend'><label class='input-group-text'>"+temp[i]['FacName']+"</label></div>";
+                                    var Str = "<div class='input-group my-3'><div class='input-group-prepend'><label class='input-group-text' style='width:150px;'>"+temp[i]['FacName']+"</label></div>";
                                         Str += "<input onkeydown='make_number()' id='fac_nhealth_time"+i+"' type='text' class='form-control text-center numonly' ";
                                         Str += "data-HptCode='"+temp[i]['HptCode']+"' data-FacCode='"+temp[i]['FacCode']+"' value='"+temp[i]['SendTime']+"'>";
                                         Str += "<div class='input-group-append'><span class='input-group-text'>นาที</span></div></div>";
                                     $("#show_fac_nhealth_time").append(Str);
                                 }
+                                
+                                $("#md_fac_nhealth").modal("show");
                                 $("#btn_edit_fac_send_time").attr("onclick","EditFacNhealth("+temp['count']+")");
                                 $("#btn_edit_fac_send_time").prop("disabled",false);
                                 $("#show_hpt_fac").hide();
@@ -350,7 +358,7 @@ $genarray = json_decode($json, TRUE);
                         </button>
                     </div>
                     <div class="col-md-6 col-sm-6 col-12">
-                        <button onclick="load_site()" class="btn btn-block btn-outline-primary" <?php if($_SESSION['PmID']==4){echo hidden;} ?>>
+                        <button onclick="show_fac()" class="btn btn-block btn-outline-primary" <?php if($_SESSION['PmID']==4){echo hidden;} ?>>
                             <i class="fas fa-edit mr-2"></i>แก้ไขเวลาขนส่ง
                         </button>
                     </div>
@@ -386,7 +394,7 @@ $genarray = json_decode($json, TRUE);
                 </div>
                 <div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
                     <div class="form-row">
-                    <div class="col-md-6 col-sm-12 col-12">
+                    <div class="col-md-12 col-sm-12 col-12">
                         <div class="input-group mb-1">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" style="width:60px;">จาก</label>
@@ -394,14 +402,14 @@ $genarray = json_decode($json, TRUE);
                             <select id="from_fac" class="custom-select"></select>                   
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12">
+                    <!-- <div class="col-md-6 col-sm-12 col-12">
                         <div class="input-group mb-1">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" style="width:60px;">ไปยัง</label>
                             </div>
                             <select id="to_hpt" class="custom-select"></select>                   
                         </div>
-                    </div>
+                    </div> -->
                     </div>
                     <div class="input-group my-3">
                         <div class="input-group-prepend">
@@ -417,7 +425,7 @@ $genarray = json_decode($json, TRUE);
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
                         <div class="col-12 text-center">
-                            <button onclick="AddFacNhealth()" type="button" class="btn btn-primary mx-3"><?php echo $genarray['save'][$language]; ?></button>
+                            <button id="AddFacNhealth" onclick="AddFacNhealth()" type="button" class="btn btn-primary mx-3"><?php echo $genarray['save'][$language]; ?></button>
                             <button type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
                         </div>
                     </div>

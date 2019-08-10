@@ -98,7 +98,8 @@
 						showConfirmButton: false
 					}).then(function () {
 						if (PmID == 4) {
-							window.location.href = 'hospital.php?Menu=factory';
+							//window.location.href = 'hospital.php?Menu=factory';
+							window.location.href = 'menu.php';
 						}
 						else {
 							window.location.href = 'menu.php';
