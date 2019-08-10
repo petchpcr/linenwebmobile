@@ -227,8 +227,8 @@
                                     status_line = "StatusLine_3";
                                 }
 
-                                var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\",0)' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
-                                    Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
+                                var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\",0)' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+                                    Str += "<div class='row'><div class='card "+status_class+"'>"+status_text+"</div>";
                                     Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                     Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
 
@@ -259,8 +259,8 @@
 
                                 if(temp[i]['IsStatus'] > 0){
                                 
-                                    var Str = "<button onclick='"+onclick+"' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
-                                        Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
+                                    var Str = "<button onclick='"+onclick+"' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+                                        Str += "<div class='row'><div class='card "+status_class+"'>"+status_text+"</div>";
                                         Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                         Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
 
@@ -311,7 +311,6 @@
                             confirmButtonText: 'Error!!'
                         })
                     }
-                    
                 } else {
                     console.log(temp['msg']);
                 }
@@ -325,25 +324,45 @@
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
             <button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
-            <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+            <div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
     <div class="px-3 pb-4 mb-5">
-
+            
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
+        <div id="HptName" class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"></div>
         <div id="document">
+            
             <div class="d-flex justify-content-center mb-3">
                 <input id="datepicker" class="text-truncate text-center" width="276" placeholder='<?php echo $genarray['CreateDocDate'][$language]; ?>' disabled/>
                 <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
             </div>
+
             <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
                 <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
                     <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
                 </button>
             </div>
+
+            <!-- <button onclick='' class='btn btn-secondary btn-block' style='align-items: center !important;'>
+                <div class='row'>
+                    <div class='my-col-5 d-flex justify-content-end align-items-center'>
+                        <div class='row'>
+                            <div class='card status1'>111111</div>
+                            <img src='../img/StatusLine_2.png' height='50'/>
+                        </div>
+                    </div>
+                    <div class='my-col-7 text-left'>
+                        <div class='text-truncate font-weight-bold'>DTBHQ1908-00017</div>
+                        <div>( ใช้เวลาขนส่ง 15 นาที )</div>
+                        <div class='font-weight-light'>N Health</div>
+                    </div>
+                </div>
+            </button> -->
+
         </div>
+        
     </div>
     
     <!-- Modal -->

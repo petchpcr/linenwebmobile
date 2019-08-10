@@ -322,7 +322,7 @@ $genarray = json_decode($json, TRUE);
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
             <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
-            <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+            <div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
@@ -366,7 +366,7 @@ $genarray = json_decode($json, TRUE);
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-12">
                         <button onclick="load_send_time()" class="btn btn-block btn-outline-primary mb-2" <?php if($_SESSION['PmID']==3){echo hidden;} ?>>
-                            <i class="fas fa-plus mr-2"></i>แสดงเวลาการขนส่ง
+                            <i class="far fa-clock mr-2"></i>แสดงเวลาการขนส่ง
                         </button>
                     </div>
                 </div>

@@ -38,9 +38,11 @@
         });
 
         function load_process(){
+            var siteCode = "<?php echo $siteCode?>";
             var DocNo = "<?php echo $DocNo?>";
             var From = "<?php echo $From?>";
             var data = {
+                'siteCode': siteCode,
                 'DocNo': DocNo,
                 'From': From,
                 'STATUS': 'load_process'
@@ -146,6 +148,7 @@
 
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_process') {
+                            $("#send_time").text("( ใช้เวลาขนส่ง "+temp['LimitTime']+" นาที )");
                             $(".head-btn.btn-light").remove();
                             var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>";
                             $("#user").before(Back);
@@ -420,14 +423,15 @@
 
     <header data-role="header">
         <div class="head-bar d-flex justify-content-between">
-            <div id="user" class="head-text text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
+            <div id="user" class="head-text font-weight-bold text-truncate align-self-center"><?php echo $UserName?> : <?php echo $UserFName?></div>
             <button  onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button >
         </div>
     </header>
     <div class="px-3">
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center my-4"><h4 class="text-truncate"><?php echo $DocNo;?></h4></div>
+        <div class="text-center text-truncate font-weight-bold mt-4" style="font-size:25px;"><?php echo $DocNo;?></div>
+        <div id="send_time" class="text-center text-truncate font-weight-bold mb-4" style="font-size:20px;">( ขนส่งไม่เกิน 15 นาที )</div>
 
         <div id="process">
             <div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">

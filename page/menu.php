@@ -120,13 +120,13 @@
         <header data-role="header">
             <div class="head-bar d-flex justify-content-between">
                 <div style="margin-right:75px"></div >
-                <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName?></div>
+                <div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName?></div>
                 <button  onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button >
             </div>
         </header>
         <div data-role="content">
             <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-            <div class="text-center my-4"><h4 class="text-truncate"><?php echo $array['menu'][$language]; ?></h4></div>
+            <div class="text-center text-truncate font-weight-bold my-4" style="font-size:30px;"><?php echo $array['menu'][$language]; ?></div>
             <div id="hospital"></div>
         </div>
 

@@ -116,8 +116,8 @@
                             var status_line = "StatusLine_2";
 
                             if(temp[i]['IsStatus'] == 1){
-                                var Str = "<button onclick='add_clean(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5'>";
-                                    Str += "<div class='row justify-content-end align-items-center'><div class='card "+status_class+"'>"+status_text+"</div>";
+                                var Str = "<button onclick='add_clean(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+                                    Str += "<div class='row'><div class='card "+status_class+"'>"+status_text+"</div>";
                                     Str += "<img src='../img/"+status_line+".png' height='50'/></div></div><div class='my-col-7 text-left'>";
                                     Str += "<div class='text-truncate font-weight-bold'>"+temp[i]['DocNo']+"</div><div class='font-weight-light'>"+temp[i]['DepName']+"</div></div></div></button>";
 
@@ -180,7 +180,7 @@
     <header data-role="header">
     <div class="head-bar d-flex justify-content-between">
             <button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
-            <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+            <div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>

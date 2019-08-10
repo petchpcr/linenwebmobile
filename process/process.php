@@ -5,6 +5,8 @@
 
     function load_process($conn, $DATA){
         $count = 0;
+        $siteCode = $DATA["siteCode"];
+        $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
         $boolean = false;
@@ -26,6 +28,10 @@
                     process.IsStatus,
                     process.IsStop,
                     process.Signature,
+                    (SELECT SendTime 
+                     FROM delivery_fac_nhealth
+                     WHERE HptCode = '$siteCode'
+                     AND FacCode = '$FacCode') AS LimitTime,
                     department.HptCode
                 FROM
                     process
@@ -51,6 +57,7 @@
             $return['IsStatus'] = $Result['IsStatus'];
             $return['IsStop'] = $Result['IsStop'];
             $return['Signature'] = $Result['Signature'];
+            $return['LimitTime'] = $Result['LimitTime'];
             $return['HptCode'] = $Result['HptCode'];
 
             $count++;

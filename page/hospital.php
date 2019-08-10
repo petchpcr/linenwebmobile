@@ -104,7 +104,7 @@ $genarray = json_decode($json, TRUE);
                                 var Str = "<button onclick='show_doc(\"" + temp[i]['HptCode'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
                                 Str += "<div class='row'><div class='col-6'><div class='row d-flex justify-content-end'><div style='width:200px !important;'>";
                                 Str += "<img class='hpt_img' src='../img/" + picture + "'/></div></div></div><div class='col-6 d-flex justify-content-start align-items-center' style='padding-left:0;color:black;'>";
-                                Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name'>" + temp[i]['HptName'] + "</div></div></div></button>";
+                                Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name font-weight-bold'>" + temp[i]['HptName'] + "</div></div></div></button>";
 
                                 $("#hospital").append(Str);
                             }
@@ -144,7 +144,7 @@ $genarray = json_decode($json, TRUE);
                 }
             ?>
             
-            <div class="head-text text-truncate align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+            <div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
             <button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
         </div>
     </header>
