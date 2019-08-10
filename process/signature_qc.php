@@ -7,7 +7,7 @@
 
     $Sql = "UPDATE clean SET Signature = '$SigCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
-    update_status($DocNo);
+    //update_status($DocNo);
 
     function update_status($thisDocNo){
         $Sql = "SELECT RefDocNo FROM clean WHERE DocNo = '$thisDocNo'";

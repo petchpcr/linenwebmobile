@@ -70,6 +70,34 @@
         }
     }
 
+    function load_site_time($conn) {
+        
+        $FacCode = $_SESSION['FacCode'];;
+        $count = 0;
+        $Sql = "SELECT site.HptName,SendTime FROM delivery_fac_nhealth,site WHERE FacCode = '$FacCode' AND site.HptCode = delivery_fac_nhealth.HptCode";
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return[$count]['HptCode'] = $Result['HptName'];
+            $return[$count]['SendTime'] = $Result['SendTime'];
+            $count++;
+        }
+        $return['count'] = $count;
+
+        if ($count > 0) {
+            $return['status'] = "success";
+            $return['form'] = "load_site_time";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "load_site";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function show_fac($conn, $DATA) {
         $HptCode = $DATA["HptCode"];
         $return['HptCode'] = $HptCode;
@@ -203,6 +231,9 @@
         }
         else if ($DATA['STATUS'] == 'load_site') {
             load_site($conn);
+        }
+        else if ($DATA['STATUS'] == 'load_site_time') {
+            load_site_time($conn);
         }
         else if ($DATA['STATUS'] == 'show_fac') {
             show_fac($conn, $DATA);
