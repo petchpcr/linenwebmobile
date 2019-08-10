@@ -72,13 +72,31 @@ $genarray = json_decode($json, TRUE);
 
         function save_checkpass() {
             var qty = $("#qc_qty").val();
+
             var pass = Number($("#qc_pass").val());
             var fail = Number($("#qc_fail").val());
             var sum = Number(pass+fail);
+
+            var claim = Number($("#claim_qty").val());
+            var rewash = Number($("#rewash_qty").val());
+
+            if ($("#claim_qty").val() == "" || $("#claim_qty").val() == null) {
+                claim = Number(0);
+            }
+            if ($("#rewash_qty").val() == "" || $("#rewash_qty").val() == null) {
+                rewash = Number(0);
+            }
+            var sum_cr = Number(claim+rewash);
+
+            Title = "จำนวนไม่ถูกต้อง";
+            Type = "warning";
+
             if (sum != qty) {
-                Title = "จำนวนไม่ถูกต้อง";
                 Text = "จำนวนข้อมูล "+sum+" จากทั้งหมด "+qty+" !";
-                Type = "warning";
+                AlertError(Title,Text,Type);
+            }
+            else if (sum_cr != fail) {
+                Text = "จำนวนส่งซ่อม "+sum_cr+" จากไม่ผ่าน "+fail+" !";
                 AlertError(Title,Text,Type);
             }
             else {
@@ -89,11 +107,12 @@ $genarray = json_decode($json, TRUE);
                     'ItemCode': ItemCode,
                     'pass': pass,
                     'fail': fail,
+                    'claim': claim,
+                    'rewash': rewash,
                     'STATUS': 'save_checkpass'
                 };
                 senddata(JSON.stringify(data));
             }
-            
         }
 
         function show_question(ItemCode) {
@@ -336,14 +355,24 @@ $genarray = json_decode($json, TRUE);
                             $("#qc_qty").val(temp['Qty']);
                             var Pass = temp['Pass'];
                             var Fail = temp['Fail'];
+                            var Claim = temp['Claim'];
+                            var Rewash = temp['Rewash'];
                             if (temp['Pass'] == 0) {
                                 Pass = "";
                             }
                             if (temp['Fail'] == 0) {
                                 Fail = "";
                             }
+                            if (temp['Claim'] == 0) {
+                                Claim = "";
+                            }
+                            if (temp['Rewash'] == 0) {
+                                Rewash = "";
+                            }
                             $("#qc_pass").val(Pass);
                             $("#qc_fail").val(Fail);
+                            $("#claim_qty").val(Claim);
+                            $("#rewash_qty").val(Rewash);
 
                             $("#md_checkpass").modal('show');
 
@@ -542,7 +571,23 @@ $genarray = json_decode($json, TRUE);
                             <label>จำนวนที่ไม่ผ่าน</label>
                             <input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_fail" placeholder="0">
                         </div>
-
+                        <hr>
+                        <div id="claim_rewash" class="alert alert-secondary m-0">
+                            <div class="form-row mb-2">
+                                <div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end">ส่งซักอีกครั้ง</div>
+                                <div class="col-md-4 col-6">
+                                    <input onkeydown='make_number()' id="rewash_qty" class='form-control text-center numonly' type='text' placeholder='0'>
+                                </div>
+                                <div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start">จำนวน</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end">ส่งเคลม</div>
+                                <div class="col-md-4 col-6">
+                                    <input onkeydown='make_number()' id="claim_qty" class='form-control text-center numonly' type='text' placeholder='0'>
+                                </div>
+                                <div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start">จำนวน</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer text-center">
@@ -585,6 +630,7 @@ $genarray = json_decode($json, TRUE);
                         </button> -->
 
                     </div>
+                    
                 </div>
                 <div class="modal-footer text-center">
                     <div class="row w-100 d-flex align-items-center m-0">
