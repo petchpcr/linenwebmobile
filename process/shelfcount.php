@@ -3,27 +3,36 @@
     require '../connect/connect.php';
     require 'logout.php';
 
-    function load_dep($conn, $DATA){
-        $HptCode = $_SESSION['HptCode'];
+    function load_Doc($conn, $DATA){
+        $search = $DATA["search"];
+        $DepCode = $DATA['DepCode'];
+        if($search == null || $search == ""){
+            $search = date('Y-m-d');
+        }
         $count = 0;
         $boolean = false;
-        $Sql = "SELECT DepCode,DepName FROM department WHERE HptCode = '$HptCode' AND IsStatus = 0";
+
+        $Sql = "SELECT DocNo,IsStatus FROM shelfcount WHERE DepCode = $DepCode AND DocDate = '$search' AND IsStatus >0";
         $meQuery = mysqli_query($conn, $Sql);
+
+        $return[' $Sql'] =  $Sql;
+
         while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DepCode'] = $Result['DepCode'];
-            $return[$count]['DepName'] = $Result['DepName'];
+            $return[$count]['DocNo'] = $Result['DocNo'];
+            $return[$count]['IsStatus'] = $Result['IsStatus'];
             $count++;
             $boolean = true;
         }
+
         if ($boolean) {
             $return['status'] = "success";
-            $return['form'] = "load_dep";
+            $return['form'] = "load_Doc";
             echo json_encode($return);
             mysqli_close($conn);
             die;
         } else {
             $return['status'] = "failed";
-            $return['form'] = "load_dep";
+            $return['form'] = "load_Doc";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -34,8 +43,8 @@
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
 
-        if ($DATA['STATUS'] == 'load_dep') {
-            load_dep($conn, $DATA);
+        if ($DATA['STATUS'] == 'load_Doc') {
+            load_Doc($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);
