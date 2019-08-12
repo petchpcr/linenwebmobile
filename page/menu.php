@@ -47,6 +47,8 @@
                 window.location.href='qc.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
             }else if(menu == 'track'){
                 window.location.href='dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
+            } else if(menu == 'shelfcount'){
+                window.location.href='shelfcount_dep.php?';
             } else {
                 window.location.href='hospital.php?Menu='+menu;
             }
@@ -163,6 +165,12 @@
                         <button onclick="menu_click('."'track'".')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/tracking.png">
                             <div class="text-truncate">'.$array["tracking"][$language].'</div>
+                        </button>
+                    </div>
+                    <div class="my-col-menu">
+                        <button onclick="menu_click('."'shelfcount'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/tracking.png">
+                            <div class="text-truncate">'.$array["Payout"][$language].'</div>
                         </button>
                     </div>
                     ';

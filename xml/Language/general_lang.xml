@@ -7,6 +7,8 @@
 
 <NotFoundHpt><en>Not found Hospital</en><th>ไม่พบข้อมูลในโรงพยาบาล</th></NotFoundHpt>
 
+<notfoundmsg><en>Not found</en><th>ไม่พบข้อมูล</th></notfoundmsg>
+
 <CreateDocDate><en>Create document date</en><th>วันที่สร้างเอกสาร</th></CreateDocDate>
 
 <titleDocument><en>| Document</en><th>| เอกสาร</th></titleDocument>
@@ -175,7 +177,6 @@
 <nodetailmsg><en>No detail in both department.</en><th>ไม่มีข้อมูลในแผนกที่ค้นหา</th></nodetailmsg>
 <cantcreatemsg><en>Cannot Create Document</en><th>ไม่สามารถสร้างเอกสารได้</th></cantcreatemsg>
 <noinputmsg><en>No input</en><th>ไม่มีข้อมูลนำเข้า</th></noinputmsg>
-<notfoundmsg><en>Not found</en><th>ไม่พบข้อมูล</th></notfoundmsg>
 <addsuccessmsg><en>Add detail success</en><th>เพิ่มข้อมูลสำเร็จ</th></addsuccessmsg>
 <addfailmsg><en>Add detail failed</en><th>เพิ่มข้อมูลล้มเหลว</th></addfailmsg>
 <editsuccessmsg><en>Edit detail success</en><th>แก้ไขข้อมูลสำเร็จ</th></editsuccessmsg>
