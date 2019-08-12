@@ -685,6 +685,21 @@
                 window.location.href='qc.php?siteCode='+siteCode+'&Menu=qc';
             }
         });
+      }else if(Menu=="sc"){
+        var URL = '../process/signature_sc.php';
+              
+        $.ajax({  
+            url: URL,
+            method:"POST",
+            data:{
+                DocNo:DocNo,
+                From:From,
+                SigCode:SigCode
+            },
+            success: function (data) {
+                window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&From='+From;
+            }
+        });
       }else{
         var URL = '../process/signature.php';
               
