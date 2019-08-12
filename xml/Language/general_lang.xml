@@ -30,7 +30,8 @@
 <titleclean><en>Clean Doc </en><th>ผ้าสะอาด</th></titleclean>
 <titledirty><en>Dirty Doc </en><th>ผ้าสกปรก</th></titledirty>
 <titleQC><en>QC</en><th>ตรวจสอบคุณภาพ</th></titleQC>
-<titlefactory><en>Factory </en><th>โรงงานซัก</th></titlefactory>
+<titlefactory><en>Factory </en><th>โรงงานซัก </th></titlefactory>
+<titleshelfcount><en>Shelfcount </en><th>Shelfcount </th></titleshelfcount>
 
 <confirm><en>Confirm</en><th>ยืนยัน</th></confirm>
 <cancel><en>Cancel</en><th>ยกเลิก</th></cancel>

@@ -10,5 +10,6 @@
 <report><en>Report</en><th>รายงาน</th></report>
 <factory><en>Factory</en><th>โรงงานซัก</th></factory>
 <tracking><en>Tracking</en><th>ติดตาม</th></tracking>
+<shelfcount><en>Shelfcount</en><th>Shelfcount</th></shelfcount>
 
 </lang>
