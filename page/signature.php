@@ -685,7 +685,7 @@
                 window.location.href='qc.php?siteCode='+siteCode+'&Menu=qc';
             }
         });
-      }else if(Menu=="sc"){
+      }else if(Menu=="shelfcount"){
         var URL = '../process/signature_sc.php';
               
         $.ajax({  
@@ -697,7 +697,7 @@
                 SigCode:SigCode
             },
             success: function (data) {
-                window.location.href='process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&From='+From;
+                window.location.href='shelf_process.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
             }
         });
       }else{

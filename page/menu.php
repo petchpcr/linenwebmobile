@@ -141,12 +141,7 @@
                             <div class="text-truncate">'.$array["factory"][$language].'</div>
                         </button>
                     </div>
-                    <div class="my-col-menu">
-                        <button onclick="menu_click('."'shelfcount'".')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/laundry.png">
-                            <div class="text-truncate">'.$array["shelfcount"][$language].'</div>
-                        </button>
-                    </div>';
+                    ';
                 }else{
                     echo '<div class="my-col-menu">
                     <button onclick="menu_click('."'dirty'".')" type="button" class="btn btn-mylight btn-block">
@@ -154,7 +149,12 @@
                         <div class="text-truncate">'.$array["dirty"][$language].'</div>
                         </button>
                     </div>
-        
+                    <div class="my-col-menu">
+                        <button onclick="menu_click('."'track'".')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/tracking.png">
+                            <div class="text-truncate">'.$array["tracking"][$language].'</div>
+                        </button>
+                    </div>
                     <div class="my-col-menu">
                         <button onclick="menu_click('."'clean'".')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/laundry.png">
@@ -168,15 +168,9 @@
                         </button>
                     </div>
                     <div class="my-col-menu">
-                        <button onclick="menu_click('."'track'".')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/tracking.png">
-                            <div class="text-truncate">'.$array["tracking"][$language].'</div>
-                        </button>
-                    </div>
-                    <div class="my-col-menu">
                         <button onclick="menu_click('."'shelfcount'".')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/tracking.png">
-                            <div class="text-truncate">'.$array["Payout"][$language].'</div>
+                            <img src="../img/laundry.png">
+                            <div class="text-truncate">'.$array["shelfcount"][$language].'</div>
                         </button>
                     </div>
                     ';

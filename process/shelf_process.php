@@ -13,20 +13,15 @@
                     shelfcount.DocNo,
                     shelfcount.ScStartTime,
                     shelfcount.ScEndTime,
-                    SEC_TO_TIME(shelfcount.ScEndTime-shelfcount.ScStartTime) AS ScUseTime,
+                    TIMEDIFF(shelfcount.ScEndTime,shelfcount.ScStartTime) AS ScUseTime,
                     shelfcount.PkStartTime,
                     shelfcount.PkEndTime,
-                    SEC_TO_TIME(shelfcount.PkEndTime-shelfcount.PkStartTime) AS PkUseTime,
+                    TIMEDIFF(shelfcount.PkEndTime,shelfcount.PkStartTime) AS PkUseTime,
                     shelfcount.DvStartTime,
                     shelfcount.DvEndTime,
-                    SEC_TO_TIME(shelfcount.DvEndTime-shelfcount.DvStartTime) AS DvUseTime,
-                    shelfcount.DvOverTime,
+                    TIMEDIFF(shelfcount.DvEndTime,shelfcount.DvStartTime) AS DvUseTime,
                     shelfcount.IsStatus,
                     shelfcount.signature,
-                    (SELECT SendTime 
-                     FROM delivery_fac_nhealth
-                     WHERE HptCode = '$siteCode'
-                     AND FacCode = '$FacCode') AS LimitTime,
                     department.HptCode
                 FROM
                     shelfcount
@@ -45,10 +40,8 @@
             $return['DvStartTime'] = $Result['DvStartTime'];
             $return['DvEndTime'] = $Result['DvEndTime'];
             $return['DvUseTime'] = $Result['DvUseTime'];
-            $return['DvOverTime'] = $Result['DvOverTime'];
             $return['IsStatus'] = $Result['IsStatus'];
             $return['Signature'] = $Result['signature'];
-            $return['LimitTime'] = $Result['LimitTime'];
             $return['HptCode'] = $Result['HptCode'];
 
             $count++;
@@ -156,13 +149,9 @@
 
     function start_pack($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $From = $DATA["From"];
-        $Sql = "UPDATE process SET PackStartTime = NOW() WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE shelfcount SET PkStartTime = NOW(),IsStatus = 2 WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn,$Sql)){
-            $Sql = "UPDATE $From SET IsProcess = 3 WHERE DocNo = '$DocNo' ";
-            mysqli_query($conn,$Sql);
-
             $return['status'] = "success";
             $return['form'] = "start_pack";
             echo json_encode($return);
@@ -179,30 +168,9 @@
 
     function end_pack($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $From = $DATA["From"];
-        $boolean = false;
+        $Sql = "UPDATE shelfcount SET PkEndTime = NOW(),IsStatus = 3 WHERE DocNo = '$DocNo'";
 
-        $Sql = "UPDATE process SET PackEndTime = NOW(),IsStatus = 3 WHERE DocNo = '$DocNo'";
-        mysqli_query($conn,$Sql);
-
-        $Sql = "SELECT  TIMEDIFF(PackEndTime,PackStartTime) AS UseTime
-
-                FROM    process 
-                WHERE   DocNo = '$DocNo'";
-
-        $meQuery = mysqli_query($conn,$Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $UseTime = $Result['UseTime'];
-            $boolean = true;
-        }
-
-        if($boolean){
-            $Sql = "UPDATE process SET PackUseTime = '$UseTime' WHERE DocNo = '$DocNo'";
-            mysqli_query($conn,$Sql);
-
-            $Sql = "UPDATE $From SET IsProcess = 4 WHERE DocNo = '$DocNo' ";
-            mysqli_query($conn,$Sql);
-
+        if(mysqli_query($conn,$Sql)){
             $return['status'] = "success";
             $return['form'] = "end_pack";
             echo json_encode($return);
@@ -211,30 +179,6 @@
         }else{
             $return['status'] = "failed";
             $return['form'] = "end_pack";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }
-    }
-
-    function use_time_pack($conn, $DATA){
-        $DocNo = $DATA["DocNo"];
-        $PackUseTime = $DATA["PackUseTime"];
-
-        $Sql = "UPDATE process SET PackUseTime = '$PackUseTime' WHERE DocNo = '$DocNo'";
-
-        if($meQuery = mysqli_query($conn,$Sql)){
-            $meQuery = mysqli_query($conn,$Sql);
-
-            $return['PackUseTime'] = $PackUseTime;
-            $return['status'] = "success";
-            $return['form'] = "use_time_pack";
-            echo json_encode($return);
-            mysqli_close($conn);
-            die;
-        }else{
-            $return['status'] = "failed";
-            $return['form'] = "use_time_pack";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -243,15 +187,9 @@
 
     function start_send($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $From = $DATA["From"];
-        $nowdate = date('Y-m-d H:i:s');
-        $Sql = "UPDATE process SET SendStartTime = '$nowdate' WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn,$Sql)){
-            $Sql = "UPDATE $From SET IsProcess = 5 WHERE DocNo = '$DocNo' ";
-            mysqli_query($conn,$Sql);
-
-            $return['SendStartTime'] = $nowdate;
             $return['status'] = "success";
             $return['form'] = "start_send";
             echo json_encode($return);
@@ -267,37 +205,10 @@
     }
 
     function end_send($conn, $DATA){
-        $SiteCode = $DATA["siteCode"];
-        $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
-        $From = $DATA["From"];
-        $boolean = false;
+        $Sql = "UPDATE shelfcount SET DvEndTime = NOW(),IsStatus = 5 WHERE DocNo = '$DocNo'";
 
-        $Sql = "UPDATE process SET SendEndTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
-        mysqli_query($conn,$Sql);
-
-        $Sql = "SELECT  TIMEDIFF(process.SendEndTime,process.SendStartTime) AS UseTime,
-                        TIMEDIFF((delivery_fac_nhealth.SendTime)*100,TIMEDIFF(process.SendEndTime,process.SendStartTime)) AS Overtime 
-
-                FROM    process,delivery_fac_nhealth 
-                WHERE   process.DocNo = '$DocNo'
-                AND     delivery_fac_nhealth.HptCode = '$SiteCode'
-                AND     delivery_fac_nhealth.FacCode = '$FacCode'";
-
-        $meQuery = mysqli_query($conn,$Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $UseTime = $Result['UseTime'];
-            $Overtime = $Result['Overtime'];
-            $boolean = true;
-        }
-
-        if ($boolean) {
-            $Sql = "UPDATE process SET SendUseTime = '$UseTime',SendOverTime = '$Overtime' WHERE DocNo = '$DocNo'";
-            mysqli_query($conn,$Sql);
-
-            $Sql = "UPDATE $From SET IsProcess = 6 WHERE DocNo = '$DocNo'";
-            mysqli_query($conn,$Sql);
-
+        if (mysqli_query($conn,$Sql)) {
             $return['status'] = "success";
             $return['form'] = "end_send";
             echo json_encode($return);

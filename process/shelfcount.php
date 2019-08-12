@@ -80,6 +80,7 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND shelfcount.DocDate LIKE '%$search%'
+                AND shelfcount.IsStatus > 0 
                 ORDER BY shelfcount.DocNo DESC";
         $return['sql'] = $Sql;
 

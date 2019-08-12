@@ -32,9 +32,6 @@
 
     <script>
         $(document).ready(function (e) {
-            
-            var Menu = '<?php echo $Menu;?>';
-            if(Menu == 'factory'){ $("#add_doc").remove(); }
             load_dep();
             load_site();
             load_doc();
@@ -200,15 +197,20 @@
                                 status_text = "หยุดชั่วขณะ";
                                 status_line = "StatusLine_1";
                             }
-                            else if (temp[i]['IsStatus'] == 1 || temp[i]['IsStatus'] == 3) {
-                                status_class = "status2";
-                                status_text = "เสร็จสิ้น";
-                                status_line = "StatusLine_2";
+                            else if (temp[i]['IsStatus'] == 1) {
+                                status_class = "status4";
+                                status_text = "ไม่ทำงาน";
+                                status_line = "StatusLine_4";
                             }
-                            else {
+                            else if (temp[i]['IsStatus'] > 1 && temp[i]['IsStatus'] < 6) {
                                 status_class = "status3";
                                 status_text = "กำลังดำเนินการ";
                                 status_line = "StatusLine_3";
+                            }
+                            else if (temp[i]['IsStatus'] == 6) {
+                                status_class = "status2";
+                                status_text = "เสร็จสิ้น";
+                                status_line = "StatusLine_2";
                             }
 
                             var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
@@ -285,12 +287,6 @@
             <div class="d-flex justify-content-center mb-3">
                 <input id="datepicker" class="text-truncate text-center" width="276" placeholder='<?php echo $genarray['CreateDocDate'][$language]; ?>' disabled/>
                 <button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
-            </div>
-
-            <div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-                <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
-                </button>
             </div>
 
             <!-- <button onclick='' class='btn btn-secondary btn-block' style='align-items: center !important;'>

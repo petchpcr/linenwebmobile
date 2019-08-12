@@ -77,20 +77,16 @@
         }
 
         function start_pack(DocNo){
-            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
-                'From': From,
                 'STATUS': 'start_pack'
             };
             senddata(JSON.stringify(data));
         }
 
         function end_pack(DocNo){
-            var From = "<?php echo $From?>";
             var data = {
                 'DocNo': DocNo,
-                'From': From,
                 'STATUS': 'end_pack'
             };
             senddata(JSON.stringify(data));
@@ -121,13 +117,13 @@
         function back(){
             var Menu = '<?php echo $Menu;?>';
             var site = '<?php echo $siteCode;?>';
-            window.location.href='dirty.php?Menu='+Menu+'&siteCode='+site;
+            window.location.href='shelfcount.php?siteCode='+site+'&Menu='+Menu;
         }
         
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = '../process/process.php';
+            var URL = '../process/shelf_process.php';
             $.ajax({
                 url: URL,
                 dataType: 'text',
@@ -145,7 +141,6 @@
 
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_process') {
-                            $("#send_time").text("( ใช้เวลาขนส่ง "+temp['LimitTime']+" นาที )");
                             $(".head-btn.btn-light").remove();
                             var Back = "<button onclick='back(\""+temp['HptCode']+"\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>";
                             $("#user").before(Back);
@@ -172,7 +167,7 @@
                                 $("#W_Start_btn").show();
                                 $("#W_End_btn").hide();
                             }
-                            else if(temp['IsStatus'] == 1){ //-----กำลังซัก
+                            else if(temp['IsStatus'] == 99){ //-----กำลังซัก
                                 $("#W_Status").attr("src","../img/Status_1.png");
                                 $("#P_Status").attr("src","../img/Status_4.png");
                                 $("#S_Status").attr("src","../img/Status_4.png");
@@ -198,9 +193,9 @@
                                 $("#W_End_btn").show();
                                 
                             }
-                            else if(temp['IsStatus'] == 2){ //-----กำลังแพคของ
+                            else if(temp['IsStatus'] == 1 || temp['IsStatus'] == 2){ //-----กำลังแพคของ
                                 $("#W_Status").attr("src","../img/Status_3.png");
-                                $("#P_Status").attr("src","../img/Status_1.png");  
+                                $("#P_Status").attr("src","../img/Status_1.png");
                                 $("#S_Status").attr("src","../img/Status_4.png");
                                 $("#W_Status_text").text("Success Process");
                                 $("#P_Status_text").text("Wait Process");
@@ -218,34 +213,39 @@
                                 $("#S_Start").text("--:--:--");
                                 $("#S_End").text("--:--:--");
 
-                                var W_Start = new Date(temp['WashStartTime']);
-                                var W_End = new Date(temp['WashEndTime']);
+                                var W_Start = new Date(temp['ScStartTime']);
+                                var W_End = new Date(temp['ScEndTime']);
                                 
-                                $("#W_Use").text(temp['WashUseTime']+" นาที");
+                                $("#W_Use").text(temp['ScUseTime']+" นาที");
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
                                 $("#W_End").text(W_End.toLocaleTimeString());
 
-                                if(temp['PackStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
+                                if(temp['PkStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
+                                    $("#P_Status").attr("src","../img/Status_4.png");
                                     $("#P_Start_btn").show();
                                     $("#P_End_btn").hide();
                                     $("#P_Start").text("--:--:--");
                                     $("#P_End").text("--:--:--");
                                 }
-                                else if(temp['PackStartTime'] != null){ // ถ้าเคยกดเริ่มแล้ว
+                                else if(temp['PkStartTime'] != null){ // ถ้าเคยกดเริ่มแล้ว
                                     $("#P_Start_btn").hide();
                                     $("#P_End_btn").show();
-                                    var P_Start = new Date(temp['PackStartTime']);
+                                    var P_Start = new Date(temp['PkStartTime']);
                                     $("#P_Start").text(P_Start.toLocaleTimeString());
                                     $("#P_End").text("--:--:--");
                                 }
                             }
-                            else if(temp['IsStatus'] == 3){ //-----กำลังขนส่ง
+                            else if(temp['IsStatus'] == 3 || temp['IsStatus'] == 4){ //-----กำลังขนส่ง
                                 $("#W_Status").attr("src","../img/Status_3.png");
                                 $("#P_Status").attr("src","../img/Status_3.png");
                                 $("#S_Status").attr("src","../img/Status_1.png");
                                 $("#W_Status_text").text("Success Process");
                                 $("#P_Status_text").text("Success Process");
                                 $("#S_Status_text").text("Wait Process");
+                                $("#W_Start_text").removeClass("col-lg-6");
+                                $("#W_End_text").removeClass("col-lg-6");
+                                $("#W_Start_text").addClass("col-lg-4");
+                                $("#W_End_text").addClass("col-lg-4");
                                 $("#P_Start_text").removeClass("col-lg-6");
                                 $("#P_End_text").removeClass("col-lg-6");
                                 $("#P_Start_text").addClass("col-lg-4");
@@ -257,34 +257,35 @@
                                 $("#S_Sum_btn").show();
                                 $("#W_Use_text").show();
                                 
-                                var W_Start = new Date(temp['WashStartTime']);
-                                var W_End = new Date(temp['WashEndTime']);
-                                var P_Start = new Date(temp['PackStartTime']);
-                                var P_End = new Date(temp['PackEndTime']);
+                                var W_Start = new Date(temp['ScStartTime']);
+                                var W_End = new Date(temp['ScEndTime']);
+                                var P_Start = new Date(temp['PkStartTime']);
+                                var P_End = new Date(temp['PkEndTime']);
                                 
-                                $("#W_Use").text(temp['WashUseTime']+" นาที");
-                                $("#P_Use").text(temp['PackUseTime']+" นาที");
+                                $("#W_Use").text(temp['ScUseTime']+" นาที");
+                                $("#P_Use").text(temp['PkUseTime']+" นาที");
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
                                 $("#W_End").text(W_End.toLocaleTimeString());
                                 $("#P_Start").text(P_Start.toLocaleTimeString());
                                 $("#P_End").text(P_End.toLocaleTimeString());
 
                                 
-                                if(temp['SendStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
+                                if(temp['DvStartTime'] == null){ // ถ้ากดเริ่มครั้งแรก
+                                    $("#S_Status").attr("src","../img/Status_4.png");
                                     $("#S_Start_btn").show();
                                     $("#S_End_btn").hide();
                                     $("#S_Start").text("--:--:--");
                                     $("#S_End").text("--:--:--");
                                 }
-                                else if(temp['SendStartTime'] != null){ // ถ้าเคยกดเริ่มแล้ว
+                                else if(temp['DvStartTime'] != null){ // ถ้าเคยกดเริ่มแล้ว
                                     $("#S_Start_btn").hide();
                                     $("#S_End_btn").show();
-                                    var S_Start = new Date(temp['SendStartTime']);
+                                    var S_Start = new Date(temp['DvStartTime']);
                                     $("#S_Start").text(S_Start.toLocaleTimeString());
                                     $("#S_End").text("--:--:--");
                                 }
                             }
-                            else if(temp['IsStatus'] == 4){ //-----เสร็จสิ้น
+                            else if(temp['IsStatus'] == 5 || temp['IsStatus'] == 6){ //-----เสร็จสิ้น
 
                                 if(temp['Signature'] == null || temp['Signature'] == ""){
                                     swal({
@@ -301,7 +302,7 @@
                                     }).then(result => {
                                         var Menu = "<?php echo $Menu?>";
                                         var From = "<?php echo $From?>";
-                                        window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo']+'&From='+From;
+                                        window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo']+'&siteCode='+temp['HptCode'];
                                     })
                                 }
                                 else{
@@ -335,27 +336,27 @@
                                 $("#P_Use_text").show();
                                 $("#S_Use_text").show();
 
-                                var W_Start = new Date(temp['WashStartTime']);
-                                var W_End = new Date(temp['WashEndTime']);
-                                var P_Start = new Date(temp['PackStartTime']);
-                                var P_End = new Date(temp['PackEndTime']);
-                                var S_Start = new Date(temp['SendStartTime']);
-                                var S_End = new Date(temp['SendEndTime']);
-                                var S_Over = temp['SendOverTime'].substring(0, 1);
+                                var W_Start = new Date(temp['ScStartTime']);
+                                var W_End = new Date(temp['ScEndTime']);
+                                var P_Start = new Date(temp['PkStartTime']);
+                                var P_End = new Date(temp['PkEndTime']);
+                                var S_Start = new Date(temp['DvStartTime']);
+                                var S_End = new Date(temp['DvEndTime']);
+                                var S_Over = temp['DvUseTime'].substring(0, 1);
 
                                 if (S_Over == '-') {
                                     $("#S_Head_use").text("เกินเวลา");
                                     $("#S_Head_use").css("color","red");
                                     $("#S_Use").css("color","red");
-                                    $("#S_Use").text(temp['SendOverTime'].substring(1)+" นาที");
+                                    $("#S_Use").text(temp['DvUseTime'].substring(1)+" นาที");
 
                                 } else {
                                     $("#S_Head_use").text("ใช้เวลา");
-                                    $("#S_Use").text(temp['SendUseTime']+" นาที");
+                                    $("#S_Use").text(temp['DvUseTime']+" นาที");
                                 }
 
-                                $("#W_Use").text(temp['WashUseTime']+" นาที");
-                                $("#P_Use").text(temp['PackUseTime']+" นาที");
+                                $("#W_Use").text(temp['ScUseTime']+" นาที");
+                                $("#P_Use").text(temp['PkUseTime']+" นาที");
                                 $("#W_Start").text(W_Start.toLocaleTimeString());
                                 $("#W_End").text(W_End.toLocaleTimeString());
                                 $("#P_Start").text(P_Start.toLocaleTimeString());
@@ -427,8 +428,7 @@
     <div class="px-3">
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center text-truncate font-weight-bold mt-4" style="font-size:25px;"><?php echo $DocNo;?></div>
-        <div id="send_time" class="text-center text-truncate font-weight-bold mb-4" style="font-size:20px;">( ขนส่งไม่เกิน 15 นาที )</div>
+        <div class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"><?php echo $DocNo;?></div>
 
         <div id="process">
             <div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">
