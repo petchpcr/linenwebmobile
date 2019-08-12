@@ -232,7 +232,7 @@
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
         <div class="text-center my-4">
-            <h4 id="HptName" class="text-truncate"></h4>
+            <div id="HptName" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
         </div>
         <div id="document">
             <div class="d-flex justify-content-center mb-3">

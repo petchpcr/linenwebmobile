@@ -205,7 +205,7 @@
     <div class="px-3 pb-4 mb-5">
 
         <div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45"/></div>
-        <div class="text-center my-4"><h4 id="HptName" class="text-truncate"></h4></div>
+        <div id="HptName" class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"></div>
         <div id="document">
             <div class="d-flex justify-content-center mb-3">
                 <input id="datepicker" class="text-truncate text-center" width="276" placeholder="<?php echo $genarray['CreateDocDate'][$language]; ?>" disabled/>
