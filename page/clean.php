@@ -145,16 +145,16 @@
                                     status_line = "StatusLine_4";
                                 } 
                                 else if (temp[i]['IsStatus'] == 1) {
-                                    status_class = "status2";
+                                    status_class = "status1";
                                     status_text = "สร้างเอกสารเสร็จสิ้น";
                                     status_line = "StatusLine_1";
                                 } 
                                 else if (temp[i]['IsStatus'] == 2) {
-                                    status_class = "status4";
+                                    status_class = "status1";
                                     status_text = "กำลังตรวจสอบคุณภาพ";
                                     status_line = "StatusLine_1";
                                 }else if (temp[i]['IsStatus'] == 3) {
-                                    status_class = "status3";
+                                    status_class = "status2";
                                     status_text = "ส่งเคลม";
                                     status_line = "StatusLine_2";
                                 }
