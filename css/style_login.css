@@ -18,7 +18,8 @@ body {
 }
 .head_login_img {
     /* width:100%; */
-    max-width:509.42px;
+    max-width:100%;
+    /* max-width:509.42px; */
     max-height:400px;
     height:auto;
 }
