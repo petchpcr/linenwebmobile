@@ -152,12 +152,12 @@
 </head>
 
 <body>
-	<div class="row p-0 m-0 d-flex justify-content-center">
-		<div class="col-lg-7 col-md-9 col-sm-11 col-11 p-0">
-			<img src="../img/head_login.png" class="head_login_img" style="border-radius:30px 30px 0 0;">
+	<div class="h-100 p-0 m-0">
+		<div class="d-flex justify-content-center w-100 mt-5 mb-0 py-0 px-2">
+			<img src="../img/head_login.jpg" class="head_login_img" style="border-radius:30px 30px 0 0;">
 		</div>
-		<div class="col-lg-7 col-md-9 col-sm-11 col-11 p-0">
-			<div class="bg-white card-body" style="border-radius:0 0 30px 30px;">
+		<div class="d-flex justify-content-center w-100 pt-0 pb-2 px-2">
+			<div class="bg-white card-body" style="border-radius:0 0 30px 30px;max-width:509.42px;">
 			<div class="row text-center mb-3 p-0">
 				<div class="col-12 mb-4"><img src="../img/logo.png" class="logo_login_img"/></div>
 				<div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;"/></div>
@@ -189,12 +189,11 @@
 			
 			<div class="text-center mt-2">
 				<div id="btn_login">
-					<button onclick="chklogin()" class="btn btn_custom">
-					<div class="row align-items-center px-4">
-						<div class="ml-3 mr-auto">LOGIN</div>	
-						<i class="fas fa-arrow-right mr-3"></i>
-					</div>
-					
+					<button onclick="chklogin()" class="btn btn-primary" style="border-radius:30px;width:200px;">
+						<div class="d-flex align-items-center">
+							<div class="mr-auto ml-4" style="font-size:27px;">LOGIN</div>
+							<i class="fas fa-arrow-right mr-4" style="font-size:20px;"></i>
+						</div>
 					</button>
 				</div>
 			</div>
