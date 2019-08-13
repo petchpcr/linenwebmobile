@@ -152,51 +152,53 @@
 </head>
 
 <body>
-	<div class="h-100 p-0 m-0 border">
-		<div class="d-flex justify-content-center w-100 mt-5 mb-0 p-0 px-2">
-			<img src="../img/head_login.jpg" class="head_login_img" style="border-radius:30px 30px 0 0;">
-		</div>
-		<div class="d-flex justify-content-center w-100 pt-0 pb-2 px-2">
-			<div class="bg-white card-body" style="border-radius:0 0 30px 30px;max-width:509.42px;">
-			<div class="row text-center mb-3 p-0">
-				<div class="col-12 mb-4"><img src="../img/logo.png" class="logo_login_img"/></div>
-				<div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;"/></div>
+	<div class="h-100 d-flex align-items-center p-0 m-0">
+		<div>
+			<div class="d-flex justify-content-center w-100 mb-0 p-0 px-2">
+				<img src="../img/head_login.jpg" class="head_login_img" style="border-radius:30px 30px 0 0;">
 			</div>
+			<div class="d-flex justify-content-center w-100 pt-0 pb-2 px-2">
+				<div class="bg-white card-body" style="border-radius:0 0 30px 30px;max-width:509.42px;">
+					<div class="row text-center mb-3 p-0">
+						<div class="col-12 mb-4"><img src="../img/logo.png" class="logo_login_img"/></div>
+						<div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;"/></div>
+					</div>
 
-			<div id="row p-0">
-				<div class="col-12">
-					<div id="icon_user">
-						<i class="fas fa-user"></i>
-					</div>
-					<div class="form-group bmd-form-group">
-						<label for="username" id="label_username" class="bmd-label-floating">Username (<?php echo "http://{$_SERVER['HTTP_HOST']}";?>)</label>
-						<input onkeyup='make_char()' type="text" autocomplete="off" class="form-control" id="username">
-					</div>
-				</div>
-			</div>
-			
-			<div id="row">
-				<div class="col-12">
-					<div id="icon_password">
-						<i class="fas fa-lock"></i>
-					</div>
-					<div class="form-group bmd-form-group">
-						<label for="password" id="label_password" class="bmd-label-floating">Password</label>
-						<input type="password" autocomplete="off" class="form-control" id="password">
-					</div>
-				</div>
-			</div>
-			
-			<div class="text-center mt-2">
-				<div id="btn_login">
-					<button onclick="chklogin()" class="btn btn-primary" style="border-radius:30px;width:200px;">
-						<div class="d-flex align-items-center">
-							<div class="mr-auto ml-4" style="font-size:27px;">LOGIN</div>
-							<i class="fas fa-arrow-right mr-4" style="font-size:20px;"></i>
+					<div id="row p-0">
+						<div class="col-12">
+							<div id="icon_user">
+								<i class="fas fa-user"></i>
+							</div>
+							<div class="form-group bmd-form-group">
+								<label for="username" id="label_username" class="bmd-label-floating">Username (<?php echo "http://{$_SERVER['HTTP_HOST']}";?>)</label>
+								<input onkeyup='make_char()' type="text" autocomplete="off" class="form-control" id="username">
+							</div>
 						</div>
-					</button>
+					</div>
+					
+					<div id="row">
+						<div class="col-12">
+							<div id="icon_password">
+								<i class="fas fa-lock"></i>
+							</div>
+							<div class="form-group bmd-form-group">
+								<label for="password" id="label_password" class="bmd-label-floating">Password</label>
+								<input type="password" autocomplete="off" class="form-control" id="password">
+							</div>
+						</div>
+					</div>
+					
+					<div class="text-center mt-2">
+						<div id="btn_login">
+							<button onclick="chklogin()" class="btn btn-primary" style="border-radius:30px;width:200px;">
+								<div class="d-flex align-items-center">
+									<div class="mr-auto ml-4" style="font-size:27px;">LOGIN</div>
+									<i class="fas fa-arrow-right mr-4" style="font-size:20px;"></i>
+								</div>
+							</button>
+						</div>
+					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 	</div>
