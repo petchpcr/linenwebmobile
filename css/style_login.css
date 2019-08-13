@@ -3,7 +3,7 @@
     font-family: myFirstFont;
 }
 html {
-    height: 100vh;
+    height: 100%;
 }
 body {
     font-family: myFirstFont;
@@ -15,11 +15,12 @@ body {
     align-items: center;
     display: flex;
     justify-content: center;
+    margin: 0px !important;
+    padding: 0px !important;
 }
 .head_login_img {
-    /* width:100%; */
-    max-width:100%;
-    /* max-width:509.42px; */
+    width:100%;
+    max-width:509.42px;
     max-height:400px;
     height:auto;
 }
