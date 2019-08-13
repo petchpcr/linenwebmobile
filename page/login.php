@@ -152,7 +152,7 @@
 </head>
 
 <body>
-	<div class="h-100 p-0 m-0 border">
+	<div class="h-100 p-0 m-0">
 		<div class="d-flex justify-content-center w-100 mt-5 mb-0 p-0 px-2">
 			<img src="../img/head_login.jpg" class="head_login_img" style="border-radius:30px 30px 0 0;">
 		</div>
