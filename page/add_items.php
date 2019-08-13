@@ -106,7 +106,8 @@ $genarray = json_decode($json, TRUE);
                     var qty = 0;
                     var unit = 1;
                     var Menu = '<?php echo $Menu; ?>';
-                    if (Menu == 'dirty') {
+                    //if (Menu == 'dirty') {
+                    if (false) {
                         var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
                         Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
                         Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
@@ -253,7 +254,8 @@ $genarray = json_decode($json, TRUE);
             $(".old").each(function() {
                 var qtyid = $(this).attr("id")+'qty';
                 var qty = $('#'+qtyid).val();
-                if (Menu == 'clean') {
+                //if (Menu == 'clean') {
+                if (true) {
                     if (qty == null || qty == "") {
                         qty = 0;
                     }
@@ -286,7 +288,8 @@ $genarray = json_decode($json, TRUE);
             $(".new").each(function() {
                 var qtyid = $(this).attr("id")+'qty';
                 var qty = $('#'+qtyid).val();
-                if (Menu == 'clean') {
+                //if (Menu == 'clean') {
+                if (true) {
                     if (qty == null || qty == "") {
                         qty = 0;
                     }
@@ -368,7 +371,8 @@ $genarray = json_decode($json, TRUE);
                     if (temp["status"] == 'success') {
                         if (temp["form"] == 'load_items') {
                             $("#items").empty();
-                            if (Menu == 'dirty') {
+                            //if (Menu == 'dirty') {
+                            if (false) {
                                 for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
                                     var num = Number(i) + 1;
                                     var id = "weight" + num;
@@ -503,7 +507,7 @@ $genarray = json_decode($json, TRUE);
     <div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
         <div class="col-lg-9 col-md-10 col-sm-12">
             <?php
-                if ($Menu == 'clean') {
+                if (true) {
                     echo '<div class="form-row my-2">
                             <div class="col-12 input-group">
                             <div class="input-group-prepend">
