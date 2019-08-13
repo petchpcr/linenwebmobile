@@ -302,9 +302,10 @@
                                         closeOnConfirm: true,
                                         closeOnCancel: true,
                                     }).then(result => {
+                                        var siteCode = "<?php echo $siteCode?>";
                                         var Menu = "<?php echo $Menu?>";
                                         var From = "<?php echo $From?>";
-                                        window.location.href='signature.php?Menu='+Menu+'&DocNo='+temp['DocNo']+'&From='+From;
+                                        window.location.href='signature.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+temp['DocNo']+'&From='+From;
                                     })
                                 }
                                 else{
