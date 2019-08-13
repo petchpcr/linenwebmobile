@@ -56,9 +56,12 @@
         }
 
         function show_qc(DocNo){
-            var siteCode = "<?php echo $siteCode?>";
-            var Menu = '<?php echo $Menu;?>';
-            window.location.href='qc_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo;
+            console.log("777");
+            var data = {
+                'DocNo': DocNo,
+                'STATUS': 'get_doc_type'
+            };
+            senddata(JSON.stringify(data));
         }
 
         function change_dep(){
@@ -152,9 +155,13 @@
                         var DocNo = temp['DocNo']
                         var Menu = '<?php echo $Menu;?>';
                         window.location.href='add_items.php?siteCode='+siteCode+'&DepCode='+DepCode+'&DocNo='+DocNo+'&Menu='+Menu+'&user='+Userid;
-                    }
-                    else if(temp["form"] == 'logout'){
+                    }else if(temp["form"] == 'logout'){
                         window.location.href='../index.html';
+                    }else if(temp["form"] == 'get_doc_type'){
+                        var siteCode = "<?php echo $siteCode?>";
+                        var Menu = '<?php echo $Menu;?>';
+                        var DocNo = temp["DocNo"];
+                        window.location.href='qc_view.php?siteCode='+siteCode+'&Menu='+Menu+'&DocNo='+DocNo+'&from='+temp["table"];
                     }
                 } else if (temp['status'] == "failed") {
                     if(temp["form"] == 'load_doc'){

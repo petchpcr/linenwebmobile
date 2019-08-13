@@ -8,6 +8,7 @@ if ($Userid == "") {
 }
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
+$From = $_GET['from'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
 // $Userid = $_GET['user'];
@@ -272,7 +273,12 @@ $genarray = json_decode($json, TRUE);
         function senddata(data) {
             var form_data = new FormData();
             form_data.append("DATA", data);
-            var URL = '../process/qc_view.php';
+            var From = '<?php echo $From; ?>';
+            if(From==2){
+                var URL = '../process/qc_view_repair.php';
+            }else{
+                var URL = '../process/qc_view_clean.php';
+            }
             $.ajax({
                 url: URL,
                 dataType: 'text',

@@ -37,19 +37,40 @@
         }
         $siteCode = $DATA["siteCode"];
         $boolean = false;
-        $Sql = "SELECT  clean.DocNo,
-                        department.DepName,
-                        clean.IsCheckList,
-                        clean.IsStatus
+        $Sql = "SELECT * 
+                FROM ( 
+                        SELECT  clean.DocNo,
+                                department.DepName,
+                                clean.IsCheckList,
+                                clean.IsStatus
 
-                FROM    clean
+                        FROM    clean,department,site
 
-                INNER JOIN department ON department.DepCode = clean.DepCode AND department.DepCode = clean.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND clean.DocDate LIKE '%$search%' 
-                AND clean.IsStatus > 0 
-                ORDER BY clean.DocNo DESC";
+                        WHERE   site.HptCode = '$siteCode' 
+                        AND     clean.DocDate LIKE '%$search%' 
+                        AND     department.DepCode = clean.DepCode 
+                        AND department.DepCode = clean.DepCode
+                        AND     site.HptCode = department.HptCode 
+                        AND site.HptCode = department.HptCode
+                        AND     clean.IsStatus > 0
+                    UNION ALL
+                        SELECT  repair.DocNo,
+                                department.DepName,
+                                repair.IsCheckList,
+                                repair.IsStatus
+
+                        FROM    repair,department,site
+
+                        WHERE   site.HptCode = '$siteCode' 
+                        AND     repair.DocDate LIKE '%$search%' 
+                        AND     department.DepCode = repair.DepCode 
+                        AND     department.DepCode = repair.DepCode
+                        AND     site.HptCode = department.HptCode 
+                        AND     site.HptCode = department.HptCode
+                        AND     repair.IsStatus > 0
+                                
+                                ) a
+                ORDER BY DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -175,6 +196,41 @@
         }
     }
 
+    function get_doc_type($conn, $DATA){
+        $return['ss'] = "success";
+        $DocNo = $DATA["DocNo"];
+        $Sql = "SELECT  1 AS x
+                FROM    clean
+                WHERE DocNo = '$DocNo'
+
+                UNION ALL
+
+                SELECT 2 AS x
+                FROM    repair
+                WHERE DocNo = '$DocNo'";
+        $boolean = false;
+
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return['table'] = $Result['x'];
+            $boolean = true;
+        }
+        if ($boolean) {
+            $return['status'] = "success";
+            $return['DocNo'] = $DocNo;
+            $return['form'] = "get_doc_type";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "get_doc_type";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -187,6 +243,9 @@
         }
         else if ($DATA['STATUS'] == 'add_dirty') {
             add_dirty($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'get_doc_type') {
+            get_doc_type($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);
