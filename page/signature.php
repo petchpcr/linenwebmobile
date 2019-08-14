@@ -672,7 +672,6 @@
       document.getElementById("h_code").value = SigCode;
       var Menu = "<?php echo $Menu?>";
       if(Menu=="qc"){
-        var siteCode = "<?php echo $siteCode?>";
         var URL = '../process/signature_qc.php';
         $.ajax({  
             url: URL,
