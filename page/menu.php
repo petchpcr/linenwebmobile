@@ -169,7 +169,7 @@
                     </div>
                     <div class="my-col-menu">
                         <button onclick="menu_click('."'shelfcount'".')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/laundry.png">
+                            <img src="../img/storage.png">
                             <div class="text-truncate">'.$array["shelfcount"][$language].'</div>
                         </button>
                     </div>
