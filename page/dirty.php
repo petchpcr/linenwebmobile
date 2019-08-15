@@ -212,19 +212,24 @@
 
                             if (Menu == 'dirty') {
                                 if (temp[i]['IsStatus'] == 0) {
-                                    status_class = "status1";
-                                    status_text = "หยุดชั่วขณะ";
-                                    status_line = "StatusLine_1";
-                                }
-                                else if (temp[i]['IsStatus'] == 1 || temp[i]['IsStatus'] == 3) {
                                     status_class = "status2";
-                                    status_text = "เสร็จสิ้น";
+                                    status_text = "สร้างไม่เสร็จ";
                                     status_line = "StatusLine_2";
                                 }
-                                else {
+                                else if (temp[i]['IsStatus'] == 1) {
                                     status_class = "status3";
-                                    status_text = "กำลังดำเนินการ";
+                                    status_text = "สร้างเสร็จ";
                                     status_line = "StatusLine_3";
+                                }
+                                else if (temp[i]['IsStatus'] == 3) {
+                                    status_class = "status3";
+                                    status_text = "เสร็จสิ้น";
+                                    status_line = "StatusLine_3";
+                                }
+                                else {
+                                    status_class = "status1";
+                                    status_text = "กำลังดำเนินการ";
+                                    status_line = "StatusLine_1";
                                 }
 
                                 var Str = "<button onclick='show_process(\""+temp[i]['DocNo']+"\",0)' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
@@ -242,14 +247,14 @@
                                     status_line = "StatusLine_4";
                                 }
                                 else if(IsPrcess == 7){
-                                    status_class = "status2";
+                                    status_class = "status3";
                                     status_text = "เสร็จสิ้น";
-                                    status_line = "StatusLine_2";
+                                    status_line = "StatusLine_3";
                                 }
                                 else {
-                                    status_class = "status3";
+                                    status_class = "status1";
                                     status_text = "กำลังดำเนินการ";
-                                    status_line = "StatusLine_3";
+                                    status_line = "StatusLine_1";
                                 }
                                 
                                 var onclick = "show_process(\""+temp[i]['DocNo']+"\",\""+temp[i]['From']+"\")";

@@ -69,9 +69,9 @@
                         AND     site.HptCode = department.HptCode
                         AND     repair.IsStatus > 0
                                 
-                                ) a
+                                )  a 
                 ORDER BY DocNo DESC";
-
+        $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['DocNo'] = $Result['DocNo'];

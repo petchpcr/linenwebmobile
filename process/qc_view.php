@@ -628,7 +628,7 @@
                 // สร้างเอกสาร claim_detail
                 if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารใน claim
                     $Sql_claim = "INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_claim,0,$weight,0,0,0)";
+                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_claim,0,0,0,0,0)";
                 }
                 else {
                     $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
@@ -638,10 +638,10 @@
 
                     if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน claim_detail
                         $Sql_claim = "INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                        VALUES ('$DocDetaliClaim','$itemCode',$unitCode,1,$sum_claim,0,$weight,0,0,0)";
+                                        VALUES ('$DocDetaliClaim','$itemCode',$unitCode,1,$sum_claim,0,0,0,0,0)";
                     }
                     else {
-                        $Sql_claim = "UPDATE claim_detail SET Qty1 = $sum_claim,Qty2 = 0,Weight = $weight 
+                        $Sql_claim = "UPDATE claim_detail SET Qty1 = $sum_claim,Qty2 = 0,Weight = 0 
                                         WHERE       DocNo = '$DocDetaliClaim'
                                         AND         ItemCode = '$itemCode'";
                     }
@@ -684,7 +684,7 @@
                 // สร้างเอกสาร rewash_detail
                 if ($chkRewash == 0) { // ถ้าไม่มีเคยมีเอกสารใน rewash
                     $Sql_rewash = "INSERT INTO rewash_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_rewash,0,$weight,0,0,0)";
+                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_rewash,0,0,0,0,0)";
                 }
                 else {
                     $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
@@ -694,10 +694,10 @@
 
                     if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน rewash_detail
                         $Sql_rewash = "INSERT INTO rewash_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                        VALUES ('$DocDetaliRewash','$itemCode',$unitCode,1,$sum_rewash,0,$weight,0,0,0)";
+                                        VALUES ('$DocDetaliRewash','$itemCode',$unitCode,1,$sum_rewash,0,0,0,0,0)";
                     }
                     else {
-                        $Sql_rewash = "UPDATE rewash_detail SET Qty1 = $sum_rewash,Qty2 = 0,Weight = $weight 
+                        $Sql_rewash = "UPDATE rewash_detail SET Qty1 = $sum_rewash,Qty2 = 0,Weight = 0 
                                         WHERE DocNo = '$DocDetaliRewash'
                                         AND ItemCode = '$itemCode'";
                     }
@@ -740,7 +740,7 @@
                 // สร้างเอกสาร claim_detail
                 if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารนี้
                     $Sql_claim = "    INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                        VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_claim,0,$weight,0,0,0)";
+                                        VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_claim,0,0,0,0,0)";
                 }
                 else {
                     $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
@@ -750,10 +750,10 @@
 
                     if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน claim_detail
                         $Sql_claim = "INSERT INTO claim_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                        VALUES ('$DocDetaliClaim','$itemCode',$unitCode,1,$sum_claim,0,$weight,0,0,0)";
+                                        VALUES ('$DocDetaliClaim','$itemCode',$unitCode,1,$sum_claim,0,0,0,0,0)";
                     }
                     else {
-                        $Sql_claim = "UPDATE claim_detail SET Qty1 = $sum_claim,Qty2 = 0,Weight = $weight 
+                        $Sql_claim = "UPDATE claim_detail SET Qty1 = $sum_claim,Qty2 = 0,Weight = 0 
                                         WHERE       DocNo = '$DocDetaliClaim'
                                         AND         ItemCode = '$itemCode'";
                     }
@@ -792,7 +792,7 @@
                 // สร้างเอกสาร rewash_detail
                 if ($chkRewash == 0) { // ถ้าไม่มีเคยมีเอกสาร rewash
                     $Sql_rewash = "INSERT INTO rewash_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_rewash,0,$weight,0,0,0)";
+                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_rewash,0,0,0,0,0)";
                 }
                 else {
                     $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
@@ -802,10 +802,10 @@
 
                     if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน rewash_detail
                         $Sql_rewash = "INSERT INTO rewash_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                        VALUES ('$DocDetaliRewash','$itemCode',$unitCode,1,$sum_rewash,0,$weight,0,0,0)";
+                                        VALUES ('$DocDetaliRewash','$itemCode',$unitCode,1,$sum_rewash,0,0,0,0,0)";
                     }
                     else {
-                        $Sql_rewash = "UPDATE rewash_detail SET Qty1 = $sum_rewash,Qty2 = 0,Weight = $weight 
+                        $Sql_rewash = "UPDATE rewash_detail SET Qty1 = $sum_rewash,Qty2 = 0,Weight = 0 
                                         WHERE DocNo = '$DocDetaliRewash'
                                         AND ItemCode = '$itemCode'";
                     }

@@ -1,1 +1,284 @@
-@font-face{src:url(../../../fonts/DBHelvethaica.ttf);font-family:myFirstFont}.head-bar{font-family:myFirstFont;font-size:20px;background-color:#1659a2!important;border:#1659a2 solid 1px}.head-text{font-family:myFirstFont;font-size:20px;font-weight:500;line-height:1.2;color:white;padding:.7em 0;margin:0 10%}.head-btn{font-family:myFirstFont;display:inline-block;font-weight:400;text-align:center;white-space:nowrap;vertical-align:middle;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border:1px solid transparent;padding:.375rem .75rem;margin:.375rem .35rem;font-size:20px;line-height:1.5;border-radius:10px;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.status1{font-family:myFirstFont;font-size:20px;align-items:center!important;width:115px!important;border:1px solid #e93631!important;background-color:#e93631!important;color:#fff!important;padding:.5rem!important;margin-right:8px!important}.status2{font-family:myFirstFont;font-size:20px;align-items:center!important;width:115px!important;border:1px solid #31a11b!important;background-color:#31a11b!important;color:#fff!important;padding:.5rem!important;margin-right:8px!important}.status3{font-family:myFirstFont;font-size:20px;align-items:center!important;width:115px!important;border:1px solid #f0691b!important;background-color:#f0691b!important;color:#fff!important;padding:.5rem!important;margin-right:8px!important}.status4{font-family:myFirstFont;font-size:20px;align-items:center!important;width:115px!important;border:1px solid #bebfc0!important;background-color:#bebfc0!important;color:#000!important;padding:.5rem!important;margin-right:8px!important}.my-col-menu{font-family:myFirstFont;font-size:20px;position:relative;width:100%;min-height:1px;padding:10px}.my-col-5,.my-col-7{font-family:myFirstFont;font-size:20px;position:relative;width:100%;min-height:1px;padding-right:10px;padding-left:10px}.view-col-num{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.view-col-item{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.my-col-menu{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.my-col-5{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 45%;flex:0 0 45%;max-width:45%}.my-col-7{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 55%;flex:0 0 55%;max-width:55%}@media (min-width:768px){.view-col-num{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.view-col-item{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.my-col-menu{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.my-col-5{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.my-col-7{font-family:myFirstFont;font-size:20px;-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}}.processName{font-family:myFirstFont;text-align:center;font-weight:bolder;font-size:20px!important}.head_text{font-family:myFirstFont;font-size:20px;font-weight:bolder}#P_Status_text,#S_Status_text,#W_Status_text{font-family:myFirstFont;font-size:20px!important}.hpt_name{font-family:myFirstFont;font-size:20px;white-space:nowrap;width:100%;overflow:hidden;text-overflow:ellipsis;text-align:left}.hpt_img{font-family:myFirstFont;font-size:20px;max-width:100%;max-height:40px;height:auto}.logo{font-family:myFirstFont;font-size:20px;width:100%;height:100%;position:absolute}.index_logo{font-family:myFirstFont;font-size:20px;margin-top:250px;max-width:100%;max-height:120px;height:auto}.p-4-25{padding:1.75rem!important}.pt-4-25,.py-4-25{padding-top:1.75rem!important}.pr-4-25,.px-4-25{padding-right:1.75rem!important}.pb-4-25,.py-4-25{padding-bottom:1.75rem!important}.pl-4-25,.px-4-25{padding-left:1.75rem!important}.my-btn.focus,.my-btn:focus{outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}
+@font-face {
+    src: url(../../../fonts/DBHelvethaica.ttf);
+    font-family: myFirstFont
+}
+
+.head-bar {
+    font-family: myFirstFont;
+    font-size: 20px;
+    background-color: #1659a2!important;
+    border: #1659a2 solid 1px
+}
+
+.head-text {
+    font-family: myFirstFont;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: white;
+    padding: .7em 0;
+    margin: 0 10%
+}
+
+.head-btn {
+    font-family: myFirstFont;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    margin: .375rem .35rem;
+    font-size: 20px;
+    line-height: 1.5;
+    border-radius: 10px;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+
+.status1 { /* กำลังทำงาน (สีน้ำเงิน) */
+    font-family: myFirstFont;
+    font-size: 20px;
+    align-items: center!important;
+    width: 115px!important;
+    border: 1px solid #1659a2!important;
+    background-color: #1659a2!important;
+    color: #fff!important;
+    padding: .5rem!important;
+    margin-right: 8px!important
+}
+
+.status2 { /* หยุดชั่วขณะ (สีเหลือง) */
+    font-family: myFirstFont;
+    font-size: 20px;
+    align-items: center!important;
+    width: 115px!important;
+    border: 1px solid #fff3a9!important;
+    background-color: #fff3a9!important;
+    color: #000!important;
+    padding: .5rem!important;
+    margin-right: 8px!important
+}
+
+.status3 { /* เสร็จสิ้น (สีเขียว) */
+    font-family: myFirstFont;
+    font-size: 20px;
+    align-items: center!important;
+    width: 115px!important;
+    border: 1px solid #94ce93!important;
+    background-color: #94ce93!important;
+    color: #000!important;
+    padding: .5rem!important;
+    margin-right: 8px!important
+}
+
+.status4 { /* ไม่ทำงาน (สีเทา) */
+    font-family: myFirstFont;
+    font-size: 20px;
+    align-items: center!important;
+    width: 115px!important;
+    border: 1px solid #c1bfc1!important;
+    background-color: #c1bfc1!important;
+    color: #000!important;
+    padding: .5rem!important;
+    margin-right: 8px!important
+}
+
+.status5 { /* เคลม (สีแดง) */
+    font-family: myFirstFont;
+    font-size: 20px;
+    align-items: center!important;
+    width: 115px!important;
+    border: 1px solid #f37a7b!important;
+    background-color: #f37a7b!important;
+    color: #000!important;
+    padding: .5rem!important;
+    margin-right: 8px!important
+}
+
+.my-col-menu {
+    font-family: myFirstFont;
+    font-size: 20px;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding: 10px
+}
+
+.my-col-5,
+.my-col-7 {
+    font-family: myFirstFont;
+    font-size: 20px;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px
+}
+
+.view-col-num {
+    font-family: myFirstFont;
+    font-size: 20px;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%
+}
+
+.view-col-item {
+    font-family: myFirstFont;
+    font-size: 20px;
+    -ms-flex: 0 0 75%;
+    flex: 0 0 75%;
+    max-width: 75%
+}
+
+.my-col-menu {
+    font-family: myFirstFont;
+    font-size: 20px;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%
+}
+
+.my-col-5 {
+    font-family: myFirstFont;
+    font-size: 20px;
+    -ms-flex: 0 0 45%;
+    flex: 0 0 45%;
+    max-width: 45%
+}
+
+.my-col-7 {
+    font-family: myFirstFont;
+    font-size: 20px;
+    -ms-flex: 0 0 55%;
+    flex: 0 0 55%;
+    max-width: 55%
+}
+
+@media (min-width:768px) {
+    .view-col-num {
+        font-family: myFirstFont;
+        font-size: 20px;
+        -ms-flex: 0 0 33.333333%;
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%
+    }
+    .view-col-item {
+        font-family: myFirstFont;
+        font-size: 20px;
+        -ms-flex: 0 0 33.333333%;
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%
+    }
+    .my-col-menu {
+        font-family: myFirstFont;
+        font-size: 20px;
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%
+    }
+    .my-col-5 {
+        font-family: myFirstFont;
+        font-size: 20px;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%
+    }
+    .my-col-7 {
+        font-family: myFirstFont;
+        font-size: 20px;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%
+    }
+}
+
+.processName {
+    font-family: myFirstFont;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 20px!important
+}
+
+.head_text {
+    font-family: myFirstFont;
+    font-size: 20px;
+    font-weight: bolder
+}
+
+#P_Status_text,
+#S_Status_text,
+#W_Status_text {
+    font-family: myFirstFont;
+    font-size: 20px!important
+}
+
+.hpt_name {
+    font-family: myFirstFont;
+    font-size: 20px;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left
+}
+
+.hpt_img {
+    font-family: myFirstFont;
+    font-size: 20px;
+    max-width: 100%;
+    max-height: 40px;
+    height: auto
+}
+
+.logo {
+    font-family: myFirstFont;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    position: absolute
+}
+
+.index_logo {
+    font-family: myFirstFont;
+    font-size: 20px;
+    margin-top: 250px;
+    max-width: 100%;
+    max-height: 120px;
+    height: auto
+}
+
+.p-4-25 {
+    padding: 1.75rem!important
+}
+
+.pt-4-25,
+.py-4-25 {
+    padding-top: 1.75rem!important
+}
+
+.pr-4-25,
+.px-4-25 {
+    padding-right: 1.75rem!important
+}
+
+.pb-4-25,
+.py-4-25 {
+    padding-bottom: 1.75rem!important
+}
+
+.pl-4-25,
+.px-4-25 {
+    padding-left: 1.75rem!important
+}
+
+.my-btn.focus,
+.my-btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25)
+}

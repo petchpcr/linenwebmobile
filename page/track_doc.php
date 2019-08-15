@@ -159,6 +159,10 @@
                                 $("#W_Status_text").text("Success Process");
                                 $("#P_Status_text").text("Success Process");
                                 $("#S_Status_text").text("Wait Process");
+                                $("#W_Start_text").removeClass("col-lg-6");
+                                $("#W_End_text").removeClass("col-lg-6");
+                                $("#W_Start_text").addClass("col-lg-4");
+                                $("#W_End_text").addClass("col-lg-4");
                                 $("#P_Start_text").removeClass("col-lg-6");
                                 $("#P_End_text").removeClass("col-lg-6");
                                 $("#P_Start_text").addClass("col-lg-4");

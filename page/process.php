@@ -249,6 +249,10 @@
                                 $("#W_Status_text").text("Success Process");
                                 $("#P_Status_text").text("Success Process");
                                 $("#S_Status_text").text("Wait Process");
+                                $("#W_Start_text").removeClass("col-lg-6");
+                                $("#W_End_text").removeClass("col-lg-6");
+                                $("#W_Start_text").addClass("col-lg-4");
+                                $("#W_End_text").addClass("col-lg-4");
                                 $("#P_Start_text").removeClass("col-lg-6");
                                 $("#P_End_text").removeClass("col-lg-6");
                                 $("#P_Start_text").addClass("col-lg-4");
@@ -474,8 +478,8 @@
                 </div>
                 <div id="W_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
-                    <div class="col-md-8 col-sm-12" id="W_End_btn"><button id="W_End_btn_sub" onclick="end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-scondary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="W_End_btn"><button id="W_End_btn_sub" onclick="end_wash('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
                 </div>
             </div>
@@ -519,8 +523,8 @@
                 </div>
                 <div id="P_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Startpack'][$language]; ?></button></div>
-                    <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startpack'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
 
                 </div>
@@ -565,8 +569,8 @@
                 </div>
                 <div id="S_Sum_btn" class="row mt-4">
                     <div class="col-md-2 col-sm-none"></div>
-                    <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
-                    <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
+                    <div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo;?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
                     <div class="col-md-2 col-sm-none"></div>
 
                 </div>

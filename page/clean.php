@@ -153,10 +153,11 @@
                                     status_class = "status1";
                                     status_text = "กำลังตรวจสอบคุณภาพ";
                                     status_line = "StatusLine_1";
-                                }else if (temp[i]['IsStatus'] == 3) {
-                                    status_class = "status2";
+                                }
+                                else if (temp[i]['IsStatus'] == 3) {
+                                    status_class = "status5";
                                     status_text = "ส่งเคลม";
-                                    status_line = "StatusLine_2";
+                                    status_line = "StatusLine_5";
                                 }
                                 else {
                                     status_class = "status3";
