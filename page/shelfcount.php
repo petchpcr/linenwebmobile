@@ -193,9 +193,9 @@
                             var status_line = "";
 
                             if (temp[i]['IsStatus'] == 0) {
-                                status_class = "status5";
+                                status_class = "status2";
                                 status_text = "หยุดชั่วขณะ";
-                                status_line = "StatusLine_5";
+                                status_line = "StatusLine_2";
                             }
                             else if (temp[i]['IsStatus'] == 1) {
                                 status_class = "status4";

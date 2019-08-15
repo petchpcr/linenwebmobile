@@ -111,9 +111,9 @@
                         
                         $(".btn.btn-mylight.btn-block").remove();
                         for (var i = 0; i < temp['count']; i++) {
-                            var status_class = "status2";
+                            var status_class = "status3";
                             var status_text = "เสร็จสิ้น";
-                            var status_line = "StatusLine_2";
+                            var status_line = "StatusLine_3";
 
                             // if(temp[i]['IsStatus'] == 1){
                                 var Str = "<button onclick='add_clean(\""+temp[i]['DocNo']+"\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
