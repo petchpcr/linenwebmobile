@@ -273,7 +273,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 
 		<div id="process">
-			<div class="card mt-3" style="padding:1rem;">
+			<div class="card alert alert-info mt-3" style="padding:1rem;">
 				<div class="row">
 					<div class="col-4 align-self-center">
 						<div class="row">
@@ -312,7 +312,7 @@ $genarray = json_decode($json, TRUE);
 				</div>
 			</div>
 
-			<div class="card mt-4" style="padding:1rem;">
+			<div class="card alert alert-info mt-4" style="padding:1rem;">
 				<div class="row">
 					<div class="col-4 align-self-center">
 						<div class="row">
@@ -351,7 +351,7 @@ $genarray = json_decode($json, TRUE);
 				</div>
 			</div>
 
-			<div class="card mt-4" style="padding:1rem;">
+			<div class="card alert alert-info mt-4" style="padding:1rem;">
 				<div class="row">
 					<div class="col-4 align-self-center">
 						<div class="row">
