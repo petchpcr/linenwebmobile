@@ -17,6 +17,6 @@
 <th><en>Thai</en><th>ไทย</th></th>
 <en><en>English</en><th>อังกฤษ</th></en>
 
-<th><en>Thai</en><th>เวลาไม่ถูกต้อง</th></th>
-<en><en>English</en><th>โปรดกรอกเวลาขนส่ง</th></en>
+<Timencorrect><en>Time is not correct</en><th>เวลาไม่ถูกต้อง</th></Timencorrect>
+<Pdeliverytime><en>Please enter delivery time</en><th>โปรดกรอกเวลาขนส่ง</th></Pdeliverytime>
 </lang>

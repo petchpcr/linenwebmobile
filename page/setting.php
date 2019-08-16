@@ -79,9 +79,9 @@ $genarray = json_decode($json, TRUE);
 			var HptCode = '<?php echo $_SESSION['HptCode']; ?>';
 			var SendTime = $("#new_send_time").val();
 			if (SendTime == null || SendTime == "" || SendTime == 0) {
-				Title = "เวลาไม่ถูกต้อง";
+				Title = "<?php echo $array['Timencorrect'][$language]; ?>";
 				Type = "warning";
-				Text = "โปรดกรอกเวลาขนส่ง !";
+				Text = "<?php echo $array['Pdeliverytime'][$language]; ?> !";
 				AlertError(Title, Text, Type);
 			} else {
 				var data = {
