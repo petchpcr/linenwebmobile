@@ -528,7 +528,8 @@
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $itemCode = $Result['ItemCode'];
             $unitCode = $Result['UnitCode'];
-            $weight = $Result['Weight'];
+            // $weight = $Result['Weight'];
+            $weight = 0;
             $CheckList = $Result['IsCheckList'];
 
             // SELECT เพื่อเอาจำนวน claim และ rewash
