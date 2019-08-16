@@ -110,36 +110,36 @@ require '../getTimeZone.php';
 
 								if (temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null) {
 									status_class = "status4";
-									status_text = "โรงซักรับเอกสาร";
+									status_text = "<?php echo $array['statusIsreceive'][$language]; ?>";
 									status_line = "StatusLine_4";
 									var onclick = "";
 								} else if (temp[i]['IsProcess'] == 1) {
 									status_class = "status1";
-									status_text = "กำลังดำเนินการซัก";
+									status_text = "<?php echo $array['statusOnWash'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsProcess'] == 2) {
 									status_class = "status1";
-									status_text = "เสร็จสิ้นการซัก";
+									status_text = "<?php echo $array['statusFinWash'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsProcess'] == 3) {
 									status_class = "status1";
-									status_text = "กำลังดำเนินการแพ็ค";
+									status_text = "<?php echo $array['statusOnPack'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsProcess'] == 4) {
 									status_class = "status1";
-									status_text = "เสร็จสิ้นการแพ็ค";
+									status_text = "<?php echo $array['statusFinPack'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsProcess'] == 5) {
 									status_class = "status1";
-									status_text = "กำลังดำเนินการขนส่ง";
+									status_text = "<?php echo $array['statusOnShipping'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsProcess'] == 6) {
 									status_class = "status1";
-									status_text = "เสร็จสิ้นการขนส่ง";
+									status_text = "<?php echo $array['statusFinShipping'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsProcess'] == 7) {
 									status_class = "status3";
-									status_text = "เสร็จสิ้น";
+									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";
 								}
 

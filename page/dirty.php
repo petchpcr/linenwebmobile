@@ -108,14 +108,14 @@ require '../getTimeZone.php';
 
 		function receive_zero(DocNo, From) {
 			swal({
-				title: 'ยืนยันการรับเอกสาร',
-				text: "คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?",
+				title: '<?php echo $genarray['confirmReceivedoc'][$language]; ?>',
+				text: "<?php echo $array['receivedYN'][$language]; ?>",
 				type: 'question',
 				showCancelButton: true,
 				confirmButtonColor: '#28a745',
 				cancelButtonColor: '#aaa',
-				confirmButtonText: 'ใช่',
-				cancelButtonText: 'ไม่ใช่'
+				confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
+				cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>'
 			}).then((result) => {
 				confirm_yes(DocNo, From);
 			})
@@ -212,19 +212,19 @@ require '../getTimeZone.php';
 								if (Menu == 'dirty') {
 									if (temp[i]['IsStatus'] == 0) {
 										status_class = "status2";
-										status_text = "สร้างไม่เสร็จ";
+										status_text = "<?php echo $genarray['statusOnCreate'][$language]; ?>";
 										status_line = "StatusLine_2";
 									} else if (temp[i]['IsStatus'] == 1) {
 										status_class = "status3";
-										status_text = "สร้างเสร็จ";
+										status_text = "<?php echo $genarray['statusCretFin'][$language]; ?>";
 										status_line = "StatusLine_3";
 									} else if (temp[i]['IsStatus'] == 3) {
 										status_class = "status3";
-										status_text = "เสร็จสิ้น";
+										status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 										status_line = "StatusLine_3";
 									} else {
 										status_class = "status1";
-										status_text = "กำลังดำเนินการ";
+										status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 										status_line = "StatusLine_1";
 									}
 
@@ -239,15 +239,15 @@ require '../getTimeZone.php';
 									var IsPrcess = temp[i]['IsProcess'];
 									if (IsPrcess == 0 || IsPrcess == null) {
 										status_class = "status4";
-										status_text = "ไม่ทำงาน";
+										status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";statusNotWork
 										status_line = "StatusLine_4";
 									} else if (IsPrcess == 7) {
 										status_class = "status3";
-										status_text = "เสร็จสิ้น";
+										status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 										status_line = "StatusLine_3";
 									} else {
 										status_class = "status1";
-										status_text = "กำลังดำเนินการ";
+										status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 										status_line = "StatusLine_1";
 									}
 

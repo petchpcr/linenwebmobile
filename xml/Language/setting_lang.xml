@@ -2,6 +2,23 @@
 <lang>
 
 <changelang><en>Change Language</en><th>เปลี่ยนภาษา</th></changelang>
+<settinglang><en>Language</en><th>ตั้งค่าภาษา</th></settinglang>
+
+<settingTime><en>Delivery Time</en><th>ตั้งค่าเวลาขนส่ง</th></settingTime>
+<addTime><en>Add delivery Time</en><th>เพิ่มเวลาขนส่ง</th></addTime>
+<editTime><en>Edit delivery Time</en><th>แก้ไขเวลาขนส่ง</th></editTime>
+<showTime><en>show delivery Time</en><th>แสดงเวลาการขนส่ง</th></showTime>
+
+<noFac><en>No factory that has not delivery Time.</en><th>ไม่มีโรงซักที่ยังไม่ได้กำหนดเวลา</th></noFac>
+
+<from><en>From</en><th>จาก</th></from>
+<useTime><en>Use time</en><th>ใช้เวลา</th></useTime>
+
+<th><en>Thai</en><th>ไทย</th></th>
+<en><en>English</en><th>อังกฤษ</th></en>
+
+<th><en>Thai</en><th>ไทย</th></th>
+<en><en>English</en><th>อังกฤษ</th></en>
 <th><en>Thai</en><th>ไทย</th></th>
 <en><en>English</en><th>อังกฤษ</th></en>
 </lang>

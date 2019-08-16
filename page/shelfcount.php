@@ -88,21 +88,6 @@ require '../getTimeZone.php';
 			window.location.href = 'shelf_process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 		}
 
-		function receive_zero(DocNo, From) {
-			swal({
-				title: 'ยืนยันการรับเอกสาร',
-				text: "คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?",
-				type: 'question',
-				showCancelButton: true,
-				confirmButtonColor: '#28a745',
-				cancelButtonColor: '#aaa',
-				confirmButtonText: 'ใช่',
-				cancelButtonText: 'ไม่ใช่'
-			}).then((result) => {
-				confirm_yes(DocNo, From);
-			})
-		}
-
 		function confirm_yes(DocNo, From) {
 			var data = {
 				'DocNo': DocNo,

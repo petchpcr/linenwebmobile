@@ -139,7 +139,7 @@ $genarray = json_decode($json, TRUE);
 								var W_Start = new Date(temp['WashStartTime']);
 								var W_End = new Date(temp['WashEndTime']);
 
-								$("#W_Use").text(temp['WashUseTime'] + " นาที");
+								$("#W_Use").text(temp['WashUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 
@@ -175,8 +175,8 @@ $genarray = json_decode($json, TRUE);
 								var P_Start = new Date(temp['PackStartTime']);
 								var P_End = new Date(temp['PackEndTime']);
 
-								$("#W_Use").text(temp['WashUseTime'] + " นาที");
-								$("#P_Use").text(temp['PackUseTime'] + " นาที");
+								$("#W_Use").text(temp['WashUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
+								$("#P_Use").text(temp['PackUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 								$("#P_Start").text(P_Start.toLocaleTimeString());
@@ -228,18 +228,18 @@ $genarray = json_decode($json, TRUE);
 								var S_Over = temp['SendOverTime'].substring(0, 1);
 
 								if (S_Over == '-') {
-									$("#S_Head_use").text("เกินเวลา");
+									$("#S_Head_use").text("<?php echo $array['overTime'][$language]; ?>");
 									$("#S_Head_use").css("color", "red");
 									$("#S_Use").css("color", "red");
-									$("#S_Use").text(temp['SendOverTime'].substring(1) + " นาที");
+									$("#S_Use").text(temp['SendOverTime'].substring(1) + " <?php echo $genarray['minute'][$language]; ?>");
 
 								} else {
-									$("#S_Head_use").text("ใช้เวลา");
-									$("#S_Use").text(temp['SendUseTime'] + " นาที");
+									$("#S_Head_use").text("<?php echo $array['useTime'][$language]; ?>");
+									$("#S_Use").text(temp['SendUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								}
 
-								$("#W_Use").text(temp['WashUseTime'] + " นาที");
-								$("#P_Use").text(temp['PackUseTime'] + " นาที");
+								$("#W_Use").text(temp['WashUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
+								$("#P_Use").text(temp['PackUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 								$("#P_Start").text(P_Start.toLocaleTimeString());

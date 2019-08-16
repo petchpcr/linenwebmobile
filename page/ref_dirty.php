@@ -119,7 +119,7 @@ require '../getTimeZone.php';
 								var status_line = "";
 								
 								status_class = "status1";
-								status_text = "กำลังดำเนินการ";
+								status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 								status_line = "StatusLine_1";
 
 								if (temp[i]['IsStatus'] == 3) {

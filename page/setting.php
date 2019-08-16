@@ -150,7 +150,7 @@ $genarray = json_decode($json, TRUE);
 				type: Type,
 				showConfirmButton: true,
 				confirmButtonColor: '#3085d6',
-				confirmButtonText: 'ตกลง'
+				confirmButtonText: '<?php echo $genarray['yes2'][$language]; ?>'
 			})
 		}
 		// end function
@@ -188,7 +188,7 @@ $genarray = json_decode($json, TRUE);
 									$("#from_fac").append(Str);
 								}
 							} else {
-								var Str = "<option value='false'>ไม่มีโรงซักที่ยังไม่ได้กำหนดเวลา</option>";
+								var Str = "<option value='false'><?php echo $array['noFac'][$language]; ?></option>";
 								$("#from_fac").append(Str);
 								$("#AddFacNhealth").hide();
 							}
@@ -201,7 +201,7 @@ $genarray = json_decode($json, TRUE);
 
 									var Str = "<div class='input-group my-3'><div class='input-group-prepend '><label class='input-group-text' style='width:150px;' >" + temp[i]['HptCode'] + "</label></div>";
 									Str += "<input type='text' class='form-control ' value='" + temp[i]['SendTime'] + "' readonly >";
-									Str += "<div class='input-group-append'><span class='input-group-text'>นาที</span></div></div>";
+									Str += "<div class='input-group-append'><span class='input-group-text'><?php echo $genarray['minute'][$language]; ?></span></div></div>";
 									$("#show_hpt_fac_time").append(Str);
 								}
 								$("#md_fac_send_time").modal("show");
@@ -213,7 +213,7 @@ $genarray = json_decode($json, TRUE);
 									var Str = "<div class='input-group my-3'><div class='input-group-prepend'><label class='input-group-text' style='width:150px;'>" + temp[i]['FacName'] + "</label></div>";
 									Str += "<input onkeydown='make_number()' id='fac_nhealth_time" + i + "' type='text' class='form-control text-center numonly' ";
 									Str += "data-HptCode='" + temp[i]['HptCode'] + "' data-FacCode='" + temp[i]['FacCode'] + "' value='" + temp[i]['SendTime'] + "'>";
-									Str += "<div class='input-group-append'><span class='input-group-text'>นาที</span></div></div>";
+									Str += "<div class='input-group-append'><span class='input-group-text'><?php echo $genarray['minute'][$language]; ?></span></div></div>";
 									$("#show_fac_nhealth_time").append(Str);
 								}
 
@@ -297,7 +297,7 @@ $genarray = json_decode($json, TRUE);
 
 		<div class="modal-body text-center">
 			<div class="row">
-				<div class="col-auto">ตั้งค่าภาษา<i class="fas fa-lg fa-language ml-2"></i></div>
+				<div class="col-auto"><?php echo $array['settinglang'][$language]; ?><i class="fas fa-lg fa-language ml-2"></i></div>
 				<div class="col">
 					<hr>
 				</div>
@@ -315,10 +315,10 @@ $genarray = json_decode($json, TRUE);
 			</div>
 
 			<div id="set_fac_nhealth" <?php if ($_SESSION['PmID'] == 2) {
-																	echo hidden;
-																} ?>>
+											echo hidden;
+										} ?>>
 				<div class="row">
-					<div class="col-auto">ตั้งค่าเวลาขนส่ง<i class="fas fa-truck ml-2"></i></div>
+					<div class="col-auto"><?php echo $array['settingTime'][$language]; ?><i class="fas fa-truck ml-2"></i></div>
 					<div class="col">
 						<hr>
 					</div>
@@ -326,25 +326,25 @@ $genarray = json_decode($json, TRUE);
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-12">
 						<button onclick="load_site_fac()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 4) {
-																																																echo hidden;
-																																															} ?>>
-							<i class="fas fa-plus mr-2"></i>เพิ่มเวลาขนส่ง
+																												echo hidden;
+																											} ?>>
+							<i class="fas fa-plus mr-2"></i><?php echo $array['addTime'][$language]; ?>
 						</button>
 					</div>
 					<div class="col-md-6 col-sm-6 col-12">
 						<button onclick="show_fac()" class="btn btn-block btn-outline-primary" <?php if ($_SESSION['PmID'] == 4) {
-																																											echo hidden;
-																																										} ?>>
-							<i class="fas fa-edit mr-2"></i>แก้ไขเวลาขนส่ง
+																									echo hidden;
+																								} ?>>
+							<i class="fas fa-edit mr-2"></i><?php echo $array['editTime'][$language]; ?>
 						</button>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-12">
 						<button onclick="load_send_time()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 3) {
-																																																echo hidden;
-																																															} ?>>
-							<i class="far fa-clock mr-2"></i>แสดงเวลาการขนส่ง
+																												echo hidden;
+																											} ?>>
+							<i class="far fa-clock mr-2"></i><?php echo $array['showTime'][$language]; ?>
 						</button>
 					</div>
 				</div>
@@ -365,7 +365,7 @@ $genarray = json_decode($json, TRUE);
 		<div class="modal-dialog  modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-plus mr-2"></i>เพิ่มเวลาขนส่ง</h5>
+					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-plus mr-2"></i><?php echo $array['addTime'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -375,7 +375,7 @@ $genarray = json_decode($json, TRUE);
 						<div class="col-md-12 col-sm-12 col-12">
 							<div class="input-group mb-1">
 								<div class="input-group-prepend">
-									<label class="input-group-text" style="width:60px;">จาก</label>
+									<label class="input-group-text" style="width:60px;"><?php echo $array['from'][$language]; ?></label>
 								</div>
 								<select id="from_fac" class="custom-select"></select>
 							</div>
@@ -391,11 +391,11 @@ $genarray = json_decode($json, TRUE);
 					</div>
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
-							<label class="input-group-text" style="width:60px;">ใช้เวลา</label>
+							<label class="input-group-text" style="width:60px;"><?php echo $array['useTime'][$language]; ?></label>
 						</div>
 						<input onkeydown='make_number()' id="new_send_time" type="text" class="form-control text-center numonly" placeholder="0">
 						<div class="input-group-append">
-							<span class="input-group-text">นาที</span>
+							<span class="input-group-text"><?php echo $genarray['minute'][$language]; ?></span>
 						</div>
 					</div>
 
@@ -416,7 +416,7 @@ $genarray = json_decode($json, TRUE);
 		<div class="modal-dialog  modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-edit mr-2"></i>เปลี่ยนเวลาขนส่ง</h5>
+					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-edit mr-2"></i><?php echo $array['editTime'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -446,7 +446,7 @@ $genarray = json_decode($json, TRUE);
 		<div class="modal-dialog  modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-edit mr-2"></i>แสดงเวลาการขนส่ง</h5>
+					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-edit mr-2"></i><?php echo $array['showTime'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>

@@ -9,5 +9,23 @@
 <Checkamount><en>Check amount</en><th>ตรวจสอบจำนวน</th></Checkamount>
 <Notthrough><en>Not through quality</en><th>ไม่ผ่านคุณภาพ</th></Notthrough>
 <sendClaim><en>Send claim </en><th>ส่งเคลม</th></sendClaim>
+<sendRewash><en>Send rewash </en><th>ส่งซักอีกครั้ง</th></sendRewash>
 
+<InvalidNum><en>Invalid number</en><th>จำนวนไม่ถูกต้อง</th></InvalidNum>
+<numData><en>Number</en><th>จำนวนข้อมูล</th></numData>
+<numFromAll><en>From All</en><th>จากทั้งหมด</th></numFromAll>
+<numRepair><en>Number of claim</en><th>จำนวนส่งซ่อม</th></numRepair>
+<maxNumList><en>Mex number</en><th>จำนวนสูงสุดของแต่ละชิ้นคือ</th></sendClaim>
+<numFromNP><en>From not pass</en><th>จากไม่ผ่าน</th></numFromNP>
+
+<weight><en>weight</en><th>น้ำหนัก</th></weight>
+<numberSize><en>Number</en><th>จำนวน</th></numberSize>
+
+<numFAll><en>All number</en><th>จำนวนทั้งหมด</th></numFAll>
+<numP><en>Pass</en><th>จำนวนผ่าน</th></numP>
+<numNP><en>Not Pass</en><th>จำนวนไม่ผ่าน</th></numNP>
+
+<Empty><en>Empty</en><th>ข้อมูลว่างเปล่า</th></Empty>Cause
+<NoiteminDoc><en>No item in Doc.</en><th>ยังไม่มีข้อมูลรายการ</th></NoiteminDoc>
+<Cause><en>Cause</en><th>สาเหตุ</th></Cause>
 </lang>

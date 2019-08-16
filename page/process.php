@@ -151,7 +151,7 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_process') {
-							$("#send_time").text("( ใช้เวลาขนส่ง " + temp['LimitTime'] + " นาที )");
+							$("#send_time").text("( <?php echo $array['useTimeS'][$language]; ?> " + temp['LimitTime'] + " <?php echo $genarray['minute'][$language]; ?> )");
 							$(".head-btn.btn-light").remove();
 							var Back = "<button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>";
 							$("#user").before(Back);
@@ -225,7 +225,7 @@ $genarray = json_decode($json, TRUE);
 								var W_Start = new Date(temp['WashStartTime']);
 								var W_End = new Date(temp['WashEndTime']);
 
-								$("#W_Use").text(temp['WashUseTime'] + " นาที");
+								$("#W_Use").text(temp['WashUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 
@@ -268,8 +268,8 @@ $genarray = json_decode($json, TRUE);
 								var P_Start = new Date(temp['PackStartTime']);
 								var P_End = new Date(temp['PackEndTime']);
 
-								$("#W_Use").text(temp['WashUseTime'] + " นาที");
-								$("#P_Use").text(temp['PackUseTime'] + " นาที");
+								$("#W_Use").text(temp['WashUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
+								$("#P_Use").text(temp['PackUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 								$("#P_Start").text(P_Start.toLocaleTimeString());
@@ -292,14 +292,14 @@ $genarray = json_decode($json, TRUE);
 
 								if (temp['Signature'] == null || temp['Signature'] == "") {
 									swal({
-										title: "ยืนยันการขนส่ง",
-										text: "การขนส่งเสร็จสิ้น โปรดเซ็นต์ชื่อเพื่อยืนยัน",
+										title: "<?php echo $genarray['confirm'][$language]; ?>",
+										text: "<?php echo $array['ConfFinShipping'][$language]; ?>",
 										type: "warning",
 										showCancelButton: false,
 										confirmButtonClass: "btn-success",
 										cancelButtonClass: "btn-danger",
-										confirmButtonText: "ตกลง",
-										cancelButtonText: "ไม่ใช่",
+										confirmButtonText: "<?php echo $genarray['yes2'][$language]; ?>",
+										cancelButtonText: "<?php echo $genarray['cancel'][$language]; ?>",
 										closeOnConfirm: true,
 										closeOnCancel: true,
 									}).then(result => {
@@ -348,18 +348,18 @@ $genarray = json_decode($json, TRUE);
 								var S_Over = temp['SendOverTime'].substring(0, 1);
 
 								if (S_Over == '-') {
-									$("#S_Head_use").text("เกินเวลา");
+									$("#S_Head_use").text("<?php echo $array['overTime'][$language]; ?>");
 									$("#S_Head_use").css("color", "red");
 									$("#S_Use").css("color", "red");
-									$("#S_Use").text(temp['SendOverTime'].substring(1) + " นาที");
+									$("#S_Use").text(temp['SendOverTime'].substring(1) + " <?php echo $genarray['minute'][$language]; ?>");
 
 								} else {
-									$("#S_Head_use").text("ใช้เวลา");
-									$("#S_Use").text(temp['SendUseTime'] + " นาที");
+									$("#S_Head_use").text("<?php echo $array['useTime'][$language]; ?>");
+									$("#S_Use").text(temp['SendUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								}
 
-								$("#W_Use").text(temp['WashUseTime'] + " นาที");
-								$("#P_Use").text(temp['PackUseTime'] + " นาที");
+								$("#W_Use").text(temp['WashUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
+								$("#P_Use").text(temp['PackUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 								$("#P_Start").text(P_Start.toLocaleTimeString());
@@ -423,7 +423,7 @@ $genarray = json_decode($json, TRUE);
 
 		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
 		<div class="text-center text-truncate font-weight-bold mt-4" style="font-size:25px;"><?php echo $DocNo; ?></div>
-		<div id="send_time" class="text-center text-truncate font-weight-bold mb-4" style="font-size:20px;">( ขนส่งไม่เกิน 15 นาที )</div>
+		<div id="send_time" class="text-center text-truncate font-weight-bold mb-4" style="font-size:20px;"></div>
 
 		<div id="process">
 			<div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">

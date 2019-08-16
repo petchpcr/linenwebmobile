@@ -108,14 +108,14 @@ require '../getTimeZone.php';
 
 		function receive_zero(DocNo) {
 			swal({
-				title: 'ยืนยันการรับเอกสาร',
-				text: "คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?",
+				title: '<?php echo $genarray['confirmReceivedoc'][$language]; ?>',
+				text: "<?php echo $array['receivedYN'][$language]; ?> ?",
 				type: 'question',
 				showCancelButton: true,
 				confirmButtonColor: '#28a745',
 				cancelButtonColor: '#aaa',
-				confirmButtonText: 'ใช่',
-				cancelButtonText: 'ไม่ใช่'
+				confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
+				cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>'
 			}).then((result) => {
 				confirm_yes(DocNo);
 			})
@@ -211,15 +211,15 @@ require '../getTimeZone.php';
 								if (Menu == 'dirty') {
 									if (temp[i]['IsStatus'] == 0) {
 										status_class = "status2";
-										status_text = "หยุดชั่วขณะ";
+										status_text = "";
 										status_line = "StatusLine_2";
 									} else if (temp[i]['IsStatus'] == 1 || temp[i]['IsStatus'] == 3) {
 										status_class = "status3";
-										status_text = "เสร็จสิ้น";
+										status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 										status_line = "StatusLine_3";
 									} else {
 										status_class = "status1";
-										status_text = "กำลังดำเนินการ";
+										status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 										status_line = "StatusLine_1";
 									}
 
@@ -234,11 +234,11 @@ require '../getTimeZone.php';
 
 									if (temp[i]['IsProcess'] == 0 || temp[i]['IsProcess'] == null) {
 										status_class = "status4";
-										status_text = "ไม่ทำงาน";
+										status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";
 										status_line = "StatusLine_4";
 									} else if (temp[i]['IsProcess'] == 1) {
 										status_class = "status1";
-										status_text = "กำลังดำเนินการ";
+										status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 										status_line = "StatusLine_1";
 									} else if (temp[i]['IsProcess'] == 2) {
 										status_class = "status2";
@@ -247,7 +247,7 @@ require '../getTimeZone.php';
 									} else if (temp[i]['IsProcess'] == 3) {
 										if (temp[i]['Signature'] == null) {
 											status_class = "status1";
-											status_text = "กำลังดำเนินการ";
+											status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 											status_line = "StatusLine_1";
 										} else {
 											status_class = "status3";

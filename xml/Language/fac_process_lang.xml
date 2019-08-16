@@ -23,4 +23,10 @@
 <Startshipping><en>Start shipping</en><th>เริ่มขนส่ง</th></Startshipping>
 
 <Finish><en>Finish</en><th>เสร็จสิ้น</th></Finish>
+
+<useTime><en>Use time</en><th>ใช้เวลา</th></useTime>
+<useTimeS><en>Shipping time</en><th>ใช้เวลาขนส่ง</th></useTimeS>
+<overTime><en>Over time</en><th>เกินเวลา</th></overTime>
+
+<ConfFinShipping><en>Shipping Completed Please sign to confirm.</en><th>การขนส่งเสร็จสิ้น โปรดเซ็นต์ชื่อเพื่อยืนยัน</th></ConfFinShipping>
 </lang>

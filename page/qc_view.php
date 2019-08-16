@@ -85,14 +85,14 @@ $genarray = json_decode($json, TRUE);
 			}
 			var sum_cr = Number(claim + rewash);
 
-			Title = "จำนวนไม่ถูกต้อง";
+			Title = "<?php echo $array['InvalidNum'][$language]; ?>";
 			Type = "warning";
 
 			if (sum != qty) {
-				Text = "จำนวนข้อมูล " + sum + " จากทั้งหมด " + qty + " !";
+				Text = "<?php echo $array['numData'][$language]; ?> " + sum + " <?php echo $array['numFromAll'][$language]; ?> " + qty + " !";
 				AlertError(Title, Text, Type);
 			} else if (sum_cr != fail) {
-				Text = "จำนวนส่งซ่อม " + sum_cr + " จากไม่ผ่าน " + fail + " !";
+				Text = "<?php echo $array['numRepair'][$language]; ?> " + sum_cr + " <?php echo $array['numFromNP'][$language]; ?> " + fail + " !";
 				AlertError(Title, Text, Type);
 			} else {
 				var DocNo = '<?php echo $DocNo ?>';
@@ -152,17 +152,17 @@ $genarray = json_decode($json, TRUE);
 					over_max = 1;
 				}
 			}
-			Title = "จำนวนไม่ถูกต้อง";
+			Title = "<?php echo $array['InvalidNum'][$language]; ?>";
 			Type = "warning";
 			if (over_max == 1) {
 				arr_question = [];
 				arr_amount = [];
-				Text = "จำนวนสูงสุดของแต่ละชิ้นคือ " + max + " !";
+				Text = "<?php echo $array['maxNumList'][$language]; ?> " + max + " !";
 				AlertError(Title, Text, Type);
 			} else if (sum_amount < max) {
 				arr_question = [];
 				arr_amount = [];
-				Text = "จำนวนข้อมูล " + sum_amount + " จากทั้งหมด " + max + " !";
+				Text = "<?php echo $array['numData'][$language]; ?> " + sum_amount + " <?php echo $array['numFromAll'][$language]; ?> " + max + " !";
 				AlertError(Title, Text, Type);
 			} else {
 				var question = arr_question.join(',');
@@ -232,7 +232,7 @@ $genarray = json_decode($json, TRUE);
 				type: Type,
 				showConfirmButton: true,
 				confirmButtonColor: '#3085d6',
-				confirmButtonText: 'ตกลง'
+				confirmButtonText: '<?php echo $genarray['yes2'][$language]; ?>'
 			})
 		}
 		// end function
@@ -298,7 +298,7 @@ $genarray = json_decode($json, TRUE);
 									var Str = "<tr onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'><td><div class='row'>";
 									Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
 									Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
-									Str += "<div class='col-12 text-black-50 p-1'>จำนวน " + temp[i]['Qty'] + " / น้ำหนัก " + temp[i]['Weight'] + " </div></div></div>";
+									Str += "<div class='col-12 text-black-50 p-1'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
 									Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>" + detail + "</div>";
 									Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='" + img + "' height='40px'></div></div></td></tr>";
 
@@ -316,8 +316,8 @@ $genarray = json_decode($json, TRUE);
 								$("#claim-btn").hide();
 								$("#save-btn").hide();
 
-								Title = "ข้อมูลว่างเปล่า";
-								Text = "ยังไม่มีข้อมูลรายการ !";
+								Title = "<?php echo $array['Empty'][$language]; ?>";
+								Text = "<?php echo $array['NoiteminDoc'][$language]; ?> !";
 								Type = "info";
 								AlertError(Title, Text, Type);
 							}
@@ -369,7 +369,7 @@ $genarray = json_decode($json, TRUE);
 								var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
 								Str += "<div>" + temp[i]['Question'] + "</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
 								Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question" + i + "' class='form-control text-center m-2 numonly' type='text' ";
-								Str += "data-itemcode='" + temp['ItemCode'] + "' data-question='" + temp[i]['QuestionId'] + "' value='" + qty + "' placeholder='0'>จำนวน</div></div></div>";
+								Str += "data-itemcode='" + temp['ItemCode'] + "' data-question='" + temp[i]['QuestionId'] + "' value='" + qty + "' placeholder='0'><?php echo $array['numberSize'][$language]; ?></div></div></div>";
 								$("#question").append(Str);
 								sum_question++;
 							}
@@ -395,7 +395,7 @@ $genarray = json_decode($json, TRUE);
 										var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
 										Str += "<div>" + temp[i]['Question'] + "</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
 										Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question" + i + "' class='form-control text-center m-2 numonly' type='text' ";
-										Str += "value='" + temp[i]['Qty'] + "' disabled>จำนวน</div></div></div>";
+										Str += "value='" + temp[i]['Qty'] + "' disabled><?php echo $array['numberSize'][$language]; ?></div></div></div>";
 
 										$("#detail").append(Str);
 									}
@@ -466,7 +466,7 @@ $genarray = json_decode($json, TRUE);
 							<div class="row">
 								<div class="col-2 text-center p-0"><?php echo $array['no'][$language]; ?></div>
 								<div class="col-6 text-left p-0"><?php echo $array['List'][$language]; ?></div>
-								<div class="col-2 text-center p-0">สาเหตุ</div>
+								<div class="col-2 text-center p-0"><?php echo $array['Cause'][$language]; ?></div>
 								<div class="col-2 text-center p-0"><?php echo $array['Status'][$language]; ?></div>
 							</div>
 						</th>
@@ -506,34 +506,34 @@ $genarray = json_decode($json, TRUE);
 					<div id="amount">
 
 						<div class="form-group text-left">
-							<label>จำนวนทั้งหมด</label>
+							<label><?php echo $array['numFAll'][$language]; ?></label>
 							<input type="text" class="form-control" id="qc_qty" disabled>
 						</div>
 
 						<div class="form-group text-left">
-							<label>จำนวนที่ผ่าน</label>
+							<label><?php echo $array['numP'][$language]; ?></label>
 							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_pass" placeholder="0">
 						</div>
 
 						<div class="form-group text-left">
-							<label>จำนวนที่ไม่ผ่าน</label>
+							<label><?php echo $array['numNP'][$language]; ?></label>
 							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_fail" placeholder="0">
 						</div>
 						<hr>
 						<div id="claim_rewash" class="alert alert-secondary m-0">
 							<div class="form-row mb-2">
-								<div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end">ส่งซักอีกครั้ง</div>
+								<div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end"><?php echo $array['sendRewash'][$language]; ?></div>
 								<div class="col-md-4 col-6">
-									<input onkeydown='make_number()' id="rewash_qty" class='form-control text-center numonly' type='text' placeholder='0'>
+									<input onkeydown='make_number()' id="rewash_qty" class='form-control text-center numonly' type='text' placeholder='0'>sendRewash
 								</div>
-								<div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start">จำนวน</div>
+								<div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start"><?php echo $array['numberSize'][$language]; ?></div>
 							</div>
 							<div class="form-row">
-								<div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end">ส่งเคลม</div>
+								<div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end"><?php echo $array['sendClaim'][$language]; ?></div>
 								<div class="col-md-4 col-6">
 									<input onkeydown='make_number()' id="claim_qty" class='form-control text-center numonly' type='text' placeholder='0'>
 								</div>
-								<div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start">จำนวน</div>
+								<div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start"><?php echo $array['numberSize'][$language]; ?></div>
 							</div>
 						</div>
 					</div>
@@ -627,7 +627,7 @@ $genarray = json_decode($json, TRUE);
 							</div>
 							<div class="d-flex align-items-center col-md-4 col-5 pl-0">
 								<input type="text" class="form-control rounded text-center bg-white my-2 mr-1 numonly">
-								<div class="">จำนวน</div>
+								<div class=""><?php echo $array['numberSize'][$language]; ?></div>
 							</div>
 						</div>
 
@@ -637,7 +637,7 @@ $genarray = json_decode($json, TRUE);
 							</div>
 							<div class="d-flex align-items-center col-md-4 col-5 pl-0">
 								<input type="text" class="form-control rounded text-center bg-white my-2 mr-1 numonly">
-								<div class="">จำนวน</div>
+								<div class=""><?php echo $array['numberSize'][$language]; ?></div>
 							</div>
 						</div>
 					</div>
@@ -651,7 +651,7 @@ $genarray = json_decode($json, TRUE);
 							</div>
 							<div class="d-flex align-items-center col-md-4 col-5 pl-0">
 								<input type="text" class="form-control rounded text-center bg-white my-2 mr-1 numonly" disabled>
-								<div class="">จำนวน</div>
+								<div class=""><?php echo $array['numberSize'][$language]; ?></div>
 							</div>
 						</div>
 					</div>

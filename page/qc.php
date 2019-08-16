@@ -128,15 +128,15 @@ require '../getTimeZone.php';
 
 								if (CheckList == 0 || CheckList == null) {
 									status_class = "status4";
-									status_text = "ไม่ได้ตรวจสอบ";
+									status_text = "<?php echo $genarray['statusNotQC'][$language]; ?>";
 									status_line = "StatusLine_4";
 								} else if (CheckList == 1) {
 									status_class = "status2";
-									status_text = "ผ่าน";
+									status_text = "<?php echo $genarray['statusPass'][$language]; ?>";
 									status_line = "StatusLine_2";
 								} else if (CheckList == 2) {
 									status_class = "status3";
-									status_text = "ส่งเคลม";
+									status_text = "<?php echo $genarray['statusClaim'][$language]; ?>";
 									status_line = "StatusLine_3";
 								}
 

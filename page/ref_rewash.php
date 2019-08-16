@@ -113,7 +113,7 @@ require '../getTimeZone.php';
 							$(".btn.btn-mylight.btn-block").remove();
 							for (var i = 0; i < temp['count']; i++) {
 								var status_class = "status3";
-								var status_text = "เสร็จสิ้น";
+								var status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 								var status_line = "StatusLine_3";
 
 								var Str = "<button onclick='add_clean(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";

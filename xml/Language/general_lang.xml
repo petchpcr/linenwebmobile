@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lang>
 
+<statusfin><en>Complete</en><th>เสร็จสิ้น</th></statusfin>
+<statusOnWork><en>Working on</en><th>กำลังดำเนินการ</th></statusOnWork>
+<statusOnCreate><en>Creating Doc.</en><th>กำลังสร้างเอกสาร</th></statusOnCreate>
+
+<statusCretFin><en>Doc. complete</en><th>สร้างเอกสารเสร็จสิ้น</th></statusCretFin>
+<statusOnQC><en>Doing QC</en><th>กำลังตรวจสอบคุณภาพ</th></statusOnQC>
+<statusClaim><en>Claim</en><th>ส่งเคลม</th></statusClaim>
+<statusNotWork><en>Not Working</en><th>ไม่ทำงาน</th></statusNotWork>
+
+<statusNotQC><en>Do not QC</en><th>ไม่ได้ตรวจสอบ</th></statusNotQC>
+<statusPass><en>QC pass</en><th>ผ่าน</th></statusPass>
+
+<minute><en>Minute</en><th>นาที</th></minute>
 <logout><en>Logout</en><th>ออกจากระบบ</th></logout>
 <back><en>Back</en><th>กลับ</th></back>
 <search><en>Search</en><th>ค้นหา</th></search>
@@ -52,15 +65,13 @@
 
 <no><en>No.</en><th>ลำดับ</th></no>
 <yes><en>Yes</en><th>ใช่</th></yes>
+<yes2><en>Yes</en><th>ตกลง</th></yes2>
 <isno><en>No</en><th>ไม่ใช่</th></isno>
 //old
 
 <activeItem><en>Active</en><th>Active</th></activeItem>
 
 <email><en>Email</en><th>Email</th></email>
-
-
-
 
 <pack><en>Pack</en><th>แพ็ค</th></pack>
 <type><en>type</en><th>ประเภท</th></type>
@@ -216,7 +227,6 @@
 <alertPar><en>Over Par</en><th>แจ้งเตือนจำนวนเกิน</th></alertPar>
 <par><en>Par</en><th>Par</th></par>
 <count> <en>count</en><th>นับได้</th></count>
-<minute><en>Minute</en><th>นาที</th></minute>
 <datafail><en>Please fill in the information correctly.</en><th>กรูณากรอกข้อมูลให้ถูกต้อง</th></datafail>
 <savedoc><en>Save Doc</en><th>บันทึกเอกสาร</th></savedoc>
 <updateprice><en>Update price</en><th>อัพเดทราคา</th></updateprice>
