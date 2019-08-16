@@ -181,15 +181,15 @@ require '../getTimeZone.php';
 									status_line = "StatusLine_2";
 								} else if (temp[i]['IsStatus'] == 1) {
 									status_class = "status4";
-									status_text = "ไม่ทำงาน";
+									status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";
 									status_line = "StatusLine_4";
 								} else if (temp[i]['IsStatus'] > 1 && temp[i]['IsStatus'] < 6) {
 									status_class = "status1";
-									status_text = "กำลังดำเนินการ";
+									status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsStatus'] == 6) {
 									status_class = "status3";
-									status_text = "เสร็จสิ้น";
+									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";
 								}
 

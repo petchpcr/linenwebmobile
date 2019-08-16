@@ -527,7 +527,7 @@ $genarray = json_decode($json, TRUE);
 							<div class="form-row mb-2">
 								<div class="col-md-4 col-3 text-right font-weight-bold d-flex align-items-center justify-content-end"><?php echo $array['sendRewash'][$language]; ?></div>
 								<div class="col-md-4 col-6">
-									<input onkeydown='make_number()' id="rewash_qty" class='form-control text-center numonly' type='text' placeholder='0'>sendRewash
+									<input onkeydown='make_number()' id="rewash_qty" class='form-control text-center numonly' type='text' placeholder='0'>
 								</div>
 								<div class="col-md-4 col-3 text-left d-flex align-items-center justify-content-start"><?php echo $array['numberSize'][$language]; ?></div>
 							</div>

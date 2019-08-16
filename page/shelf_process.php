@@ -217,7 +217,7 @@ $genarray = json_decode($json, TRUE);
 								var W_Start = new Date(temp['ScStartTime']);
 								var W_End = new Date(temp['ScEndTime']);
 
-								$("#W_Use").text(temp['ScUseTime'] + " นาที");
+								$("#W_Use").text(temp['ScUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 
@@ -261,8 +261,8 @@ $genarray = json_decode($json, TRUE);
 								var P_Start = new Date(temp['PkStartTime']);
 								var P_End = new Date(temp['PkEndTime']);
 
-								$("#W_Use").text(temp['ScUseTime'] + " นาที");
-								$("#P_Use").text(temp['PkUseTime'] + " นาที");
+								$("#W_Use").text(temp['ScUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
+								$("#P_Use").text(temp['PkUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 								$("#P_Start").text(P_Start.toLocaleTimeString());
@@ -286,14 +286,14 @@ $genarray = json_decode($json, TRUE);
 
 								if (temp['Signature'] == null || temp['Signature'] == "") {
 									swal({
-										title: "ยืนยันการขนส่ง",
-										text: "การขนส่งเสร็จสิ้น โปรดเซ็นต์ชื่อเพื่อยืนยัน",
+										title: "<?php echo $genarray['confirm'][$language]; ?>",
+										text: "<?php echo $array['ConfFinShipping'][$language]; ?>",
 										type: "warning",
 										showCancelButton: false,
 										confirmButtonClass: "btn-success",
 										cancelButtonClass: "btn-danger",
-										confirmButtonText: "ตกลง",
-										cancelButtonText: "ไม่ใช่",
+										confirmButtonText: "<?php echo $genarray['yes2'][$language]; ?>",
+										cancelButtonText: "<?php echo $genarray['isno'][$language]; ?>",
 										closeOnConfirm: true,
 										closeOnCancel: true,
 									}).then(result => {
@@ -341,18 +341,18 @@ $genarray = json_decode($json, TRUE);
 								var S_Over = temp['DvUseTime'].substring(0, 1);
 
 								if (S_Over == '-') {
-									$("#S_Head_use").text("เกินเวลา");
+									$("#S_Head_use").text("<?php echo $genarray['overTime'][$language]; ?>");
 									$("#S_Head_use").css("color", "red");
 									$("#S_Use").css("color", "red");
-									$("#S_Use").text(temp['DvUseTime'].substring(1) + " นาที");
+									$("#S_Use").text(temp['DvUseTime'].substring(1) + " <?php echo $genarray['minute'][$language]; ?>");
 
 								} else {
-									$("#S_Head_use").text("ใช้เวลา");
-									$("#S_Use").text(temp['DvUseTime'] + " นาที");
+									$("#S_Head_use").text("<?php echo $array['useTime'][$language]; ?>");
+									$("#S_Use").text(temp['DvUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								}
 
-								$("#W_Use").text(temp['ScUseTime'] + " นาที");
-								$("#P_Use").text(temp['PkUseTime'] + " นาที");
+								$("#W_Use").text(temp['ScUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
+								$("#P_Use").text(temp['PkUseTime'] + " <?php echo $genarray['minute'][$language]; ?>");
 								$("#W_Start").text(W_Start.toLocaleTimeString());
 								$("#W_End").text(W_End.toLocaleTimeString());
 								$("#P_Start").text(P_Start.toLocaleTimeString());
