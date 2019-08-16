@@ -70,9 +70,12 @@ $genarray = json_decode($json, TRUE);
 		function save_checkpass() {
 			var qty = $("#qc_qty").val();
 
-			var pass = Number($("#qc_pass").val());
+			//var pass = Number($("#qc_pass").val());
+			// var sum = Number(pass + fail);
+			
 			var fail = Number($("#qc_fail").val());
-			var sum = Number(pass + fail);
+			var sum = Number($("#qc_qty").val());
+			var pass = Number(sum-fail);
 
 			var claim = Number($("#claim_qty").val());
 			var rewash = Number($("#rewash_qty").val());
@@ -510,7 +513,7 @@ $genarray = json_decode($json, TRUE);
 							<input type="text" class="form-control" id="qc_qty" disabled>
 						</div>
 
-						<div class="form-group text-left">
+						<div class="form-group text-left" hidden>
 							<label><?php echo $array['numP'][$language]; ?></label>
 							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_pass" placeholder="0">
 						</div>
@@ -605,7 +608,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 	</div>
 
-	<div class="modal fade" id="md_claim_rewash" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<!-- <div class="modal fade" id="md_claim_rewash" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog  modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -665,7 +668,7 @@ $genarray = json_decode($json, TRUE);
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </body>
 

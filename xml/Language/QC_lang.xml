@@ -15,7 +15,7 @@
 <numData><en>Number</en><th>จำนวนข้อมูล</th></numData>
 <numFromAll><en>From All</en><th>จากทั้งหมด</th></numFromAll>
 <numRepair><en>Number of claim</en><th>จำนวนส่งซ่อม</th></numRepair>
-<maxNumList><en>Mex number</en><th>จำนวนสูงสุดของแต่ละชิ้นคือ</th></sendClaim>
+<maxNumList><en>Mex number</en><th>จำนวนสูงสุดของแต่ละชิ้นคือ</th></maxNumList>
 <numFromNP><en>From not pass</en><th>จากไม่ผ่าน</th></numFromNP>
 
 <weight><en>weight</en><th>น้ำหนัก</th></weight>
