@@ -8,11 +8,11 @@
 <receivedYN><en>You received the dirty document ?</en><th>คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?</th></receivedYN>
 
 
-<statusIsreceive><en>Yes</en><th>โรงซักรับเอกสาร</th></statusIsreceive>
-<statusOnWash><en>Yes</en><th>กำลังดำเนินการซัก</th></statusOnWash>
-<statusFinWash><en>Yes</en><th>เสร็จสิ้นการซัก</th></statusFinWash>
-<statusOnPack><en>Yes</en><th>กำลังดำเนินการแพ็ค</th></statusOnPack>
-<statusFinPack><en>Yes</en><th>เสร็จสิ้นการแพ็ค</th></statusFinPack>
-<statusOnShipping><en>Yes</en><th>กำลังดำเนินการขนส่ง</th></statusOnShipping>
-<statusFinShipping><en>Yes</en><th>เสร็จสิ้นการขนส่ง</th></statusFinShipping>
+<statusIsreceive><en>Received</en><th>โรงซักรับเอกสาร</th></statusIsreceive>
+<statusOnWash><en>Washing on</en><th>กำลังดำเนินการซัก</th></statusOnWash>
+<statusFinWash><en>Wash complete</en><th>เสร็จสิ้นการซัก</th></statusFinWash>
+<statusOnPack><en>Packing on</en><th>กำลังดำเนินการแพ็ค</th></statusOnPack>
+<statusFinPack><en>Pack complete</en><th>เสร็จสิ้นการแพ็ค</th></statusFinPack>
+<statusOnShipping><en>Shipping on</en><th>กำลังดำเนินการขนส่ง</th></statusOnShipping>
+<statusFinShipping><en>Shipping compl.</en><th>เสร็จสิ้นการขนส่ง</th></statusFinShipping>
 </lang>
