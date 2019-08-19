@@ -30,6 +30,7 @@ require '../getTimeZone.php';
 	<script>
 		var f = true;
 		$(document).ready(function(e) {
+			$(".btn.btn-mylight.btn-block").remove();
 			load_site();
 			load_doc();
 		});
@@ -61,7 +62,7 @@ require '../getTimeZone.php';
 
 		var x = setInterval(function() {
 			load_doc();
-			console.log(111);
+			///console.log(111);
 		}, 1000);
 
 		function show_process(DocNo, From) {
@@ -95,13 +96,12 @@ require '../getTimeZone.php';
 					} catch (e) {
 						console.log('Error#542-decode error');
 					}
-					console.log(555);
+					///console.log(555);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_site') {
 							$("#HptName").text(temp['HptName']);
 						} else if (temp["form"] == 'load_doc') {
 							f = true;
-							$(".btn.btn-mylight.btn-block").remove();
 							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
 								var status_class = "";
 								var status_text = "";
@@ -143,15 +143,26 @@ require '../getTimeZone.php';
 									status_line = "StatusLine_3";
 								}
 
-								if (temp[i]['IsStatus'] > 0) {
-
-									var Str = "<button onclick='" + onclick + "' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
-									Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
+								console.log($("#bt"+temp[i]['DocNo']).data('i')==null);
+								if ($("#bt"+temp[i]['DocNo']).data('i')==null) {
+									var Str = "<button onclick='" + onclick + "' class='btn btn-mylight btn-block' style='align-items: center !important;' id='bt"+temp[i]['DocNo']+"' data-i = '"+temp[i]['DocNo']+"'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+									Str += "<div class='row' id='row"+temp[i]['DocNo']+"' data-process = '"+temp[i]['IsProcess']+"'><div class='card " + status_class + "'>" + status_text + "</div>";
 									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
 									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
 
 									$("#document").append(Str);
+								}else{
+									console.log($("#row"+temp[i]['DocNo']).data('process'));
+									if($("#row"+temp[i]['DocNo']).data('process')!=temp[i]['IsProcess']){
+										$("#row"+temp[i]['DocNo']).empty();
+										var Str = "<div class='card " + status_class + "'>" + status_text + "</div>";
+										Str += "<img src='../img/" + status_line + ".png' height='50'/></div>";
+
+										$("#row"+temp[i]['DocNo']).append(Str);
+										$("#row"+temp[i]['DocNo']).data('process',temp[i]['IsProcess']);
+									}
 								}
+								
 							}
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
