@@ -239,7 +239,7 @@ require '../getTimeZone.php';
 									var IsPrcess = temp[i]['IsProcess'];
 									if (IsPrcess == 0 || IsPrcess == null) {
 										status_class = "status4";
-										status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";statusNotWork
+										status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";
 										status_line = "StatusLine_4";
 									} else if (IsPrcess == 7) {
 										status_class = "status3";
