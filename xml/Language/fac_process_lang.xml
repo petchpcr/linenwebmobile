@@ -21,7 +21,7 @@
 
 <shipping><en>Shipping</en><th>ขนส่ง</th></shipping>
 <Startshipping><en>Start shipping</en><th>เริ่มขนส่ง</th></Startshipping>
-<Startshipping><en>Start shipping</en><th>ยืนยันการขนส่ง</th></Startshipping>
+<Confirmshipping><en>Start shipping</en><th>ยืนยันการขนส่ง</th></Confirmshipping>
 
 <Finish><en>Finish</en><th>เสร็จสิ้น</th></Finish>
 

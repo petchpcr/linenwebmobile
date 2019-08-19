@@ -53,7 +53,7 @@
                         DATE_FORMAT(dirty.Modify_Date,'%H:%i') AS xtime,
                         FName,
                         Total,
-                        DepCode
+                        dirty.DepCode
                 FROM dirty, users, site
                 WHERE DocNo ='$DocNo'
                 AND users.ID = dirty.Modify_Code
