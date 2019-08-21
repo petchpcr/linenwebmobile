@@ -27,4 +27,6 @@
 <Empty><en>Empty</en><th>ข้อมูลว่างเปล่า</th></Empty>Cause
 <NoiteminDoc><en>No item in Doc.</en><th>ยังไม่มีข้อมูลรายการ</th></NoiteminDoc>
 <Cause><en>Cause</en><th>สาเหตุ</th></Cause>
+
+<allPass><en>All quality checks passed ?</en><th>การตรวจสอบคุณภาพผ่านทั้งหมด ?</th></allPass>
 </lang>

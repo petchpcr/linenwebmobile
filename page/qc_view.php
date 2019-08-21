@@ -506,7 +506,7 @@ $genarray = json_decode($json, TRUE);
 				<button onclick="create_claim()" id="claim-btn" class="btn btn-danger btn-block" type="button">
 					<i class="fas fa-times mr-1"></i><?php echo $array['sendClaim'][$language]; ?>
 				</button>
-				<button onclick="save_Allpass()" id="save-btn" class="btn btn-success btn-block" type="button">
+				<button data-toggle="modal" data-target="#exampleModal" id="save-btn" class="btn btn-success btn-block" type="button">
 				<!-- <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button"> -->
 					<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 				</button>
@@ -622,6 +622,32 @@ $genarray = json_decode($json, TRUE);
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-12 text-right">
 							<button type="button" class="btn btn-block btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['confirm'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<?php echo $array['allPass'][$language]; ?>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-6 text-right">
+							<button onclick="save_Allpass()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
 						</div>
 					</div>
 				</div>

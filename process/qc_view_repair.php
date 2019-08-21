@@ -101,7 +101,13 @@
         $cnt = $Result['cnt'];
         $return['cnt'] = $cnt;
 
+        $passOld=0;
+
         if ($cnt > 0) {
+            $Sql = "SELECT Pass FROM qccheckpass WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+            $meQuery = mysqli_query($conn,$Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $passOld = $Result['Pass'];
             $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         }
         else {
@@ -121,7 +127,8 @@
             $meQuery = mysqli_query($conn,$Sql);
             $Result = mysqli_fetch_assoc($meQuery);
             $TotalQty = $Result['TotalQty'];
-            $TotalQty = $TotalQty+$pass;
+            $TotalQty = $TotalQty+$pass-$passOld;
+
             $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
             mysqli_query($conn, $Sql);
 
