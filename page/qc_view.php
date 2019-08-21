@@ -112,6 +112,26 @@ $genarray = json_decode($json, TRUE);
 				senddata(JSON.stringify(data));
 			}
 		}
+		function save_Allpass() {
+				var DocNo = '<?php echo $DocNo ?>';
+				$('.itemQTY').each(function( index ) {
+					
+					var ItemCode = this.id;
+					var pass = $("#"+ItemCode).data('qty');
+					console.log($("#"+ItemCode).data('qty'));
+					var data = {
+						'DocNo': DocNo,
+						'ItemCode': ItemCode,
+						'pass': pass,
+						'fail': 0,
+						'claim': 0,
+						'rewash': 0,
+						'STATUS': 'save_checkpass'
+					};
+					senddata(JSON.stringify(data));
+				});
+				save_qc();
+		}
 
 		function show_question(ItemCode) {
 			var DocNo = '<?php echo $DocNo ?>';
@@ -301,7 +321,7 @@ $genarray = json_decode($json, TRUE);
 									var Str = "<tr onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'><td><div class='row'>";
 									Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
 									Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
-									Str += "<div class='col-12 text-black-50 p-1'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
+									Str += "<div class='col-12 text-black-50 p-1 itemQTY' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
 									Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>" + detail + "</div>";
 									Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='" + img + "' height='40px'></div></div></td></tr>";
 
@@ -486,7 +506,8 @@ $genarray = json_decode($json, TRUE);
 				<button onclick="create_claim()" id="claim-btn" class="btn btn-danger btn-block" type="button">
 					<i class="fas fa-times mr-1"></i><?php echo $array['sendClaim'][$language]; ?>
 				</button>
-				<button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button">
+				<button onclick="save_Allpass()" id="save-btn" class="btn btn-success btn-block" type="button">
+				<!-- <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button"> -->
 					<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 				</button>
 			</div>

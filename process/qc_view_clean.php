@@ -111,6 +111,23 @@
         }
 
         if (mysqli_query($conn, $Sql)) {
+
+            $HptCode = $_SESSION['HptCode'];
+
+            $Sql = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
+            $meQuery = mysqli_query($conn,$Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $DepCode = $Result['DepCode'];
+
+            $Sql = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+            $meQuery = mysqli_query($conn,$Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $TotalQty = $Result['TotalQty'];
+            $TotalQty = $TotalQty+$pass;
+
+            $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+            mysqli_query($conn, $Sql);
+
             if ($fail == 0) {
                 $Sql = "UPDATE clean_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
                 mysqli_query($conn, $Sql);
