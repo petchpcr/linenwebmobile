@@ -109,7 +109,7 @@ $genarray = json_decode($json, TRUE);
 					} else if (temp['status'] == "failed") {
 						swal({
 							title: '',
-							text: "<?php $genarray['NotFoundHpt'][$language] ?>",
+							text: "<?php echo $genarray['NotFoundHpt'][$language] ?>",
 							type: 'warning',
 							showCancelButton: false,
 							confirmButtonColor: '#3085d6',

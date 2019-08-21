@@ -12,11 +12,17 @@
     // $From = "dirty";
     // $SigCode = "45154";
 
+    $return['get'] = $DocNo+"--"+$From+"--"+$SigCode;
+
     $Sql = "UPDATE process SET IsStatus = 4,Signature = '$SigCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
 
+    $return['Sql_up_process'] = $Sql;
+
     $Sql = "UPDATE $From SET IsStatus = 3,IsProcess = 7 WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
+
+    $return['Sql_up_from'] = $Sql;
 
     $Sql = "SELECT IF(SendOverTime<0, TRUE, FALSE) AS t,SendOverTime FROM process WHERE DocNo='$DocNo'";
     $meQuery=mysqli_query($conn,$Sql);
@@ -24,7 +30,8 @@
     $Time = $Result['t'];
     $SendOverTime = $Result['SendOverTime'];
 
-   // echo json_encode($Time);
+    $return['Sql_overT'] = $Sql;
+    $return['Time'] = $Time;
 
     if($Time==1){
         $Sql = "SELECT FName,email
@@ -44,6 +51,7 @@
 
         $email = $Result['email'];
         $FName = $Result['FName'];
+        $return['email'] = $email;
 
         $Sql = "SELECT FacName,HptName 
         FROM dirty,department,site,factory 
@@ -56,6 +64,8 @@
         $FacName = $Result['FacName'];
         $HptName = $Result['HptName'];
         
+        $return['HptName'] = $HptName;
+
         $Subject = "Delivery over time";
         // build message body
         $body = '

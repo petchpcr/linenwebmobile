@@ -696,6 +696,12 @@ $genarray = json_decode($json, TRUE);
 			var SigCode = dataURL;
 			document.getElementById("h_code").value = SigCode;
 			var Menu = "<?php echo $Menu ?>";
+			swal({
+				title: 'Please wait...',
+				text: 'Processing',
+				allowOutsideClick: false
+			})
+			swal.showLoading()
 			if (Menu == "qc") {
 				var URL = '../process/signature_qc.php';
 				$.ajax({
