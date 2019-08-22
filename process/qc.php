@@ -70,7 +70,7 @@
                         AND     repair.IsStatus > 0
                                 
                                 )  a 
-                ORDER BY DocNo DESC";
+                ORDER BY IsStatus ASC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

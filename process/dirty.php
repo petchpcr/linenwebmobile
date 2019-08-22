@@ -85,7 +85,7 @@
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.FacCode = '$FacCode'
                 AND dirty.IsStatus > 0 
-                ORDER BY dirty.DocNo DESC";
+                ORDER BY dirty.IsStatus ASC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
