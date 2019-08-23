@@ -70,7 +70,7 @@
                         AND     repair.IsStatus > 0
                                 
                                 )  a 
-                ORDER BY IsCheckList ASC";
+                ORDER BY IsCheckList ASC, DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

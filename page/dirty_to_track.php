@@ -66,10 +66,12 @@ require '../getTimeZone.php';
 		}, 1000);
 
 		function show_process(DocNo, From) {
-			var siteCode = '<?php echo $siteCode ?>';
-			var Menu = '<?php echo $Menu ?>';
-			window.location.href = 'track_doc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
-
+			console.log($('#row'+DocNo).data('process'));
+			if($('#row'+DocNo).data('process')>0){
+				var siteCode = '<?php echo $siteCode ?>';
+				var Menu = '<?php echo $Menu ?>';
+				window.location.href = 'track_doc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
+			}
 		}
 
 		function back() {
@@ -112,7 +114,6 @@ require '../getTimeZone.php';
 									status_class = "status4";
 									status_text = "<?php echo $array['statusIsreceive'][$language]; ?>";
 									status_line = "StatusLine_4";
-									var onclick = "";
 								} else if (temp[i]['IsProcess'] == 1) {
 									status_class = "status1";
 									status_text = "<?php echo $array['statusOnWash'][$language]; ?>";
