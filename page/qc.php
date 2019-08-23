@@ -35,7 +35,7 @@ require '../getTimeZone.php';
 
 		// function
 		function load_site() {
-			$('#datepicker').val("<?php echo date("Y-m-d"); ?>");
+			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
 			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
@@ -225,7 +225,7 @@ require '../getTimeZone.php';
 		$('#datepicker').datepicker({
 			// uiLibrary: 'bootstrap4',
 			size: 'large',
-			format: 'yyyy-mm-dd'
+			format: 'dd-mm-yyyy'
 		});
 	</script>
 

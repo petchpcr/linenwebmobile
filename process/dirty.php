@@ -61,7 +61,7 @@
 
     function load_doc_procees($conn, $DATA){
         $count = 0;
-        $search = $DATA["search"];
+        $search = date_format(date_create($DATA["search"]),"Y-m-d");
         $return['search'] = $DATA["search"];
         if($search == null || $search == ""){
             $search = date('Y-m-d');
@@ -155,7 +155,7 @@
 
     function load_doc_tracking($conn, $DATA){
         $count = 0;
-        $search = $DATA["search"];
+        $search = date_format(date_create($DATA["search"]),"Y-m-d");
         if($search == null || $search == ""){
             $search = date('Y-m-d');
         }
@@ -253,8 +253,8 @@
 
     function load_doc($conn, $DATA){
         $count = 0;
-        $search = $DATA["search"];
-        $return['search'] = $DATA["search"];
+        $search = date_format(date_create($DATA["search"]),"Y-m-d");
+        $return['search'] = $search;
         if($search == null || $search == ""){
             $search = date('Y-m-d');
         }
@@ -274,7 +274,7 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
                 ORDER BY dirty.DocNo DESC";
-
+        $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['DocNo'] = $Result['DocNo'];

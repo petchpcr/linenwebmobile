@@ -69,7 +69,7 @@ require '../getTimeZone.php';
 		}
 
 		function load_site() {
-			$('#datepicker').val("<?php echo date("Y-m-d"); ?>");
+			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
 			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,

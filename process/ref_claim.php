@@ -32,7 +32,7 @@ function load_site($conn, $DATA)
 function load_doc($conn, $DATA)
 {
     $count = 0;
-    $search = $DATA["search"];
+    $search = date_format(date_create($DATA["search"]),"Y-m-d");
     $return['search'] = $DATA["search"];
     if ($search == null || $search == "") {
         $search = date('Y-m-d');
