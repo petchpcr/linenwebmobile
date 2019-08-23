@@ -91,7 +91,7 @@ $genarray = json_decode($json, TRUE);
 			Title = "<?php echo $array['InvalidNum'][$language]; ?>";
 			Type = "warning";
 
-			if (sum != qty) {
+			if (pass<0) {
 				Text = "<?php echo $array['numData'][$language]; ?> " + sum + " <?php echo $array['numFromAll'][$language]; ?> " + qty + " !";
 				AlertError(Title, Text, Type);
 			} else if (sum_cr != fail) {
