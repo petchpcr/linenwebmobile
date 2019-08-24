@@ -5,12 +5,13 @@
 
     function load_site($conn, $DATA){
         $siteCode = $DATA["siteCode"];
+        $From = $DATA["From"];
         $DocNo = $DATA["DocNo"];
         $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
         $Sql2 = "SELECT department.DepName,department.DepCode 
                 FROM department 
-                INNER JOIN dirty ON dirty.DepCode = department.DepCode 
-                WHERE dirty.DocNo = '$DocNo'";
+                INNER JOIN $From ON $From.DepCode = department.DepCode 
+                WHERE $From.DocNo = '$DocNo'";
         $boolean = false;
         $boolean2 = false;
 
@@ -46,17 +47,18 @@
     function load_doc($conn, $DATA){
         $count = 0;
         $DocNo = $DATA["DocNo"];
+        $From = $DATA["From"];
         $boolean = false;
         $boolean2 = false;
         $Sql = "SELECT RefDocNo,
-                        DATE_FORMAT(dirty.Modify_Date,'%d %M %Y') AS xdate,
-                        DATE_FORMAT(dirty.Modify_Date,'%H:%i') AS xtime,
+                        DATE_FORMAT($From.Modify_Date,'%d %M %Y') AS xdate,
+                        DATE_FORMAT($From.Modify_Date,'%H:%i') AS xtime,
                         FName,
                         Total,
-                        dirty.DepCode
-                FROM dirty, users, site
+                        $From.DepCode
+                FROM $From, users, site
                 WHERE DocNo ='$DocNo'
-                AND users.ID = dirty.Modify_Code
+                AND users.ID = $From.Modify_Code
                 AND users.HptCode = site.HptCode";
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -71,15 +73,15 @@
         }
         $return['boolean'] = $boolean;
 
-        $Sql2 = "SELECT dirty_detail.ItemCode,
+        $Sql2 = "SELECT ".$From."_detail.ItemCode,
                         item.ItemName,
-                        dirty_detail.UnitCode,
-                        dirty_detail.Qty,
-                        dirty_detail.Weight 
-                FROM dirty_detail,
+                        ".$From."_detail.UnitCode,
+                        ".$From."_detail.Qty,
+                        ".$From."_detail.Weight 
+                FROM ".$From."_detail,
                      item 
                 WHERE DocNo = '$DocNo'
-                AND	  item.ItemCode = dirty_detail.ItemCode";
+                AND	  item.ItemCode = ".$From."_detail.ItemCode";
 
         $meQuery2 = mysqli_query($conn, $Sql2);
         while ($Result = mysqli_fetch_assoc($meQuery2)) {
