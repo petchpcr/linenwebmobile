@@ -13,13 +13,20 @@
                         item.UnitCode,
                         clean_detail.Qty,
                         clean_detail.Weight,
-                        clean_detail.IsCheckList
+                        clean_detail.IsCheckList,
+                        qccheckpass.Fail,
+                        qccheckpass.Claim,
+                        qccheckpass.Rewash,
+                        qccheckpass.Lost
 
                 FROM    item,
-                        clean_detail
+                        clean_detail,
+                        qccheckpass
 
-                WHERE   item.ItemCode = clean_detail.ItemCode
+                WHERE   item.ItemCode = clean_detail.ItemCode 
+                AND     qccheckpass.ItemCode = clean_detail.ItemCode 
 
+                AND     qccheckpass.DocNo = '$DocNo' 
                 AND     clean_detail.DocNo = '$DocNo'";
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -30,6 +37,10 @@
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $return[$count]['IsCheckList'] = $Result['IsCheckList'];
+            $return[$count]['Fail'] = $Result['Fail'];
+            $return[$count]['Claim'] = $Result['Claim'];
+            $return[$count]['Rewash'] = $Result['Rewash'];
+            $return[$count]['Lost'] = $Result['Lost'];
             $count++;
         }
 
@@ -58,6 +69,7 @@
         $Sql = "SELECT (SELECT ItemName FROM item WHERE ItemCode = '$ItemCode') AS itemname,Qty,
                         (SELECT Pass FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Pass,
                         (SELECT Fail FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Fail, 
+                        (SELECT Lost FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Lost, 
                         (SELECT Claim FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Claim, 
                         (SELECT Rewash FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Rewash 
                 FROM clean_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
@@ -68,6 +80,7 @@
             $return['Qty']	=  $Result['Qty'];
             $return['Pass']	=  $Result['Pass'];
             $return['Fail']	=  $Result['Fail'];
+            $return['Lost']	=  $Result['Lost'];
             $return['Claim']	=  $Result['Claim'];
             $return['Rewash']	=  $Result['Rewash'];
             $boolean = true;
@@ -94,6 +107,7 @@
         $pass = $DATA['pass'];
         $fail = $DATA['fail'];
         $return['check'] = $fail;
+        $lost = $DATA["lost"];
         $claim = $DATA["claim"];
         $rewash = $DATA["rewash"];
 
@@ -110,10 +124,10 @@
             $meQuery = mysqli_query($conn,$Sql);
             $Result = mysqli_fetch_assoc($meQuery);
             $passOld = $Result['Pass'];
-            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Lost = $lost, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         }
         else {
-            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,Claim,Rewash,QCDate) VALUES ('$DocNo','$ItemCode',$pass,$fail,$claim,$rewash,NOW())";
+            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,Lost,Claim,Rewash,QCDate) VALUES ('$DocNo','$ItemCode',$pass,$fail,$lost,$claim,$rewash,NOW())";
         }
 
         if (mysqli_query($conn, $Sql)) {
@@ -144,13 +158,13 @@
                 $return['unfail'] = 1;
             }
 
-            if ($claim > 0 && $rewash > 0) {
+            if ($claim > 0 && $rewash > 0) { // claim & rewash
                 $checklist = 3;
             }
-            else if ($claim == 0 && $rewash > 0) {
+            else if ($claim == 0 && $rewash > 0) { // rewash
                 $checklist = 2;
             }
-            else if ($claim > 0 && $rewash == 0) {
+            else if ($claim > 0 && $rewash == 0) { // claim
                 $checklist = 1;
             }
 

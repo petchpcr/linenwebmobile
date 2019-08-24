@@ -476,7 +476,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 	</header>
 	<div class="px-3 mb-5">
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
+		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
 		<div class="text-center mb-3">
 			<div class="text-truncate font-weight-bold" style="font-size:25px;"><?php echo $genarray['docno'][$language]; ?></div>
 			<div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>

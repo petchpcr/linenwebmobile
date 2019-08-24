@@ -133,7 +133,7 @@ $genarray = json_decode($json, TRUE);
 			</div>
 		</header>
 		<div data-role="content">
-			<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
+			<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
 			<div class="text-center text-truncate font-weight-bold my-4" style="font-size:30px;"><?php echo $array['menu'][$language]; ?></div>
 			<div id="hospital"></div>
 		</div>

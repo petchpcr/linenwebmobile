@@ -58,7 +58,6 @@ require '../getTimeZone.php';
 		}
 
 		function show_qc(DocNo) {
-			console.log("777");
 			var data = {
 				'DocNo': DocNo,
 				'STATUS': 'get_doc_type'
@@ -211,7 +210,7 @@ require '../getTimeZone.php';
 	</header>
 	<div class="px-3 pb-4 mb-5">
 
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
+		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
 		<div id="HptName" class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"></div>
 		<div id="document">
 			<div class="d-flex justify-content-center mb-3">

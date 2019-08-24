@@ -73,6 +73,7 @@ $genarray = json_decode($json, TRUE);
 			//var pass = Number($("#qc_pass").val());
 			// var sum = Number(pass + fail);
 			
+			var lost = Number($("#qc_lost").val());
 			var fail = Number($("#qc_fail").val());
 			var sum = Number($("#qc_qty").val());
 			var pass = Number(sum-fail);
@@ -97,6 +98,9 @@ $genarray = json_decode($json, TRUE);
 			} else if (sum_cr != fail) {
 				Text = "<?php echo $array['numRepair'][$language]; ?> " + sum_cr + " <?php echo $array['numFromNP'][$language]; ?> " + fail + " !";
 				AlertError(Title, Text, Type);
+			} else if (lost > sum) {
+				Text = "<?php echo $array['numLost'][$language]; ?> " + lost + " <?php echo $array['numFromAll'][$language]; ?> " + sum + " !";
+				AlertError(Title, Text, Type);
 			} else {
 				var DocNo = '<?php echo $DocNo ?>';
 				var ItemCode = $("#qc_qty").attr("data-itemcode");
@@ -105,6 +109,7 @@ $genarray = json_decode($json, TRUE);
 					'ItemCode': ItemCode,
 					'pass': pass,
 					'fail': fail,
+					'lost': lost,
 					'claim': claim,
 					'rewash': rewash,
 					'STATUS': 'save_checkpass'
@@ -113,6 +118,7 @@ $genarray = json_decode($json, TRUE);
 			}
 		}
 		function save_Allpass() {
+				var lost = Number($("#qc_lost").val());
 				var DocNo = '<?php echo $DocNo ?>';
 				$('.itemQTY').each(function( index ) {
 					var ItemCode = this.id;
@@ -292,9 +298,28 @@ $genarray = json_decode($json, TRUE);
 							if (temp['cnt'] > 0) {
 								for (var i = 0; i < temp['cnt']; i++) {
 									var CheckList = Number(temp[i]['IsCheckList']);
+									var Fail = Number(temp[i]['Fail']);
+									var Claim = Number(temp[i]['Claim']);
+									var Rewash = Number(temp[i]['Rewash']);
+									var Lost = Number(temp[i]['Lost']);
 									var img = "";
 									var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info'>เรียกดู</button>";
 									var classItemQTY = "itemQTY";
+									if (Fail > 0) {
+										if (Claim > 0 && Rewash > 0 && Lost > 0) {
+
+										}
+										else if (Claim > 0 && Rewash > 0 && Lost == 0) {
+
+										
+										}
+										else if (Claim > 0 && Rewash > 0 && Lost > 0) {
+
+										}
+									}
+									else {
+
+									}
 									switch (CheckList) {
 										case 0:
 											img = "../img/Status_3.png"; // เขียว
@@ -354,6 +379,7 @@ $genarray = json_decode($json, TRUE);
 							$("#qc_qty").val(temp['Qty']);
 							var Pass = temp['Pass'];
 							var Fail = temp['Fail'];
+							var Lost = temp['Lost'];
 							var Claim = temp['Claim'];
 							var Rewash = temp['Rewash'];
 							if (temp['Pass'] == 0) {
@@ -361,6 +387,9 @@ $genarray = json_decode($json, TRUE);
 							}
 							if (temp['Fail'] == 0) {
 								Fail = "";
+							}
+							if (temp['Lost'] == 0) {
+								Lost = "";
 							}
 							if (temp['Claim'] == 0) {
 								Claim = "";
@@ -370,6 +399,7 @@ $genarray = json_decode($json, TRUE);
 							}
 							$("#qc_pass").val(Pass);
 							$("#qc_fail").val(Fail);
+							$("#qc_lost").val(Lost);
 							$("#claim_qty").val(Claim);
 							$("#rewash_qty").val(Rewash);
 
@@ -480,7 +510,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 	</header>
 	<div class="px-3 mb-5">
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
+		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
 		<div class="text-center mb-3">
 			<div class="text-truncate font-weight-bold" style="font-size:25px;"><?php echo $genarray['Document'][$language]; ?></div>
 			<div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
@@ -546,6 +576,11 @@ $genarray = json_decode($json, TRUE);
 						<div class="form-group text-left">
 							<label><?php echo $array['numNP'][$language]; ?></label>
 							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_fail" placeholder="0">
+						</div>
+
+						<div class="form-group text-left">
+							<label>สูญหาย</label>
+							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_lost" placeholder="0">
 						</div>
 						<hr>
 						<div id="claim_rewash" class="alert alert-secondary m-0">
