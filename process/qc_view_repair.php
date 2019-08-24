@@ -11,13 +11,19 @@
                         item.UnitCode,
                         repair_detail.Qty,
                         repair_detail.Weight,
-                        repair_detail.IsCheckList
+                        repair_detail.IsCheckList,
+                        qccheckpass.Fail,
+                        qccheckpass.Claim,
+                        qccheckpass.Rewash,
+                        qccheckpass.Lost
 
                 FROM    item,
                         repair_detail
 
                 WHERE   item.ItemCode = repair_detail.ItemCode
+                AND     qccheckpass.ItemCode = repair_detail.ItemCode 
 
+                AND     qccheckpass.DocNo = '$DocNo' 
                 AND     repair_detail.DocNo = '$DocNo'";
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -28,6 +34,10 @@
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $return[$count]['IsCheckList'] = $Result['IsCheckList'];
+            $return[$count]['Fail'] = $Result['Fail'];
+            $return[$count]['Claim'] = $Result['Claim'];
+            $return[$count]['Rewash'] = $Result['Rewash'];
+            $return[$count]['Lost'] = $Result['Lost'];
             $count++;
         }
 
@@ -56,6 +66,7 @@
         $Sql = "SELECT (SELECT ItemName FROM item WHERE ItemCode = '$ItemCode') AS itemname,Qty,
                         (SELECT Pass FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Pass,
                         (SELECT Fail FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Fail, 
+                        (SELECT Lost FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Lost, 
                         (SELECT Claim FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Claim, 
                         (SELECT Rewash FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Rewash 
                 FROM repair_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
@@ -66,6 +77,7 @@
             $return['Qty']	=  $Result['Qty'];
             $return['Pass']	=  $Result['Pass'];
             $return['Fail']	=  $Result['Fail'];
+            $return['Lost']	=  $Result['Lost'];
             $return['Claim']	=  $Result['Claim'];
             $return['Rewash']	=  $Result['Rewash'];
             $boolean = true;
@@ -92,6 +104,7 @@
         $pass = $DATA['pass'];
         $fail = $DATA['fail'];
         $return['check'] = $fail;
+        $lost = $DATA["lost"];
         $claim = $DATA["claim"];
         $rewash = $DATA["rewash"];
 
@@ -108,10 +121,10 @@
             $meQuery = mysqli_query($conn,$Sql);
             $Result = mysqli_fetch_assoc($meQuery);
             $passOld = $Result['Pass'];
-            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Lost = $lost, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         }
         else {
-            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,Claim,Rewash,QCDate) VALUES ('$DocNo','$ItemCode',$pass,$fail,$claim,$rewash,NOW())";
+            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,Lost,Claim,Rewash,QCDate) VALUES ('$DocNo','$ItemCode',$pass,$fail,$lost,$claim,$rewash,NOW())";
         }
 
         if (mysqli_query($conn, $Sql)) {

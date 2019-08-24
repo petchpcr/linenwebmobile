@@ -58,6 +58,7 @@
         $Sql = "SELECT (SELECT ItemName FROM item WHERE ItemCode = '$ItemCode') AS itemname,Qty,
                         (SELECT Pass FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Pass,
                         (SELECT Fail FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Fail, 
+                        (SELECT Lost FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Lost, 
                         (SELECT Claim FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Claim, 
                         (SELECT Rewash FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Rewash 
                 FROM clean_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
@@ -68,6 +69,7 @@
             $return['Qty']	=  $Result['Qty'];
             $return['Pass']	=  $Result['Pass'];
             $return['Fail']	=  $Result['Fail'];
+            $return['Lost']	=  $Result['Lost'];
             $return['Claim']	=  $Result['Claim'];
             $return['Rewash']	=  $Result['Rewash'];
             $boolean = true;
@@ -94,6 +96,7 @@
         $pass = $DATA['pass'];
         $fail = $DATA['fail'];
         $return['check'] = $fail;
+        $lost = $DATA["lost"];
         $claim = $DATA["claim"];
         $rewash = $DATA["rewash"];
 
@@ -104,12 +107,12 @@
         $return['cnt'] = $cnt;
 
         if ($cnt > 0) {
-            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+            $Sql = "UPDATE qccheckpass SET Pass = $pass, Fail = $fail, Lost = $lost, Claim = $claim, Rewash = $rewash, QCDate = NOW() WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         }
         else {
-            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,Claim,Rewash,QCDate) VALUES ('$DocNo','$ItemCode',$pass,$fail,$claim,$rewash,NOW())";
+            $Sql = "INSERT INTO	qccheckpass(DocNo,ItemCode,Pass,Fail,Lost,Claim,Rewash,QCDate) VALUES ('$DocNo','$ItemCode',$pass,$fail,$lost,$claim,$rewash,NOW())";
         }
-
+        $return['Sql'] = $Sql;
         if (mysqli_query($conn, $Sql)) {
             if ($fail == 0) {
                 $Sql = "UPDATE clean_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
