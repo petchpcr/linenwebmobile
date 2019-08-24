@@ -9,6 +9,7 @@ if ($Userid == "") {
 $Menu = $_GET['Menu'];
 $siteCode = $_GET['siteCode'];
 $DepCode = $_GET['DepCode'];
+$From = $_GET['From'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
 $json = json_encode($xml);
@@ -55,10 +56,12 @@ require '../getTimeZone.php';
 			var search = $('#datepicker').val();
 			var siteCode = "<?php echo $siteCode ?>";
 			var Menu = "<?php echo $Menu ?>";
+			var From = "<?php echo $From ?>";
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
 				'Menu': Menu,
+				'From': From,
 				'STATUS': 'load_doc'
 			};
 			senddata(JSON.stringify(data));
@@ -82,7 +85,8 @@ require '../getTimeZone.php';
 		function back() {
 			var siteCode = "<?php echo $siteCode ?>";
 			var Menu = '<?php echo $Menu; ?>';
-			window.location.href = "clean.php?siteCode=" + siteCode + "&Menu=" + Menu;
+			var From = '<?php echo $From; ?>';
+			window.location.href = "clean.php?siteCode=" + siteCode + "&Menu=" + Menu+ "&From=" + From;
 		}
 		// end function
 
@@ -90,7 +94,10 @@ require '../getTimeZone.php';
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
+			var From = '<?php echo $From; ?>';
+
 			var URL = '../process/ref_dirty.php';
+			
 			$.ajax({
 				url: URL,
 				dataType: 'text',

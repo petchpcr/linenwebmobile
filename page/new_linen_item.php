@@ -77,16 +77,11 @@ require '../getTimeZone.php';
 			// var searchDate = new Date(search);
 			var siteCode = "<?php echo $siteCode ?>";
 			var Menu = "<?php echo $Menu ?>";
-			if (Menu == 'factory') {
-				var status = 'load_doc_procees';
-			} else {
-				var status = 'load_doc';
-			}
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
 				'Menu': Menu,
-				'STATUS': status
+				'STATUS': 'load_doc'
 			};
 			senddata(JSON.stringify(data));
 		}
@@ -95,7 +90,7 @@ require '../getTimeZone.php';
 			var siteCode = '<?php echo $siteCode ?>';
 			var Menu = '<?php echo $Menu ?>';
 
-			window.location.href = 'new_linen_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+			window.location.href = 'dirty_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo+ '&From=newlinentable';
 
 		}
 

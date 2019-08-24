@@ -9,6 +9,7 @@ if ($Userid == "") {
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
+$From = $_GET['From'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
 $json = json_encode($xml);
@@ -29,6 +30,9 @@ $genarray = json_decode($json, TRUE);
 	<?php
 	require 'script_css.php';
 	require 'logout_fun.php';
+	if($From==""){
+		$From="dirty";
+	}
 	?>
 	<script>
 		$(document).ready(function(e) {
@@ -39,9 +43,11 @@ $genarray = json_decode($json, TRUE);
 		function load_site() {
 			var siteCode = "<?php echo $siteCode ?>";
 			var DocNo = "<?php echo $DocNo ?>";
+			var From = "<?php echo $From ?>";
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
+				'From': From,
 				'STATUS': 'load_site'
 			};
 			senddata(JSON.stringify(data));
@@ -49,8 +55,10 @@ $genarray = json_decode($json, TRUE);
 
 		function load_doc() {
 			var DocNo = "<?php echo $DocNo ?>";
+			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
+				'From': From,
 				'STATUS': 'load_doc'
 			};
 			senddata(JSON.stringify(data));
@@ -59,7 +67,13 @@ $genarray = json_decode($json, TRUE);
 		function back() {
 			var siteCode = '<?php echo $siteCode; ?>';
 			var Menu = '<?php echo $Menu; ?>';
-			window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+			var From = '<?php echo $From; ?>';
+			if(From=="dirty"){
+				window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+			}else{
+				window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu;
+			}
+			
 		}
 
 		function logout(num) {

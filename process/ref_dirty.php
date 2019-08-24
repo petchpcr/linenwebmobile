@@ -37,25 +37,26 @@ function load_doc($conn, $DATA)
     if ($search == null || $search == "") {
         $search = date('Y-m-d');
     }
+    $From = $DATA["From"];
     $siteCode = $DATA["siteCode"];
     $return['siteCode'] = $siteCode;
     $boolean = false;
     $Sql = "SELECT
-                    dirty.DocNo,
-                    dirty.IsReceive,
-                    dirty.IsProcess,
-                    dirty.IsStatus,
+                    $From.DocNo,
+                    $From.IsReceive,
+                    $From.IsProcess,
+                    $From.IsStatus,
                     department.DepName,
                     site.HptCode,
                     site.HptName
                 FROM
-                    dirty
-                INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
+                $From
+                INNER JOIN department ON department.DepCode = $From.DepCode AND department.DepCode = $From.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND dirty.DocDate LIKE '%$search%'
-                AND dirty.IsStatus = 3
-                ORDER BY dirty.DocNo DESC";
+                AND $From.DocDate LIKE '%$search%'
+                AND $From.IsStatus = 3
+                ORDER BY $From.DocNo DESC";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {

@@ -97,9 +97,11 @@ require '../getTimeZone.php';
 			var Menu = '<?php echo $Menu ?>';
 			var slt = $("#DocName").val();
 			if (slt == 1) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu; // Handle(DepCode = 224)
-			} else if (slt == 3) {
-				window.location.href = 'ref_rewash.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu; // Handle(DepCode = 224)
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu+ '&From=dirty';
+			} else if (slt == 2) {
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu+ '&From=rewash';
+			}else{
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu+ '&From=newLinenTable';
 			}
 		}
 		// end function
@@ -261,7 +263,8 @@ require '../getTimeZone.php';
 						<select onchange="change_doc()" id="DocName" class="custom-select">
 							<option value="0" selected><?php echo $genarray['docfirst'][$language]; ?></option>
 							<option value="1"><?php echo $array['refDocDirty'][$language]; ?></option>
-							<option value="3"><?php echo $array['refDocRewash'][$language]; ?></option>
+							<option value="2"><?php echo $array['refDocRewash'][$language]; ?></option>
+							<option value="3"><?php echo $array['refDocnew'][$language]; ?></option>
 						</select>
 					</div>
 				</div>
