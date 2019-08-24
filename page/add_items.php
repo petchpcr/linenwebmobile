@@ -322,8 +322,10 @@ $genarray = json_decode($json, TRUE);
 			var Menu = '<?php echo $Menu; ?>';
 			if (Menu == 'dirty') {
 				window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
-			} else {
+			} else if (Menu == 'clean'){
 				window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+			}else{
+				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>';
 			}
 		}
 		// end function
@@ -337,6 +339,8 @@ $genarray = json_decode($json, TRUE);
 				var URL = '../process/add_items_dirty.php';
 			} else if (Menu == 'clean') {
 				var URL = '../process/add_items_clean.php';
+			} else{
+				var URL = '../process/add_items_new_linen.php';
 			}
 
 			$.ajax({
