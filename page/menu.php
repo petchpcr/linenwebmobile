@@ -50,6 +50,8 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
 			} else if (menu == 'shelfcount') {
 				window.location.href = 'shelfcount.php?siteCode=<?php echo $HptCode; ?>&Menu=shelfcount';
+			} else if(menu == 'newLinenTable'){
+				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>';
 			} else {
 				window.location.href = 'hospital.php?Menu=' + menu;
 			}
@@ -152,7 +154,15 @@ $genarray = json_decode($json, TRUE);
                         <img src="../img/tshirt.png">
                         <div class="text-truncate">' . $array["dirty"][$language] . '</div>
                         </button>
-                    </div>
+					</div>
+					
+                    <div class="my-col-menu">
+                        <button onclick="menu_click(' . "'newLinenTable'" . ')" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/storage.png">
+                            <div class="text-truncate">' . $array["newLinen"][$language] . '</div>
+                        </button>
+					</div>
+					
                     <div class="my-col-menu">
                         <button onclick="menu_click(' . "'track'" . ')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/tracking.png">
@@ -171,12 +181,13 @@ $genarray = json_decode($json, TRUE);
                             <div class="text-truncate">' . $array["QC"][$language] . '</div>
                         </button>
                     </div>
-                    <div class="my-col-menu">
+                    <!-- <div class="my-col-menu">
                         <button onclick="menu_click(' . "'shelfcount'" . ')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/storage.png">
                             <div class="text-truncate">' . $array["shelfcount"][$language] . '</div>
                         </button>
-                    </div>
+					</div> --!>
+					
                     ';
 			}
 
