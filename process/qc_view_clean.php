@@ -5,46 +5,48 @@
 
     function load_items($conn, $DATA){
         $count = 0;
+        $cnt_checkpass = 0;
         $DocNo = $DATA["DocNo"];
-        $ItemCode = $DATA['ItemCode'];
-        $return['ItemCode'] = $ItemCode;
+        $ItemCode = array();
         $Sql = "SELECT  item.ItemName,
                         item.ItemCode,
                         item.UnitCode,
                         clean_detail.Qty,
                         clean_detail.Weight,
-                        clean_detail.IsCheckList,
-                        qccheckpass.Fail,
-                        qccheckpass.Claim,
-                        qccheckpass.Rewash,
-                        qccheckpass.Lost
+                        clean_detail.IsCheckList 
 
                 FROM    item,
-                        clean_detail,
-                        qccheckpass
+                        clean_detail 
 
                 WHERE   item.ItemCode = clean_detail.ItemCode 
-                AND     qccheckpass.ItemCode = clean_detail.ItemCode 
-
-                AND     qccheckpass.DocNo = '$DocNo' 
                 AND     clean_detail.DocNo = '$DocNo'";
-
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode'] = $Result['ItemCode'];
+            array_push($ItemCode,$Result['ItemCode']);
             $return[$count]['ItemName'] = $Result['ItemName'];
             $return[$count]['UnitCode'] = $Result['UnitCode'];
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $return[$count]['IsCheckList'] = $Result['IsCheckList'];
-            $return[$count]['Fail'] = $Result['Fail'];
-            $return[$count]['Claim'] = $Result['Claim'];
-            $return[$count]['Rewash'] = $Result['Rewash'];
-            $return[$count]['Lost'] = $Result['Lost'];
             $count++;
         }
-
         $return['cnt'] = $count;
+
+        for ($i = 0; $i < $count; $i++) {
+            $Sql = "SELECT Fail,Claim,Rewash,Lost FROM qccheckpass WHERE ItemCode = '$ItemCode[$i]' AND DocNo = '$DocNo'";
+            $meQuery = mysqli_query($conn, $Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $return[$i]['Fail'] = $Result['Fail'];
+            $return[$i]['Claim'] = $Result['Claim'];
+            $return[$i]['Rewash'] = $Result['Rewash'];
+            $return[$i]['Lost'] = $Result['Lost'];
+            $cnt_checkpass++;
+        }
+        $return['cnt_checkpass'] = $cnt_checkpass;
+
+
         if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "load_items";
