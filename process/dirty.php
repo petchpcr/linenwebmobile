@@ -85,7 +85,7 @@
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.FacCode = '$FacCode'
                 AND dirty.IsStatus > 0 
-                ORDER BY dirty.IsStatus ASC";
+                ORDER BY dirty.IsStatus,dirty.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -122,7 +122,7 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND newlinentable.IsStatus > 1
                 AND newlinentable.DocDate LIKE '%$search%'
-                ORDER BY newlinentable.DocNo DESC";
+                ORDER BY newlinentable.IsStatus,newlinentable.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -152,7 +152,7 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.FacCode = '$FacCode'
                 AND rewash.DocDate LIKE '%$search%'
-                ORDER BY rewash.DocNo DESC";
+                ORDER BY rewash.IsStatus,rewash.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

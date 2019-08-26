@@ -152,8 +152,8 @@ $genarray = json_decode($json, TRUE);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_process') {
 							$("#send_time").text("( <?php echo $array['useTimeS'][$language]; ?> " + temp['LimitTime'] + " <?php echo $genarray['minute'][$language]; ?> )");
-							$(".head-btn.btn-light").remove();
-							var Back = "<div style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
+							$("#head-back").remove();
+							var Back = "<div id='head-back' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
 							$("#user").before(Back);
 							if (temp['IsStatus'] == 0 || temp['IsStatus'] == null) { //-----ยังไม่ได้ทำอะไร
 								$("#W_Status").attr("src", "../img/Status_4.png");
