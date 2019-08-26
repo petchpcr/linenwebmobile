@@ -109,20 +109,20 @@
         }
 
         $Sql = "SELECT
-                    newLinenTable.DocNo,
-                    newLinenTable.IsReceive,
-                    newLinenTable.IsStatus,
-                    newLinenTable.IsProcess,
+                    newlinentable.DocNo,
+                    newlinentable.IsReceive,
+                    newlinentable.IsStatus,
+                    newlinentable.IsProcess,
                     department.DepName,
                     site.HptCode,
                     site.HptName
-                FROM newLinenTable
-                INNER JOIN department ON department.DepCode = newLinenTable.DepCode AND department.DepCode = newLinenTable.DepCode
+                FROM newlinentable
+                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND newLinenTable.IsStatus > 1
-                AND newLinenTable.DocDate LIKE '%$search%'
-                ORDER BY newLinenTable.DocNo DESC";
+                AND newlinentable.IsStatus > 1
+                AND newlinentable.DocDate LIKE '%$search%'
+                ORDER BY newlinentable.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -132,7 +132,7 @@
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['From'] = "newLinenTable";
+            $return[$count]['From'] = "newlinentable";
 
             $count++;
             $boolean = true;
@@ -267,20 +267,20 @@
         }
 
         $Sql = "SELECT
-                    newLinenTable.DocNo,
-                    newLinenTable.IsReceive,
-                    newLinenTable.IsStatus,
-                    newLinenTable.IsProcess,
+                    newlinentable.DocNo,
+                    newlinentable.IsReceive,
+                    newlinentable.IsStatus,
+                    newlinentable.IsProcess,
                     department.DepName,
                     site.HptCode,
                     site.HptName
-                FROM newLinenTable
-                INNER JOIN department ON department.DepCode = newLinenTable.DepCode AND department.DepCode = newLinenTable.DepCode
+                FROM newlinentable
+                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND newLinenTable.IsStatus > 1
-                AND newLinenTable.DocDate LIKE '%$search%'
-                ORDER BY newLinenTable.DocNo DESC";
+                AND newlinentable.IsStatus > 1
+                AND newlinentable.DocDate LIKE '%$search%'
+                ORDER BY newlinentable.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -290,7 +290,7 @@
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['From'] = "newLinenTable";
+            $return[$count]['From'] = "newlinentable";
 
             $count++;
             $boolean = true;

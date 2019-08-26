@@ -82,7 +82,7 @@
                      item 
                 WHERE DocNo = '$DocNo'
                 AND	  item.ItemCode = ".$From."_detail.ItemCode";
-
+        $return['Sql'] = $Sql2;
         $meQuery2 = mysqli_query($conn, $Sql2);
         while ($Result = mysqli_fetch_assoc($meQuery2)) {
             $return[$count]['ItemCode'] = $Result['ItemCode'];

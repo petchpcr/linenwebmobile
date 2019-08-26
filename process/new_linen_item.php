@@ -69,19 +69,19 @@
         $siteCode = $DATA["siteCode"];
         $boolean = false;
         $Sql = "SELECT
-                        newLinenTable.DocNo,
-                        newLinenTable.IsReceive,
-                        newLinenTable.IsProcess,
-                        newLinenTable.IsStatus,
+                        newlinentable.DocNo,
+                        newlinentable.IsReceive,
+                        newlinentable.IsProcess,
+                        newlinentable.IsStatus,
                         department.DepName,
                         site.HptCode,
                         site.HptName
-                FROM    newLinenTable
-                INNER JOIN department ON department.DepCode = newLinenTable.DepCode AND department.DepCode = newLinenTable.DepCode
+                FROM    newlinentable
+                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND newLinenTable.DocDate LIKE '%$search%'
-                ORDER BY newLinenTable.DocNo DESC";
+                AND newlinentable.DocDate LIKE '%$search%'
+                ORDER BY newlinentable.DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -134,7 +134,7 @@
         }
     }
 
-    function add_newLinenTable($conn, $DATA){
+    function add_newlinentable($conn, $DATA){
         $Userid = $DATA["Userid"];
         $siteCode = $DATA["siteCode"];
         $DepCode = $DATA["DepCode"];
@@ -143,9 +143,9 @@
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
-                    FROM newLinenTable
+                    FROM newlinentable
                     INNER JOIN department 
-                    ON newLinenTable.DepCode = department.DepCode
+                    ON newlinentable.DepCode = department.DepCode
                     WHERE DocNo Like CONCAT('NL',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                     AND department.HptCode = '$siteCode'
                     ORDER BY DocNo DESC LIMIT 1";
@@ -163,7 +163,7 @@
 
         if ($count == 1) {
 
-            $Sql = "    INSERT INTO     newLinenTable
+            $Sql = "    INSERT INTO     newlinentable
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -176,8 +176,8 @@
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            newLinenTable.Modify_Code,
-                                            newLinenTable.Modify_Date,
+                                            newlinentable.Modify_Code,
+                                            newlinentable.Modify_Date,
                                             FacCode
                                         )
                         VALUES
@@ -210,7 +210,7 @@
                                             DATE(NOW()),
                                             $DepCode,
                                             '',
-                                            'newLinenTable',
+                                            'newlinentable',
                                             $Userid,
                                             DATE(NOW())
                                         )";
@@ -222,14 +222,14 @@
             $return['DocNo'] = $DocNo;
 
             $return['status'] = "success";
-            $return['form'] = "add_newLinenTable";
+            $return['form'] = "add_newlinentable";
             echo json_encode($return);
             mysqli_close($conn);
             die;
 
         } else {
             $return['status'] = "failed";
-            $return['form'] = "add_newLinenTable";
+            $return['form'] = "add_newlinentable";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -283,8 +283,8 @@
         else if ($DATA['STATUS'] == 'confirm_yes') {
             confirm_yes($conn, $DATA);
         }
-        else if ($DATA['STATUS'] == 'add_newLinenTable') {
-            add_newLinenTable($conn, $DATA);
+        else if ($DATA['STATUS'] == 'add_newlinentable') {
+            add_newlinentable($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'load_Fac') {
             load_Fac($conn, $DATA);
