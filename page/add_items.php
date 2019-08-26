@@ -325,7 +325,7 @@ $genarray = json_decode($json, TRUE);
 			} else if (Menu == 'clean') {
 				window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
 			} else {
-				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>';
+				window.location.href = 'new_linen_item.php?siteCode='+siteCode;
 			}
 		}
 		// end function
