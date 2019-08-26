@@ -20,7 +20,7 @@
 
                 WHERE   item.ItemCode = clean_detail.ItemCode 
                 AND     clean_detail.DocNo = '$DocNo'";
-        $return['Sql'] = $Sql;
+
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode'] = $Result['ItemCode'];
