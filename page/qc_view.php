@@ -660,7 +660,7 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-12 text-right">
-							<button type="button" class="btn btn-block btn-secondary mx-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
+							<button type="button" class="btn btn-block btn-secondary" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
 						</div>
 					</div>
 				</div>
