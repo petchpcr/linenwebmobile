@@ -81,7 +81,7 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND shelfcount.DocDate LIKE '%$search%'
                 AND shelfcount.IsStatus > 0 
-                ORDER BY shelfcount.DocNo DESC";
+                ORDER BY shelfcount.IsStatus ASC,shelfcount.DocNo DESC";
         $return['sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);

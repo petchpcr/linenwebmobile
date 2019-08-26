@@ -84,7 +84,7 @@
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.FacCode = '$FacCode'
                 AND dirty.IsStatus > 0 
-                ORDER BY dirty.DocNo DESC";
+                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -145,7 +145,7 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
-                ORDER BY dirty.DocNo DESC";
+                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

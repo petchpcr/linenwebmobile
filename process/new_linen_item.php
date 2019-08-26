@@ -81,7 +81,7 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND newlinentable.DocDate LIKE '%$search%'
-                ORDER BY newlinentable.DocNo DESC";
+                ORDER BY  newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

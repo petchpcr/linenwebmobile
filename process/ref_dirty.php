@@ -56,7 +56,7 @@ function load_doc($conn, $DATA)
                 WHERE site.HptCode = '$siteCode' 
                 AND $From.DocDate LIKE '%$search%'
                 AND $From.IsStatus = 3
-                ORDER BY $From.DocNo DESC";
+                ORDER BY $From.IsStatus ASC,$From.DocNo DESC";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
