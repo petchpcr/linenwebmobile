@@ -177,9 +177,13 @@ $genarray = json_decode($json, TRUE);
 <body>
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
-			<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+			<div style="width:139.14px;">
+				<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-			<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			<div class="text-right" style="width:139.14px;">
+				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			</div>
 		</div>
 	</header>
 	<div class="px-3">

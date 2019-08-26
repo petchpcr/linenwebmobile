@@ -97,11 +97,11 @@ require '../getTimeZone.php';
 			var Menu = '<?php echo $Menu ?>';
 			var slt = $("#DocName").val();
 			if (slt == 1) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu+ '&From=dirty';
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=dirty';
 			} else if (slt == 2) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu+ '&From=rewash';
-			}else{
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu+ '&From=newLinenTable';
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=rewash';
+			} else {
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=newLinenTable';
 			}
 		}
 		// end function
@@ -166,18 +166,14 @@ require '../getTimeZone.php';
 								$("#document").append(Str);
 
 							}
-						}
-						else if (temp["form"] == 'show_process') {
+						} else if (temp["form"] == 'show_process') {
 							window.location.href = 'process.php?siteCode=' + temp['siteCode'];
-						}
-						else if (temp["form"] == 'logout') {
+						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
-						}
-						else if (temp["form"] == 'load_dep') {
+						} else if (temp["form"] == 'load_dep') {
 							depCode = temp["DepCode"];
 						}
-					}
-					else if (temp['status'] == "failed") {
+					} else if (temp['status'] == "failed") {
 						if (temp["form"] == 'load_doc') {
 							$(".btn.btn-mylight.btn-block").remove();
 							var search = $('#datepicker').val();
@@ -221,9 +217,13 @@ require '../getTimeZone.php';
 <body>
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
-			<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+			<div style="width:139.14px;">
+				<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-			<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			<div class="text-right" style="width:139.14px;">
+				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			</div>
 		</div>
 	</header>
 	<div class="px-3">

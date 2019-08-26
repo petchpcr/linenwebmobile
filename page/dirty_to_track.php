@@ -66,8 +66,8 @@ require '../getTimeZone.php';
 		}, 1000);
 
 		function show_process(DocNo, From) {
-			console.log($('#row'+DocNo).data('process'));
-			if($('#row'+DocNo).data('process')>0){
+			console.log($('#row' + DocNo).data('process'));
+			if ($('#row' + DocNo).data('process') > 0) {
 				var siteCode = '<?php echo $siteCode ?>';
 				var Menu = '<?php echo $Menu ?>';
 				window.location.href = 'track_doc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
@@ -144,26 +144,26 @@ require '../getTimeZone.php';
 									status_line = "StatusLine_3";
 								}
 
-								console.log($("#bt"+temp[i]['DocNo']).data('i')==null);
-								if ($("#bt"+temp[i]['DocNo']).data('i')==null) {
-									var Str = "<button onclick='" + onclick + "' class='btn btn-mylight btn-block' style='align-items: center !important;' id='bt"+temp[i]['DocNo']+"' data-i = '"+temp[i]['DocNo']+"'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
-									Str += "<div class='row' id='row"+temp[i]['DocNo']+"' data-process = '"+temp[i]['IsProcess']+"'><div class='card " + status_class + "'>" + status_text + "</div>";
+								console.log($("#bt" + temp[i]['DocNo']).data('i') == null);
+								if ($("#bt" + temp[i]['DocNo']).data('i') == null) {
+									var Str = "<button onclick='" + onclick + "' class='btn btn-mylight btn-block' style='align-items: center !important;' id='bt" + temp[i]['DocNo'] + "' data-i = '" + temp[i]['DocNo'] + "'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+									Str += "<div class='row' id='row" + temp[i]['DocNo'] + "' data-process = '" + temp[i]['IsProcess'] + "'><div class='card " + status_class + "'>" + status_text + "</div>";
 									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
 									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
 
 									$("#document").append(Str);
-								}else{
-									console.log($("#row"+temp[i]['DocNo']).data('process'));
-									if($("#row"+temp[i]['DocNo']).data('process')!=temp[i]['IsProcess']){
-										$("#row"+temp[i]['DocNo']).empty();
+								} else {
+									console.log($("#row" + temp[i]['DocNo']).data('process'));
+									if ($("#row" + temp[i]['DocNo']).data('process') != temp[i]['IsProcess']) {
+										$("#row" + temp[i]['DocNo']).empty();
 										var Str = "<div class='card " + status_class + "'>" + status_text + "</div>";
 										Str += "<img src='../img/" + status_line + ".png' height='50'/></div>";
 
-										$("#row"+temp[i]['DocNo']).append(Str);
-										$("#row"+temp[i]['DocNo']).data('process',temp[i]['IsProcess']);
+										$("#row" + temp[i]['DocNo']).append(Str);
+										$("#row" + temp[i]['DocNo']).data('process', temp[i]['IsProcess']);
 									}
 								}
-								
+
 							}
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
@@ -213,9 +213,13 @@ require '../getTimeZone.php';
 <body>
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
-			<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
+			<div style="width:139.14px;">
+				<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
+			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-			<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			<div class="text-right" style="width:139.14px;">
+				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			</div>
 		</div>
 	</header>
 	<div class="px-3 pb-4 mb-5">

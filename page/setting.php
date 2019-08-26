@@ -287,9 +287,13 @@ $genarray = json_decode($json, TRUE);
 <body>
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
-			<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+			<div style="width:139.14px;">
+				<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-			<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			<div class="text-right" style="width:139.14px;">
+				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+			</div>
 		</div>
 	</header>
 	<div class="px-3">
@@ -315,8 +319,8 @@ $genarray = json_decode($json, TRUE);
 			</div>
 
 			<div id="set_fac_nhealth" <?php if ($_SESSION['PmID'] == 2) {
-											echo hidden;
-										} ?>>
+																	echo hidden;
+																} ?>>
 				<div class="row">
 					<div class="col-auto"><?php echo $array['settingTime'][$language]; ?><i class="fas fa-truck ml-2"></i></div>
 					<div class="col">
@@ -326,15 +330,15 @@ $genarray = json_decode($json, TRUE);
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-12">
 						<button onclick="load_site_fac()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 4) {
-																												echo hidden;
-																											} ?>>
+																																																echo hidden;
+																																															} ?>>
 							<i class="fas fa-plus mr-2"></i><?php echo $array['addTime'][$language]; ?>
 						</button>
 					</div>
 					<div class="col-md-6 col-sm-6 col-12">
 						<button onclick="show_fac()" class="btn btn-block btn-outline-primary" <?php if ($_SESSION['PmID'] == 4) {
-																									echo hidden;
-																								} ?>>
+																																											echo hidden;
+																																										} ?>>
 							<i class="fas fa-edit mr-2"></i><?php echo $array['editTime'][$language]; ?>
 						</button>
 					</div>
@@ -342,8 +346,8 @@ $genarray = json_decode($json, TRUE);
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-12">
 						<button onclick="load_send_time()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 3) {
-																												echo hidden;
-																											} ?>>
+																																																echo hidden;
+																																															} ?>>
 							<i class="far fa-clock mr-2"></i><?php echo $array['showTime'][$language]; ?>
 						</button>
 					</div>

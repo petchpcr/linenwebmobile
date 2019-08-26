@@ -50,7 +50,7 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
 			} else if (menu == 'shelfcount') {
 				window.location.href = 'shelfcount.php?siteCode=<?php echo $HptCode; ?>&Menu=shelfcount';
-			} else if(menu == 'newLinenTable'){
+			} else if (menu == 'newLinenTable') {
 				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>';
 			} else {
 				window.location.href = 'hospital.php?Menu=' + menu;
@@ -127,9 +127,11 @@ $genarray = json_decode($json, TRUE);
 
 		<header data-role="header">
 			<div class="head-bar d-flex justify-content-between">
-				<div style="margin-right:75px"></div>
+				<div style="width:139.14px;"></div>
 				<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<div class="text-right" style="width:139.14px;">
+					<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				</div>
 			</div>
 		</header>
 		<div data-role="content">
