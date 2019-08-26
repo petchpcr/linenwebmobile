@@ -52,15 +52,15 @@
         $DocNo = $DATA["DocNo"];
         $boolean = false;
 
-        $Sql = "SELECT newLinenTable_detail.ItemCode,
+        $Sql = "SELECT dirty.ItemCode,
                         item.ItemName,
-                        newLinenTable_detail.UnitCode,
-                        newLinenTable_detail.Qty,
-                        newLinenTable_detail.Weight 
-                FROM newLinenTable_detail,
+                        dirty.UnitCode,
+                        dirty.Qty,
+                        dirty.Weight 
+                FROM dirty,
                      item 
                 WHERE DocNo = '$DocNo'
-                AND	  item.ItemCode = newLinenTable_detail.ItemCode
+                AND	  item.ItemCode = dirty.ItemCode
                 ORDER BY ItemName ASC";
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -118,23 +118,23 @@
         $cnt_del = sizeof($del_i, 0);
 
         for ($i = 0; $i < $cnt_del; $i++) {
-            $Sql = "DELETE FROM newLinenTable_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
+            $Sql = "DELETE FROM dirty WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
             mysqli_query($conn,$Sql);
         }
 
         for ($i = 0; $i < $cnt_old; $i++) {
-            $Sql = "UPDATE newLinenTable_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
+            $Sql = "UPDATE dirty SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
             mysqli_query($conn,$Sql);
         }
 
         for ($i = 0; $i < $cnt_new; $i++) {
-            $Sql = "INSERT INTO newLinenTable_detail(`DocNo`,`ItemCode`,`UnitCode`,`Weight`,`Qty`) 
+            $Sql = "INSERT INTO dirty(`DocNo`,`ItemCode`,`UnitCode`,`Weight`,`Qty`) 
                     VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_weight[$i],$new_qty[$i]) ";
             $return[$i]['Weight'] = $new_weight[$i];
             mysqli_query($conn,$Sql);
         }
 
-        $Sql = "SELECT SUM(Weight) AS total FROM newLinenTable_detail WHERE DocNo = '$DocNo'";
+        $Sql = "SELECT SUM(Weight) AS total FROM dirty WHERE DocNo = '$DocNo'";
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $total = $Result['total'];
