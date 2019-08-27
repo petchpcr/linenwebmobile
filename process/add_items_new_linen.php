@@ -20,7 +20,7 @@
 
         $Sql = "SELECT  * 
                 FROM    item 
-                WHERE   IsDirtyBag = 1 
+                WHERE   itemnew = 1 
                 AND     IsActive =1
                 AND     item.ItemName LIKE '%$Search%' ";
         $meQuery = mysqli_query($conn,$Sql);

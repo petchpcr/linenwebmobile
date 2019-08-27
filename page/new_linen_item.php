@@ -122,13 +122,13 @@ require '../getTimeZone.php';
 			var slt = $("#DepName").val();
 			var sltFac = $("#FacName").val();
 			if (slt == 0 || sltFac == 0) {
-				$("#btn_add_newLinenTable").prop('disabled', true);
+				$("#btn_add_newlinentable").prop('disabled', true);
 			} else {
-				$("#btn_add_newLinenTable").prop('disabled', false);
+				$("#btn_add_newlinentable").prop('disabled', false);
 			}
 		}
 
-		function add_newLinenTable() {
+		function add_newlinentable() {
 			var Userid = "<?php echo $Userid ?>";
 			var siteCode = "<?php echo $siteCode ?>";
 			var DepCode = $("#DepName").val();
@@ -138,8 +138,9 @@ require '../getTimeZone.php';
 				'siteCode': siteCode,
 				'DepCode': DepCode,
 				'FacCode': FacCode,
-				'STATUS': 'add_newLinenTable'
+				'STATUS': 'add_newlinentable'
 			};
+			console.log(data);
 			senddata(JSON.stringify(data));
 		}
 
@@ -224,7 +225,7 @@ require '../getTimeZone.php';
 							}
 						} else if (temp["form"] == 'confirm_yes') {
 							show_process(temp['DocNo'], temp['From']);
-						} else if (temp["form"] == 'add_newLinenTable') {
+						} else if (temp["form"] == 'add_newlinentable') {
 							var Userid = temp['user']
 							var siteCode = temp['siteCode']
 							var DepCode = temp['DepCode']
@@ -337,7 +338,7 @@ require '../getTimeZone.php';
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button id="btn_add_newLinenTable" onclick="add_newLinenTable()" type="button" class="btn btn-primary m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+							<button id="btn_add_newlinentable" onclick="add_newlinentable()" type="button" class="btn btn-primary m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
