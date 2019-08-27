@@ -215,9 +215,9 @@ require '../getTimeZone.php';
 										status_text = "<?php echo $genarray['statusOnCreate'][$language]; ?>";
 										status_line = "StatusLine_2";
 									} else if (temp[i]['IsStatus'] == 1) {
-										status_class = "status3";
+										status_class = "status1";
 										status_text = "<?php echo $genarray['statusCretFin'][$language]; ?>";
-										status_line = "StatusLine_3";
+										status_line = "StatusLine_1";
 									} else if (temp[i]['IsStatus'] == 3) {
 										status_class = "status3";
 										status_text = "<?php echo $genarray['statusfin'][$language]; ?>";

@@ -363,9 +363,9 @@ $genarray = json_decode($json, TRUE);
 									}
 								}
 
-								if (Lost > 0) { // สูญหาย สีเทา
+								if (Lost > 0) { // ผ้าค้างโรงซัก สีเทา
 									op_claim++;
-									$(status_id).append("<div class='col-12 text-center p-0' style='color:#bebfc0;'>สูญหาย</div>");
+									$(status_id).append("<div class='col-12 text-center p-0' style='color:#bebfc0;'>ผ้าค้างโรงซัก</div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
@@ -456,7 +456,7 @@ $genarray = json_decode($json, TRUE);
 							if (temp['Lost'] > 0) {
 								var Str = "<div class='my-btn btn-block alert alert-secondary py-1 px-3 mb-2'>";
 								Str += "<div class='col-12 text-truncate p-0'><div class='form-check form-check-inline font-weight-bold m-0'>";
-								Str += "สูญหาย<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' ";
+								Str += "ผ้าค้างโรงซัก<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' ";
 								Str += "value='" + temp['Lost'] + "' disabled><?php echo $array['numberSize'][$language]; ?></div></div></div>";
 
 								$("#detail").append(Str);
@@ -600,7 +600,7 @@ $genarray = json_decode($json, TRUE);
 						</div>
 
 						<div class="form-group text-left">
-							<label>สูญหาย</label>
+							<label>ผ้าค้างโรงซัก</label>
 							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_lost" placeholder="0">
 						</div>
 						<hr>
