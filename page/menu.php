@@ -160,7 +160,7 @@ $genarray = json_decode($json, TRUE);
 					
                     <div class="my-col-menu">
                         <button onclick="menu_click(' . "'newLinenTable'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/storage.png">
+                            <img src="../img/fabric.png">
                             <div class="text-truncate">' . $array["newLinen"][$language] . '</div>
                         </button>
 					</div>
