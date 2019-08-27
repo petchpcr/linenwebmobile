@@ -332,15 +332,20 @@ $genarray = json_decode($json, TRUE);
 								// 		detail = "-";
 								// }
 
+								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
+									classItemQTY = "itemQTY";
+									detail = "-";
+								}
+
 								var num = i + 1;
-								var status = "multi_status"+num;
-								var status_id = "#multi_status"+num;
+								var status = "multi_status" + num;
+								var status_id = "#multi_status" + num;
 								var Str = "<tr onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'><td><div class='row'>";
 								Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
 								Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
 								Str += "<div class='col-12 text-black-50 p-1 " + classItemQTY + "' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
 								Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>" + detail + "</div>";
-								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='"+status+"' class='row'></div></div></td></tr>";
+								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='" + status + "' class='row'></div></div></td></tr>";
 
 								$("#item").append(Str);
 
@@ -353,16 +358,14 @@ $genarray = json_decode($json, TRUE);
 										$(status_id).append("<div class='col-12 text-center p-0' style='color:#fdd700;'>ส่งซัก</div>");
 									}
 								}
-								
-								if (Lost > 0){ // สูญหาย สีเทา
+
+								if (Lost > 0) { // สูญหาย สีเทา
 									op_claim++;
 									$(status_id).append("<div class='col-12 text-center p-0' style='color:#bebfc0;'>สูญหาย</div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
 									$(status_id).append("<div class='col-12 text-center p-0' style='color:#3bb324;'>ผ่าน</div>");
-									classItemQTY = "itemQTY";
-									detail = "-";
 								}
 							}
 
@@ -445,8 +448,17 @@ $genarray = json_decode($json, TRUE);
 							load_items();
 
 						} else if (temp["form"] == 'show_claim_detail') {
+							$("#detail").empty();
+							if (temp['Lost'] > 0) {
+								var Str = "<div class='my-btn btn-block alert alert-secondary py-1 px-3 mb-2'>";
+								Str += "<div class='col-12 text-truncate p-0'><div class='form-check form-check-inline font-weight-bold m-0'>";
+								Str += "สูญหาย<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' ";
+								Str += "value='" + temp['Lost'] + "' disabled><?php echo $array['numberSize'][$language]; ?></div></div></div>";
+
+								$("#detail").append(Str);
+							}
 							if (temp['cnt'] > 0) {
-								$("#detail").empty();
+
 								for (var i = 0; i < temp['cnt']; i++) {
 									if (temp[i]['Qty'] != 0) {
 										var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";

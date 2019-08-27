@@ -511,6 +511,11 @@
         $DocNo=$DATA["DocNo"];
         $ItemCode=$DATA["ItemCode"];
         $count = 0;
+        
+        $Sql = "SELECT Lost FROM qccheckpass WHERE DocNo= '$DocNo' AND ItemCode = '$ItemCode'";
+        $meQuery = mysqli_query($conn, $Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $return['Lost'] = $Result['Lost'];
 
         $Sql = "SELECT qcquestion.Question,qcchecklist.Qty FROM qcchecklist 
                 INNER JOIN qcquestion ON qcchecklist.QuestionId = qcquestion.CodeId 
