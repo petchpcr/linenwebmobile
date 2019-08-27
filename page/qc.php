@@ -130,13 +130,13 @@ require '../getTimeZone.php';
 									status_text = "<?php echo $genarray['statusNotQC'][$language]; ?>";
 									status_line = "StatusLine_4";
 								} else if (CheckList == 1) {
-									status_class = "status2";
-									status_text = "<?php echo $genarray['statusPass'][$language]; ?>";
-									status_line = "StatusLine_2";
-								} else if (CheckList == 2) {
 									status_class = "status3";
-									status_text = "<?php echo $genarray['statusClaim'][$language]; ?>";
+									status_text = "<?php echo $genarray['statusPass'][$language]; ?>";
 									status_line = "StatusLine_3";
+								} else if (CheckList == 2) {
+									status_class = "status5";
+									status_text = "<?php echo $genarray['statusClaim'][$language]; ?>";
+									status_line = "StatusLine_5";
 								}
 
 								var Str = "<button onclick='show_qc(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";

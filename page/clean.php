@@ -145,9 +145,9 @@ require '../getTimeZone.php';
 									status_text = "<?php echo $genarray['statusCretFin'][$language]; ?>";
 									status_line = "StatusLine_1";
 								} else if (temp[i]['IsStatus'] == 2) {
-									status_class = "status1";
+									status_class = "status2";
 									status_text = "<?php echo $genarray['statusOnQC'][$language]; ?>";
-									status_line = "StatusLine_1";
+									status_line = "StatusLine_2";
 								} else if (temp[i]['IsStatus'] == 3) {
 									status_class = "status5";
 									status_text = "<?php echo $genarray['statusClaim'][$language]; ?>";
