@@ -14,7 +14,7 @@
 <numData><en>Number</en><th>จำนวนข้อมูล</th></numData>
 <numFromAll><en>From All</en><th>จากทั้งหมด</th></numFromAll>
 <numRepair><en>Number of claim</en><th>จำนวนส่งซ่อม</th></numRepair>
-<numLost><en>Number of lost</en><th>จำนวนสูญหาย</th></numLost>
+<numLost><en>Number of lost</en><th>จำนวนผ้าค้างโรงซัก</th></numLost>
 <maxNumList><en>Mex number</en><th>จำนวนสูงสุดของแต่ละชิ้นคือ</th></maxNumList>
 <numFromNP><en>From not pass</en><th>จากไม่ผ่าน</th></numFromNP>
 
