@@ -302,29 +302,10 @@ $genarray = json_decode($json, TRUE);
 								var Claim = Number(temp[i]['Claim']);
 								var Rewash = Number(temp[i]['Rewash']);
 								var Lost = Number(temp[i]['Lost']);
-								var img = "../img/Status_3.png";
-								var detail = "-";
-								var classItemQTY = "itemQTY";
-								// if (Fail > 0) {
-								// 	if (Claim > 0 && Rewash > 0 && Lost > 0) {
-
-								// 	} else if (Claim > 0 && Rewash > 0 && Lost == 0) {
-
-
-								// 	} else if (Claim > 0 && Rewash > 0 && Lost > 0) {
-
-								// 	}
-								// } else {
-
-								// }
-								if (temp['cnt_checkpass'] > 0) {
-									if (temp[i]['Fail'] > 0 || temp[i]['Lost'] > 0) {
-										img = "../img/Status_2.png"; // แดง
-										op_claim++;
-										classItemQTY = "";
-										detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info'>เรียกดู</button>";
-									}
-								}
+								var img = "../img/Status_5.png";
+								var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info'>เรียกดู</button>";
+								var classItemQTY = "";
+								// console.log("Fail = "+Fail+" Claim = "+Claim+" Rewash = "+Rewash+" Lost = "+Lost);
 
 								// switch (CheckList) {
 								// 	case 0:
@@ -352,14 +333,37 @@ $genarray = json_decode($json, TRUE);
 								// }
 
 								var num = i + 1;
+								var status = "multi_status"+num;
+								var status_id = "#multi_status"+num;
 								var Str = "<tr onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'><td><div class='row'>";
 								Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
 								Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
 								Str += "<div class='col-12 text-black-50 p-1 " + classItemQTY + "' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
 								Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>" + detail + "</div>";
-								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><img src='" + img + "' height='40px'></div></div></td></tr>";
+								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='"+status+"' class='row'></div></div></td></tr>";
 
 								$("#item").append(Str);
+
+								if (Fail > 0) {
+									op_claim++;
+									if (Claim > 0) { // เคลม สีแดง
+										$(status_id).append("<div class='col-12 text-center p-0' style='color:#e93631;'>เคลม</div>");
+									}
+									if (Rewash > 0) { // ส่งซัก สีเหลือง
+										$(status_id).append("<div class='col-12 text-center p-0' style='color:#fdd700;'>ส่งซัก</div>");
+									}
+								}
+								
+								if (Lost > 0){ // สูญหาย สีเทา
+									op_claim++;
+									$(status_id).append("<div class='col-12 text-center p-0' style='color:#bebfc0;'>สูญหาย</div>");
+								}
+
+								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
+									$(status_id).append("<div class='col-12 text-center p-0' style='color:#3bb324;'>ผ่าน</div>");
+									classItemQTY = "itemQTY";
+									detail = "-";
+								}
 							}
 
 							if (op_claim > 0) {
