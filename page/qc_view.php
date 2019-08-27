@@ -88,12 +88,16 @@ $genarray = json_decode($json, TRUE);
 				rewash = Number(0);
 			}
 			var sum_cr = Number(claim + rewash);
+			var sum_lost_cr = Number(sum_cr + lost);
 
 			Title = "<?php echo $array['InvalidNum'][$language]; ?>";
 			Type = "warning";
 
 			if (pass < 0) {
 				Text = "<?php echo $array['numData'][$language]; ?> " + sum + " <?php echo $array['numFromAll'][$language]; ?> " + qty + " !";
+				AlertError(Title, Text, Type);
+			} else if (sum_lost_cr > sum) {
+				Text = "<?php echo $array['numRepair'][$language]; ?> " + sum_cr + " <?php echo $array['numLost'][$language]; ?> " + lost + " <?php echo $array['numFromAll'][$language]; ?> " + sum + " !";
 				AlertError(Title, Text, Type);
 			} else if (sum_cr != fail) {
 				Text = "<?php echo $array['numRepair'][$language]; ?> " + sum_cr + " <?php echo $array['numFromNP'][$language]; ?> " + fail + " !";
