@@ -76,7 +76,7 @@ $genarray = json_decode($json, TRUE);
 			var lost = Number($("#qc_lost").val());
 			var fail = Number($("#qc_fail").val());
 			var sum = Number($("#qc_qty").val());
-			var pass = Number(sum - fail);
+			var pass = Number(sum - fail - lost);
 
 			var claim = Number($("#claim_qty").val());
 			var rewash = Number($("#rewash_qty").val());
@@ -88,7 +88,7 @@ $genarray = json_decode($json, TRUE);
 				rewash = Number(0);
 			}
 			var sum_cr = Number(claim + rewash);
-			var sum_lost_cr = Number(sum_cr + lost);
+			var sum_lost_cr = Number(fail + lost);
 
 			Title = "<?php echo $array['InvalidNum'][$language]; ?>";
 			Type = "warning";
@@ -97,7 +97,7 @@ $genarray = json_decode($json, TRUE);
 				Text = "<?php echo $array['numData'][$language]; ?> " + sum + " <?php echo $array['numFromAll'][$language]; ?> " + qty + " !";
 				AlertError(Title, Text, Type);
 			} else if (sum_lost_cr > sum) {
-				Text = "<?php echo $array['numRepair'][$language]; ?> " + sum_cr + " <?php echo $array['numLost'][$language]; ?> " + lost + " <?php echo $array['numFromAll'][$language]; ?> " + sum + " !";
+				Text = "<?php echo $array['numRepair'][$language]; ?> " + fail + " <?php echo $array['numLost'][$language]; ?> " + lost + " <?php echo $array['numFromAll'][$language]; ?> " + sum + " !";
 				AlertError(Title, Text, Type);
 			} else if (sum_cr != fail) {
 				Text = "<?php echo $array['numRepair'][$language]; ?> " + sum_cr + " <?php echo $array['numFromNP'][$language]; ?> " + fail + " !";

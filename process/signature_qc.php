@@ -17,7 +17,7 @@
         $Result = mysqli_fetch_assoc($meQuery);
         $rewashRefDocNo = $Result['RefDocNo'];
 
-        $c=0;
+        $c = 0;
         $Sql = "SELECT RefDocNo FROM rewash WHERE DocNo = '$rewashRefDocNo'";
         $meQuery = mysqli_query($conn, $Sql);
         $Result = mysqli_fetch_assoc($meQuery);
@@ -26,7 +26,7 @@
             $c++;
         }
         
-        if(c>0){
+        if($c > 0){
             $s=true;
             $Sql = "SELECT IF(IsStatus=3, TRUE, FALSE) as s FROM rewash WHERE RefDocNo = '$cleanRefDocNo'
                     UNION ALL
