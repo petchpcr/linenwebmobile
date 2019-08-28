@@ -101,7 +101,7 @@ require '../getTimeZone.php';
 			} else if (slt == 2) {
 				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=rewash';
 			} else {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=newLinenTable';
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=newlinentable';
 			}
 		}
 		// end function
