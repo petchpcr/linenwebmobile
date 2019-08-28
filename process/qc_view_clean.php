@@ -712,7 +712,7 @@
 
                 
             }
-            if ($CheckList == 2 || $CheckList == 5 || $CheckList == 6 || $CheckList == 7) { // -------------- Rewash -------------- 
+            if ($CheckList == 3 || $CheckList == 5 || $CheckList == 6 || $CheckList == 7) { // -------------- Rewash -------------- 
                 // สร้างเอกสาร rewash
                 $Sql_rewash = "SELECT      CONCAT('RW',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                             LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
