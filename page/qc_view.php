@@ -453,7 +453,7 @@ $genarray = json_decode($json, TRUE);
 
 						} else if (temp["form"] == 'show_claim_detail') {
 							$("#detail").empty();
-							if (temp['Lost'] > 0) {
+							if (temp['cntLost'] > 0) {
 								var Str = "<div class='my-btn btn-block alert alert-secondary py-1 px-3 mb-2'>";
 								Str += "<div class='col-12 text-truncate p-0'><div class='form-check form-check-inline font-weight-bold m-0'>";
 								Str += "ผ้าค้างโรงซัก<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' ";
@@ -462,7 +462,6 @@ $genarray = json_decode($json, TRUE);
 								$("#detail").append(Str);
 							}
 							if (temp['cnt'] > 0) {
-
 								for (var i = 0; i < temp['cnt']; i++) {
 									if (temp[i]['Qty'] != 0) {
 										var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
@@ -473,9 +472,8 @@ $genarray = json_decode($json, TRUE);
 										$("#detail").append(Str);
 									}
 								}
-								$("#md_detail").modal('show');
 							}
-
+							$("#md_detail").modal('show');
 
 						} else if (temp["form"] == 'claim_detail') {
 							$("#md_claim").modal('show');

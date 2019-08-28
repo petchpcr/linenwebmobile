@@ -525,17 +525,22 @@
     function show_claim_detail($conn, $DATA){
         $DocNo=$DATA["DocNo"];
         $ItemCode=$DATA["ItemCode"];
+        $cntLost = 0;
         $count = 0;
 
         $Sql = "SELECT Lost FROM qccheckpass WHERE DocNo= '$DocNo' AND ItemCode = '$ItemCode'";
         $meQuery = mysqli_query($conn, $Sql);
-        $Result = mysqli_fetch_assoc($meQuery);
-        $return['Lost'] = $Result['Lost'];
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return['Lost'] = $Result['Lost'];
+            if ($Result['Lost'] > 0) {
+                $cntLost++;
+            }
+        }
+        $return['cntLost'] = $cntLost;
 
         $Sql = "SELECT qcquestion.Question,qcchecklist.Qty FROM qcchecklist 
                 INNER JOIN qcquestion ON qcchecklist.QuestionId = qcquestion.CodeId 
                 WHERE DocNo= '$DocNo' AND ItemCode = '$ItemCode'";
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['Question'] = $Result['Question'];
@@ -544,7 +549,7 @@
         }
         $return['cnt'] = $count;
         
-        if ($count > 0) {
+        if ($count > 0 || $cntLost > 0) {
             $return['status'] = "success";
             $return['form'] = "show_claim_detail";
             echo json_encode($return);
@@ -592,7 +597,7 @@
             $CheckList = $Result['IsCheckList'];
 
             // SELECT เพื่อเอาจำนวน claim rewash และ remain
-            $Sql_qty = "SELECT Fail,Claim,Rewash,Lost FROM qccheckpass WHERE DocNo = '$repairDocNo' AND ItemCode = '$itemCode'";
+            $Sql_qty = "SELECT Fail,Claim,Rewash,Lost FROM qccheckpass WHERE DocNo = '$cleanDocNo' AND ItemCode = '$itemCode'";
             $meQuery_qty = mysqli_query($conn, $Sql_qty);
             $Result_qty = mysqli_fetch_assoc($meQuery_qty);
             $sum_fail = $Result_qty['Fail'];
@@ -662,6 +667,18 @@
                     $Sql_pass = "DELETE FROM rewash WHERE DocNo = '$DocDetaliRewash'";
                     mysqli_query($conn, $Sql_pass);
                 }
+
+                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                    mysqli_query($conn, $Sql_pass);
+                }
             }
             if ($CheckList == 2 || $CheckList == 4 || $CheckList == 6 || $CheckList == 7) { // -------------- Claim -------------- 
                 // สร้างเอกสาร claim
@@ -714,8 +731,6 @@
                                         WHERE       DocNo = '$DocDetaliClaim'
                                         AND         ItemCode = '$itemCode'";
                     }
-                    $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
-                    mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_claim);
 
@@ -770,8 +785,6 @@
                                         WHERE DocNo = '$DocDetaliRewash'
                                         AND ItemCode = '$itemCode'";
                     }
-                    $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
-                    mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_rewash);
             }
@@ -792,7 +805,7 @@
                 if ($count_remain == 1) {
                     if ($chkRemain == 0) {
                         $Sql_remain = "INSERT INTO remain(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
-                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$repairDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
+                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
                         mysqli_query($conn, $Sql_remain);
                         
                         $Sql_remain = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
@@ -824,8 +837,6 @@
                                         WHERE DocNo = '$DocDetaliRemain'
                                         AND ItemCode = '$itemCode'";
                     }
-                    $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
-                    mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_remain);
             }

@@ -524,17 +524,22 @@
     function show_claim_detail($conn, $DATA){
         $DocNo=$DATA["DocNo"];
         $ItemCode=$DATA["ItemCode"];
+        $cntLost = 0;
         $count = 0;
 
         $Sql = "SELECT Lost FROM qccheckpass WHERE DocNo= '$DocNo' AND ItemCode = '$ItemCode'";
         $meQuery = mysqli_query($conn, $Sql);
-        $Result = mysqli_fetch_assoc($meQuery);
-        $return['Lost'] = $Result['Lost'];
-
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return['Lost'] = $Result['Lost'];
+            if ($Result['Lost'] > 0) {
+                $cntLost++;
+            }
+        }
+        $return['cntLost'] = $cntLost;
+        
         $Sql = "SELECT qcquestion.Question,qcchecklist.Qty FROM qcchecklist 
                 INNER JOIN qcquestion ON qcchecklist.QuestionId = qcquestion.CodeId 
                 WHERE DocNo= '$DocNo' AND ItemCode = '$ItemCode'";
-        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['Question'] = $Result['Question'];
@@ -543,7 +548,7 @@
         }
         $return['cnt'] = $count;
         
-        if ($count > 0) {
+        if ($count > 0 || $cntLost > 0) {
             $return['status'] = "success";
             $return['form'] = "show_claim_detail";
             echo json_encode($return);
@@ -717,8 +722,6 @@
                                         WHERE       DocNo = '$DocDetaliClaim'
                                         AND         ItemCode = '$itemCode'";
                     }
-                    $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
-                    mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_claim);
 
@@ -773,8 +776,6 @@
                                         WHERE DocNo = '$DocDetaliRewash'
                                         AND ItemCode = '$itemCode'";
                     }
-                    $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
-                    mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_rewash);
             }
@@ -827,8 +828,6 @@
                                         WHERE DocNo = '$DocDetaliRemain'
                                         AND ItemCode = '$itemCode'";
                     }
-                    $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
-                    mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_remain);
             }
