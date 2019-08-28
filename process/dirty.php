@@ -69,23 +69,63 @@
         $siteCode = $DATA["siteCode"];
         $FacCode = $_SESSION['FacCode'];
         $boolean = false;
-        $Sql = "SELECT
-                    dirty.DocNo,
-                    dirty.IsReceive,
-                    dirty.IsProcess,
-                    dirty.IsStatus,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName
-                FROM
-                    dirty
-                INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND dirty.DocDate LIKE '%$search%'
-                AND dirty.FacCode = '$FacCode'
-                AND dirty.IsStatus > 0 
-                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
+        $Sql = "SELECT * From (SELECT
+        newlinentable.DocNo,
+        newlinentable.IsReceive,
+        newlinentable.IsProcess,
+        newlinentable.IsStatus,
+        department.DepName,
+        site.HptCode,
+        site.HptName,
+        'newlinentable' AS F
+            FROM
+                newlinentable
+            INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
+            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+            WHERE site.HptCode = 'BHQ' 
+            AND newlinentable.DocDate LIKE '%%'
+            AND newlinentable.FacCode = '1'
+            AND newlinentable.IsStatus > 0
+
+        UNION ALL       
+
+        SELECT
+                rewash.DocNo,
+                rewash.IsReceive,
+                rewash.IsProcess,
+                rewash.IsStatus,
+                department.DepName,
+                site.HptCode,
+                site.HptName,
+        'rewash' AS F
+            FROM
+                rewash
+            INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
+            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+            WHERE site.HptCode = 'BHQ' 
+            AND rewash.DocDate LIKE '%%'
+            AND rewash.FacCode = '1'
+            AND rewash.IsStatus > 0 
+        UNION ALL                 
+        SELECT
+                dirty.DocNo,
+                dirty.IsReceive,
+                dirty.IsProcess,
+                dirty.IsStatus,
+                department.DepName,
+                site.HptCode,
+                site.HptName,
+        'dirty' AS F
+            FROM
+                dirty
+            INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
+            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+            WHERE site.HptCode = 'BHQ' 
+            AND dirty.DocDate LIKE '%%'
+            AND dirty.FacCode = '1'
+            AND dirty.IsStatus > 0 )a
+
+            ORDER BY IsProcess ASC,DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -95,7 +135,7 @@
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['From'] = "dirty";
+            $return[$count]['From'] = $Result['F'];
 
             $DocNo = $Result['DocNo'];
             $Sql2 = "SELECT Signature FROM process WHERE DocNo = '$DocNo'";
@@ -103,68 +143,6 @@
             while ($Result = mysqli_fetch_assoc($meQuery2)) {
                 $return[$count]['Signature'] = $Result['Signature'];
             }
-
-            $count++;
-            $boolean = true;
-        }
-
-        $Sql = "SELECT
-                    newlinentable.DocNo,
-                    newlinentable.IsReceive,
-                    newlinentable.IsStatus,
-                    newlinentable.IsProcess,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName
-                FROM newlinentable
-                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND newlinentable.DocDate LIKE '%$search%'
-                AND newlinentable.FacCode = '$FacCode'
-                AND newlinentable.IsStatus > 0 
-                ORDER BY newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
-
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DocNo'] = $Result['DocNo'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $return[$count]['HptName'] = $Result['HptName'];
-            $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['From'] = "newlinentable";
-
-            $count++;
-            $boolean = true;
-        }
-
-        $Sql = "SELECT
-                    rewash.DocNo,
-                    rewash.IsReceive,
-                    rewash.IsProcess,
-                    rewash.IsStatus,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName
-                FROM rewash
-                INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND rewash.DocDate LIKE '%$search%'
-                AND rewash.FacCode = '$FacCode'
-                AND rewash.IsStatus > 0 
-                ORDER BY rewash.IsStatus ASC,rewash.DocNo DESC";
-
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DocNo'] = $Result['DocNo'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $return[$count]['HptName'] = $Result['HptName'];
-            $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['From'] = "rewash";
 
             $count++;
             $boolean = true;
@@ -193,14 +171,15 @@
         }
         $siteCode = $DATA["siteCode"];
         $boolean = false;
-        $Sql = "SELECT
+        $Sql = "SELECT * From (SELECT
                     dirty.DocNo,
                     dirty.IsReceive,
                     dirty.IsStatus,
                     dirty.IsProcess,
                     department.DepName,
                     site.HptCode,
-                    site.HptName
+                    site.HptName,
+                'dirty' AS F
                 FROM
                     dirty
                 INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
@@ -208,44 +187,40 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.IsStatus > 1 
-                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
-
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DocNo'] = $Result['DocNo'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $return[$count]['HptName'] = $Result['HptName'];
-            $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['From'] = "dirty";
-
-            // $DocNo = $Result['DocNo'];
-            // $Sql2 = "SELECT IsStatus FROM process WHERE DocNo = '$DocNo'";
-            // $meQuery2 = mysqli_query($conn, $Sql2);
-            // while ($Result = mysqli_fetch_assoc($meQuery2)) {
-            //     $return[$count]['IsProcess'] = $Result['IsStatus'];
-            // }
-
-            $count++;
-            $boolean = true;
-        }
-
-        $Sql = "SELECT
+                UNION ALL
+                SELECT
                     rewash.DocNo,
                     rewash.IsReceive,
                     rewash.IsStatus,
                     rewash.IsProcess,
                     department.DepName,
                     site.HptCode,
-                    site.HptName
+                    site.HptName,
+                'rewash' AS F
                 FROM rewash
                 INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.IsStatus > 1
                 AND rewash.DocDate LIKE '%$search%'
-                ORDER BY rewash.IsStatus ASC,rewash.DocNo DESC";
+                UNION ALL
+                SELECT
+                    newlinentable.DocNo,
+                    newlinentable.IsReceive,
+                    newlinentable.IsStatus,
+                    newlinentable.IsProcess,
+                    department.DepName,
+                    site.HptCode,
+                    site.HptName,
+                'newlinentable' AS F
+                FROM newlinentable
+                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
+                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+                WHERE site.HptCode = '$siteCode' 
+                AND newlinentable.IsStatus > 1
+                AND newlinentable.DocDate LIKE '%$search%')a
+
+                ORDER BY IsProcess ASC,DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -255,7 +230,7 @@
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['From'] = "rewash";
+            $return[$count]['From'] = $Result['F'];
 
             // $DocNo = $Result['DocNo'];
             // $Sql2 = "SELECT IsStatus FROM process WHERE DocNo = '$DocNo'";
@@ -263,36 +238,6 @@
             // while ($Result = mysqli_fetch_assoc($meQuery2)) {
             //     $return[$count]['IsProcess'] = $Result['IsStatus'];
             // }
-
-            $count++;
-            $boolean = true;
-        }
-
-        $Sql = "SELECT
-                    newlinentable.DocNo,
-                    newlinentable.IsReceive,
-                    newlinentable.IsStatus,
-                    newlinentable.IsProcess,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName
-                FROM newlinentable
-                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND newlinentable.IsStatus > 1
-                AND newlinentable.DocDate LIKE '%$search%'
-                ORDER BY newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
-
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['DocNo'] = $Result['DocNo'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $return[$count]['HptName'] = $Result['HptName'];
-            $return[$count]['IsReceive'] = $Result['IsReceive'];
-            $return[$count]['IsStatus'] = $Result['IsStatus'];
-            $return[$count]['IsProcess'] = $Result['IsProcess'];
-            $return[$count]['From'] = "newlinentable";
 
             $count++;
             $boolean = true;
@@ -554,4 +499,3 @@
         mysqli_close($conn);
         die;
     }
-?>
