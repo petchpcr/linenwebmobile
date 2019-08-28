@@ -120,9 +120,10 @@
                 INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND newlinentable.IsStatus > 1
                 AND newlinentable.DocDate LIKE '%$search%'
-                ORDER BY newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
+                AND newlinentable.FacCode = '$FacCode'
+                AND newlinentable.IsStatus > 0 
+                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
