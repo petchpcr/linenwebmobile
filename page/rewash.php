@@ -168,7 +168,7 @@ require '../getTimeZone.php';
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/dirty.php';
+			var URL = '../process/rewash.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',
