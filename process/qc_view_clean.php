@@ -591,15 +591,16 @@
             $weight = 0;
             $CheckList = $Result['IsCheckList'];
 
-            // SELECT เพื่อเอาจำนวน claim และ rewash
-            $Sql_qty = "SELECT Fail,Claim,Rewash FROM qccheckpass WHERE DocNo = '$cleanDocNo' AND ItemCode = '$itemCode'";
+            // SELECT เพื่อเอาจำนวน claim rewash และ remain
+            $Sql_qty = "SELECT Fail,Claim,Rewash,Lost FROM qccheckpass WHERE DocNo = '$repairDocNo' AND ItemCode = '$itemCode'";
             $meQuery_qty = mysqli_query($conn, $Sql_qty);
             $Result_qty = mysqli_fetch_assoc($meQuery_qty);
             $sum_fail = $Result_qty['Fail'];
             $sum_claim = $Result_qty['Claim'];
             $sum_rewash = $Result_qty['Rewash'];
+            $sum_remain = $Result_qty['Lost'];
 
-            // SELECT เพื่อเอา FacCode
+            // SELECT เพื่อเอา RefDoc
             $Sql_ref = "SELECT RefDocNo FROM clean WHERE DocNo = '$cleanDocNo'";
             $meQuery_ref = mysqli_query($conn, $Sql_ref);
             $Result_ref = mysqli_fetch_assoc($meQuery_ref);
@@ -608,12 +609,13 @@
             // SELECT เพื่อเอา FacCode
             $Sql_fac = "SELECT FacCode FROM dirty WHERE dirty.DocNo = '$ref'
                         UNION ALL
-                        SELECT FacCode FROM rewash WHERE rewash.DocNo = '$ref'";
+                        SELECT FacCode FROM rewash WHERE rewash.DocNo = '$ref'
+                        UNION ALL
+                        SELECT FacCode FROM remain WHERE remain.DocNo = '$ref'";
             $return[$count]['Sql Fac'] = $Sql_fac;
             $meQuery_fac = mysqli_query($conn, $Sql_fac);
             $Result_fac = mysqli_fetch_assoc($meQuery_fac);
             $fac = $Result_fac['FacCode'];
-            $return['Sql 777'] = $Sql_fac;
 
             // เช็คว่าเคยสร้างแล้วรึป่าว แล้วเก็บ DocNo ไว้ (Rewash)
             $Sql_check = "SELECT COUNT(RefDocNo) AS chkRewash,DocNo AS DocDetali FROM rewash WHERE RefDocNo = '$cleanDocNo'";
@@ -628,6 +630,13 @@
             $Result_check = mysqli_fetch_assoc($meQuery_check);
             $chkClaim = $Result_check['chkClaim'];
             $DocDetaliClaim = $Result_check['DocDetali'];
+
+            // เช็คว่าเคยสร้างแล้วรึป่าว แล้วเก็บ DocNo ไว้ (Remain)
+            $Sql_check = "SELECT COUNT(RefDocNo) AS chkRemain,DocNo AS DocDetali FROM remain WHERE RefDocNo = '$repairDocNo'";
+            $meQuery_check = mysqli_query($conn, $Sql_check);
+            $Result_check = mysqli_fetch_assoc($meQuery_check);
+            $chkRemain = $Result_check['chkRemain'];
+            $DocDetaliRemain = $Result_check['DocDetali'];
 
             if ($CheckList == 0) { // -------------- Pass -------------- 
                 $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
@@ -765,6 +774,60 @@
                     mysqli_query($conn, $Sql_pass);
                 }
                 mysqli_query($conn, $Sql_rewash);
+            }
+            if ($CheckList == 1 || $CheckList == 4 || $CheckList == 5 || $CheckList == 7) { // -------------- Remain -------------- 
+                // สร้างเอกสาร remain
+                $Sql_remain = "SELECT      CONCAT('RM',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+                                            LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
+                                FROM        remain
+                                WHERE       DocNo Like CONCAT('RM',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                                ORDER BY    DocNo DESC LIMIT 1";
+
+                $meQuery2 = mysqli_query($conn, $Sql_remain);
+                while ($Result = mysqli_fetch_assoc($meQuery2)) {
+                    $DocNo = $Result['DocNo'];
+                    $count_remain = 1;
+                }
+
+                if ($count_remain == 1) {
+                    if ($chkRemain == 0) {
+                        $Sql_remain = "INSERT INTO remain(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
+                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$repairDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
+                        mysqli_query($conn, $Sql_remain);
+                        
+                        $Sql_remain = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
+                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Remain',$userid,DATE(NOW()))";
+                        mysqli_query($conn, $Sql_remain);
+                    }
+                }
+                else {
+                    $Fail++;
+                }
+
+                // สร้างเอกสาร remain_detail
+                if ($chkRemain == 0) { // ถ้าไม่มีเคยมีเอกสารใน remain
+                    $Sql_remain = "INSERT INTO remain_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_remain,0,$weight,0,0,0)";
+                }
+                else {
+                    $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                    $meQuery_chkDetail = mysqli_query($conn, $Sql_chkDetail);
+                    $Result_chkDetail = mysqli_fetch_assoc($meQuery_chkDetail);
+                    $chkDeteil = $Result_chkDetail['chkDeteil'];
+
+                    if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน remain_detail
+                        $Sql_remain = "INSERT INTO remain_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+                                        VALUES ('$DocDetaliRemain','$itemCode',$unitCode,1,$sum_remain,0,$weight,0,0,0)";
+                    }
+                    else {
+                        $Sql_remain = "UPDATE remain_detail SET Qty1 = $sum_remain,Qty2 = 0,Weight = $weight 
+                                        WHERE DocNo = '$DocDetaliRemain'
+                                        AND ItemCode = '$itemCode'";
+                    }
+                    $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+                mysqli_query($conn, $Sql_remain);
             }
             $count++;
         }
