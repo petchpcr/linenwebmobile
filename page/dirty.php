@@ -6,6 +6,7 @@ $UserFName = $_SESSION['FName'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+$From = $_GET['From'];
 $Menu = $_GET['Menu'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
@@ -35,9 +36,12 @@ require '../getTimeZone.php';
 	?>
 
 	<script>
-		$(document).ready(function(e) {
+		var Userid = "<?php echo $Userid ?>";
+		var siteCode = "<?php echo $siteCode ?>";
+		var Menu = "<?php echo $Menu ?>";
+		var From = "<?php echo $From ?>";
 
-			var Menu = '<?php echo $Menu; ?>';
+		$(document).ready(function(e) {
 			if (Menu == 'factory') {
 				$("#add_doc").remove();
 			}
@@ -49,7 +53,6 @@ require '../getTimeZone.php';
 
 		// function
 		function load_dep() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_dep'
@@ -58,7 +61,6 @@ require '../getTimeZone.php';
 		}
 
 		function load_Fac() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'STATUS': 'load_Fac'
 			};
@@ -68,7 +70,6 @@ require '../getTimeZone.php';
 
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_site'
@@ -79,8 +80,6 @@ require '../getTimeZone.php';
 		function load_doc() {
 			var search = $('#datepicker').val();
 			// var searchDate = new Date(search);
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = "<?php echo $Menu ?>";
 			if (Menu == 'factory') {
 				var status = 'load_doc_procees';
 			} else {
@@ -90,15 +89,13 @@ require '../getTimeZone.php';
 				'search': search,
 				'siteCode': siteCode,
 				'Menu': Menu,
+				'From': From,
 				'STATUS': status
 			};
 			senddata(JSON.stringify(data));
 		}
 
 		function show_process(DocNo, From) {
-			var siteCode = '<?php echo $siteCode ?>';
-			var Menu = '<?php echo $Menu ?>';
-
 			if (Menu == 'dirty') {
 				window.location.href = 'dirty_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 			} else if (Menu == 'factory') {
@@ -141,8 +138,6 @@ require '../getTimeZone.php';
 		}
 
 		function add_dirty() {
-			var Userid = "<?php echo $Userid ?>";
-			var siteCode = "<?php echo $siteCode ?>";
 			var DepCode = $("#DepName").val();
 			var FacCode = $("#FacName").val();
 			var data = {

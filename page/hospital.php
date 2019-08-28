@@ -40,6 +40,9 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var Menu = '<?php echo $Menu; ?>';
+		var SiteCode;
+
 		$(document).ready(function(e) {
 			load_site();
 		});
@@ -58,9 +61,18 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function show_doc(SiteCode) {
-			var Menu = '<?php echo $Menu; ?>';
-			window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+		function show_doc(sltHpt) {
+			SiteCode = sltHpt;
+			if (Menu == "factory") {
+				$("#choose_doc").modal('show');
+			} else {
+				window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+			}
+		}
+
+		function doc_of_type() {
+			var slt = $("#DocType").val();
+			window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu + '&From=' + slt;
 		}
 
 		function back() {
@@ -153,6 +165,44 @@ $genarray = json_decode($json, TRUE);
 			<h4 class="text-truncate"><?php $genarray['AllHospital'][$language] ?></h4>
 		</div>
 		<div id="hospital"></div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="choose_doc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['confirmCreatedocno'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					คุณต้องการเรียกดูเอกสารประเภทใด ?
+					<div class="input-group my-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
+						</div>
+						<select id="DocType" class="custom-select">
+							<option value="all" selected>เอกสารทุกประเภท</option>
+							<option value="dirty">เอกสารผ้าสกปรก</option>
+							<option value="newlinentable">เอกสารผ้าใหม่</option>
+							<option value="rewash">เอกสารส่งซักอีกครั้ง</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-6 text-right">
+							<button id="btn_confirm" onclick="doc_of_type()" type="button" class="btn btn-primary m-2"><?php echo $genarray['yes'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['isno'][$language]; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 
