@@ -8,8 +8,21 @@
 <script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
 
-<script src="../js/gijgo.min.js" type="text/javascript"></script>
-<link href="../css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<?php
+if ($language == "en") {
+	echo "<script src='../js/datepicker_en.js' type='text/javascript'></script>
+				<script src='../js/datepicker-en.js' type='text/javascript'></script>";
+} else {
+	echo "<script src='../js/datepicker_th.js' type='text/javascript'></script>
+				<script src='../js/datepicker-th.js' type='text/javascript'></script>";
+}
+?>
+
+<script src="../js/datepicker-en.js" type="text/javascript"></script>
+<link href="../css/datepicker.min.css" rel="stylesheet" type="text/css" />
+
+<!-- <script src="../js/gijgo.min.js" type="text/javascript"></script>
+<link href="../css/gijgo.min.css" rel="stylesheet" type="text/css" /> -->
 
 <script src="../dist/js/sweetalert2.min.js"></script>
 <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">

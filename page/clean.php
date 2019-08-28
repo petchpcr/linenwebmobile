@@ -233,7 +233,7 @@ require '../getTimeZone.php';
 		</div>
 		<div id="document" style="margin-bottom:70px;">
 			<div class="d-flex justify-content-center mb-3">
-				<input id="datepicker" class="text-truncate text-center" width="276" placeholder='<?php echo $genarray['CreateDocDate'][$language]; ?>' disabled />
+				<div width="50"><input type="text" id="datepicker" class="form-control bg-white text-center datepicker-here" style="font-size:20px;" data-language=<?php echo $language ?> data-date-format='dd-mm-yyyy' readonly></div>
 				<button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
 			</div>
 			<div id="add_doc" class="fixed-bottom py-2 px-3 bg-white">
@@ -281,15 +281,7 @@ require '../getTimeZone.php';
 			</div>
 		</div>
 	</div>
-
-	<script>
-		$('#datepicker').datepicker({
-			// uiLibrary: 'bootstrap4',
-			size: 'large',
-			format: 'dd-mm-yyyy'
-		});
-	</script>
-
+	
 </body>
 
 </html>
