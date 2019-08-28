@@ -307,7 +307,7 @@ $genarray = json_decode($json, TRUE);
 								var Rewash = Number(temp[i]['Rewash']);
 								var Lost = Number(temp[i]['Lost']);
 								var img = "../img/Status_5.png";
-								var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info'>เรียกดู</button>";
+								var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info btn-block px-0' style='max-width:150px;'>เรียกดู</button>";
 								var classItemQTY = "";
 								// console.log("Fail = "+Fail+" Claim = "+Claim+" Rewash = "+Rewash+" Lost = "+Lost);
 
