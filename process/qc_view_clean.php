@@ -616,7 +616,9 @@
                         UNION ALL
                         SELECT FacCode FROM rewash WHERE rewash.DocNo = '$ref'
                         UNION ALL
-                        SELECT FacCode FROM remain WHERE remain.DocNo = '$ref'";
+                        SELECT FacCode FROM remain WHERE remain.DocNo = '$ref'
+                        UNION ALL
+                        SELECT FacCode FROM newlinentable WHERE newlinentable.DocNo = '$ref'";
             $return[$count]['Sql Fac'] = $Sql_fac;
             $meQuery_fac = mysqli_query($conn, $Sql_fac);
             $Result_fac = mysqli_fetch_assoc($meQuery_fac);
@@ -637,12 +639,13 @@
             $DocDetaliClaim = $Result_check['DocDetali'];
 
             // เช็คว่าเคยสร้างแล้วรึป่าว แล้วเก็บ DocNo ไว้ (Remain)
-            $Sql_check = "SELECT COUNT(RefDocNo) AS chkRemain,DocNo AS DocDetali FROM remain WHERE RefDocNo = '$repairDocNo'";
+            $Sql_check = "SELECT COUNT(RefDocNo) AS chkRemain,DocNo AS DocDetali FROM remain WHERE RefDocNo = '$cleanDocNo'";
             $meQuery_check = mysqli_query($conn, $Sql_check);
             $Result_check = mysqli_fetch_assoc($meQuery_check);
             $chkRemain = $Result_check['chkRemain'];
             $DocDetaliRemain = $Result_check['DocDetali'];
 
+            // ++++++++++++++++++++++++++++++++++++++++++++ สร้างเอกสาร ++++++++++++++++++++++++++++++++++++++++++++
             if ($CheckList == 0) { // -------------- Pass -------------- 
                 $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
                 mysqli_query($conn, $Sql_pass);
@@ -839,6 +842,122 @@
                     }
                 }
                 mysqli_query($conn, $Sql_remain);
+            }
+
+            // ++++++++++++++++++++++++++++++++++++++++++++ ลบเอกสาร ++++++++++++++++++++++++++++++++++++++++++++
+            if ($CheckList == 1) {
+                $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM claim_detail WHERE DocNo = '$DocDetaliClaim'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM claim WHERE DocNo = '$DocDetaliClaim'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+
+                $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM rewash_detail WHERE DocNo = '$DocDetaliRewash'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM rewash WHERE DocNo = '$DocDetaliRewash'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+            }
+            else if ($CheckList == 2) {
+                $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM rewash_detail WHERE DocNo = '$DocDetaliRewash'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM rewash WHERE DocNo = '$DocDetaliRewash'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+
+                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+            }
+            else if ($CheckList == 3) {
+                $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM claim_detail WHERE DocNo = '$DocDetaliClaim'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM claim WHERE DocNo = '$DocDetaliClaim'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+
+                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+            }
+            else if ($CheckList == 4) {
+                $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM rewash_detail WHERE DocNo = '$DocDetaliRewash'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM rewash WHERE DocNo = '$DocDetaliRewash'";
+                    mysqli_query($conn, $Sql_pass);
+                }          
+            }
+            else if ($CheckList == 5) {
+                $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM claim_detail WHERE DocNo = '$DocDetaliClaim'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM claim WHERE DocNo = '$DocDetaliClaim'";
+                    mysqli_query($conn, $Sql_pass);
+                }
+            }
+            else if ($CheckList == 6) {
+                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                mysqli_query($conn, $Sql_pass);
+
+                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                if ($cntEmpty == 0) {
+                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                    mysqli_query($conn, $Sql_pass);
+                }
             }
             $count++;
         }
