@@ -263,7 +263,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 
 
-		<div id="add_doc" data-depcode="" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
+		<div id="add_doc" data-depcode="" class="fixed-bottom d-flex justify-content-center py-2 bg-white">
 			<div class="col-lg-9 col-md-10 col-sm-12">
 
 				<div class="row">

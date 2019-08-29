@@ -268,11 +268,11 @@ $genarray = json_decode($json, TRUE);
 			</table>
 		</div>
 
-		<div id="add_doc" data-depcode="" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
+		<div id="add_doc" data-depcode="" class="fixed-bottom d-flex justify-content-center bg-white">
 			<div class="col-lg-9 col-md-10 col-sm-12">
 
 				<div class="row">
-					<div class="col-12 d-flex justify-content-center">
+					<div class="col-12 d-flex justify-content-center py-2">
 						<button class="btn btn-primary btn-block" type="button" style="max-width:250px;" onclick="movetoAddItem()">
 							<i class="fas fa-plus mr-1"></i><?php echo $array['addList'][$language]; ?>
 						</button>
