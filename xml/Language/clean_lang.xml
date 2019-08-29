@@ -2,10 +2,9 @@
 <lang>
 
 <CreateCleanLinenDoc><en> for create clean document ?</en><th>เพื่อสร้างเอกสารผ้าสะอาด</th></CreateCleanLinenDoc>
-<refDocDirty><en>From dirty document</en><th>เอกสารจากผ้าสกปรก</th></refDocDirty>
+<refDocDirty><en>From dirty document</en><th>เอกสารจากการ ส่งผ้าสกปรก</th></refDocDirty>
 <refDocClaim><en>From claim document</en><th>เอกสารจากส่งเคลม</th></refDocClaim>
-<refDocRewash><en>From rewash document</en><th>เอกสารจากส่งซัก</th></refDocRewash>
-
-<refDocnew><en>From new document</en><th>เอกสารจากผ้าใหม่</th></refDocnew>
+<refDocRewash><en>From rewash document</en><th>เอกสารจากส่งซักใหม่</th></refDocRewash>
+<refDocnew><en>From new document</en><th>เอกสารจากส่งซักรายการผ้าใหม่</th></refDocnew>
 
 </lang>
