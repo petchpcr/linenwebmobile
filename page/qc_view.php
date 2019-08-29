@@ -349,27 +349,33 @@ $genarray = json_decode($json, TRUE);
 								Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
 								Str += "<div class='col-12 text-black-50 p-1 " + classItemQTY + "' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
 								Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>" + detail + "</div>";
-								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='" + status + "' class='row'></div></div></td></tr>";
+								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='" + status + "' class='row pb-1'></div></div></td></tr>";
 
 								$("#item").append(Str);
 
 								if (Fail > 0) {
-									op_claim++;
 									if (Claim > 0) { // เคลม สีแดง
-										$(status_id).append("<div class='col-12 text-center p-0' style='color:#e93631;'>เคลม</div>");
+										op_claim++;
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color my-bg-red mt-1 px-2'>เคลม</div></div>");
 									}
 									if (Rewash > 0) { // ส่งซัก สีเหลือง
-										$(status_id).append("<div class='col-12 text-center p-0' style='color:#fdd700;'>ส่งซัก</div>");
+										op_claim++;
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color my-bg-yellow mt-1 px-2'>ผ้าซักใหม่</div></div>");
 									}
 								}
 
 								if (Lost > 0) { // ผ้าค้างโรงซัก สีเทา
 									op_claim++;
-									$(status_id).append("<div class='col-12 text-center p-0' style='color:#bebfc0;'>ผ้าค้างโรงซัก</div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color my-bg-silver mt-1 px-2'>ผ้าค้างจากโรงซัก</div></div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
-									$(status_id).append("<div class='col-12 text-center p-0' style='color:#3bb324;'>ผ่าน</div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='my-bg-green mt-1 px-2'>ผ่าน</div></div>");
+								}
+
+								if (op_claim >= 2) {
+									// $(".st_color").css("color","#fff");
+									// $(".st_color").css("background-color","#1659a2");
 								}
 							}
 
@@ -555,11 +561,11 @@ $genarray = json_decode($json, TRUE);
 
 	<div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
 		<div class="col-lg-9 col-md-10 col-sm-12">
-			<div class="row py-1 px-3">
-				<button onclick="create_claim()" id="claim-btn" class="btn btn-danger btn-block" type="button">
+			<div class="row d-flex justify-content-center py-1 px-3">
+				<button onclick="create_claim()" id="claim-btn" class="btn btn-danger btn-block" style="max-width:250px;" type="button">
 					<i class="fas fa-times mr-1"></i><?php echo $array['sendClaim'][$language]; ?>
 				</button>
-				<button data-toggle="modal" data-target="#exampleModal" id="save-btn" class="btn btn-success btn-block" type="button">
+				<button data-toggle="modal" data-target="#exampleModal" id="save-btn" class="btn btn-success btn-block" style="max-width:250px;" type="button">
 					<!-- <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button"> -->
 					<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 				</button>

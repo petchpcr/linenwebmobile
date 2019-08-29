@@ -282,3 +282,27 @@
     outline: 0;
     box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25)
 }
+
+.my-bg-red {
+    border-radius: 8px;
+    background-color: #e93631;
+    color: #fff;
+}
+
+.my-bg-yellow {
+    border-radius: 8px;
+    background-color: #fdd700;
+    color: #000;
+}
+
+.my-bg-silver {
+    border-radius: 8px;
+    background-color: #bebfc0;
+    color: #000;
+}
+
+.my-bg-green {
+    border-radius: 8px;
+    background-color: #3bb324;
+    color: #fff;
+}

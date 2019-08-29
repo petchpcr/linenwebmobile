@@ -267,8 +267,8 @@ $genarray = json_decode($json, TRUE);
 			<div class="col-lg-9 col-md-10 col-sm-12">
 
 				<div class="row">
-					<div class="col-12">
-						<button class="btn btn-primary btn-block" type="button" onclick="movetoAddItem()">
+					<div class="col-12 d-flex justify-content-center">
+						<button class="btn btn-primary btn-block" type="button" onclick="movetoAddItem()" style="max-width:250px;">
 							<i class="fas fa-plus mr-1"></i><?php echo $array['addList'][$language]; ?>
 						</button>
 					</div>

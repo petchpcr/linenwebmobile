@@ -236,8 +236,8 @@ require '../getTimeZone.php';
 				<div width="50"><input type="text" id="datepicker" class="form-control bg-white text-center datepicker-here" style="font-size:20px;" data-language=<?php echo $language ?> data-date-format='dd-mm-yyyy' readonly></div>
 				<button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
 			</div>
-			<div id="add_doc" class="fixed-bottom py-2 px-3 bg-white">
-				<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#choose_doc">
+			<div id="add_doc" class="fixed-bottom py-2 px-3 bg-white d-flex justify-content-center">
+				<button class="btn btn-primary btn-block" type="button" style="max-width:250px;" data-toggle="modal" data-target="#choose_doc">
 					<i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
 				</button>
 			</div>

@@ -335,8 +335,8 @@ require '../getTimeZone.php';
 				<button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
 			</div>
 
-			<div id="add_doc" class="fixed-bottom pb-4 px-3 bg-white">
-				<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#exampleModal">
+			<div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 px-3 bg-white">
+				<button class="btn btn-primary btn-block" type="button" data-toggle="modal" style="max-width:250px;" data-target="#exampleModal">
 					<i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
 				</button>
 			</div>
