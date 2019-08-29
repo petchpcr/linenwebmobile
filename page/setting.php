@@ -181,8 +181,8 @@ $genarray = json_decode($json, TRUE);
 					}
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_site_fac') {
+							$("#from_fac").empty();
 							if (temp['cnt_Fac'] > 0) {
-								$("#from_fac").empty();
 								for (var i = 0; i < temp['cnt_Fac']; i++) {
 									var Str = "<option value='" + temp[i]['FacCode'] + "'>" + temp[i]['FacName'] + "</option>";
 									$("#from_fac").append(Str);
