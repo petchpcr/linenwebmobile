@@ -284,31 +284,21 @@
 }
 
 .my-bg-red {
-    border-radius: 8px;
-    background-color: #e93631;
-    color: #fff;
+    color: #e93631;
 }
 
 .my-bg-yellow {
-    border-radius: 8px;
-    background-color: #fdd700;
-    color: #000;
+    color: #fdd700;
 }
 
 .my-bg-silver {
-    border-radius: 8px;
-    background-color: #bebfc0;
-    color: #000;
+    color: #bebfc0;
 }
 
 .my-bg-green {
-    border-radius: 8px;
-    background-color: #3bb324;
-    color: #fff;
+    color: #3bb324;
 }
 
 .my-bg-blue {
-    border-radius: 8px;
-    background-color: rgb(22, 89, 162);
-    color: #fff;
+    color: rgb(22, 89, 162);
 }

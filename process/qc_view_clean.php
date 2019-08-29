@@ -639,11 +639,11 @@
             $DocDetaliClaim = $Result_check['DocDetali'];
 
             // เช็คว่าเคยสร้างแล้วรึป่าว แล้วเก็บ DocNo ไว้ (Remain)
-            $Sql_check = "SELECT COUNT(RefDocNo) AS chkRemain,DocNo AS DocDetali FROM remain WHERE RefDocNo = '$cleanDocNo'";
-            $meQuery_check = mysqli_query($conn, $Sql_check);
-            $Result_check = mysqli_fetch_assoc($meQuery_check);
-            $chkRemain = $Result_check['chkRemain'];
-            $DocDetaliRemain = $Result_check['DocDetali'];
+            // $Sql_check = "SELECT COUNT(RefDocNo) AS chkRemain,DocNo AS DocDetali FROM remain WHERE RefDocNo = '$cleanDocNo'";
+            // $meQuery_check = mysqli_query($conn, $Sql_check);
+            // $Result_check = mysqli_fetch_assoc($meQuery_check);
+            // $chkRemain = $Result_check['chkRemain'];
+            // $DocDetaliRemain = $Result_check['DocDetali'];
 
             // ++++++++++++++++++++++++++++++++++++++++++++ สร้างเอกสาร ++++++++++++++++++++++++++++++++++++++++++++
             if ($CheckList == 0) { // -------------- Pass -------------- 
@@ -791,58 +791,58 @@
                 }
                 mysqli_query($conn, $Sql_rewash);
             }
-            if ($CheckList == 1 || $CheckList == 4 || $CheckList == 5 || $CheckList == 7) { // -------------- Remain -------------- 
-                // สร้างเอกสาร remain
-                $Sql_remain = "SELECT      CONCAT('RM',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
-                                            LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
-                                FROM        remain
-                                WHERE       DocNo Like CONCAT('RM',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                                ORDER BY    DocNo DESC LIMIT 1";
+            // if ($CheckList == 1 || $CheckList == 4 || $CheckList == 5 || $CheckList == 7) { // -------------- Remain -------------- 
+            //     // สร้างเอกสาร remain
+            //     $Sql_remain = "SELECT      CONCAT('RM',LPAD('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+            //                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,DATE(NOW()) AS DocDate,CURRENT_TIME() AS RecNow
+            //                     FROM        remain
+            //                     WHERE       DocNo Like CONCAT('RM',lpad('$hotpCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+            //                     ORDER BY    DocNo DESC LIMIT 1";
 
-                $meQuery2 = mysqli_query($conn, $Sql_remain);
-                while ($Result = mysqli_fetch_assoc($meQuery2)) {
-                    $DocNo = $Result['DocNo'];
-                    $count_remain = 1;
-                }
+            //     $meQuery2 = mysqli_query($conn, $Sql_remain);
+            //     while ($Result = mysqli_fetch_assoc($meQuery2)) {
+            //         $DocNo = $Result['DocNo'];
+            //         $count_remain = 1;
+            //     }
 
-                if ($count_remain == 1) {
-                    if ($chkRemain == 0) {
-                        $Sql_remain = "INSERT INTO remain(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
-                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
-                        mysqli_query($conn, $Sql_remain);
+            //     if ($count_remain == 1) {
+            //         if ($chkRemain == 0) {
+            //             $Sql_remain = "INSERT INTO remain(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
+            //                             VALUES ($deptCode,'$DocNo',DATE(NOW()),'$cleanDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
+            //             mysqli_query($conn, $Sql_remain);
                         
-                        $Sql_remain = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
-                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Remain',$userid,DATE(NOW()))";
-                        mysqli_query($conn, $Sql_remain);
-                    }
-                }
-                else {
-                    $Fail++;
-                }
+            //             $Sql_remain = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
+            //                             VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Remain',$userid,DATE(NOW()))";
+            //             mysqli_query($conn, $Sql_remain);
+            //         }
+            //     }
+            //     else {
+            //         $Fail++;
+            //     }
 
-                // สร้างเอกสาร remain_detail
-                if ($chkRemain == 0) { // ถ้าไม่มีเคยมีเอกสารใน remain
-                    $Sql_remain = "INSERT INTO remain_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                    VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_remain,0,$weight,0,0,0)";
-                }
-                else {
-                    $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                    $meQuery_chkDetail = mysqli_query($conn, $Sql_chkDetail);
-                    $Result_chkDetail = mysqli_fetch_assoc($meQuery_chkDetail);
-                    $chkDeteil = $Result_chkDetail['chkDeteil'];
+            //     // สร้างเอกสาร remain_detail
+            //     if ($chkRemain == 0) { // ถ้าไม่มีเคยมีเอกสารใน remain
+            //         $Sql_remain = "INSERT INTO remain_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+            //                         VALUES ('$DocNo','$itemCode',$unitCode,1,$sum_remain,0,$weight,0,0,0)";
+            //     }
+            //     else {
+            //         $Sql_chkDetail = "SELECT COUNT(ItemCode) AS chkDeteil FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+            //         $meQuery_chkDetail = mysqli_query($conn, $Sql_chkDetail);
+            //         $Result_chkDetail = mysqli_fetch_assoc($meQuery_chkDetail);
+            //         $chkDeteil = $Result_chkDetail['chkDeteil'];
 
-                    if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน remain_detail
-                        $Sql_remain = "INSERT INTO remain_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
-                                        VALUES ('$DocDetaliRemain','$itemCode',$unitCode,1,$sum_remain,0,$weight,0,0,0)";
-                    }
-                    else {
-                        $Sql_remain = "UPDATE remain_detail SET Qty1 = $sum_remain,Qty2 = 0,Weight = $weight 
-                                        WHERE DocNo = '$DocDetaliRemain'
-                                        AND ItemCode = '$itemCode'";
-                    }
-                }
-                mysqli_query($conn, $Sql_remain);
-            }
+            //         if ($chkDeteil == 0) { // ถ้าไม่มีเคยมีเอกสารใน remain_detail
+            //             $Sql_remain = "INSERT INTO remain_detail(DocNo,ItemCode,UnitCode1,UnitCode2,Qty1,Qty2,Weight,IsCancel,Price,Total)
+            //                             VALUES ('$DocDetaliRemain','$itemCode',$unitCode,1,$sum_remain,0,$weight,0,0,0)";
+            //         }
+            //         else {
+            //             $Sql_remain = "UPDATE remain_detail SET Qty1 = $sum_remain,Qty2 = 0,Weight = $weight 
+            //                             WHERE DocNo = '$DocDetaliRemain'
+            //                             AND ItemCode = '$itemCode'";
+            //         }
+            //     }
+            //     mysqli_query($conn, $Sql_remain);
+            // }
 
             // ++++++++++++++++++++++++++++++++++++++++++++ ลบเอกสาร ++++++++++++++++++++++++++++++++++++++++++++
             if ($CheckList == 1) {

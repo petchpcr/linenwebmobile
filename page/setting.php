@@ -199,7 +199,7 @@ $genarray = json_decode($json, TRUE);
 								$("#show_hpt_fac_time").empty();
 								for (var i = 0; i < temp['count']; i++) {
 
-									var Str = "<div class='input-group my-3'><div class='input-group-prepend '><label class='input-group-text' style='width:150px;' >" + temp[i]['HptCode'] + "</label></div>";
+									var Str = "<div class='input-group my-3'><div class='input-group-prepend '><label class='input-group-text' style='width:180px;' >" + temp[i]['HptCode'] + "</label></div>";
 									Str += "<input type='text' class='form-control ' value='" + temp[i]['SendTime'] + "' readonly >";
 									Str += "<div class='input-group-append'><span class='input-group-text'><?php echo $genarray['minute'][$language]; ?></span></div></div>";
 									$("#show_hpt_fac_time").append(Str);
