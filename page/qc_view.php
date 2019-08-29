@@ -299,8 +299,8 @@ $genarray = json_decode($json, TRUE);
 						if (temp["form"] == 'load_items') {
 							$("#item").empty();
 							var op_claim = 0;
-							var test = temp['cnt'];
 							for (var i = 0; i < temp['cnt']; i++) {
+								var st_color = 0;
 								var CheckList = Number(temp[i]['IsCheckList']);
 								var Fail = Number(temp[i]['Fail']);
 								var Claim = Number(temp[i]['Claim']);
@@ -354,28 +354,33 @@ $genarray = json_decode($json, TRUE);
 								$("#item").append(Str);
 
 								if (Fail > 0) {
+									op_claim++;
 									if (Claim > 0) { // เคลม สีแดง
-										op_claim++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color my-bg-red mt-1 px-2'>เคลม</div></div>");
+										st_color++;
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-red mt-1 px-2'>เคลม</div></div>");
 									}
 									if (Rewash > 0) { // ส่งซัก สีเหลือง
-										op_claim++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color my-bg-yellow mt-1 px-2'>ผ้าซักใหม่</div></div>");
+										st_color++;
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-yellow mt-1 px-2'>ผ้าซักใหม่</div></div>");
 									}
 								}
 
 								if (Lost > 0) { // ผ้าค้างโรงซัก สีเทา
 									op_claim++;
-									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color my-bg-silver mt-1 px-2'>ผ้าค้างจากโรงซัก</div></div>");
+									st_color++;
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-silver mt-1 px-2'>ผ้าค้างจากโรงซัก</div></div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
 									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='my-bg-green mt-1 px-2'>ผ่าน</div></div>");
 								}
 
-								if (op_claim >= 2) {
-									$(".st_color").css("color","#fff");
-									$(".st_color").css("background-color","#1659a2");
+								if (st_color >= 2) {
+									$(".st_color"+num+"").removeClass("my-bg-red");
+									$(".st_color"+num+"").removeClass("my-bg-yellow");
+									$(".st_color"+num+"").removeClass("my-bg-silver");
+
+									$(".st_color"+num+"").addClass("my-bg-blue");
 								}
 							}
 
