@@ -178,16 +178,17 @@ $genarray = json_decode($json, TRUE);
 					</button>
 				</div>
 				<div class="modal-body text-center">
-					คุณต้องการเรียกดูเอกสารประเภทใด ?
+					<?php echo $genarray['selecttypedoc'][$language]; ?>
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
 							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
 						</div>
 						<select id="DocType" class="custom-select">
-							<option value="all" selected>เอกสารทุกประเภท</option>
-							<option value="dirty">เอกสารผ้าสกปรก</option>
-							<option value="newlinentable">เอกสารผ้าใหม่</option>
-							<option value="rewash">เอกสารส่งซักอีกครั้ง</option>
+					
+							<option value="all" selected><?php echo $array['refDocall'][$language]; ?></option>
+							<option value="dirty"><?php echo $array['refDocDirty'][$language]; ?></option>
+							<option value="newlinentable"><?php echo $array['refDocRewash'][$language]; ?></option>
+							<option value="rewash"><?php echo $array['refDocnew'][$language]; ?></option>
 						</select>
 					</div>
 				</div>
