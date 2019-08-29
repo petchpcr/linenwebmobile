@@ -379,7 +379,7 @@ $genarray = json_decode($json, TRUE);
 						<div class="col-md-12 col-sm-12 col-12">
 							<div class="input-group mb-1">
 								<div class="input-group-prepend">
-									<label class="input-group-text" style="width:60px;"><?php echo $array['from'][$language]; ?></label>
+									<label class="input-group-text" style="width:80px;"><?php echo $array['from'][$language]; ?></label>
 								</div>
 								<select id="from_fac" class="custom-select"></select>
 							</div>
@@ -395,7 +395,7 @@ $genarray = json_decode($json, TRUE);
 					</div>
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
-							<label class="input-group-text" style="width:60px;"><?php echo $array['useTime'][$language]; ?></label>
+							<label class="input-group-text" style="width:80px;"><?php echo $array['useTime'][$language]; ?></label>
 						</div>
 						<input onkeydown='make_number()' id="new_send_time" type="text" class="form-control text-center numonly" placeholder="0">
 						<div class="input-group-append">
