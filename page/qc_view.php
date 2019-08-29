@@ -346,10 +346,10 @@ $genarray = json_decode($json, TRUE);
 								var status_id = "#multi_status" + num;
 								var Str = "<tr onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'><td><div class='row'>";
 								Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
-								Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
+								Str += "<div class='col-6 d-flex align-items-center'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
 								Str += "<div class='col-12 text-black-50 p-1 " + classItemQTY + "' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
-								Str += "<div class='col-2 d-flex align-items-center justify-content-center p-0'>" + detail + "</div>";
-								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='" + status + "' class='row pb-1'></div></div></td></tr>";
+								Str += "<div class='col-2 d-flex align-items-center justify-content-center py-0 px-1'>" + detail + "</div>";
+								Str += "<div class='col-2 d-flex align-items-center justify-content-center'><div id='" + status + "' class='row pb-1 px-1'></div></div></td></tr>";
 
 								$("#item").append(Str);
 
@@ -374,8 +374,8 @@ $genarray = json_decode($json, TRUE);
 								}
 
 								if (op_claim >= 2) {
-									// $(".st_color").css("color","#fff");
-									// $(".st_color").css("background-color","#1659a2");
+									$(".st_color").css("color","#fff");
+									$(".st_color").css("background-color","#1659a2");
 								}
 							}
 
