@@ -4,4 +4,9 @@
 <title><en>| Select Hospital</en><th>|เลือกโรงพยาบาล</th></title>
 <AllHospital><en>All Hospital</en><th>โรงพยาบาลทั้งหมด</th></AllHospital>
 
+<refDocDirty><en>From dirty document</en><th>เอกสารจากการ ส่งผ้าสกปรก</th></refDocDirty>
+<refDocall><en>From all document</en><th>เอกสารทั้งหมด</th></refDocall>
+<refDocRewash><en>From rewash document</en><th>เอกสารจากส่งซักใหม่</th></refDocRewash>
+<refDocnew><en>From new linen document</en><th>เอกสารจากส่งซักรายการผ้าใหม่</th></refDocnew>
+
 </lang>
