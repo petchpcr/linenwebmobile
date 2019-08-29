@@ -33,15 +33,17 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var siteCode = "<?php echo $siteCode ?>";
+		var Menu = '<?php echo $Menu; ?>';
+		var From = "<?php echo $From ?>";
+		var DocNo = "<?php echo $DocNo ?>";
+
 		$(document).ready(function(e) {
 			load_process();
 		});
 
 		// function
 		function load_process() {
-			var siteCode = "<?php echo $siteCode ?>";
-			var DocNo = "<?php echo $DocNo ?>";
-			var From = "<?php echo $From ?>";
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
@@ -52,7 +54,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function insert_process() {
-			var DocNo = "<?php echo $DocNo ?>";
 			var data = {
 				'DocNo': DocNo,
 				'STATUS': 'insert_process'
@@ -61,7 +62,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function start_wash(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -71,7 +71,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function end_wash(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -81,7 +80,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function start_pack(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -91,7 +89,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function end_pack(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -101,7 +98,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function start_send(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -111,8 +107,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function end_send(DocNo) {
-			var siteCode = '<?php echo $siteCode; ?>';
-			var From = "<?php echo $From ?>";
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
@@ -123,9 +117,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			var Menu = '<?php echo $Menu; ?>';
-			var site = '<?php echo $siteCode; ?>';
-			window.location.href = 'dirty.php?Menu=' + Menu + '&siteCode=' + site;
+			window.location.href = 'dirty.php?Menu=' + Menu + '&siteCode=' + siteCode + '&From=' + From;
 		}
 		// end function
 
