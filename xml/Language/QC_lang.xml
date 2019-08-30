@@ -9,12 +9,17 @@
 <Notthrough><en>Not through quality</en><th>ไม่ผ่านคุณภาพ</th></Notthrough>
 <sendClaim><en>Send claim </en><th>ส่งเคลม</th></sendClaim>
 <sendRewash><en>Send rewash </en><th>ส่งซักอีกครั้ง</th></sendRewash>
+<claim><en>Claim</en><th>เคลม</th></claim>
+<rewash><en>Rewash</en><th>ผ้าซักใหม่</th></rewash>
+<remain><en>Leftovers</en><th>ผ้าค้างจากโรงซัก</th></remain>
+<pass><en>Pass</en><th>ผ่าน</th></pass>
+<view><en>View</en><th>เรียกดู</th></view>
 
 <InvalidNum><en>Invalid number</en><th>จำนวนไม่ถูกต้อง</th></InvalidNum>
 <numData><en>Number</en><th>จำนวนข้อมูล</th></numData>
 <numFromAll><en>From All</en><th>จากทั้งหมด</th></numFromAll>
 <numRepair><en>Number of claim</en><th>จำนวนส่งซ่อม</th></numRepair>
-<numLost><en>Number of lost</en><th>จำนวนผ้าค้างโรงซัก</th></numLost>
+<numLost><en>Number of leftovers</en><th>จำนวนผ้าค้างจากโรงซัก</th></numLost>
 <maxNumList><en>Mex number</en><th>จำนวนสูงสุดของแต่ละชิ้นคือ</th></maxNumList>
 <numFromNP><en>From not pass</en><th>จากไม่ผ่าน</th></numFromNP>
 

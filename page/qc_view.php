@@ -3,6 +3,7 @@ session_start();
 $Userid = $_SESSION['Userid'];
 $UserName = $_SESSION['Username'];
 $UserFName = $_SESSION['FName'];
+$Per = $_SESSION['Permission'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
@@ -307,7 +308,7 @@ $genarray = json_decode($json, TRUE);
 								var Rewash = Number(temp[i]['Rewash']);
 								var Lost = Number(temp[i]['Lost']);
 								var img = "../img/Status_5.png";
-								var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info btn-block px-0' style='max-width:150px;'>เรียกดู</button>";
+								var detail = "<button onclick='event.cancelBubble=true;show_claim_detail(\"" + temp[i]['ItemCode'] + "\");' class='btn btn-info btn-block px-0' style='max-width:150px;'><?php echo $array['view'][$language]; ?></button>";
 								var classItemQTY = "";
 								// console.log("Fail = "+Fail+" Claim = "+Claim+" Rewash = "+Rewash+" Lost = "+Lost);
 
@@ -357,22 +358,22 @@ $genarray = json_decode($json, TRUE);
 									op_claim++;
 									if (Claim > 0) { // เคลม สีแดง
 										st_color++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-red mt-1 px-2'>เคลม</div></div>");
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-red mt-1 px-2'><?php echo $array['claim'][$language]; ?></div></div>");
 									}
 									if (Rewash > 0) { // ส่งซัก สีเหลือง
 										st_color++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-yellow mt-1 px-2'>ผ้าซักใหม่</div></div>");
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-yellow mt-1 px-2'><?php echo $array['rewash'][$language]; ?></div></div>");
 									}
 								}
 
 								if (Lost > 0) { // ผ้าค้างโรงซัก สีเทา
 									op_claim++;
 									st_color++;
-									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-silver mt-1 px-2'>ผ้าค้างจากโรงซัก</div></div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-silver mt-1 px-2'><?php echo $array['remain'][$language]; ?></div></div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
-									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='my-bg-green mt-1 px-2'>ผ่าน</div></div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='my-bg-green mt-1 px-2'><?php echo $array['pass'][$language]; ?></div></div>");
 								}
 
 								if (st_color >= 2) {
@@ -443,7 +444,7 @@ $genarray = json_decode($json, TRUE);
 								}
 								var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
 								Str += "<div>" + temp[i]['Question'] + "</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
-								Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question" + i + "' class='form-control text-center m-2 numonly' type='text' ";
+								Str += "<?php echo $array['numNP'][$language]; ?><input onkeydown='make_number()' id='question" + i + "' class='form-control text-center m-2 numonly' type='text' ";
 								Str += "data-itemcode='" + temp['ItemCode'] + "' data-question='" + temp[i]['QuestionId'] + "' value='" + qty + "' placeholder='0'><?php echo $array['numberSize'][$language]; ?></div></div></div>";
 								$("#question").append(Str);
 								sum_question++;
@@ -467,7 +468,7 @@ $genarray = json_decode($json, TRUE);
 							if (temp['cntLost'] > 0) {
 								var Str = "<div class='my-btn btn-block alert alert-secondary py-1 px-3 mb-2'>";
 								Str += "<div class='col-12 text-truncate p-0'><div class='form-check form-check-inline font-weight-bold m-0'>";
-								Str += "ผ้าค้างโรงซัก<input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' ";
+								Str += "<?php echo $array['remain'][$language]; ?><input onkeydown='make_number()' class='form-control text-center m-2 numonly' type='text' ";
 								Str += "value='" + temp['Lost'] + "' disabled><?php echo $array['numberSize'][$language]; ?></div></div></div>";
 
 								$("#detail").append(Str);
@@ -477,7 +478,7 @@ $genarray = json_decode($json, TRUE);
 									if (temp[i]['Qty'] != 0) {
 										var Str = "<div class='my-btn btn-block alert alert-info py-1 px-3 mb-2'><div class='col-12 text-left font-weight-bold pr-0'>";
 										Str += "<div>" + temp[i]['Question'] + "</div></div><div class='col-12 text-truncate p-0'><div class='form-check form-check-inline m-0'>";
-										Str += "ไม่ผ่าน<input onkeydown='make_number()' id='question" + i + "' class='form-control text-center m-2 numonly' type='text' ";
+										Str += "<?php echo $array['numNP'][$language]; ?><input onkeydown='make_number()' id='question" + i + "' class='form-control text-center m-2 numonly' type='text' ";
 										Str += "value='" + temp[i]['Qty'] + "' disabled><?php echo $array['numberSize'][$language]; ?></div></div></div>";
 
 										$("#detail").append(Str);
@@ -533,7 +534,7 @@ $genarray = json_decode($json, TRUE);
 			<div style="width:139.14px;">
 				<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
-			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
 				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
@@ -609,7 +610,7 @@ $genarray = json_decode($json, TRUE);
 						</div>
 
 						<div class="form-group text-left">
-							<label>ผ้าค้างโรงซัก</label>
+							<label><?php echo $array['remain'][$language]; ?></label>
 							<input onkeydown='make_number()' type="text" class="form-control numonly" id="qc_lost" placeholder="0">
 						</div>
 						<hr>

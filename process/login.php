@@ -9,13 +9,23 @@ function checklogin($conn,$DATA)
     $user = $DATA['USERNAME'];
     $password = $DATA['PASSWORD'];
     $boolean = false;
-    $Sql = "SELECT    UserName,FName,ID,PmID,IFNULL(lang,'th') AS lang,HptCode,FacCode,TimeOut
-            FROM      users
-            WHERE     UserName = '$user'
-            AND       Password = '$password' 
-            AND       IsCancel = 0
-            AND       IsActive = 0
-            AND       (PmID=2 OR PmID=3 OR PmID=4)";
+    $Sql = "SELECT  users.UserName,
+                    users.FName,
+                    users.ID,
+                    users.PmID,
+                    users.HptCode,
+                    users.FacCode,
+                    users.TimeOut,
+                    IFNULL(users.lang,'th') AS lang,
+                    permission.Permission
+
+            FROM    users INNER JOIN permission ON users.PmID = permission.PmID
+            WHERE   users.UserName = '$user'
+            AND     users.Password = '$password' 
+            AND     users.IsCancel = 0
+            AND     users.IsActive = 0
+
+            AND       (users.PmID=2 OR users.PmID=3 OR users.PmID=4)";
 
     $meQuery = mysqli_query($conn,$Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -24,6 +34,7 @@ function checklogin($conn,$DATA)
       $_SESSION['Username'] = $Result['UserName'];
       $_SESSION['FName'] = $Result['FName'];
       $_SESSION['PmID'] = $Result['PmID'];
+      $_SESSION['Permission'] = $Result['Permission'];
       $_SESSION['lang'] = $Result['lang'];
       $_SESSION['TimeOut'] = $Result['TimeOut'];
       $_SESSION['HptCode'] = $Result['HptCode'];

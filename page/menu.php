@@ -5,6 +5,7 @@ $UserName = $_SESSION['Username'];
 $UserFName = $_SESSION['FName'];
 $HptCode = $_SESSION['HptCode'];
 $PM = $_SESSION['PmID'];
+$Per = $_SESSION['Permission'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
@@ -128,7 +129,7 @@ $genarray = json_decode($json, TRUE);
 		<header data-role="header">
 			<div class="head-bar d-flex justify-content-between">
 				<div style="width:139.14px;"></div>
-				<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserName ?> : <?php echo $UserFName ?></div>
+				<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
 				<div class="text-right" style="width:139.14px;">
 					<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 				</div>

@@ -22,6 +22,7 @@ function logout($conn, $DATA){
     unset($_SESSION['Username']);
     unset($_SESSION['FName']);
     unset($_SESSION['PmID']);
+    unset($_SESSION['Permission']);
     unset($_SESSION['TimeOut']);
     unset($_SESSION['HptCode']);
     unset($_SESSION['FacCode']);
