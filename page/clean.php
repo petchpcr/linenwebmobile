@@ -101,8 +101,10 @@ require '../getTimeZone.php';
 				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=dirty';
 			} else if (slt == 2) {
 				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=rewash';
-			} else {
+			} else if (slt == 3) {
 				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=newlinentable';
+			} else if (slt == 4) {
+				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean';
 			}
 		}
 		// end function
@@ -221,7 +223,7 @@ require '../getTimeZone.php';
 			<div style="width:139.14px;">
 				<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
-			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
 				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
@@ -266,6 +268,7 @@ require '../getTimeZone.php';
 							<option value="1"><?php echo $array['refDocDirty'][$language]; ?></option>
 							<option value="2"><?php echo $array['refDocRewash'][$language]; ?></option>
 							<option value="3"><?php echo $array['refDocnew'][$language]; ?></option>
+							<option value="4"><?php echo $array['refDocRemain'][$language]; ?></option>
 						</select>
 					</div>
 				</div>
@@ -282,7 +285,7 @@ require '../getTimeZone.php';
 			</div>
 		</div>
 	</div>
-	
+
 </body>
 
 </html>
