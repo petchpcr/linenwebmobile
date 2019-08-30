@@ -188,8 +188,8 @@ $genarray = json_decode($json, TRUE);
 					
 							<option value="all" selected><?php echo $array['refDocall'][$language]; ?></option>
 							<option value="dirty"><?php echo $array['refDocDirty'][$language]; ?></option>
-							<option value="newlinentable"><?php echo $array['refDocRewash'][$language]; ?></option>
-							<option value="rewash"><?php echo $array['refDocnew'][$language]; ?></option>
+							<option value="rewash"><?php echo $array['refDocRewash'][$language]; ?></option>
+							<option value="newlinentable"><?php echo $array['refDocnew'][$language]; ?></option>
 						</select>
 					</div>
 				</div>
