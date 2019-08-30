@@ -130,6 +130,7 @@ $genarray = json_decode($json, TRUE);
 				var ItemCode = this.id;
 				var pass = $("#" + ItemCode).data('qty');
 				console.log($("#" + ItemCode).data('qty'));
+				console.log(lost);
 				var data = {
 					'DocNo': DocNo,
 					'ItemCode': ItemCode,
@@ -137,6 +138,7 @@ $genarray = json_decode($json, TRUE);
 					'fail': 0,
 					'claim': 0,
 					'rewash': 0,
+					'lost': lost,
 					'STATUS': 'save_checkpass'
 				};
 				senddata(JSON.stringify(data));
