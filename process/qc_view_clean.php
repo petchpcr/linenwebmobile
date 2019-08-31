@@ -8,6 +8,12 @@
         $cnt_checkpass = 0;
         $DocNo = $DATA["DocNo"];
         $ItemCode = array();
+
+        $Sql = "SELECT IsStatus FROM clean WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $return['IsStatus'] = $Result['IsStatus'];
+
         $Sql = "SELECT  item.ItemName,
                         item.ItemCode,
                         item.UnitCode,
@@ -45,7 +51,6 @@
             $cnt_checkpass++;
         }
         $return['cnt_checkpass'] = $cnt_checkpass;
-
 
         if ($count > 0) {
             $return['status'] = "success";
@@ -656,17 +661,17 @@
                     mysqli_query($conn, $Sql_pass);
                 }
 
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
             if ($CheckList == 2 || $CheckList == 4 || $CheckList == 6 || $CheckList == 7) { // -------------- Claim -------------- 
                 // สร้างเอกสาร claim
@@ -721,7 +726,6 @@
                     }
                 }
                 mysqli_query($conn, $Sql_claim);
-
                 
             }
             if ($CheckList == 3 || $CheckList == 5 || $CheckList == 6 || $CheckList == 7) { // -------------- Rewash -------------- 
@@ -868,17 +872,17 @@
                     mysqli_query($conn, $Sql_pass);
                 }
 
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
             else if ($CheckList == 3) {
                 $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
@@ -893,17 +897,17 @@
                     mysqli_query($conn, $Sql_pass);
                 }
 
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
             else if ($CheckList == 4) {
                 $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
@@ -932,37 +936,38 @@
                 }
             }
             else if ($CheckList == 6) {
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
 
             $HptCode = $_SESSION['HptCode'];
 
-            $Sql = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
-            $meQuery = mysqli_query($conn,$Sql);
-            $Result = mysqli_fetch_assoc($meQuery);
-            $DepCode = $Result['DepCode'];
+            $SqlD = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
+            $meQueryD = mysqli_query($conn,$SqlD);
+            $ResultD = mysqli_fetch_assoc($meQueryD);
+            $DepCode = $ResultD['DepCode'];
 
-            $Sql = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
-            $meQuery = mysqli_query($conn,$Sql);
-            $Result = mysqli_fetch_assoc($meQuery);
-            $TotalQty = $Result['TotalQty'];
+            $SqlT = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
+            $meQueryT = mysqli_query($conn,$SqlT);
+            $ResultT = mysqli_fetch_assoc($meQueryT);
+            $TotalQty = $ResultT['TotalQty'];
             $TotalQty = $TotalQty+$new_pass;
 
-            $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
-            mysqli_query($conn, $Sql);
+            $SqlI = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
+            mysqli_query($conn, $SqlI);
 
             $count++;
         }
+        $return['count'] = $count;
         if ($Fail == 0) {
             $return['status'] = "success";
             $return['form'] = "create_claim";

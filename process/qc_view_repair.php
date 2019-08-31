@@ -8,6 +8,12 @@
         $cnt_checkpass = 0;
         $DocNo = $DATA["DocNo"];
         $ItemCode = array();
+
+        $Sql = "SELECT IsStatus FROM clean WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $return['IsStatus'] = $Result['IsStatus'];
+        
         $Sql = "SELECT  item.ItemName,
                         item.ItemCode,
                         item.UnitCode,
@@ -941,15 +947,15 @@
 
             $HptCode = $_SESSION['HptCode'];
 
-            $Sql = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
-            $meQuery = mysqli_query($conn,$Sql);
-            $Result = mysqli_fetch_assoc($meQuery);
-            $DepCode = $Result['DepCode'];
+            $SqlD = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
+            $meQueryD = mysqli_query($conn,$SqlD);
+            $ResultD = mysqli_fetch_assoc($meQueryD);
+            $DepCode = $ResultD['DepCode'];
 
-            $Sql = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
-            $meQuery = mysqli_query($conn,$Sql);
-            $Result = mysqli_fetch_assoc($meQuery);
-            $TotalQty = $Result['TotalQty'];
+            $SqlT = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
+            $meQueryT = mysqli_query($conn,$SqlT);
+            $ResultT = mysqli_fetch_assoc($meQueryT);
+            $TotalQty = $ResultT['TotalQty'];
             $TotalQty = $TotalQty+$new_pass;
 
             $count++;

@@ -305,6 +305,7 @@ $genarray = json_decode($json, TRUE);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_items') {
 							$("#item").empty();
+							var IsStatus = temp['IsStatus'];
 							var op_claim = 0;
 							for (var i = 0; i < temp['cnt']; i++) {
 								var st_color = 0;
@@ -347,11 +348,14 @@ $genarray = json_decode($json, TRUE);
 									classItemQTY = "itemQTY";
 									detail = "-";
 								}
-
+								var onclick = "";
+								if (IsStatus < 3 && IsStatus > 0) {
+									onclick = "onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'";
+								}
 								var num = i + 1;
 								var status = "multi_status" + num;
 								var status_id = "#multi_status" + num;
-								var Str = "<tr onclick='show_quantity(\"" + temp[i]['ItemCode'] + "\")'><td><div class='row'>";
+								var Str = "<tr "+onclick+"><td><div class='row'>";
 								Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
 								Str += "<div class='col-6 d-flex align-items-center'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
 								Str += "<div class='col-12 text-black-50 p-1 " + classItemQTY + "' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
@@ -391,12 +395,18 @@ $genarray = json_decode($json, TRUE);
 								}
 							}
 
-							if (op_claim > 0) {
-								$("#claim-btn").show();
-								$("#save-btn").hide();
-							} else {
+							if (IsStatus < 3 && IsStatus > 0) {
+								if (op_claim > 0) {
+									$("#claim-btn").show();
+									$("#save-btn").hide();
+								} else {
+									$("#claim-btn").hide();
+									$("#save-btn").show();
+								}
+							}
+							else {
 								$("#claim-btn").hide();
-								$("#save-btn").show();
+								$("#save-btn").hide();
 							}
 
 						} else if (temp["form"] == 'show_quantity') {
