@@ -118,7 +118,7 @@
         $cnt = $Result['cnt'];
         $return['cnt'] = $cnt;
 
-        $passOld=0;
+        $passOld = 0;
 
         if ($cnt > 0) {
             $Sql = "SELECT Pass FROM qccheckpass WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
@@ -132,19 +132,6 @@
         }
 
         if (mysqli_query($conn, $Sql)) {
-
-            $HptCode = $_SESSION['HptCode'];
-
-            $Sql = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
-            $meQuery = mysqli_query($conn,$Sql);
-            $Result = mysqli_fetch_assoc($meQuery);
-            $DepCode = $Result['DepCode'];
-
-            $Sql = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
-            $meQuery = mysqli_query($conn,$Sql);
-            $Result = mysqli_fetch_assoc($meQuery);
-            $TotalQty = $Result['TotalQty'];
-            $TotalQty = $TotalQty+$pass-$passOld;
 
             $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
             mysqli_query($conn, $Sql);
@@ -567,6 +554,7 @@
     function create_claim($conn, $DATA){
         $repairDocNo=$DATA["DocNo"];
         $userid=$DATA["Userid"];
+        $new_pass = $DATA['new_pass'];
         $count = 0;
         $Fail = 0;
 
@@ -950,6 +938,20 @@
                     mysqli_query($conn, $Sql_pass);
                 }
             }
+
+            $HptCode = $_SESSION['HptCode'];
+
+            $Sql = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
+            $meQuery = mysqli_query($conn,$Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $DepCode = $Result['DepCode'];
+
+            $Sql = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
+            $meQuery = mysqli_query($conn,$Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $TotalQty = $Result['TotalQty'];
+            $TotalQty = $TotalQty+$new_pass;
+
             $count++;
         }
         if ($Fail == 0) {

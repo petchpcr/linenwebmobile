@@ -103,7 +103,7 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_site') {
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['count']; i++) {
 								var picture = temp[i]['picture'];
 								if (temp[i]['picture'] == null || temp[i]['picture'] == "") {
 									picture = "logo.png";

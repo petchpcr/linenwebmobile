@@ -3,10 +3,9 @@
     require '../connect/connect.php';
     require 'logout.php';
 
-    function load_site($conn, $DATA){
+    function load_site($conn){
         $FacCode = $_SESSION['FacCode'];
         $count = 0;
-        $boolean = false;
         $Sql = "SELECT * 
                 FROM    (
                             SELECT site.HptCode,site.HptName,site.picture 
@@ -15,25 +14,37 @@
                             AND dirty.DepCode = department.DepCode
                             AND dirty.FacCode = $FacCode
                             AND department.HptCode = site.HptCode
-                        UNION All
+
+                            UNION All
+
                             SELECT site.HptCode,site.HptName,site.picture 
                             FROM site,rewash,department 
                             WHERE site.IsStatus = 0
                             AND rewash.DepCode = department.DepCode
                             AND rewash.FacCode = $FacCode
                             AND department.HptCode = site.HptCode
+
+                            UNION All
+
+                            SELECT site.HptCode,site.HptName,site.picture 
+                            FROM site,newlinentable,department 
+                            WHERE site.IsStatus = 0
+                            AND newlinentable.DepCode = department.DepCode
+                            AND newlinentable.FacCode = $FacCode
+                            AND department.HptCode = site.HptCode
                         ) h
                 GROUP BY HptCode
                 ORDER BY HptName ASC";
+        // $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['HptCode'] = $Result['HptCode'];
             $return[$count]['HptName'] = $Result['HptName'];
             $return[$count]['picture'] = $Result['picture'];
             $count++;
-            $boolean = true;
         }
-        if ($boolean) {
+        $return['count'] = $count;
+        if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "load_site";
             echo json_encode($return);
@@ -51,7 +62,6 @@
     function show_doc($conn, $DATA){
         $count = 0;
         $siteCode = $DATA["SiteCode"];
-        $boolean = false;
         $Sql = "SELECT COUNT(dirty.DocNo) AS cnt 
                 FROM dirty 
                 INNER JOIN department ON dirty.DepCode = department.DepCode 
@@ -60,7 +70,6 @@
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $cntDocNo = $Result['cnt'];
             $count++;
-            $boolean = true;
         }
         if ($cntDocNo >= 1) {
             $return['siteCode'] = $siteCode;
@@ -83,7 +92,7 @@
         $DATA = json_decode(str_replace('\"', '"', $data), true);
 
         if ($DATA['STATUS'] == 'load_site') {
-            load_site($conn, $DATA);
+            load_site($conn);
         }
         else if ($DATA['STATUS'] == 'show_doc') {
             show_doc($conn, $DATA);

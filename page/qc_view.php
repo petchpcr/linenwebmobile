@@ -35,6 +35,8 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var new_pass = 0;
+
 		$(document).ready(function(e) {
 			var DocNo = "<?php echo $DocNo ?>";
 			$("#DocNo").text(DocNo);
@@ -109,6 +111,7 @@ $genarray = json_decode($json, TRUE);
 			} else {
 				var DocNo = '<?php echo $DocNo ?>';
 				var ItemCode = $("#qc_qty").attr("data-itemcode");
+				new_pass = pass;
 				var data = {
 					'DocNo': DocNo,
 					'ItemCode': ItemCode,
@@ -241,6 +244,7 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DocNo': DocNo,
 				'Userid': Userid,
+				'new_pass': new_pass,
 				'STATUS': 'create_claim'
 			};
 			senddata(JSON.stringify(data));
