@@ -557,7 +557,6 @@
     function create_claim($conn, $DATA){
         $repairDocNo=$DATA["DocNo"];
         $userid=$DATA["Userid"];
-        $new_pass = $DATA['new_pass'];
         $count = 0;
         $Fail = 0;
 
@@ -865,17 +864,17 @@
                     mysqli_query($conn, $Sql_pass);
                 }
 
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
             else if ($CheckList == 3) {
                 $Sql_pass = "DELETE FROM claim_detail WHERE DocNo = '$DocDetaliClaim' AND ItemCode = '$itemCode'";
@@ -890,17 +889,17 @@
                     mysqli_query($conn, $Sql_pass);
                 }
 
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
             else if ($CheckList == 4) {
                 $Sql_pass = "DELETE FROM rewash_detail WHERE DocNo = '$DocDetaliRewash' AND ItemCode = '$itemCode'";
@@ -929,34 +928,18 @@
                 }
             }
             else if ($CheckList == 6) {
-                $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
-                mysqli_query($conn, $Sql_pass);
+                // $Sql_pass = "DELETE FROM remain_detail WHERE DocNo = '$DocDetaliRemain' AND ItemCode = '$itemCode'";
+                // mysqli_query($conn, $Sql_pass);
 
-                $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
-                $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
-                $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
-                $cntEmpty = $Result_chkEmpty['cntEmpty'];
-                if ($cntEmpty == 0) {
-                    $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
-                    mysqli_query($conn, $Sql_pass);
-                }
+                // $Sql_chkEmpty = "SELECT COUNT(DocNo) cntEmpty FROM remain_detail WHERE DocNo = '$DocDetaliRemain'";
+                // $meQuery_chkEmpty = mysqli_query($conn, $Sql_chkEmpty);
+                // $Result_chkEmpty = mysqli_fetch_assoc($meQuery_chkEmpty);
+                // $cntEmpty = $Result_chkEmpty['cntEmpty'];
+                // if ($cntEmpty == 0) {
+                //     $Sql_pass = "DELETE FROM remain WHERE DocNo = '$DocDetaliRemain'";
+                //     mysqli_query($conn, $Sql_pass);
+                // }
             }
-
-            $HptCode = $_SESSION['HptCode'];
-
-            $SqlD = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault=1";
-            $meQueryD = mysqli_query($conn,$SqlD);
-            $ResultD = mysqli_fetch_assoc($meQueryD);
-            $DepCode = $ResultD['DepCode'];
-
-            $SqlT = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
-            $meQueryT = mysqli_query($conn,$SqlT);
-            $ResultT = mysqli_fetch_assoc($meQueryT);
-            $TotalQty = $ResultT['TotalQty'];
-            $TotalQty = $TotalQty+$new_pass;
-
-            $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
-            mysqli_query($conn, $Sql);
 
             $count++;
         }
@@ -1072,6 +1055,60 @@
         }
     }
 
+    function save_item_stock($conn, $DATA) {
+        $count = 0;
+        $DocNo = $DATA["DocNo"];
+        $HptCode = $_SESSION['HptCode'];
+
+        $SqlD = "SELECT DepCode FROM department WHERE HptCode ='$HptCode' AND IsDefault = 1";
+        $meQueryD = mysqli_query($conn,$SqlD);
+        $ResultD = mysqli_fetch_assoc($meQueryD);
+        $DepCode = $ResultD['DepCode'];
+        
+        $Sql = "SELECT COUNT(*) AS cntItem FROM qccheckpass WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $cntItem = $Result['cntItem'];
+
+        $Sql = "SELECT ItemCode,Pass FROM qccheckpass WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)){
+            $ItemCode = $Result['ItemCode'];
+            $return['ItemCode'] = $ItemCode;
+            $Pass = $Result['Pass'];
+            $return['Pass'] = $Pass;
+
+            $SqlT = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+            $meQueryT = mysqli_query($conn,$SqlT);
+            $ResultT = mysqli_fetch_assoc($meQueryT);
+            $TotalQty = $ResultT['TotalQty'];
+            $TotalQty = $TotalQty + $Pass;
+
+            $SqlI = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+            // $return[$count]['Sql'] = $SqlI;
+            if (mysqli_query($conn, $SqlI)) {
+                $return[$count]['count'] = $count;
+                $count++;
+            }
+        }
+        $return['count_end'] = $count;
+        $return['cntItem'] = $cntItem;
+        if ($cntItem == $count) {
+            $return['status'] = "success";
+            $return['form'] = "save_item_stock";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+        else {
+            $return['status'] = "failed";
+            $return['form'] = "save_item_stock";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -1117,6 +1154,9 @@
         }
         else if ($DATA['STATUS'] == 'save_qc') {
             save_qc($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'save_item_stock') {
+            save_item_stock($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

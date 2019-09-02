@@ -35,7 +35,6 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
-		var new_pass = 0;
 
 		$(document).ready(function(e) {
 			var DocNo = "<?php echo $DocNo ?>";
@@ -111,7 +110,6 @@ $genarray = json_decode($json, TRUE);
 			} else {
 				var DocNo = '<?php echo $DocNo ?>';
 				var ItemCode = $("#qc_qty").attr("data-itemcode");
-				new_pass = pass;
 				var data = {
 					'DocNo': DocNo,
 					'ItemCode': ItemCode,
@@ -244,7 +242,6 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DocNo': DocNo,
 				'Userid': Userid,
-				'new_pass': new_pass,
 				'STATUS': 'create_claim'
 			};
 			senddata(JSON.stringify(data));
@@ -255,6 +252,15 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DocNo': DocNo,
 				'STATUS': 'save_qc'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function save_item_stock() {
+			var DocNo = '<?php echo $DocNo ?>';
+			var data = {
+				'DocNo': DocNo,
+				'STATUS': 'save_item_stock'
 			};
 			senddata(JSON.stringify(data));
 		}
@@ -512,13 +518,15 @@ $genarray = json_decode($json, TRUE);
 
 						} else if (temp["form"] == 'create_claim') {
 							save_Allpass();
-							//save_qc();
 
 						} else if (temp["form"] == 'create_rewash') {
 							var NewDocNo = temp['NewDocNo'];
 							send_rewash(NewDocNo);
 
 						} else if (temp["form"] == 'save_qc') {
+							save_item_stock();
+
+						} else if (temp["form"] == 'save_item_stock') {
 							var Menu = "<?php echo $Menu ?>";
 							var DocNo = "<?php echo $DocNo ?>";
 							var siteCode = "<?php echo $siteCode ?>";
