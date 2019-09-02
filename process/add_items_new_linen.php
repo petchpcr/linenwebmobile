@@ -50,7 +50,6 @@
     function load_items($conn, $DATA){
         $count = 0;
         $DocNo = $DATA["DocNo"];
-        $boolean = false;
 
         $Sql = "SELECT newlinentable_detail.ItemCode,
                         item.ItemName,
@@ -71,10 +70,10 @@
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $count++;
-            $boolean = true;
         }
+        $return['count'] = $count;
 
-        if ($boolean) {
+        if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "load_items";
             echo json_encode($return);
@@ -150,6 +149,22 @@
         die;
     }
 
+    function del_back($conn, $DATA){
+        $DocNo = $DATA["DocNo"];
+        $Menu = $DATA["Menu"];
+        $return['Menu'] = $Menu;
+        $Sql = "DELETE FROM $Menu WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
+        $Sql = "DELETE FROM ".$Menu."_detail WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
+
+        $return['status'] = "success";
+        $return['form'] = "del_back";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+    
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -162,6 +177,9 @@
         }
         else if ($DATA['STATUS'] == 'add_item') {
             add_item($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'del_back') {
+            del_back($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

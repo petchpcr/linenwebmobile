@@ -271,7 +271,7 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid;
+							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

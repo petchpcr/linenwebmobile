@@ -81,7 +81,6 @@
     function load_items($conn, $DATA){
         $count = 0;
         $DocNo = $DATA["DocNo"];
-        $boolean = false;
         $refDoc = $DATA["refDoc"];
 
         $Sql = "SELECT Count(*) AS c FROM rewash WHERE docNo= '$refDoc'";
@@ -89,11 +88,9 @@
         $Result = mysqli_fetch_assoc($meQuery);
         $c	=  $Result['c'];
         if($c==1){
-            $boolean = false;
-    
             $Sql = "SELECT     ItemCode,UnitCode1,Qty1,Weight
                     FROM       rewash_detail
-                    WHERE      DocNo='$refDoc'";
+                    WHERE      DocNo = '$refDoc'";
 
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)){
@@ -101,7 +98,6 @@
                 $new_unit	=  $Result['UnitCode1'];
                 $new_qty	=  $Result['Qty1'];
                 $new_weight	=  $Result['Weight'];
-                $boolean = true;
                 $Sql = "INSERT INTO clean_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
                     VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
                 mysqli_query($conn,$Sql);
@@ -127,10 +123,10 @@
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $count++;
-            $boolean = true;
         }
-        $return['boolean'] = $boolean;
-        if ($boolean) {
+        $return['count'] = $count;
+
+        if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "load_items";
             echo json_encode($return);
@@ -205,6 +201,22 @@
         die;
     }
 
+    function del_back($conn, $DATA){
+        $DocNo = $DATA["DocNo"];
+        $Menu = $DATA["Menu"];
+        $return['Menu'] = $Menu;
+        $Sql = "DELETE FROM $Menu WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
+        $Sql = "DELETE FROM ".$Menu."_detail WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
+
+        $return['status'] = "success";
+        $return['form'] = "del_back";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -217,6 +229,9 @@
         }
         else if ($DATA['STATUS'] == 'add_item') {
             add_item($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'del_back') {
+            del_back($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

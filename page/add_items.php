@@ -6,6 +6,12 @@ $UserFName = $_SESSION['FName'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+if (isset($_GET['Delback'])) {
+	$Delback = $_GET['Delback'];
+}
+else {
+	$Delback = 0;
+}
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -43,12 +49,18 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var siteCode = '<?php echo $siteCode; ?>';
+		var DepCode = "<?php echo $DepCode ?>";
+		var DocNo = "<?php echo $DocNo ?>";
+		var refDoc = "<?php echo $refDoc ?>";
+		var Menu = '<?php echo $Menu; ?>';
+		var Userid = "<?php echo $Userid ?>";
+		var Delback = "<?php echo $Delback ?>";
 		var arr_old_items = [];
 		var arr_new_items = [];
 		var arr_del_items = [];
 
 		$(document).ready(function(e) {
-			var DocNo = "<?php echo $DocNo ?>";
 			$("#DocNo").text(DocNo);
 			load_items();
 		});
@@ -58,8 +70,6 @@ $genarray = json_decode($json, TRUE);
 			arr_old_items = [];
 			arr_new_items = [];
 			arr_del_items = [];
-			var DocNo = "<?php echo $DocNo ?>";
-			var refDoc = "<?php echo $refDoc ?>";
 			var data = {
 				'DocNo': DocNo,
 				'refDoc': refDoc,
@@ -69,9 +79,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function choose_items() {
-			var DepCode = "<?php echo $DepCode ?>";
-			var refDoc = "<?php echo $refDoc ?>";
-			console.log(refDoc);
 			var Search = $("#search_items").val();
 			var data = {
 				'DepCode': DepCode,
@@ -107,7 +114,6 @@ $genarray = json_decode($json, TRUE);
 					var code = $(this).val();
 					var qty = 0;
 					var unit = 1;
-					var Menu = '<?php echo $Menu; ?>';
 					if (false) {
 						var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
 						Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
@@ -238,9 +244,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item() {
-			var DocNo = "<?php echo $DocNo ?>";
-			var Userid = "<?php echo $Userid ?>";
-			var Menu = '<?php echo $Menu; ?>';
 			var arr_old_Qty = [];
 			var arr_old_UnitCode = [];
 			var arr_old_weight = [];
@@ -319,14 +322,22 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			var siteCode = '<?php echo $siteCode; ?>';
-			var Menu = '<?php echo $Menu; ?>';
-			if (Menu == 'dirty') {
-				window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
-			} else if (Menu == 'clean') {
-				window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
-			} else {
-				window.location.href = 'new_linen_item.php?siteCode='+siteCode;
+			if (Delback == 1) {
+				var data = {
+					'DocNo': DocNo,
+					'Menu': Menu,
+					'STATUS': 'del_back'
+				};
+				senddata(JSON.stringify(data));
+			}
+			else {
+				if (Menu == 'dirty') {
+					window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+				} else if (Menu == 'clean') {
+					window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+				} else if (Menu == 'newlinentable') {
+					window.location.href = 'new_linen_item.php?siteCode='+siteCode + '&Menu=' + Menu;
+				}
 			}
 		}
 		// end function
@@ -335,7 +346,6 @@ $genarray = json_decode($json, TRUE);
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var Menu = '<?php echo $Menu; ?>';
 			if (Menu == 'dirty') {
 				var URL = '../process/add_items_dirty.php';
 			} else if (Menu == 'clean') {
@@ -363,7 +373,7 @@ $genarray = json_decode($json, TRUE);
 						if (temp["form"] == 'load_items') {
 							$("#items").empty();
 							if (false) {
-								for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+								for (var i = 0; i < temp['count']; i++) {
 									var num = Number(i) + 1;
 									var id = "weight" + num;
 									var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
@@ -378,7 +388,7 @@ $genarray = json_decode($json, TRUE);
 									cal_num();
 								}
 							} else {
-								for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+								for (var i = 0; i < temp['count']; i++) {
 									var num = Number(i) + 1;
 									var id = "weight" + num;
 									var idqty = id + "qty";
@@ -447,6 +457,9 @@ $genarray = json_decode($json, TRUE);
 								confirmButtonText: 'Error!!'
 							})
 							setTimeout('back()', 1500);
+						} else if (temp["form"] == 'del_back') {
+							Delback = 0;
+							back();
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

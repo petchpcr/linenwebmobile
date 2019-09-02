@@ -9,7 +9,7 @@
         $DocNo = $DATA["DocNo"];
         $ItemCode = array();
 
-        $Sql = "SELECT IsStatus FROM clean WHERE DocNo = '$DocNo'";
+        $Sql = "SELECT IsStatus FROM repair WHERE DocNo = '$DocNo'";
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $return['IsStatus'] = $Result['IsStatus'];

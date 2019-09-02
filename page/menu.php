@@ -51,8 +51,8 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
 			} else if (menu == 'shelfcount') {
 				window.location.href = 'shelfcount.php?siteCode=<?php echo $HptCode; ?>&Menu=shelfcount';
-			} else if (menu == 'newLinenTable') {
-				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>';
+			} else if (menu == 'newlinentable') {
+				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>&Menu=newlinentable';
 			} else {
 				window.location.href = 'hospital.php?Menu=' + menu;
 			}
@@ -160,7 +160,7 @@ $genarray = json_decode($json, TRUE);
 					</div>
 					
                     <div class="my-col-menu">
-                        <button onclick="menu_click(' . "'newLinenTable'" . ')" type="button" class="btn btn-mylight btn-block">
+                        <button onclick="menu_click(' . "'newlinentable'" . ')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/fabric.png">
                             <div class="text-truncate">' . $array["newLinen"][$language] . '</div>
                         </button>
