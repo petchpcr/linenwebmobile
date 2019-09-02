@@ -139,9 +139,6 @@
 
         if (mysqli_query($conn, $Sql)) {
 
-            $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
-            mysqli_query($conn, $Sql);
-
             if ($fail == 0) {
                 $Sql = "UPDATE repair_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
                 mysqli_query($conn, $Sql);
@@ -957,6 +954,9 @@
             $ResultT = mysqli_fetch_assoc($meQueryT);
             $TotalQty = $ResultT['TotalQty'];
             $TotalQty = $TotalQty+$new_pass;
+
+            $Sql = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$itemCode' AND DepCode = '$DepCode'";
+            mysqli_query($conn, $Sql);
 
             $count++;
         }
