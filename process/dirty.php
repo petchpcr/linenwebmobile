@@ -337,6 +337,38 @@ function load_doc($conn, $DATA)
     }
 }
 
+function receive_zero($conn, $DATA)
+{
+    $count = 0;
+    $DocNo = $DATA["DocNo"];
+    $From = $DATA["From"];
+    $return['From'] = $From;
+
+    $Sql = "SELECT ItemCode,Qty FROM dirty_detail WHERE DocNo = '$DocNo'";
+
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $return[$count]['ItemCode'] = $Result['ItemCode'];
+        $return[$count]['Qty'] = $Result['Qty'];
+        $count++;
+    }
+
+    if ($count > 0) {
+        $return['DocNo'] = $DocNo;
+        $return['status'] = "success";
+        $return['form'] = "receive_zero";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['status'] = "failed";
+        $return['form'] = "receive_zero";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
 function confirm_yes($conn, $DATA)
 {
     $FacCode = $_SESSION["FacCode"];
@@ -504,6 +536,8 @@ if (isset($_POST['DATA'])) {
         load_doc($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_doc_procees') {
         load_doc_procees($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'receive_zero') {
+        receive_zero($conn, $DATA);
     } else if ($DATA['STATUS'] == 'confirm_yes') {
         confirm_yes($conn, $DATA);
     } else if ($DATA['STATUS'] == 'add_dirty') {

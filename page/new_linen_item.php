@@ -288,7 +288,7 @@ require '../getTimeZone.php';
 	</header>
 	<div class="px-3 pb-4 mb-5">
 
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="220" height="45" /></div>
+		<div align="center" style="margin:1rem 0;"><img src="../img/Linen4.0.png" width="230" height="40" /></div>
 		<div id="HptName" class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"></div>
 		<div id="document">
 
