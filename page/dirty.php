@@ -103,48 +103,34 @@ require '../getTimeZone.php';
 				window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
 			}
 		}
-
-		function receive_zero(DocNo, From) {
-			swal({
-				title: '<?php echo $genarray['confirmReceivedoc'][$language]; ?>',
-				text: "<?php echo $array['receivedYN'][$language]; ?>",
-				type: 'question',
-				showCancelButton: true,
-				confirmButtonColor: '#28a745',
-				cancelButtonColor: '#aaa',
-				confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
-				cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>'
-			}).then((result) => {
-				confirm_yes(DocNo, From);
-			})
-		}
 		
-		function receive_zero2(DocNo, From) {
+		function receive_zero(DocNo, From) {
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
 				'STATUS': 'receive_zero'
 			};
 			senddata(JSON.stringify(data));
-
-			// swal({
-			// 	title: '<?php echo $genarray['confirmReceivedoc'][$language]; ?>',
-			// 	text: "<?php echo $array['receivedYN'][$language]; ?>",
-			// 	type: 'question',
-			// 	showCancelButton: true,
-			// 	confirmButtonColor: '#28a745',
-			// 	cancelButtonColor: '#aaa',
-			// 	confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
-			// 	cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>'
-			// }).then((result) => {
-			// 	confirm_yes(DocNo, From);
-			// })
 		}
 
 		function confirm_yes(DocNo, From) {
+			var Arr_ItemCode = [];
+			var Arr_Qty = [];
+			$('.receive_item').each(function(index) {
+				var ItemCode = $(this).attr("data-itemcode");
+				var Qty = $(this).val();
+				Arr_ItemCode.push(ItemCode);
+				Arr_Qty.push(Qty);
+			});
+			
+			var Str_ItemCode = Arr_ItemCode.join(',');
+			var Str_Qty = Arr_Qty.join(',');
+
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
+				'Str_ItemCode': Str_ItemCode,
+				'Str_Qty': Str_Qty,
 				'STATUS': 'confirm_yes'
 			};
 			senddata(JSON.stringify(data));
@@ -171,6 +157,13 @@ require '../getTimeZone.php';
 				'STATUS': 'add_dirty'
 			};
 			senddata(JSON.stringify(data));
+		}
+
+		function make_number() {
+			$('.numonly').on('input', function() {
+				this.value = this.value.replace(/[^0-9]/g, ''); //<-- replace all other than given set of values\
+				this.value = Number(this.value);
+			});
 		}
 
 		function back() {
@@ -286,8 +279,25 @@ require '../getTimeZone.php';
 								}
 							}
 						} else if (temp["form"] == 'receive_zero') {
+							$("#show_receive").empty();
+							for (var i = 0; i < temp['count']; i++) {
+								var Str = "<div class='alert alert-info my-2 p-2'>";
+										Str += 	"<div class='text-center font-weight-bold mb-2'>";
+										Str += 		temp[i]['ItemName'];
+										Str += 	"</div>";
+										Str += 	"<div class='row'>";
+										Str += 		"<div class='col-6 p-0 text-right'>ทั้งหมด <b>"+temp[i]['Qty']+"</b> ได้รับ</div>";
+										Str += 			"<div class='col-6 p-0 text-left'>";
+										Str += 				"<div class='ml-2' style='width:80px;'>";
+										Str += 				"<input onkeydown='make_number()' type='text' class='form-control text-center receive_item numonly' data-itemcode='"+temp[i]['ItemCode']+"' value='"+temp[i]['Qty']+"'>";
+										Str += 			"</div>";
+										Str += 		"</div>";
+										Str += 	"</div>";
+										Str += "</div>";
+								$("#show_receive").append(Str);
+							}
+							$("#btn_receive").attr("onclick","confirm_yes(\"" + temp['DocNo'] + "\",\"" + temp['From'] + "\")");
 							$("#md_receive").modal("show");
-							
 						} else if (temp["form"] == 'confirm_yes') {
 							show_process(temp['DocNo'], temp['From']);
 						} else if (temp["form"] == 'add_dirty') {
@@ -427,7 +437,7 @@ require '../getTimeZone.php';
 					โปรดระบุจำนวนที่ได้รับ
 					<div id="show_receive">
 
-						<div class="alert alert-info my-2 p-2">
+						<!-- <div class="alert alert-info my-2 p-2">
 							<div class="text-center font-weight-bold mb-2">
 								กางเกงผู้ป่วย (ทหารผ่านศึก) แบบกางเกงจีนเอวยางยืดขาจั๊ม FREE SIZE
 							</div>
@@ -439,14 +449,14 @@ require '../getTimeZone.php';
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 					</div>
 				</div>
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button id="btn_add_dirty" onclick="add_dirty()" type="button" class="btn btn-primary m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+							<button id="btn_receive" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>

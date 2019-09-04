@@ -124,28 +124,28 @@ $genarray = json_decode($json, TRUE);
 			}
 		}
 
-		function save_Allpass() {
-			var lost = Number($("#qc_lost").val());
-			var DocNo = '<?php echo $DocNo ?>';
-			$('.itemQTY').each(function(index) {
-				var ItemCode = this.id;
-				var pass = $("#" + ItemCode).data('qty');
-				console.log($("#" + ItemCode).data('qty'));
-				console.log(lost);
-				var data = {
-					'DocNo': DocNo,
-					'ItemCode': ItemCode,
-					'pass': pass,
-					'fail': 0,
-					'claim': 0,
-					'rewash': 0,
-					'lost': lost,
-					'STATUS': 'save_checkpass'
-				};
-				senddata(JSON.stringify(data));
-			});
-			save_qc();
-		}
+		// function save_Allpass() {
+		// 	var lost = Number($("#qc_lost").val());
+		// 	var DocNo = '<?php echo $DocNo ?>';
+		// 	$('.itemQTY').each(function(index) {
+		// 		var ItemCode = this.id;
+		// 		var pass = $("#" + ItemCode).data('qty');
+		// 		console.log($("#" + ItemCode).data('qty'));
+		// 		console.log(lost);
+		// 		var data = {
+		// 			'DocNo': DocNo,
+		// 			'ItemCode': ItemCode,
+		// 			'pass': pass,
+		// 			'fail': 0,
+		// 			'claim': 0,
+		// 			'rewash': 0,
+		// 			'lost': lost,
+		// 			'STATUS': 'save_checkpass'
+		// 		};
+		// 		senddata(JSON.stringify(data));
+		// 	});
+		// 	save_qc();
+		// }
 
 		function show_question(ItemCode) {
 			var DocNo = '<?php echo $DocNo ?>';
@@ -517,7 +517,7 @@ $genarray = json_decode($json, TRUE);
 							load_items();
 
 						} else if (temp["form"] == 'create_claim') {
-							save_Allpass();
+							save_qc();
 
 						} else if (temp["form"] == 'create_rewash') {
 							var NewDocNo = temp['NewDocNo'];
@@ -738,7 +738,7 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button onclick="save_Allpass()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
+							<button onclick="save_qc()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>

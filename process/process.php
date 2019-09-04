@@ -126,9 +126,10 @@
     function end_wash($conn, $DATA){
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
+        $question = $DATA["question"];
         $boolean = false;
 
-        $Sql = "UPDATE process SET WashEndTime = NOW() WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE process SET WashEndTime = NOW(),WashDetail = '$question' WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
 
         $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime
@@ -189,9 +190,10 @@
     function end_pack($conn, $DATA){
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
+        $question = $DATA["question"];
         $boolean = false;
 
-        $Sql = "UPDATE process SET PackEndTime = NOW(),IsStatus = 3 WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE process SET PackEndTime = NOW(),PackDetail = '$question',IsStatus = 3 WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
 
         $Sql = "SELECT  TIMEDIFF(PackEndTime,PackStartTime) AS UseTime
@@ -280,9 +282,10 @@
         $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
+        $question = $DATA["question"];
         $boolean = false;
 
-        $Sql = "UPDATE process SET SendEndTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE process SET SendEndTime = NOW(),SendDetail = '$question',IsStatus = 4 WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
 
         $Sql = "SELECT  TIMEDIFF(process.SendEndTime,process.SendStartTime) AS UseTime,

@@ -167,7 +167,7 @@ session_start();
 
 					<div class="text-center mt-2">
 						<div id="btn_login">
-							<button onclick="chklogin()" class="btn btn-primary" style="border-radius:30px;width:200px;">
+							<button id="btn_sign_in" onclick="chklogin()" class="btn btn-primary" style="border-radius:30px;width:200px;">
 								<div class="d-flex align-items-center">
 									<div class="mr-auto ml-4" style="font-size:27px;">LOGIN</div>
 									<i class="fas fa-arrow-right mr-4" style="font-size:20px;"></i>
@@ -186,6 +186,14 @@ session_start();
 	<script src="../js/clipboard.min.js"></script>
 	<script src="../js/holder.min.js"></script>
 	<script src="../js/application.js"></script>
+
+	<script>
+		$("#password").keypress(function(event) {
+			if (event.which == 13) {
+				$('#btn_sign_in').click();
+			}
+		});
+	</script>
 </body>
 
 </html>

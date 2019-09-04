@@ -342,16 +342,22 @@ function receive_zero($conn, $DATA)
     $count = 0;
     $DocNo = $DATA["DocNo"];
     $From = $DATA["From"];
+    $return['DocNo'] = $DocNo;
     $return['From'] = $From;
 
-    $Sql = "SELECT ItemCode,Qty FROM dirty_detail WHERE DocNo = '$DocNo'";
+    $Sql = "SELECT ".$From."_detail.ItemCode,".$From."_detail.Qty,item.ItemName 
+            FROM ".$From."_detail 
+            INNER JOIN item ON ".$From."_detail.ItemCode = item.ItemCode 
+            WHERE DocNo = '$DocNo'";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['ItemCode'] = $Result['ItemCode'];
+        $return[$count]['ItemName'] = $Result['ItemName'];
         $return[$count]['Qty'] = $Result['Qty'];
         $count++;
     }
+    $return['count'] = $count;
 
     if ($count > 0) {
         $return['DocNo'] = $DocNo;
@@ -374,23 +380,50 @@ function confirm_yes($conn, $DATA)
     $FacCode = $_SESSION["FacCode"];
     $DocNo = $DATA["DocNo"];
     $From = $DATA["From"];
+    $Str_ItemCode = $DATA["Str_ItemCode"];
+    $Str_Qty = $DATA["Str_Qty"];
+    $count = 0;
     $return['From'] = $From;
-    $Sql = "UPDATE $From SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
 
-    if (mysqli_query($conn, $Sql)) {
-        $return['DocNo'] = $DocNo;
-        $return['status'] = "success";
-        $return['form'] = "confirm_yes";
-        echo json_encode($return);
-        mysqli_close($conn);
-        die;
+    $Arr_ItemCode = explode(",", $Str_ItemCode);
+    $Arr_Qty = explode(",", $Str_Qty);
+    $cnt_Arr = sizeof($Arr_ItemCode, 0);
+    
+    for ($i = 0; $i < $cnt_Arr; $i++){
+        $Sql = "UPDATE ".$From."_detail SET ReceiveQty = $Arr_Qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$Arr_ItemCode[$i]'";
+        $return['Sql'] = $Sql;
+        if (mysqli_query($conn, $Sql)) {
+            $count++;
+        }
+    }
+
+    if ($cnt_Arr == $count) {
+        $Sql = "UPDATE $From SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
+
+        if (mysqli_query($conn, $Sql)) {
+            $return['DocNo'] = $DocNo;
+            $return['status'] = "success";
+            $return['form'] = "confirm_yes";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['cause'] = "update IsReceive fail";
+            $return['status'] = "failed";
+            $return['form'] = "confirm_yes";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
     } else {
+        $return['cause'] = "update loop(".$count.") != array size(".$cnt_Arr.")";
         $return['status'] = "failed";
         $return['form'] = "confirm_yes";
         echo json_encode($return);
         mysqli_close($conn);
         die;
     }
+    
 }
 
 function add_dirty($conn, $DATA)

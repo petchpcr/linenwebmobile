@@ -62,7 +62,7 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function start_wash(DocNo) {
+		function start_wash() {
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -71,16 +71,23 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function end_wash(DocNo) {
+		function question_end_wash() {
+			$("#save_question").attr("onclick","end_wash()");
+			$("#md_question").modal("show");
+		}
+
+		function end_wash() {
+			var question = $("textarea#ipt_question").val();
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
+				'question': question,
 				'STATUS': 'end_wash'
 			};
 			senddata(JSON.stringify(data));
 		}
 
-		function start_pack(DocNo) {
+		function start_pack() {
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -89,16 +96,23 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function end_pack(DocNo) {
+		function question_end_pack() {
+			$("#save_question").attr("onclick","end_pack()");
+			$("#md_question").modal("show");
+		}
+		
+		function end_pack() {
+			var question = $("textarea#ipt_question").val();
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
+				'question': question,
 				'STATUS': 'end_pack'
 			};
 			senddata(JSON.stringify(data));
 		}
 
-		function start_send(DocNo) {
+		function start_send() {
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -107,11 +121,18 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function end_send(DocNo) {
+		function question_end_send() {
+			$("#save_question").attr("onclick","end_send()");
+			$("#md_question").modal("show");
+		}
+
+		function end_send() {
+			var question = $("textarea#ipt_question").val();
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
 				'From': From,
+				'question': question,
 				'STATUS': 'end_send'
 			};
 			senddata(JSON.stringify(data));
@@ -368,14 +389,20 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'stop_wash') {
 							load_process();
 						} else if (temp["form"] == 'end_wash') {
+							$("#md_question").modal("hide");
+							$("textarea#ipt_question").val("");
 							load_process();
 						} else if (temp["form"] == 'start_pack') {
 							load_process();
 						} else if (temp["form"] == 'end_pack') {
+							$("#md_question").modal("hide");
+							$("textarea#ipt_question").val("");
 							load_process();
 						} else if (temp["form"] == 'start_send') {
 							load_process();
 						} else if (temp["form"] == 'end_send') {
+							$("#md_question").modal("hide");
+							$("textarea#ipt_question").val("");
 							load_process();
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
@@ -460,8 +487,8 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div id="W_Sum_btn" class="row mt-4">
 					<div class="col-md-2 col-sm-none"></div>
-					<div class="col-md-8 col-sm-12" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-scondary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
-					<div class="col-md-8 col-sm-12" id="W_End_btn"><button id="W_End_btn_sub" onclick="end_wash('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="W_Start_btn"><button id="W_Start_btn_sub" onclick="start_wash()" type="button" class="btn btn-lg btn-scondary btn-block"><?php echo $array['StartWash'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="W_End_btn"><button id="W_End_btn_sub" onclick="question_end_wash()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
 					<div class="col-md-2 col-sm-none"></div>
 				</div>
 			</div>
@@ -505,8 +532,8 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div id="P_Sum_btn" class="row mt-4">
 					<div class="col-md-2 col-sm-none"></div>
-					<div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startpack'][$language]; ?></button></div>
-					<div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack()" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startpack'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="question_end_pack()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
 					<div class="col-md-2 col-sm-none"></div>
 
 				</div>
@@ -551,8 +578,8 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div id="S_Sum_btn" class="row mt-4">
 					<div class="col-md-2 col-sm-none"></div>
-					<div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
-					<div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send()" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="question_end_send()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
 					<div class="col-md-2 col-sm-none"></div>
 
 				</div>
@@ -563,6 +590,34 @@ $genarray = json_decode($json, TRUE);
 					<div class="row justify-content-center">
 						<div class="card my-2 p-2">
 							<div id="show_sign"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+  <!-- Modal -->
+	<div class="modal fade" id="md_question" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="font-weight-bold">คำถาม</div>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<div class="mb-2">โปรดกรอกรายละเอียดหากมีปัญหาเกิดขึ้น</div>
+					<textarea id="ipt_question" cols="20" rows="10" class="form-control"></textarea>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-6 text-right">
+							<button id="save_question" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
 						</div>
 					</div>
 				</div>

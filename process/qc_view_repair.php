@@ -8,6 +8,8 @@
         $cnt_checkpass = 0;
         $DocNo = $DATA["DocNo"];
         $ItemCode = array();
+        $Qty = array();
+        $Weight = array();
 
         $Sql = "SELECT IsStatus FROM repair WHERE DocNo = '$DocNo'";
         $meQuery = mysqli_query($conn,$Sql);
@@ -30,17 +32,30 @@
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode'] = $Result['ItemCode'];
-            array_push($ItemCode,$Result['ItemCode']);
             $return[$count]['ItemName'] = $Result['ItemName'];
             $return[$count]['UnitCode'] = $Result['UnitCode'];
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
             $return[$count]['IsCheckList'] = $Result['IsCheckList'];
+            array_push($ItemCode,$Result['ItemCode']);
+            array_push($Qty,$Result['Qty']);
+            array_push($Weight,$Result['Weight']);
             $count++;
         }
         $return['cnt'] = $count;
 
         for ($i = 0; $i < $count; $i++) {
+            $Sql_cnt = "SELECT COUNT(*) AS cnt_ChkPass FROM qccheckpass WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode[$i]'";
+            $meQuery_cnt = mysqli_query($conn,$Sql_cnt);
+            $Result_cnt = mysqli_fetch_assoc($meQuery_cnt);
+            $cnt_ChkPass = $Result_cnt['cnt_ChkPass'];
+
+            if ($cnt_ChkPass == 0) {
+                $Sql_ins = "INSERT INTO qccheckpass(DocNo,ItemCode,Pass,Fail,Lost,Claim,Rewash,QCDate) 
+                            VALUES ('$DocNo','$ItemCode[$i]',$Qty[$i],0,0,0,0,NOW())";
+                mysqli_query($conn,$Sql_ins);
+            }
+            
             $Sql = "SELECT Fail,Claim,Rewash,Lost FROM qccheckpass WHERE ItemCode = '$ItemCode[$i]' AND DocNo = '$DocNo'";
             $meQuery = mysqli_query($conn, $Sql);
             $Result = mysqli_fetch_assoc($meQuery);
