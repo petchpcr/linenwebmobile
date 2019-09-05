@@ -230,7 +230,7 @@ require '../getTimeZone.php';
 		</div>
 	</header>
 	<div class="px-3">
-		<div align="center" style="margin:1rem 0;"><img src="../img/Linen4.0.png" width="230" height="40" /></div>
+		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
 		<div class="text-center my-4">
 			<div id="HptName" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
 		</div>

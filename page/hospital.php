@@ -161,7 +161,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 	</header>
 	<div class="px-3">
-		<div align="center" style="margin:1rem 0;"><img src="../img/Linen4.0.png" width="230" height="40" /></div>
+		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
 		<div class="text-center my-4">
 			<h4 class="text-truncate"><?php $genarray['AllHospital'][$language] ?></h4>
 		</div>
