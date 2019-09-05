@@ -87,15 +87,6 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function sendmail() {
-			var data = {
-				'DocNo': DocNo,
-				'siteCode': siteCode,
-				'STATUS': 'sendmail'
-			};
-			senddata(JSON.stringify(data));
-		}
-
 		function start_pack() {
 			var data = {
 				'DocNo': DocNo,
@@ -408,12 +399,22 @@ $genarray = json_decode($json, TRUE);
 									allowOutsideClick: false
 								})
 								swal.showLoading();
-								sendmail();
+
+								$.ajax({
+									url: "../process/sendmail_wash.php",
+									method: "POST",
+									data: {
+										'DocNo': DocNo,
+										'siteCode': siteCode
+									},
+									success: function(data) {
+										console.log(99999);
+										swal.close();
+										load_process();
+									}
+								});
 							}
 							
-						} else if (temp["form"] == 'sendmail') {
-							swal.close();
-							load_process();
 						} else if (temp["form"] == 'start_pack') {
 							load_process();
 						} else if (temp["form"] == 'end_pack') {
