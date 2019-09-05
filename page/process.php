@@ -87,6 +87,15 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
+		function sendmail() {
+			var data = {
+				'DocNo': DocNo,
+				'siteCode': siteCode,
+				'STATUS': 'sendmail'
+			};
+			senddata(JSON.stringify(data));
+		}
+
 		function start_pack() {
 			var data = {
 				'DocNo': DocNo,
@@ -106,7 +115,6 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
-				'question': question,
 				'STATUS': 'end_pack'
 			};
 			senddata(JSON.stringify(data));
@@ -132,7 +140,6 @@ $genarray = json_decode($json, TRUE);
 				'siteCode': siteCode,
 				'DocNo': DocNo,
 				'From': From,
-				'question': question,
 				'STATUS': 'end_send'
 			};
 			senddata(JSON.stringify(data));
@@ -391,6 +398,21 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'end_wash') {
 							$("#md_question").modal("hide");
 							$("textarea#ipt_question").val("");
+							if (temp['question'] == null || temp['question'] == "") {
+								load_process();
+							}
+							else {
+								swal({
+									title: 'Please wait...',
+									text: 'Processing',
+									allowOutsideClick: false
+								})
+								swal.showLoading();
+								sendmail();
+							}
+							
+						} else if (temp["form"] == 'sendmail') {
+							swal.close();
 							load_process();
 						} else if (temp["form"] == 'start_pack') {
 							load_process();
@@ -533,7 +555,7 @@ $genarray = json_decode($json, TRUE);
 				<div id="P_Sum_btn" class="row mt-4">
 					<div class="col-md-2 col-sm-none"></div>
 					<div class="col-md-8 col-sm-12" id="P_Start_btn"><button onclick="start_pack()" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startpack'][$language]; ?></button></div>
-					<div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="question_end_pack()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="P_End_btn"><button onclick="end_pack()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
 					<div class="col-md-2 col-sm-none"></div>
 
 				</div>
@@ -579,7 +601,7 @@ $genarray = json_decode($json, TRUE);
 				<div id="S_Sum_btn" class="row mt-4">
 					<div class="col-md-2 col-sm-none"></div>
 					<div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send()" type="button" class="btn btn-lg btn-secondary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
-					<div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="question_end_send()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
 					<div class="col-md-2 col-sm-none"></div>
 
 				</div>

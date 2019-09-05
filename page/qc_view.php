@@ -374,22 +374,22 @@ $genarray = json_decode($json, TRUE);
 									op_claim++;
 									if (Claim > 0) { // เคลม สีแดง
 										st_color++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-red mt-1 px-2'><?php echo $array['claim'][$language]; ?></div></div>");
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color"+num+" my-bg-red mt-1 px-2'><?php echo $array['claim'][$language]; ?></div></div>");
 									}
 									if (Rewash > 0) { // ส่งซัก สีเหลือง
 										st_color++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-yellow mt-1 px-2'><?php echo $array['rewash'][$language]; ?></div></div>");
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color"+num+" my-bg-yellow mt-1 px-2'><?php echo $array['rewash'][$language]; ?></div></div>");
 									}
 								}
 
 								if (Lost > 0) { // ผ้าค้างโรงซัก สีเทา
 									op_claim++;
 									st_color++;
-									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='st_color"+num+" my-bg-silver mt-1 px-2'><?php echo $array['remain'][$language]; ?></div></div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color"+num+" my-bg-silver mt-1 px-2'><?php echo $array['remain'][$language]; ?></div></div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
-									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center'><div class='my-bg-green mt-1 px-2'><?php echo $array['pass'][$language]; ?></div></div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='my-bg-green mt-1 px-2'><?php echo $array['pass'][$language]; ?></div></div>");
 								}
 
 								if (st_color >= 2) {

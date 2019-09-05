@@ -88,15 +88,15 @@
         $Result = mysqli_fetch_assoc($meQuery);
         $c	=  $Result['c'];
         if($c==1){
-            $Sql = "SELECT     ItemCode,UnitCode1,Qty1,Weight
+            $Sql = "SELECT     ItemCode,UnitCode,Qty,Weight
                     FROM       rewash_detail
                     WHERE      DocNo = '$refDoc'";
 
             $meQuery = mysqli_query($conn,$Sql);
             while ($Result = mysqli_fetch_assoc($meQuery)){
                 $new_i	=  $Result['ItemCode'];
-                $new_unit	=  $Result['UnitCode1'];
-                $new_qty	=  $Result['Qty1'];
+                $new_unit	=  $Result['UnitCode'];
+                $new_qty	=  $Result['Qty'];
                 $new_weight	=  $Result['Weight'];
                 $Sql = "INSERT INTO clean_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
                     VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
