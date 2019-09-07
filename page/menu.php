@@ -184,12 +184,12 @@ $genarray = json_decode($json, TRUE);
                             <div class="text-truncate">' . $array["QC"][$language] . '</div>
                         </button>
                     </div>
-                    <!-- <div class="my-col-menu">
+                    <div class="my-col-menu">
                         <button onclick="menu_click(' . "'shelfcount'" . ')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/storage.png">
                             <div class="text-truncate">' . $array["shelfcount"][$language] . '</div>
                         </button>
-					</div> --!>
+					</div>
 					
                     ';
 			}
