@@ -145,8 +145,8 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_process') {
-							$(".head-btn.btn-light").remove();
-							var Back = "<div style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
+							$("#back_div").remove();
+							var Back = "<div id='back_div' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
 							$("#user").before(Back);
 							if (temp['IsStatus'] == 0 || temp['IsStatus'] == null) { //-----ยังไม่ได้ทำอะไร
 								$("#W_Status").attr("src", "../img/Status_4.png");
@@ -235,7 +235,7 @@ $genarray = json_decode($json, TRUE);
 									$("#P_Start").text(P_Start.toLocaleTimeString());
 									$("#P_End").text("--:--:--");
 								}
-							} else if (temp['IsStatus'] == 3 || temp['IsStatus'] == 4) { //-----กำลังขนส่ง
+							} else if (temp['IsStatus'] == 3 && temp['DvEndTime'] == null) { //-----กำลังขนส่ง
 								$("#W_Status").attr("src", "../img/Status_3.png");
 								$("#P_Status").attr("src", "../img/Status_3.png");
 								$("#S_Status").attr("src", "../img/Status_1.png");
@@ -282,8 +282,9 @@ $genarray = json_decode($json, TRUE);
 									var S_Start = new Date(temp['DvStartTime']);
 									$("#S_Start").text(S_Start.toLocaleTimeString());
 									$("#S_End").text("--:--:--");
+									
 								}
-							} else if (temp['IsStatus'] == 5 || temp['IsStatus'] == 6) { //-----เสร็จสิ้น
+							} else if ((temp['IsStatus'] == 3 && temp['DvEndTime'] != null) || temp['IsStatus'] == 4) { //-----เสร็จสิ้น
 
 								if (temp['Signature'] == null || temp['Signature'] == "") {
 									swal({
@@ -421,7 +422,7 @@ $genarray = json_decode($json, TRUE);
 		<div class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"><?php echo $DocNo; ?></div>
 
 		<div id="process">
-			<div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">
+			<!-- <div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">
 				<div class="row">
 					<div class="col-4 align-self-center">
 						<div class="row">
@@ -510,7 +511,7 @@ $genarray = json_decode($json, TRUE);
 					<div class="col-md-2 col-sm-none"></div>
 
 				</div>
-			</div>
+			</div> -->
 
 			<div class="card alert alert-info mx-3 mt-4" style="padding:1rem;">
 				<div class="row">

@@ -71,6 +71,7 @@
         $Sql = "SELECT
                         shelfcount.DocNo,
                         shelfcount.IsStatus,
+                        shelfcount.DvStartTime,
                         shelfcount.signature,
                         department.DepName,
                         site.HptCode,
@@ -80,7 +81,7 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND shelfcount.DocDate LIKE '%$search%'
-                AND shelfcount.IsStatus > 0 
+                AND shelfcount.IsStatus >= 3 
                 ORDER BY shelfcount.IsStatus ASC,shelfcount.DocNo DESC";
         $return['sql'] = $Sql;
 
@@ -90,11 +91,14 @@
             $return[$count]['DepName'] = $Result['DepName'];
             $return[$count]['HptName'] = $Result['HptName'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
+            $return[$count]['DvStartTime'] = $Result['DvStartTime'];
             $return[$count]['signature'] = $Result['signature'];
 
             $count++;
             $boolean = true;
         }
+
+        $Sql = "SELECT ";
 
         if ($boolean) {
             $return['status'] = "success";

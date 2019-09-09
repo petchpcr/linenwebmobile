@@ -180,15 +180,15 @@ require '../getTimeZone.php';
 									status_class = "status2";
 									status_text = "หยุดชั่วขณะ";
 									status_line = "StatusLine_2";
-								} else if (temp[i]['IsStatus'] == 1) {
+								} else if (temp[i]['IsStatus'] == 3 && temp[i]['DvStartTime'] == null) {
 									status_class = "status4";
 									status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";
 									status_line = "StatusLine_4";
-								} else if (temp[i]['IsStatus'] > 1 && temp[i]['IsStatus'] < 6) {
+								} else if (temp[i]['IsStatus'] == 3 && temp[i]['DvStartTime'] != null) {
 									status_class = "status1";
 									status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 									status_line = "StatusLine_1";
-								} else if (temp[i]['IsStatus'] == 6) {
+								} else if (temp[i]['IsStatus'] == 4 &&  temp[i]['signature'] != null) {
 									status_class = "status3";
 									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";

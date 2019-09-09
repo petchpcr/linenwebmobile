@@ -187,7 +187,7 @@
 
     function start_send($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE shelfcount SET DvStartTime = NOW() WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn,$Sql)){
             $return['status'] = "success";
@@ -206,7 +206,7 @@
 
     function end_send($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $Sql = "UPDATE shelfcount SET DvEndTime = NOW(),IsStatus = 5 WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE shelfcount SET DvEndTime = NOW() WHERE DocNo = '$DocNo'";
 
         if (mysqli_query($conn,$Sql)) {
             $return['status'] = "success";
