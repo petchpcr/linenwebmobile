@@ -110,9 +110,8 @@ $genarray = json_decode($json, TRUE);
 								}
 
 								var Str = "<button onclick='show_doc(\"" + temp[i]['HptCode'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
-								Str += "<div class='row'><div class='col-6'><div class='row d-flex justify-content-end'><div style='width:200px !important;'>";
-								Str += "<img class='hpt_img' src='../img/" + picture + "'/></div></div></div><div class='col-6 d-flex justify-content-start align-items-center' style='padding-left:0;color:black;'>";
-								Str += "<img src='../img/H-Line.png' height='40' style='margin-right:1rem;'/><div class='hpt_name font-weight-bold'>" + temp[i]['HptName'] + "</div></div></div></button>";
+ 								Str += "<div class='d-flex justify-content-center align-items-center' style='padding-left:0;color:black;'>";
+								Str += "<div class='font-weight-bold'>" + temp[i]['HptName'] + "</div></div></div></button>";
 
 								$("#hospital").append(Str);
 							}

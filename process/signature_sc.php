@@ -8,6 +8,8 @@ $SigCode = $_POST['SigCode'];
 $Sql = "UPDATE shelfcount SET signature = '$SigCode',IsStatus = 4  WHERE DocNo = '$DocNo'";
 mysqli_query($conn, $Sql);
 
+$count = 0;
+$cnk = 0;
 $Sql1 = "SELECT department.HptCode, shelfcount.DepCode 
   FROM shelfcount  INNER JOIN department ON shelfcount.DepCode = department.DepCode  WHERE shelfcount.DocNo = '$DocNo'";
 $meQuery1 = mysqli_query($conn, $Sql1);
@@ -57,10 +59,20 @@ while ($Result3 = mysqli_fetch_assoc($meQuery3)) {
     while ($Result4 = mysqli_fetch_assoc($meQuery4)) {
         $QtyCenter = $Result4['TotalQty'] == null ? 0 : $Result4['TotalQty'];
         $return['QtyCenter'] = $QtyCenter;
-        if ($QtyCenter > $Oder || $QtyCenter == 0) {
+        // if ($QtyCenter > $Oder || $QtyCenter == 0) {
+            $return['test'] = 1;
             $updateQty = "UPDATE item_stock SET TotalQty = TotalQty + $Oder WHERE ItemCode = '$ItemCode' AND DepCode = $SCDepCode";
-            mysqli_query($conn, $updateQty);
+            // mysqli_query($conn, $updateQty);
             $return['updateQty'] = $updateQty;
-        }
+            if (mysqli_query($conn, $updateQty)) {
+                $return['ok'] = 2;
+            }
+        // }
+        // else{
+        //     $return['test'] = 00;
+        // }
     }
 }
+echo json_encode($return);
+mysqli_close($conn);
+die;
