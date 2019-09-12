@@ -80,6 +80,7 @@
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.DocDate LIKE '%$search%'
+                AND rewash.IsStatus != 9 
                 ORDER BY rewash.IsStatus ASC,rewash.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);

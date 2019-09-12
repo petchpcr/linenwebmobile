@@ -82,6 +82,7 @@
                 WHERE site.HptCode = '$siteCode' 
                 AND shelfcount.DocDate LIKE '%$search%'
                 AND shelfcount.IsStatus >= 3 
+                AND shelfcount.IsStatus != 9  
                 ORDER BY shelfcount.IsStatus ASC,shelfcount.DocNo DESC";
         $return['sql'] = $Sql;
 

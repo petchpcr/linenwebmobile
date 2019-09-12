@@ -80,7 +80,8 @@
                 INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
-                AND newlinentable.DocDate LIKE '%$search%'
+                AND newlinentable.DocDate LIKE '%$search%' 
+                AND newlinentable.IsStatus != 9 
                 ORDER BY  newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);

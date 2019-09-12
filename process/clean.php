@@ -48,8 +48,9 @@
                     clean,department,site
                 WHERE site.HptCode = '$siteCode' 
                 AND clean.DocDate = '$search' 
-                AND department.DepCode = clean.DepCode AND department.DepCode = clean.DepCode
-                AND site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+                AND department.DepCode = clean.DepCode 
+                AND site.HptCode = department.HptCode
+                AND clean.IsStatus != 9 
                 ORDER BY clean.IsStatus ASC,clean.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);

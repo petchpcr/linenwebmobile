@@ -55,7 +55,8 @@ function load_doc($conn, $DATA)
                 INNER JOIN qccheckpass ON qccheckpass.DocNo = $From.DocNo 
                 WHERE site.HptCode = '$siteCode' 
                 AND $From.DocDate LIKE '%$search%'
-                AND $From.IsStatus = 3
+                AND $From.IsStatus = 3 
+                AND $From.IsStatus != 9 
                 AND qccheckpass.Lost > 0
                 ORDER BY $From.IsStatus ASC,$From.DocNo DESC";
     $return['Sql'] = $Sql;

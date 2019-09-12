@@ -49,10 +49,9 @@
                         WHERE   site.HptCode = '$siteCode' 
                         AND     clean.DocDate LIKE '%$search%' 
                         AND     department.DepCode = clean.DepCode 
-                        AND department.DepCode = clean.DepCode
                         AND     site.HptCode = department.HptCode 
-                        AND site.HptCode = department.HptCode
                         AND     clean.IsStatus > 0
+                        AND     clean.IsStatus != 9
                     UNION ALL
                         SELECT  repair.DocNo,
                                 department.DepName,
@@ -64,10 +63,9 @@
                         WHERE   site.HptCode = '$siteCode' 
                         AND     repair.DocDate LIKE '%$search%' 
                         AND     department.DepCode = repair.DepCode 
-                        AND     department.DepCode = repair.DepCode
                         AND     site.HptCode = department.HptCode 
-                        AND     site.HptCode = department.HptCode
                         AND     repair.IsStatus > 0
+                        AND     repair.IsStatus != 9
                                 
                                 )  a 
                 ORDER BY IsCheckList ASC, DocNo DESC";

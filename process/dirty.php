@@ -91,6 +91,7 @@ function load_doc_procees($conn, $DATA)
             AND newlinentable.DocDate LIKE '%$search%'
             AND newlinentable.FacCode = '$FacCode'
             AND newlinentable.IsStatus > 0
+            AND newlinentable.IsStatus != 9 
     
             UNION ALL       
     
@@ -111,6 +112,7 @@ function load_doc_procees($conn, $DATA)
             AND rewash.DocDate LIKE '%$search%'
             AND rewash.FacCode = '$FacCode'
             AND rewash.IsStatus > 0 
+            AND rewash.IsStatus != 9 
             UNION ALL                 
             SELECT
             dirty.DocNo,
@@ -128,7 +130,8 @@ function load_doc_procees($conn, $DATA)
             WHERE site.HptCode = '$siteCode' 
             AND dirty.DocDate LIKE '%$search%'
             AND dirty.FacCode = '$FacCode'
-            AND dirty.IsStatus > 0 )a
+            AND dirty.IsStatus > 0
+            AND dirty.IsStatus != 9 )a
 
             ORDER BY IsProcess ASC,DocNo DESC";
     } else {
@@ -149,6 +152,7 @@ function load_doc_procees($conn, $DATA)
             AND $From.DocDate LIKE '%$search%'
             AND $From.FacCode = '$FacCode'
             AND $From.IsStatus > 0 
+            AND $From.IsStatus != 9 
             ORDER BY IsStatus ASC,DocNo DESC";
     }
 
