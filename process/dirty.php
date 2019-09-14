@@ -217,6 +217,7 @@ function load_doc_tracking($conn, $DATA)
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.IsStatus > 1 
+                AND dirty.IsStatus != 9 
                 UNION ALL
                 SELECT
                     rewash.DocNo,
@@ -232,6 +233,7 @@ function load_doc_tracking($conn, $DATA)
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND rewash.IsStatus > 1
+                AND rewash.IsStatus != 9 
                 AND rewash.DocDate LIKE '%$search%'
                 UNION ALL
                 SELECT
@@ -248,6 +250,7 @@ function load_doc_tracking($conn, $DATA)
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND newlinentable.IsStatus > 1
+                AND newlinentable.IsStatus != 9 
                 AND newlinentable.DocDate LIKE '%$search%')a
 
                 ORDER BY IsProcess ASC,DocNo DESC";
@@ -311,6 +314,7 @@ function load_doc($conn, $DATA)
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
+                AND dirty.IsStatus != 9 
                 ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
     $return['sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
