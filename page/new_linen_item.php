@@ -305,7 +305,7 @@ require '../getTimeZone.php';
 			</div>
 
 			<div id="add_doc" class="fixed-bottom py-2 bg-white d-flex justify-content-center">
-				<button class="btn btn-primary btn-block" type="button" style="max-width:250px;" data-toggle="modal" data-target="#exampleModal">
+				<button class="btn btn-create btn-block" type="button" style="max-width:250px;" data-toggle="modal" data-target="#exampleModal">
 					<i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
 				</button>
 			</div>

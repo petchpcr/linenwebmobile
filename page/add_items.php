@@ -525,17 +525,16 @@ $genarray = json_decode($json, TRUE);
 			<?php
 			if (true) {
 				echo '<div class="form-row my-2">
-                            <div class="col-12 input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" style="width:100px;">' . $array['numberSum'][$language] . '</span>
-                            </div>
-                            <input id="sum_num" type="text" class="form-control text-center bg-white" placeholder="0.0" disabled>
-                            <div class="input-group-append">
-                                <span class="input-group-text" style="width:70px;">' . $array['piece'][$language] . '</span>
-                            </div>
-
-                        </div>
-                    </div>';
+								<div class="col-12 input-group">
+									<div class="input-group-prepend">
+											<span class="input-group-text" style="width:100px;">' . $array['numberSum'][$language] . '</span>
+									</div>
+									<input id="sum_num" type="text" class="form-control text-center bg-white" placeholder="0.0" disabled>
+									<div class="input-group-append">
+											<span class="input-group-text" style="width:70px;">' . $array['piece'][$language] . '</span>
+									</div>
+								</div>
+							</div>';
 			}
 			?>
 			<div class="form-row my-2">
@@ -552,7 +551,7 @@ $genarray = json_decode($json, TRUE);
 			</div>
 			<div class="row">
 				<div class="col-6">
-					<button onclick="choose_items()" class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#md_item">
+					<button onclick="choose_items()" class="btn btn-create btn-block" type="button" data-toggle="modal" data-target="#md_item">
 						<i class="fas fa-plus mr-1"></i><?php echo $array['addList'][$language]; ?>
 					</button>
 				</div>

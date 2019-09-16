@@ -597,11 +597,10 @@ $genarray = json_decode($json, TRUE);
 	<div id="add_doc" class="fixed-bottom d-flex justify-content-center py-2 bg-white">
 		<div class="col-lg-9 col-md-10 col-sm-12">
 			<div class="row d-flex justify-content-center">
-				<button onclick="create_claim()" id="claim-btn" class="btn btn-danger btn-block" style="max-width:250px;" type="button">
+				<button onclick="create_claim()" id="claim-btn" class="btn btn-claim btn-block" style="max-width:250px;" type="button">
 					<i class="fas fa-times mr-1"></i><?php echo $array['sendClaim'][$language]; ?>
 				</button>
 				<button data-toggle="modal" data-target="#exampleModal" id="save-btn" class="btn btn-success btn-block m-0" style="max-width:250px;" type="button">
-					<!-- <button onclick="save_qc()" id="save-btn" class="btn btn-success btn-block" type="button"> -->
 					<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 				</button>
 			</div>
