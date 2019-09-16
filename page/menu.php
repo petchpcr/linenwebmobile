@@ -53,6 +53,8 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'shelfcount.php?siteCode=<?php echo $HptCode; ?>&Menu=shelfcount';
 			} else if (menu == 'newlinentable') {
 				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>&Menu=newlinentable';
+			} else if (menu == 'qr_code') {
+				scan_QRcode();
 			} else {
 				window.location.href = 'hospital.php?Menu=' + menu;
 			}
@@ -60,6 +62,10 @@ $genarray = json_decode($json, TRUE);
 
 		function sendTimeout() {
 			console.log(<?php echo $_SESSION['TimeOut']; ?>);
+			Android.setTimeout(<?php echo $_SESSION['TimeOut']; ?>);
+		}
+
+		function scan_QRcode() {
 			Android.setTimeout(<?php echo $_SESSION['TimeOut']; ?>);
 		}
 
@@ -204,6 +210,12 @@ $genarray = json_decode($json, TRUE);
 			}
 
 			?>
+			<div class="my-col-menu">
+				<button onclick="menu_click('qr_code')" type="button" class="btn btn-mylight btn-block">
+					<img src="../img/Tools.png">
+					<div class="text-truncate"><?php echo $array["qr_code"][$language]; ?></div>
+				</button>
+			</div>
 			<div class="my-col-menu">
 				<button onclick="menu_click('tools')" type="button" class="btn btn-mylight btn-block">
 					<img src="../img/Tools.png">
