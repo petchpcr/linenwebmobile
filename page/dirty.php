@@ -8,6 +8,10 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $From = $_GET['From'];
+if (!isset($_GET['From'])) {
+	$From = $_GET['TypeDoc'];
+}
+$TypeDoc = $_GET['TypeDoc'];
 $Menu = $_GET['Menu'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
@@ -41,6 +45,7 @@ require '../getTimeZone.php';
 		var siteCode = "<?php echo $siteCode ?>";
 		var Menu = "<?php echo $Menu ?>";
 		var From = "<?php echo $From ?>";
+		var TypeDoc = "<?php echo $TypeDoc ?>";
 
 		$(document).ready(function(e) {
 			if (Menu == 'factory') {
@@ -100,7 +105,7 @@ require '../getTimeZone.php';
 			if (Menu == 'dirty') {
 				window.location.href = 'dirty_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 			} else if (Menu == 'factory') {
-				window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
+				window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From + '&TypeDoc=' + TypeDoc;
 			}
 		}
 

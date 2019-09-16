@@ -73,7 +73,7 @@ $genarray = json_decode($json, TRUE);
 
 		function doc_of_type() {
 			var slt = $("#DocType").val();
-			window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu + '&From=' + slt;
+			window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu + '&TypeDoc=' + slt;
 		}
 
 		function back() {

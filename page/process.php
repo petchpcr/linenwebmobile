@@ -9,6 +9,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $From = $_GET['From'];
+$TypeDoc = $_GET['TypeDoc'];
 $Menu = $_GET['Menu'];
 $siteCode = $_GET['siteCode'];
 $DocNo = $_GET['DocNo'];
@@ -37,6 +38,7 @@ $genarray = json_decode($json, TRUE);
 		var siteCode = "<?php echo $siteCode ?>";
 		var Menu = '<?php echo $Menu; ?>';
 		var From = "<?php echo $From ?>";
+		var TypeDoc = "<?php echo $TypeDoc ?>";
 		var DocNo = "<?php echo $DocNo ?>";
 
 		$(document).ready(function(e) {
@@ -137,7 +139,15 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			window.location.href = 'dirty.php?Menu=' + Menu + '&siteCode=' + siteCode + '&From=' + From;
+			var getStr = 'dirty.php?Menu=' + Menu;
+			    getStr += '&siteCode=' + siteCode;
+					if (TypeDoc != "all") {
+						getStr += '&From=' + From;
+					}
+					if (TypeDoc != null || TypeDoc != "") {
+						getStr += '&TypeDoc=' + TypeDoc;
+					}
+			window.location.href =  getStr;
 		}
 		// end function
 
