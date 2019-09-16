@@ -103,7 +103,7 @@ require '../getTimeZone.php';
 				window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
 			}
 		}
-		
+
 		function receive_zero(DocNo, From) {
 			var data = {
 				'DocNo': DocNo,
@@ -122,7 +122,7 @@ require '../getTimeZone.php';
 				Arr_ItemCode.push(ItemCode);
 				Arr_Qty.push(Qty);
 			});
-			
+
 			var Str_ItemCode = Arr_ItemCode.join(',');
 			var Str_Qty = Arr_Qty.join(',');
 
@@ -282,21 +282,21 @@ require '../getTimeZone.php';
 							$("#show_receive").empty();
 							for (var i = 0; i < temp['count']; i++) {
 								var Str = "<div class='alert alert-info my-2 p-2'>";
-										Str += 	"<div class='text-center font-weight-bold mb-2'>";
-										Str += 		temp[i]['ItemName'];
-										Str += 	"</div>";
-										Str += 	"<div class='row'>";
-										Str += 		"<div class='col-6 p-0 text-right'>ทั้งหมด <b>"+temp[i]['Qty']+"</b> ได้รับ</div>";
-										Str += 			"<div class='col-6 p-0 text-left'>";
-										Str += 				"<div class='ml-2' style='width:80px;'>";
-										Str += 				"<input onkeydown='make_number()' type='text' class='form-control text-center receive_item numonly' data-itemcode='"+temp[i]['ItemCode']+"' value='"+temp[i]['Qty']+"'>";
-										Str += 			"</div>";
-										Str += 		"</div>";
-										Str += 	"</div>";
-										Str += "</div>";
+								Str += "<div class='text-center font-weight-bold mb-2'>";
+								Str += temp[i]['ItemName'];
+								Str += "</div>";
+								Str += "<div class='row'>";
+								Str += "<div class='col-6 p-0 text-right'>ทั้งหมด <b>" + temp[i]['Qty'] + "</b> ได้รับ</div>";
+								Str += "<div class='col-6 p-0 text-left'>";
+								Str += "<div class='ml-2' style='width:80px;'>";
+								Str += "<input onkeydown='make_number()' type='text' class='form-control text-center receive_item numonly' data-itemcode='" + temp[i]['ItemCode'] + "' value='" + temp[i]['Qty'] + "'>";
+								Str += "</div>";
+								Str += "</div>";
+								Str += "</div>";
+								Str += "</div>";
 								$("#show_receive").append(Str);
 							}
-							$("#btn_receive").attr("onclick","confirm_yes(\"" + temp['DocNo'] + "\",\"" + temp['From'] + "\")");
+							$("#btn_receive").attr("onclick", "confirm_yes(\"" + temp['DocNo'] + "\",\"" + temp['From'] + "\")");
 							$("#md_receive").modal("show");
 						} else if (temp["form"] == 'confirm_yes') {
 							show_process(temp['DocNo'], temp['From']);
@@ -352,17 +352,24 @@ require '../getTimeZone.php';
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
-				<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
+				<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3 pb-4 mb-5">
 
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div id="HptName" class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"></div>
 		<div id="document">
 

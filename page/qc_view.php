@@ -35,7 +35,6 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
-
 		$(document).ready(function(e) {
 			var DocNo = "<?php echo $DocNo ?>";
 			$("#DocNo").text(DocNo);
@@ -361,7 +360,7 @@ $genarray = json_decode($json, TRUE);
 								var num = i + 1;
 								var status = "multi_status" + num;
 								var status_id = "#multi_status" + num;
-								var Str = "<tr "+onclick+"><td><div class='row'>";
+								var Str = "<tr " + onclick + "><td><div class='row'>";
 								Str += "<div scope='row' class='col-2 d-flex align-items-center justify-content-center'>" + num + "</div>";
 								Str += "<div class='col-6 d-flex align-items-center'><div class='row'><div class='col-12 text-truncate font-weight-bold p-1'>" + temp[i]['ItemName'] + "</div>";
 								Str += "<div class='col-12 text-black-50 p-1 " + classItemQTY + "' id = '" + temp[i]['ItemCode'] + "' data-qty = '" + temp[i]['Qty'] + "'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
@@ -374,18 +373,18 @@ $genarray = json_decode($json, TRUE);
 									op_claim++;
 									if (Claim > 0) { // เคลม สีแดง
 										st_color++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color"+num+" my-bg-red mt-1 px-2'><?php echo $array['claim'][$language]; ?></div></div>");
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color" + num + " my-bg-red mt-1 px-2'><?php echo $array['claim'][$language]; ?></div></div>");
 									}
 									if (Rewash > 0) { // ส่งซัก สีเหลือง
 										st_color++;
-										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color"+num+" my-bg-yellow mt-1 px-2'><?php echo $array['rewash'][$language]; ?></div></div>");
+										$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color" + num + " my-bg-yellow mt-1 px-2'><?php echo $array['rewash'][$language]; ?></div></div>");
 									}
 								}
 
 								if (Lost > 0) { // ผ้าค้างโรงซัก สีเทา
 									op_claim++;
 									st_color++;
-									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color"+num+" my-bg-silver mt-1 px-2'><?php echo $array['remain'][$language]; ?></div></div>");
+									$(status_id).append("<div class='col-12 text-center p-0 d-flex justify-content-center font-weight-bold'><div class='st_color" + num + " my-bg-silver mt-1 px-2'><?php echo $array['remain'][$language]; ?></div></div>");
 								}
 
 								if (Fail == 0 && Lost == 0) { // ผ่าน สีเขียว
@@ -393,11 +392,11 @@ $genarray = json_decode($json, TRUE);
 								}
 
 								if (st_color >= 2) {
-									$(".st_color"+num+"").removeClass("my-bg-red");
-									$(".st_color"+num+"").removeClass("my-bg-yellow");
-									$(".st_color"+num+"").removeClass("my-bg-silver");
+									$(".st_color" + num + "").removeClass("my-bg-red");
+									$(".st_color" + num + "").removeClass("my-bg-yellow");
+									$(".st_color" + num + "").removeClass("my-bg-silver");
 
-									$(".st_color"+num+"").addClass("my-bg-blue");
+									$(".st_color" + num + "").addClass("my-bg-blue");
 								}
 							}
 
@@ -409,8 +408,7 @@ $genarray = json_decode($json, TRUE);
 									$("#claim-btn").hide();
 									$("#save-btn").show();
 								}
-							}
-							else {
+							} else {
 								$("#claim-btn").hide();
 								$("#save-btn").hide();
 							}
@@ -556,16 +554,23 @@ $genarray = json_decode($json, TRUE);
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
-				<button onclick="back()" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+				<button onclick="back()" class="head-btn btn-primary"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
-			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3 mb-5">
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div class="text-center mb-3">
 			<div class="text-truncate font-weight-bold" style="font-size:25px;"><?php echo $genarray['Document'][$language]; ?></div>
 			<div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>

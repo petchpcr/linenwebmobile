@@ -8,8 +8,7 @@ if ($Userid == "") {
 }
 if (isset($_GET['Delback'])) {
 	$Delback = $_GET['Delback'];
-}
-else {
+} else {
 	$Delback = 0;
 }
 $siteCode = $_GET['siteCode'];
@@ -329,14 +328,13 @@ $genarray = json_decode($json, TRUE);
 					'STATUS': 'del_back'
 				};
 				senddata(JSON.stringify(data));
-			}
-			else {
+			} else {
 				if (Menu == 'dirty') {
 					window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
 				} else if (Menu == 'clean') {
 					window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
 				} else if (Menu == 'newlinentable') {
-					window.location.href = 'new_linen_item.php?siteCode='+siteCode + '&Menu=' + Menu;
+					window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu;
 				}
 			}
 		}
@@ -494,16 +492,23 @@ $genarray = json_decode($json, TRUE);
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
-				<button data-toggle="modal" data-target="#exampleModal" class="head-btn btn-light"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+				<button data-toggle="modal" data-target="#exampleModal" class="head-btn btn-primary"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
-			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3 mb-5">
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div class="text-center mb-3">
 			<div class="text-truncate font-weight-bold" style="font-size:25px;"><?php echo $genarray['docno'][$language]; ?></div>
 			<div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>

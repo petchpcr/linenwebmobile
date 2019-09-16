@@ -86,7 +86,7 @@ $genarray = json_decode($json, TRUE);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_process') {
 							$("#head-back").remove();
-							var Back = "<div id='head-back' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
+							var Back = "<div id='head-back' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
 							$("#user").before(Back);
 							if (temp['IsStatus'] == 0 || temp['IsStatus'] == null) { //-----ยังไม่ได้ทำอะไร
 								$("#W_Status").attr("src", "../img/Status_4.png");
@@ -268,15 +268,22 @@ $genarray = json_decode($json, TRUE);
 
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
-			<div id="user" class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div id="user" class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3">
 
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div class="text-center my-4">
 			<h4 class="text-truncate"><?php echo $DocNo; ?></h4>
 		</div>

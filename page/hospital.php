@@ -110,7 +110,7 @@ $genarray = json_decode($json, TRUE);
 								}
 
 								var Str = "<button onclick='show_doc(\"" + temp[i]['HptCode'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'>";
- 								Str += "<div class='d-flex justify-content-center align-items-center' style='padding-left:0;color:black;'>";
+								Str += "<div class='d-flex justify-content-center align-items-center' style='padding-left:0;color:black;'>";
 								Str += "<div class='font-weight-bold'>" + temp[i]['HptName'] + "</div></div></div></button>";
 
 								$("#hospital").append(Str);
@@ -147,20 +147,27 @@ $genarray = json_decode($json, TRUE);
 				<?php
 				$Menu = $_GET['Menu'];
 				if ($Menu == 'dirty') {
-					echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+					echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
 				} else {
-					echo "<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+					echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
 				}
 				?>
 			</div>
-			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3">
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div class="text-center my-4">
 			<h4 class="text-truncate"><?php $genarray['AllHospital'][$language] ?></h4>
 		</div>
@@ -184,7 +191,7 @@ $genarray = json_decode($json, TRUE);
 							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
 						</div>
 						<select id="DocType" class="custom-select">
-					
+
 							<option value="all" selected><?php echo $array['refDocall'][$language]; ?></option>
 							<option value="dirty"><?php echo $array['refDocDirty'][$language]; ?></option>
 							<option value="rewash"><?php echo $array['refDocRewash'][$language]; ?></option>

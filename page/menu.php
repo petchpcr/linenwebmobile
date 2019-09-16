@@ -129,15 +129,24 @@ $genarray = json_decode($json, TRUE);
 		<header data-role="header">
 			<div class="head-bar d-flex justify-content-between">
 				<div style="width:139.14px;"></div>
-				<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+				<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 				<div class="text-right" style="width:139.14px;">
-					<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+					<button onclick="logout(1)" class="head-btn btn-primary" role="button">
+						<?php echo $genarray['logout'][$language]; ?>
+						<i class="fas fa-power-off ml-1"></i></button>
 				</div>
 			</div>
 		</header>
 		<div data-role="content">
-			<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
-			<div class="text-center text-truncate font-weight-bold my-4" style="font-size:30px;"><?php echo $array['menu'][$language]; ?></div>
+			<div class="text-center" style="margin:1rem 0;">
+				<div class="mb-3">
+					<img src="../img/logo.png" width="156" height="40" />
+				</div>
+				<div>
+					<img src="../img/nlinen.png" width="95" height="14" />
+				</div>
+			</div>
+			<!-- <div class="text-center text-truncate font-weight-bold my-4" style="font-size:30px;"><?php echo $array['menu'][$language]; ?></div> -->
 			<div id="hospital"></div>
 		</div>
 

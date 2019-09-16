@@ -188,7 +188,7 @@ require '../getTimeZone.php';
 									status_class = "status1";
 									status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 									status_line = "StatusLine_1";
-								} else if (temp[i]['IsStatus'] == 4 &&  temp[i]['signature'] != null) {
+								} else if (temp[i]['IsStatus'] == 4 && temp[i]['signature'] != null) {
 									status_class = "status3";
 									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";
@@ -254,17 +254,24 @@ require '../getTimeZone.php';
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
-				<button onclick='back()' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
+				<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
-			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3 pb-4 mb-5">
 
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div id="HptName" class="text-center text-truncate font-weight-bold my-4" style="font-size:25px;"></div>
 		<div id="document">
 			<div class="d-flex justify-content-center mb-3">

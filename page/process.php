@@ -72,7 +72,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function question_end_wash() {
-			$("#save_question").attr("onclick","end_wash()");
+			$("#save_question").attr("onclick", "end_wash()");
 			$("#md_question").modal("show");
 		}
 
@@ -97,10 +97,10 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function question_end_pack() {
-			$("#save_question").attr("onclick","end_pack()");
+			$("#save_question").attr("onclick", "end_pack()");
 			$("#md_question").modal("show");
 		}
-		
+
 		function end_pack() {
 			var question = $("textarea#ipt_question").val();
 			var data = {
@@ -121,7 +121,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function question_end_send() {
-			$("#save_question").attr("onclick","end_send()");
+			$("#save_question").attr("onclick", "end_send()");
 			$("#md_question").modal("show");
 		}
 
@@ -165,7 +165,7 @@ $genarray = json_decode($json, TRUE);
 						if (temp["form"] == 'load_process') {
 							$("#send_time").text("( <?php echo $array['useTimeS'][$language]; ?> " + temp['LimitTime'] + " <?php echo $genarray['minute'][$language]; ?> )");
 							$("#head-back").remove();
-							var Back = "<div id='head-back' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-light'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
+							var Back = "<div id='head-back' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
 							$("#user").before(Back);
 							if (temp['IsStatus'] == 0 || temp['IsStatus'] == null) { //-----ยังไม่ได้ทำอะไร
 								$("#W_Status").attr("src", "../img/Status_4.png");
@@ -391,8 +391,7 @@ $genarray = json_decode($json, TRUE);
 							$("textarea#ipt_question").val("");
 							if (temp['question'] == null || temp['question'] == "") {
 								load_process();
-							}
-							else {
+							} else {
 								swal({
 									title: 'Please wait...',
 									text: 'Processing',
@@ -414,7 +413,7 @@ $genarray = json_decode($json, TRUE);
 									}
 								});
 							}
-							
+
 						} else if (temp["form"] == 'start_pack') {
 							load_process();
 						} else if (temp["form"] == 'end_pack') {
@@ -458,15 +457,22 @@ $genarray = json_decode($json, TRUE);
 
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
-			<div id="user" class="head-text font-weight-bold text-truncate align-self-center"><?php echo $UserFName ?> <?php echo "[ ".$Per." ]" ?></div>
+			<div id="user" class="head-text font-weight-bold text-truncate align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
-				<button onclick="logout(1)" class="head-btn btn-dark" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
+				<button onclick="logout(1)" class="head-btn btn-primary" role="button"><?php echo $genarray['logout'][$language]; ?><i class="fas fa-power-off ml-1"></i></button>
 			</div>
 		</div>
 	</header>
 	<div class="px-3">
 
-		<div align="center" style="margin:1rem 0;"><img src="../img/logo.png" width="156" height="40" /></div>
+		<div align="center" style="margin:1rem 0;">
+			<div class="mb-3">
+				<img src="../img/logo.png" width="156" height="40" />
+			</div>
+			<div>
+				<img src="../img/nlinen.png" width="95" height="14" />
+			</div>
+		</div>
 		<div class="text-center text-truncate font-weight-bold mt-4" style="font-size:25px;"><?php echo $DocNo; ?></div>
 		<div id="send_time" class="text-center text-truncate font-weight-bold mb-4" style="font-size:20px;"></div>
 
@@ -620,7 +626,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 	</div>
 
-  <!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="md_question" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
