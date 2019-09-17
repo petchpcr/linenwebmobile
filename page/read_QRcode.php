@@ -180,7 +180,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 
 		<div id="show_detail" class="row d-flex justify-content-center pt-3 m-0">
-			<div class="col-lg-4 col-md-6 col-sm-8 col-12 text-center px-3">
+			<div class="col-xl-4 col-lg-5 col-md-6 col-sm-9 col-12 text-center px-3">
 
 				<div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
 				<canvas id="canvas" hidden></canvas>
@@ -203,7 +203,7 @@ $genarray = json_decode($json, TRUE);
 					<input type="text" id="item_qty" class="form-control bg-white" disabled>
 				</div>
 
-				<button onclick="clear_text()" class="btn btn-secondary mt-2"><i class="fas fa-undo-alt mr-2"></i>ล้างข้อมูล</button>
+				<button onclick="clear_text()" class="btn btn-secondary"><i class="fas fa-undo-alt mr-2"></i>ล้างข้อมูล</button>
 			</div>
 		</div>
 

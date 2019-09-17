@@ -140,14 +140,14 @@ $genarray = json_decode($json, TRUE);
 
 		function back() {
 			var getStr = 'dirty.php?Menu=' + Menu;
-			    getStr += '&siteCode=' + siteCode;
-					if (TypeDoc != "all") {
-						getStr += '&From=' + From;
-					}
-					if (TypeDoc != null || TypeDoc != "") {
-						getStr += '&TypeDoc=' + TypeDoc;
-					}
-			window.location.href =  getStr;
+			getStr += '&siteCode=' + siteCode;
+			if (TypeDoc != "all") {
+				getStr += '&From=' + From;
+			}
+			if (TypeDoc != null || TypeDoc != "") {
+				getStr += '&TypeDoc=' + TypeDoc;
+			}
+			window.location.href = getStr;
 		}
 		// end function
 
@@ -328,7 +328,7 @@ $genarray = json_decode($json, TRUE);
 										var siteCode = "<?php echo $siteCode ?>";
 										var Menu = "<?php echo $Menu ?>";
 										var From = "<?php echo $From ?>";
-										window.location.href = 'signature.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&From=' + From;
+										window.location.href = 'signature.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&From=' + From + '&TypeDoc=' + TypeDoc;
 									})
 								} else {
 									var ck = temp['Signature'];

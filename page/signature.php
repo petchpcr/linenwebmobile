@@ -10,6 +10,7 @@ $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $From = $_GET['From'];
+$TypeDoc = $_GET['TypeDoc'];
 $language = $_SESSION['lang'];
 $genxml = simplexml_load_file('../xml/Language/general_lang.xml');
 $json = json_encode($genxml);
@@ -693,6 +694,7 @@ $genarray = json_decode($json, TRUE);
 			var siteCode = "<?php echo $siteCode ?>";
 			var DocNo = "<?php echo $DocNo ?>";
 			var From = "<?php echo $From ?>";
+			var TypeDoc = "<?php echo $TypeDoc ?>";
 			var SigCode = dataURL;
 			document.getElementById("h_code").value = SigCode;
 			var Menu = "<?php echo $Menu ?>";
@@ -742,7 +744,7 @@ $genarray = json_decode($json, TRUE);
 						SigCode: SigCode
 					},
 					success: function(data) {
-						window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
+						window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From + '&TypeDoc=' + TypeDoc;
 					}
 				});
 			}
