@@ -54,7 +54,7 @@ $genarray = json_decode($json, TRUE);
 			} else if (menu == 'newlinentable') {
 				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>&Menu=newlinentable';
 			} else if (menu == 'qr_code') {
-				scan_QRcode();
+				window.location.href = 'read_QRcode.php';
 			} else {
 				window.location.href = 'hospital.php?Menu=' + menu;
 			}
@@ -212,7 +212,7 @@ $genarray = json_decode($json, TRUE);
 			?>
 			<div class="my-col-menu">
 				<button onclick="menu_click('qr_code')" type="button" class="btn btn-mylight btn-block">
-					<img src="../img/Tools.png">
+					<img src="../img/qrcode.png">
 					<div class="text-truncate"><?php echo $array["qr_code"][$language]; ?></div>
 				</button>
 			</div>

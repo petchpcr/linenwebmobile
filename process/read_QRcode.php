@@ -20,7 +20,7 @@
             mysqli_close($conn);
             die;
         } else {
-            $return['status'] = "failed";
+            $return['status'] = "failed_QRcode";
             $return['form'] = "load_QRcode";
             echo json_encode($return);
             mysqli_close($conn);

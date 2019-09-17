@@ -30,13 +30,13 @@ $genarray = json_decode($json, TRUE);
 	require 'script_css.php';
 	require 'logout_fun.php';
 	?>
-
+	<script src="../js/jsQR.js"></script>
 	<script>
-		var getQR = "BHQLPNONO010006,12";
+		// var getQR = "BHQLPNONO010006,12";
 		var itemCode;
 		var itemQty;
 		$(document).ready(function(e) {
-			load_QRcode(getQR);
+			// load_QRcode(getQR);
 		});
 
 		// function
@@ -44,12 +44,19 @@ $genarray = json_decode($json, TRUE);
 			var Arr_QR = getQR.split(",");
 			itemCode = Arr_QR[0];
 			itemQty = Arr_QR[1];
-			
+
 			var data = {
 				'itemCode': itemCode,
 				'STATUS': 'load_QRcode'
 			};
 			senddata(JSON.stringify(data));
+		}
+
+		function clear_text() {
+			itemCode = "";
+			itemQty = "";
+			$("#item_name").val("");
+			$("#item_qty").val("");
 		}
 
 		function back() {
@@ -104,6 +111,45 @@ $genarray = json_decode($json, TRUE);
 		}
 		// end display
 	</script>
+	<style>
+		#githubLink {
+			position: absolute;
+			right: 0;
+			top: 12px;
+			color: #2D99FF;
+		}
+
+		h1 {
+			margin: 10px 0;
+			font-size: 40px;
+		}
+
+		#loadingMessage {
+			text-align: center;
+			padding: 40px;
+			background-color: #eee;
+		}
+
+		#canvas {
+			width: 100%;
+		}
+
+		#output {
+			margin-top: 20px;
+			background: #eee;
+			padding: 10px;
+			padding-bottom: 0;
+		}
+
+		#output div {
+			padding-bottom: 10px;
+			word-wrap: break-word;
+		}
+
+		#noQRFound {
+			text-align: center;
+		}
+	</style>
 </head>
 
 <body>
@@ -136,25 +182,94 @@ $genarray = json_decode($json, TRUE);
 		<div id="show_detail" class="row d-flex justify-content-center pt-3 m-0">
 			<div class="col-lg-4 col-md-6 col-sm-8 col-12 text-center px-3">
 
-				<div class="input-group mb-3">
+				<div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
+				<canvas id="canvas" hidden></canvas>
+				<!-- <div id="output" hidden>
+					<div id="outputMessage">No QR code detected.</div>
+					<div hidden><b>Data:</b> <span id="outputData"></span></div>
+				</div> -->
+
+				<div class="input-group my-3">
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width:100px;">ชื่อไอเทม</span>
 					</div>
-					<input type="text" id="item_name" class="form-control bg-white" value="เสื้อขาว size XL" disabled>
+					<input type="text" id="item_name" class="form-control bg-white" disabled>
 				</div>
 
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width:100px;">จำนวน</span>
 					</div>
-					<input type="text" id="item_qty" class="form-control bg-white" value="24" disabled>
+					<input type="text" id="item_qty" class="form-control bg-white" disabled>
 				</div>
 
-				<button class="btn btn-create mt-2"><i class="fas fa-camera mr-2"></i>แสกนอีกครั้ง</button>
+				<button onclick="clear_text()" class="btn btn-secondary mt-2"><i class="fas fa-undo-alt mr-2"></i>ล้างข้อมูล</button>
 			</div>
 		</div>
 
 	</section>
+	<script>
+		var video = document.createElement("video");
+		var canvasElement = document.getElementById("canvas");
+		var canvas = canvasElement.getContext("2d");
+		var loadingMessage = document.getElementById("loadingMessage");
+		// var outputContainer = document.getElementById("output");
+		// var outputMessage = document.getElementById("outputMessage");
+		// var outputData = document.getElementById("outputData");
+
+		function drawLine(begin, end, color) {
+			canvas.beginPath();
+			canvas.moveTo(begin.x, begin.y);
+			canvas.lineTo(end.x, end.y);
+			canvas.lineWidth = 4;
+			canvas.strokeStyle = color;
+			canvas.stroke();
+		}
+
+		// Use facingMode: environment to attemt to get the front camera on phones
+		navigator.mediaDevices.getUserMedia({
+			video: {
+				facingMode: "environment"
+			}
+		}).then(function(stream) {
+			video.srcObject = stream;
+			video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+			video.play();
+			requestAnimationFrame(tick);
+		});
+
+		function tick() {
+			loadingMessage.innerText = "⌛ Loading video..."
+			if (video.readyState === video.HAVE_ENOUGH_DATA) {
+				loadingMessage.hidden = true;
+				canvasElement.hidden = false;
+				// outputContainer.hidden = false;
+
+				canvasElement.height = video.videoHeight;
+				canvasElement.width = video.videoWidth;
+				canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+				var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+				var code = jsQR(imageData.data, imageData.width, imageData.height, {
+					inversionAttempts: "dontInvert",
+				});
+				if (code) { // แสกนไม่เห็น(ซ่อน)
+					drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+					drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+					drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+					drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+					// outputMessage.hidden = true;
+					// outputData.parentElement.hidden = false;
+					// outputData.innerText = code.data;
+					var text = code.data;
+					load_QRcode(code.data);
+				} else { // แสกนเห็น(แสดง)
+					// outputMessage.hidden = false;
+					// outputData.parentElement.hidden = true;
+				}
+			}
+			requestAnimationFrame(tick);
+		}
+	</script>
 </body>
 
 </html>
