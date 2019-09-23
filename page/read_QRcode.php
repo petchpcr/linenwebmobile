@@ -55,8 +55,12 @@ $genarray = json_decode($json, TRUE);
 		function clear_text() {
 			itemCode = "";
 			itemQty = "";
+			$("#item_code").val("");
+			$("#item_cate_main").val("");
+			$("#item_cate_sub").val("");
 			$("#item_name").val("");
 			$("#item_qty").val("");
+			$("#item_size").val("");
 		}
 
 		function back() {
@@ -86,8 +90,13 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_QRcode') {
+							$("#item_code").val(itemCode);
 							$("#item_name").val(temp['ItemName']);
+							$("#item_cate_main").val(temp['CateMain']);
+							$("#item_cate_sub").val(temp['CateSub']);
 							$("#item_qty").val(itemQty);
+							$("#item_size").val(temp['SizeName']);
+
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
@@ -191,7 +200,28 @@ $genarray = json_decode($json, TRUE);
 
 				<div class="input-group my-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text" style="width:100px;">ชื่อไอเทม</span>
+						<span class="input-group-text" style="width:100px;">รหัส</span>
+					</div>
+					<input type="text" id="item_code" class="form-control bg-white" disabled>
+				</div>
+
+				<div class="input-group my-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width:100px;">หมวดหมู่หลัก</span>
+					</div>
+					<input type="text" id="item_cate_main" class="form-control bg-white" disabled>
+				</div>
+
+				<div class="input-group my-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width:100px;">หมวดหมู่รอง</span>
+					</div>
+					<input type="text" id="item_cate_sub" class="form-control bg-white" disabled>
+				</div>
+
+				<div class="input-group my-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width:100px;">รายการ</span>
 					</div>
 					<input type="text" id="item_name" class="form-control bg-white" disabled>
 				</div>
@@ -201,9 +231,19 @@ $genarray = json_decode($json, TRUE);
 						<span class="input-group-text" style="width:100px;">จำนวน</span>
 					</div>
 					<input type="text" id="item_qty" class="form-control bg-white" disabled>
+					<div class="input-group-append">
+						<span class="input-group-text">ชิ้น</span>
+					</div>
 				</div>
 
-				<button onclick="clear_text()" class="btn btn-secondary"><i class="fas fa-undo-alt mr-2"></i>ล้างข้อมูล</button>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width:100px;">ขนาด</span>
+					</div>
+					<input type="text" id="item_size" class="form-control bg-white" disabled>
+				</div>
+
+				<button onclick="clear_text()" class="btn btn-secondary mb-3"><i class="fas fa-undo-alt mr-2"></i>ล้างข้อมูล</button>
 			</div>
 		</div>
 

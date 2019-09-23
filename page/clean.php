@@ -155,7 +155,7 @@ require '../getTimeZone.php';
 									status_class = "status5";
 									status_text = "<?php echo $genarray['statusClaim'][$language]; ?>";
 									status_line = "StatusLine_5";
-								} else {
+								} else if (temp[i]['IsStatus'] == 4)  {
 									status_class = "status3";
 									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";
