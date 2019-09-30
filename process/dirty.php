@@ -79,15 +79,10 @@ function load_doc_procees($conn, $DATA)
             newlinentable.IsReceive,
             newlinentable.IsProcess,
             newlinentable.IsStatus,
-            department.DepName,
-            site.HptCode,
-            site.HptName,
             'newlinentable' AS F
             FROM
                 newlinentable
-            INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
-            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-            WHERE site.HptCode = '$siteCode' 
+            WHERE HptCode = '$siteCode' 
             AND newlinentable.DocDate LIKE '%$search%'
             AND newlinentable.FacCode = '$FacCode'
             AND newlinentable.IsStatus > 0
@@ -100,15 +95,10 @@ function load_doc_procees($conn, $DATA)
             rewash.IsReceive,
             rewash.IsProcess,
             rewash.IsStatus,
-            department.DepName,
-            site.HptCode,
-            site.HptName,
             'rewash' AS F
             FROM
                 rewash
-            INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
-            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-            WHERE site.HptCode = '$siteCode' 
+            WHERE HptCode = '$siteCode' 
             AND rewash.DocDate LIKE '%$search%'
             AND rewash.FacCode = '$FacCode'
             AND rewash.IsStatus > 0 
@@ -119,15 +109,10 @@ function load_doc_procees($conn, $DATA)
             dirty.IsReceive,
             dirty.IsProcess,
             dirty.IsStatus,
-            department.DepName,
-            site.HptCode,
-            site.HptName,
             'dirty' AS F
             FROM
                 dirty
-            INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
-            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-            WHERE site.HptCode = '$siteCode' 
+            WHERE HptCode = '$siteCode' 
             AND dirty.DocDate LIKE '%$search%'
             AND dirty.FacCode = '$FacCode'
             AND dirty.IsStatus > 0
@@ -135,32 +120,28 @@ function load_doc_procees($conn, $DATA)
 
             ORDER BY IsProcess ASC,DocNo DESC";
     } else {
-        $Sql = "SELECT
-            $From.DocNo,
-            $From.IsReceive,
-            $From.IsProcess,
-            $From.IsStatus,
-            department.DepName,
-            site.HptCode,
-            site.HptName,
-            '$From' AS F
-            FROM
-                $From
-            INNER JOIN department ON department.DepCode = $From.DepCode AND department.DepCode = $From.DepCode
-            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-            WHERE site.HptCode = '$siteCode' 
-            AND $From.DocDate LIKE '%$search%'
-            AND $From.FacCode = '$FacCode'
-            AND $From.IsStatus > 0 
-            AND $From.IsStatus != 9 
-            ORDER BY IsStatus ASC,DocNo DESC";
+            $Sql = "SELECT
+                        DocNo,
+                        IsReceive,
+                        IsProcess,
+                        IsStatus,
+                        '$From' AS F
+                    FROM
+                        $From
+                    WHERE
+                        HptCode = '$siteCode'
+                    AND DocDate LIKE '%$search%'
+                    AND FacCode = '$FacCode'
+                    AND IsStatus > 0
+                    AND IsStatus != 9
+                    ORDER BY
+                        IsStatus ASC,
+                        DocNo DESC";
     }
-
+    $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['DocNo'] = $Result['DocNo'];
-        $return[$count]['DepName'] = $Result['DepName'];
-        $return[$count]['HptName'] = $Result['HptName'];
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];
         $return[$count]['IsStatus'] = $Result['IsStatus'];
@@ -206,15 +187,10 @@ function load_doc_tracking($conn, $DATA)
                     dirty.IsReceive,
                     dirty.IsStatus,
                     dirty.IsProcess,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName,
                 'dirty' AS F
                 FROM
                     dirty
-                INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
+                WHERE HptCode = '$siteCode' 
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.IsStatus > 1 
                 AND dirty.IsStatus != 9 
@@ -224,14 +200,9 @@ function load_doc_tracking($conn, $DATA)
                     rewash.IsReceive,
                     rewash.IsStatus,
                     rewash.IsProcess,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName,
                 'rewash' AS F
                 FROM rewash
-                INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
+                WHERE HptCode = '$siteCode' 
                 AND rewash.IsStatus > 1
                 AND rewash.IsStatus != 9 
                 AND rewash.DocDate LIKE '%$search%'
@@ -241,14 +212,9 @@ function load_doc_tracking($conn, $DATA)
                     newlinentable.IsReceive,
                     newlinentable.IsStatus,
                     newlinentable.IsProcess,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName,
                 'newlinentable' AS F
                 FROM newlinentable
-                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
+                WHERE HptCode = '$siteCode' 
                 AND newlinentable.IsStatus > 1
                 AND newlinentable.IsStatus != 9 
                 AND newlinentable.DocDate LIKE '%$search%')a
@@ -258,8 +224,6 @@ function load_doc_tracking($conn, $DATA)
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['DocNo'] = $Result['DocNo'];
-        $return[$count]['DepName'] = $Result['DepName'];
-        $return[$count]['HptName'] = $Result['HptName'];
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsStatus'] = $Result['IsStatus'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];
@@ -302,20 +266,20 @@ function load_doc($conn, $DATA)
     $siteCode = $DATA["siteCode"];
     $boolean = false;
     $Sql = "SELECT
-                        dirty.DocNo,
-                        dirty.IsReceive,
-                        dirty.IsProcess,
-                        dirty.IsStatus,
-                        department.DepName,
-                        site.HptCode,
-                        site.HptName
-                FROM    dirty
-                INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND dirty.DocDate LIKE '%$search%'
-                AND dirty.IsStatus != 9 
-                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
+                    dirty.DocNo,
+                    dirty.IsReceive,
+                    dirty.IsProcess,
+                    dirty.IsStatus,
+                    department.DepName,
+                    site.HptCode,
+                    site.HptName
+            FROM    dirty
+            INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
+            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+            WHERE site.HptCode = '$siteCode' 
+            AND dirty.DocDate LIKE '%$search%'
+            AND dirty.IsStatus != 9 
+            ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
     $return['sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -403,6 +367,7 @@ function confirm_yes($conn, $DATA)
         if (mysqli_query($conn, $Sql)) {
             $count++;
         }
+        $return['Sql'] = $Sql;
     }
 
     if ($cnt_Arr == $count) {
@@ -438,17 +403,16 @@ function add_dirty($conn, $DATA)
 {
     $Userid = $DATA["Userid"];
     $siteCode = $DATA["siteCode"];
-    $DepCode = $DATA["DepCode"];
     $FacCode = $DATA["FacCode"];
     $Sql = "    SELECT CONCAT('DT',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
                     FROM dirty
-                    INNER JOIN department 
-                    ON dirty.DepCode = department.DepCode
+                    INNER JOIN site 
+                    ON dirty.HptCode = site.HptCode
                     WHERE DocNo Like CONCAT('DT',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                    AND department.HptCode = '$siteCode'
+                    AND site.HptCode = '$siteCode'
                     ORDER BY DocNo DESC LIMIT 1";
 
     $meQuery = mysqli_query($conn, $Sql);
@@ -458,8 +422,8 @@ function add_dirty($conn, $DATA)
         $DocDate = $Result['DocDate'];
         $RecNow  = $Result['RecNow'];
         $count = 1;
-        $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
-        mysqli_query($conn, $Sql);
+        // $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
+        // mysqli_query($conn, $Sql);
     }
 
     if ($count == 1) {
@@ -494,7 +458,7 @@ function add_dirty($conn, $DATA)
                                             NOW(),
                                             $FacCode
                                         )";
-        mysqli_query($conn, $Sql);
+        // mysqli_query($conn, $Sql);
 
         $Sql2 = "    INSERT INTO     daily_request
                                         (
@@ -515,11 +479,10 @@ function add_dirty($conn, $DATA)
                                             $Userid,
                                             DATE(NOW())
                                         )";
-        mysqli_query($conn, $Sql2);
+        // mysqli_query($conn, $Sql2);
 
         $return['user'] = $Userid;
         $return['siteCode'] = $siteCode;
-        $return['DepCode'] = $DepCode;
         $return['DocNo'] = $DocNo;
 
         $return['status'] = "success";

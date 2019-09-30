@@ -144,7 +144,7 @@ require '../getTimeZone.php';
 		function change_dep() {
 			var slt = $("#DepName").val();
 			var sltFac = $("#FacName").val();
-			if (slt == 0 || sltFac == 0) {
+			if (sltFac == 0) {
 				$("#btn_add_dirty").prop('disabled', true);
 			} else {
 				$("#btn_add_dirty").prop('disabled', false);
@@ -152,12 +152,10 @@ require '../getTimeZone.php';
 		}
 
 		function add_dirty() {
-			var DepCode = $("#DepName").val();
 			var FacCode = $("#FacName").val();
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
-				'DepCode': DepCode,
 				'FacCode': FacCode,
 				'STATUS': 'add_dirty'
 			};
@@ -308,10 +306,9 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'add_dirty') {
 							var Userid = temp['user']
 							var siteCode = temp['siteCode']
-							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
@@ -405,7 +402,7 @@ require '../getTimeZone.php';
 				</div>
 				<div class="modal-body text-center">
 					<?php echo $genarray['chooseDepartment'][$language] . $array['CreateDirtyLinenDoc'][$language]; ?>
-					<div class="input-group my-3">
+					<div class="input-group my-3" hidden>
 						<div class="input-group-prepend">
 							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>
 						</div>

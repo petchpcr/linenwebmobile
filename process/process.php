@@ -32,12 +32,13 @@
                      FROM delivery_fac_nhealth
                      WHERE HptCode = '$siteCode'
                      AND FacCode = '$FacCode') AS LimitTime,
-                    department.HptCode
+                     $From.HptCode  
                 FROM
                     process
                 INNER JOIN $From ON $From.DocNo = process.DocNo
-                INNER JOIN department ON department.DepCode = $From.DepCode
                 WHERE process.DocNo = '$DocNo'";
+
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return['DocNo'] = $Result['DocNo'];

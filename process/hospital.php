@@ -11,7 +11,7 @@
                             SELECT site.HptCode,site.HptName,site.picture 
                             FROM site,dirty,department 
                             WHERE site.IsStatus = 0
-                            AND dirty.DepCode = department.DepCode
+                            -- AND dirty.DepCode = department.DepCode
                             AND dirty.FacCode = $FacCode
                             AND department.HptCode = site.HptCode
 
@@ -20,7 +20,7 @@
                             SELECT site.HptCode,site.HptName,site.picture 
                             FROM site,rewash,department 
                             WHERE site.IsStatus = 0
-                            AND rewash.DepCode = department.DepCode
+                            -- AND rewash.DepCode = department.DepCode
                             AND rewash.FacCode = $FacCode
                             AND department.HptCode = site.HptCode
 
@@ -29,13 +29,13 @@
                             SELECT site.HptCode,site.HptName,site.picture 
                             FROM site,newlinentable,department 
                             WHERE site.IsStatus = 0
-                            AND newlinentable.DepCode = department.DepCode
+                            -- AND newlinentable.DepCode = department.DepCode
                             AND newlinentable.FacCode = $FacCode
                             AND department.HptCode = site.HptCode
                         ) h
                 GROUP BY HptCode
                 ORDER BY HptName ASC";
-        // $return['Sql'] = $Sql;
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['HptCode'] = $Result['HptCode'];
