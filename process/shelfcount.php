@@ -77,8 +77,8 @@
                         site.HptCode,
                         site.HptName
                 FROM    shelfcount
-                INNER JOIN department ON department.DepCode = shelfcount.DepCode AND department.DepCode = shelfcount.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+                INNER JOIN department ON department.DepCode = shelfcount.DepCode 
+                INNER JOIN site ON site.HptCode = department.HptCode 
                 WHERE site.HptCode = '$siteCode' 
                 AND shelfcount.DocDate LIKE '%$search%'
                 AND shelfcount.IsStatus >= 3 
