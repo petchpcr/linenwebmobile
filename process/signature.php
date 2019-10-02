@@ -35,17 +35,16 @@
 
     if($Time==1){
         $Sql = "SELECT FName,email
-        FROM users,department
-        WHERE users.HptCode = department.HptCode
-        AND department.DepCode = (SELECT DepCode 
-                                FROM dirty 
-                                WHERE DocNo = '$DocNo' 
-                                UNION ALL 
-                                SELECT DepCode 
-                                FROM rewash 
-                                WHERE DocNo = '$DocNo'
-                                )
-        AND users.Active_mail = 1";
+        FROM users
+        WHERE HptCode = (SELECT HptCode 
+                            FROM dirty 
+                            WHERE DocNo = '$DocNo' 
+                            UNION ALL 
+                            SELECT HptCode 
+                            FROM repair_wash 
+                            WHERE DocNo = '$DocNo'
+                            )
+        AND Active_mail = 1";
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
 
@@ -54,11 +53,24 @@
         $return['email'] = $email;
 
         $Sql = "SELECT FacName,HptName 
-        FROM dirty,department,site,factory 
-        WHERE DocNo='$DocNo' 
-        AND dirty.DepCode = department.DepCode 
-        AND factory.FacCode = dirty.FacCode 
-        AND department.HptCode=site.HptCode";
+        FROM site,factory 
+        WHERE factory.FacCode = (SELECT FacCode 
+                            FROM dirty 
+                            WHERE DocNo = '$DocNo' 
+                            UNION ALL 
+                            SELECT FacCode 
+                            FROM repair_wash 
+                            WHERE DocNo = '$DocNo'
+                            )
+
+        AND site.HptCode = (SELECT HptCode 
+                            FROM dirty 
+                            WHERE DocNo = '$DocNo' 
+                            UNION ALL 
+                            SELECT HptCode 
+                            FROM repair_wash 
+                            WHERE DocNo = '$DocNo'
+                            )";
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $FacName = $Result['FacName'];

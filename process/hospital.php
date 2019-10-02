@@ -5,10 +5,16 @@
 
     function load_site($conn){
         $FacCode = $_SESSION['FacCode'];
+        $lang = $_SESSION['lang'];
+        if ($lang = 'th') {
+            $hptname = "HptNameTH";
+        } else {
+            $hptname = "HptName";
+        }
         $count = 0;
         $Sql = "SELECT * 
                 FROM    (
-                            SELECT site.HptCode,site.HptName,site.picture 
+                            SELECT site.HptCode,site.$hptname AS Hname,site.picture 
                             FROM site,dirty,department 
                             WHERE site.IsStatus = 0
                             -- AND dirty.DepCode = department.DepCode
@@ -17,7 +23,7 @@
 
                             UNION All
 
-                            SELECT site.HptCode,site.HptName,site.picture 
+                            SELECT site.HptCode,site.$hptname AS Hname,site.picture 
                             FROM site,rewash,department 
                             WHERE site.IsStatus = 0
                             -- AND rewash.DepCode = department.DepCode
@@ -26,7 +32,7 @@
 
                             UNION All
 
-                            SELECT site.HptCode,site.HptName,site.picture 
+                            SELECT site.HptCode,site.$hptname AS Hname,site.picture 
                             FROM site,newlinentable,department 
                             WHERE site.IsStatus = 0
                             -- AND newlinentable.DepCode = department.DepCode
@@ -34,12 +40,12 @@
                             AND department.HptCode = site.HptCode
                         ) h
                 GROUP BY HptCode
-                ORDER BY HptName ASC";
+                ORDER BY Hname ASC";
         $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['HptCode'] = $Result['HptCode'];
-            $return[$count]['HptName'] = $Result['HptName'];
+            $return[$count]['HptName'] = $Result['Hname'];
             $return[$count]['picture'] = $Result['picture'];
             $count++;
         }

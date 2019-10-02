@@ -91,18 +91,18 @@ function load_doc_procees($conn, $DATA)
             UNION ALL       
     
             SELECT
-            rewash.DocNo,
-            rewash.IsReceive,
-            rewash.IsProcess,
-            rewash.IsStatus,
-            'rewash' AS F
+            repair_wash.DocNo,
+            repair_wash.IsReceive,
+            repair_wash.IsProcess,
+            repair_wash.IsStatus,
+            'repair_wash' AS F
             FROM
-                rewash
+                repair_wash
             WHERE HptCode = '$siteCode' 
-            AND rewash.DocDate LIKE '%$search%'
-            AND rewash.FacCode = '$FacCode'
-            AND rewash.IsStatus > 0 
-            AND rewash.IsStatus != 9 
+            AND repair_wash.DocDate LIKE '%$search%'
+            AND repair_wash.FacCode = '$FacCode'
+            AND repair_wash.IsStatus > 0 
+            AND repair_wash.IsStatus != 9 
             UNION ALL                 
             SELECT
             dirty.DocNo,
@@ -196,16 +196,16 @@ function load_doc_tracking($conn, $DATA)
                 AND dirty.IsStatus != 9 
                 UNION ALL
                 SELECT
-                    rewash.DocNo,
-                    rewash.IsReceive,
-                    rewash.IsStatus,
-                    rewash.IsProcess,
-                'rewash' AS F
-                FROM rewash
+                    repair_wash.DocNo,
+                    repair_wash.IsReceive,
+                    repair_wash.IsStatus,
+                    repair_wash.IsProcess,
+                'repair_wash' AS F
+                FROM repair_wash
                 WHERE HptCode = '$siteCode' 
-                AND rewash.IsStatus > 1
-                AND rewash.IsStatus != 9 
-                AND rewash.DocDate LIKE '%$search%'
+                AND repair_wash.IsStatus > 1
+                AND repair_wash.IsStatus != 9 
+                AND repair_wash.DocDate LIKE '%$search%'
                 UNION ALL
                 SELECT
                     newlinentable.DocNo,
@@ -266,26 +266,19 @@ function load_doc($conn, $DATA)
     $siteCode = $DATA["siteCode"];
     $boolean = false;
     $Sql = "SELECT
-                    dirty.DocNo,
-                    dirty.IsReceive,
-                    dirty.IsProcess,
-                    dirty.IsStatus,
-                    department.DepName,
-                    site.HptCode,
-                    site.HptName
+                    DocNo,
+                    IsReceive,
+                    IsProcess,
+                    IsStatus
             FROM    dirty
-            INNER JOIN department ON department.DepCode = dirty.DepCode AND department.DepCode = dirty.DepCode
-            INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-            WHERE site.HptCode = '$siteCode' 
-            AND dirty.DocDate LIKE '%$search%'
-            AND dirty.IsStatus != 9 
-            ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
+            WHERE HptCode = '$siteCode' 
+            AND DocDate LIKE '%$search%'
+            AND IsStatus != 9 
+            ORDER BY IsStatus ASC,DocNo DESC";
     $return['sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['DocNo'] = $Result['DocNo'];
-        $return[$count]['DepName'] = $Result['DepName'];
-        $return[$count]['HptName'] = $Result['HptName'];
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];
         $return[$count]['IsStatus'] = $Result['IsStatus'];
@@ -317,10 +310,11 @@ function receive_zero($conn, $DATA)
     $return['DocNo'] = $DocNo;
     $return['From'] = $From;
 
-    $Sql = "SELECT ".$From."_detail.ItemCode,".$From."_detail.Qty,item.ItemName 
+    $Sql = "SELECT ".$From."_detail.ItemCode,SUM(".$From."_detail.Qty) AS Qty,item.ItemName 
             FROM ".$From."_detail 
             INNER JOIN item ON ".$From."_detail.ItemCode = item.ItemCode 
-            WHERE DocNo = '$DocNo'";
+            WHERE DocNo = '$DocNo'
+            GROUP BY ".$From."_detail.ItemCode";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -330,6 +324,7 @@ function receive_zero($conn, $DATA)
         $count++;
     }
     $return['count'] = $count;
+    $return['Sql'] = $Sql;
 
     if ($count > 0) {
         $return['DocNo'] = $DocNo;
@@ -370,7 +365,7 @@ function confirm_yes($conn, $DATA)
         $return['Sql'] = $Sql;
     }
 
-    if ($cnt_Arr == $count) {
+    if ($count > 0) {
         $Sql = "UPDATE $From SET IsReceive = 1,IsStatus = 2,FacCode = $FacCode,ReceiveDate = NOW() WHERE DocNo = '$DocNo'";
 
         if (mysqli_query($conn, $Sql)) {
@@ -389,7 +384,8 @@ function confirm_yes($conn, $DATA)
             die;
         }
     } else {
-        $return['cause'] = "update loop(".$count.") != array size(".$cnt_Arr.")";
+        // $return['cause'] = "update loop(".$count.") != array size(".$cnt_Arr.")";
+        $return['cause'] = "count = ".$count;
         $return['status'] = "failed";
         $return['form'] = "confirm_yes";
         echo json_encode($return);
