@@ -37,16 +37,21 @@
         $Sql = "SELECT FName,email
         FROM users
         WHERE HptCode = (SELECT HptCode 
-                            FROM dirty 
-                            WHERE DocNo = '$DocNo' 
-                            UNION ALL 
-                            SELECT HptCode 
-                            FROM repair_wash 
-                            WHERE DocNo = '$DocNo'
-                            )
+                        FROM dirty 
+                        WHERE DocNo = '$DocNo' 
+                        UNION ALL 
+                        SELECT HptCode 
+                        FROM repair_wash 
+                        WHERE DocNo = '$DocNo'
+                        UNION ALL 
+                        SELECT HptCode 
+                        FROM newlinentable 
+                        WHERE DocNo = '$DocNo'
+                        )
         AND Active_mail = 1";
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
+        $return['Sql1'] = $Sql;
 
         $email = $Result['email'];
         $FName = $Result['FName'];
@@ -61,6 +66,10 @@
                             SELECT FacCode 
                             FROM repair_wash 
                             WHERE DocNo = '$DocNo'
+                            UNION ALL 
+                            SELECT FacCode 
+                            FROM newlinentable 
+                            WHERE DocNo = '$DocNo'
                             )
 
         AND site.HptCode = (SELECT HptCode 
@@ -70,12 +79,17 @@
                             SELECT HptCode 
                             FROM repair_wash 
                             WHERE DocNo = '$DocNo'
+                            UNION ALL 
+                            SELECT FacCode 
+                            FROM newlinentable 
+                            WHERE DocNo = '$DocNo'
                             )";
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $FacName = $Result['FacName'];
         $HptName = $Result['HptName'];
         
+        $return['Sql2'] = $Sql;
         $return['HptName'] = $HptName;
 
         $Subject = "Delivery over time";
