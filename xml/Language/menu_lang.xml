@@ -11,8 +11,8 @@
 <factory><en>Laundry</en><th>โรงงานซัก</th></factory>
 <tracking><en>Tracking</en><th>ติดตาม</th></tracking>
 <newLinen><en>New Linen</en><th>ผ้าสะอาดส่งซัก</th></newLinen>
-<shelfcount><en>Shelf Count</en><th>จ่ายผ้า</th></shelfcount>
-<shelf_count><en>Shelf Count</en><th>เชลเคาท์</th></shelf_count>
+<shelfcount><en>Delivery to customer</en><th>ส่งผ้า</th></shelfcount>
+<shelf_count><en>Shelf Count</en><th>Shelf Count</th></shelf_count>
 <qr_code><en>QR Code</en><th>QR Code</th></qr_code>
 
 </lang>
