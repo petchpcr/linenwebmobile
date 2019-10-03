@@ -24,16 +24,22 @@
 
     $return['Sql_up_from'] = $Sql;
 
-    $Sql = "SELECT IF(SendOverTime<0, TRUE, FALSE) AS t,SendOverTime FROM process WHERE DocNo='$DocNo'";
+    $Sql = "SELECT IF(SendOverTime < 0, TRUE, FALSE) AS t,
+            TIME_TO_SEC(SUBSTRING(SendOverTime,2))/60 AS SendOverTime,
+            DATE_FORMAT(SendStartTime,'%H:%i') AS SendStartTime,
+            DATE_FORMAT(SendEndTime,'%H:%i') AS SendEndTime 
+            FROM process WHERE DocNo='$DocNo'";
     $meQuery=mysqli_query($conn,$Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $Time = $Result['t'];
-    $SendOverTime = $Result['SendOverTime'];
-
+    $SendStartTime = $Result['SendStartTime'];
+    $SendEndTime = $Result['SendEndTime'];
+    $SendOverTime = floor($Result['SendOverTime']);
     $return['Sql_overT'] = $Sql;
     $return['Time'] = $Time;
 
     if($Time==1){
+        //============= SELECT Email AND Name =============
         $Sql = "SELECT FName,email
         FROM users
         WHERE HptCode = (SELECT HptCode 
@@ -57,58 +63,90 @@
         $FName = $Result['FName'];
         $return['email'] = $email;
 
-        $Sql = "SELECT FacName,HptName 
-        FROM site,factory 
-        WHERE factory.FacCode = (SELECT FacCode 
-                            FROM dirty 
-                            WHERE DocNo = '$DocNo' 
-                            UNION ALL 
-                            SELECT FacCode 
-                            FROM repair_wash 
-                            WHERE DocNo = '$DocNo'
-                            UNION ALL 
-                            SELECT FacCode 
-                            FROM newlinentable 
-                            WHERE DocNo = '$DocNo'
-                            )
+        //============= SELECT FacCode AND HptCode =============
+        $Sql = "SELECT (SELECT FacCode 
+                        FROM dirty 
+                        WHERE DocNo = '$DocNo' 
+                        UNION ALL 
+                        SELECT FacCode 
+                        FROM repair_wash 
+                        WHERE DocNo = '$DocNo'
+                        UNION ALL 
+                        SELECT FacCode 
+                        FROM newlinentable 
+                        WHERE DocNo = '$DocNo'
+                        ) AS FacCode,
 
-        AND site.HptCode = (SELECT HptCode 
-                            FROM dirty 
-                            WHERE DocNo = '$DocNo' 
-                            UNION ALL 
-                            SELECT HptCode 
-                            FROM repair_wash 
-                            WHERE DocNo = '$DocNo'
-                            UNION ALL 
-                            SELECT FacCode 
-                            FROM newlinentable 
-                            WHERE DocNo = '$DocNo'
-                            )";
+                        (SELECT HptCode 
+                        FROM dirty 
+                        WHERE DocNo = '$DocNo' 
+                        UNION ALL 
+                        SELECT HptCode 
+                        FROM repair_wash 
+                        WHERE DocNo = '$DocNo'
+                        UNION ALL 
+                        SELECT FacCode 
+                        FROM newlinentable 
+                        WHERE DocNo = '$DocNo'
+                        ) AS HptCode";
+
+        $meQuery=mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $FacCode = $Result['FacCode'];
+        $HptCode = $Result['HptCode'];
+
+        //============= SELECT FacCode AND HptCode =============
+        $Sql = "SELECT FacName,FacNameTH,HptName,HptNameTH 
+        FROM site,factory 
+        WHERE factory.FacCode = $FacCode 
+        AND site.HptCode = '$HptCode'";
+
         $meQuery=mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $FacName = $Result['FacName'];
+        $FacNameTH = $Result['FacNameTH'];
         $HptName = $Result['HptName'];
+        $HptNameTH = $Result['HptNameTH'];
         
         $return['Sql2'] = $Sql;
         $return['HptName'] = $HptName;
 
+        $Sql = "SELECT SendTime FROM delivery_fac_nhealth WHERE HptCode = '$HptCode' AND FacCode = $FacCode";
+        $meQuery=mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $SendTime = $Result['SendTime'];
+
+        //============= TEXT OF EMAIL =============
         $Subject = "Delivery over time";
-        // build message body
-        $body = '
-        <html>
-        <body>
-        <br>
-        ___________________________________________________________________<br>
-        <br>
-        Document : '.$DocNo.'<br>
-        From : '.$FacName.' To : '.$HptName.'<br>
-        Over time : '.$SendOverTime.'
-        <br>___________________________________________________________________<br>
-        <br>
-        Thanks...<br>
-        </body>
-        </html>
-        ';
+        $body = "
+            <html>
+            <body>
+
+            <hr style='margin:25px 0;'>
+
+            <div style='margin-bottom:10px;'>Laundry : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$FacName."</u>
+            To : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$HptName."</u></div>
+            <div style='margin-bottom:10px;'>Document : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$DocNo."</u></div>
+            <div style='margin-bottom:10px;'>Start Time Delivery : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 50px 0 10px;'>".$SendStartTime."</u>
+            Finish Time Delivery : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$SendEndTime."</u></div>
+            <div style='margin-bottom:10px;'>Set Time : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 90px 0 10px;'>".$SendTime." Minute</u>
+            Over Time : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$SendOverTime." Minute</u></div>
+
+            <hr style='margin:25px 0;'>
+
+            <div style='margin-bottom:10px;'>โรงซัก : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$FacNameTH."</u>
+            ถึง โรงพยาบาล : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$HptNameTH."</u></div>
+            <div style='margin-bottom:10px;'>เลขที่เอกสาร : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$DocNo."</u></div>
+            <div style='margin-bottom:10px;'>เริ่มเดินทาง : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 100px 0 10px;'>".$SendStartTime." น.</u>
+            สิ้นสุดการเดินทาง : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$SendEndTime." น.</u></div>
+            <div style='margin-bottom:10px;'>ระยะเวลาที่กำหนด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 80px 0 10px;'>".$SendTime." นาที</u>
+            ระยะเวลาช้ากว่ากำหนด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$SendOverTime." นาที</u></div>
+
+            <hr style='margin:25px 0;'>
+
+            </body>
+            </html>
+            ";
     
         $mail = new PHPMailer;
         $mail->CharSet = "UTF-8";
