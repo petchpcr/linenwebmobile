@@ -221,7 +221,7 @@
             $return['user'] = $Userid;
             $return['siteCode'] = $siteCode;
             $return['DepCode'] = $DepCode;
-            // $return['DocNo'] = $DocNo;
+            $return['DocNo'] = $DocNo;
 
             $return['status'] = "success";
             $return['form'] = "add_sc";

@@ -11,6 +11,7 @@ $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
+$Create = $_GET['Create'];
 // $Userid = $_GET['user'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
@@ -34,8 +35,12 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var siteCode = '<?php echo $siteCode; ?>';
+		var Menu = '<?php echo $Menu; ?>';
 		var DocNo = "<?php echo $DocNo ?>";
 		var DepCode = "<?php echo $DepCode ?>";
+		var Create = "<?php echo isset($_GET['Create'])?$Create:0; ?>";
+		var Notsave = 0;
 		var old_i_code = [];
 		var old_i_name = [];
 		var old_i_qty = [];
@@ -90,6 +95,7 @@ $genarray = json_decode($json, TRUE);
 			$(".chk-item").each(function() {
 				var code, name, qty;
 				if ($(this).is(':checked')) {
+					Notsave = 1;
 					var qty_id = "#chqty" + $(this).attr("data-i");
 					code = $(this).attr("data-code");
 					name = $(this).attr("data-name");
@@ -185,6 +191,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function edit_qty() {
+			Notsave = 1;
 			var ar = $("#viewname").attr("data-ar");
 			var Title = "จำนวนผิดพลาด";
 			var Type = "warning";
@@ -213,6 +220,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function del_item() {
+			Notsave = 1;
 			var code = $("#viewname").attr("data-code");
 			// หา Index ของคำนั้น
 			var iold = old_i_code.indexOf(code); 
@@ -235,30 +243,64 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item() {
-			var old_code = old_i_code.join(',');
-			var old_qty = old_i_qty.join(',');
-			var old_par = old_i_par.join(',');
-			var new_code = new_i_code.join(',');
-			var new_qty = new_i_qty.join(',');
-			var new_par = new_i_par.join(',');
+			var old_size = old_i_code.length;
+			var new_size = new_i_code.length;
+			if (old_size == 0 && new_size == 0) {
+				var Title = "ไม่สามารถบันทึกข้อมูลได้";
+				var Text = "ต้องมีข้อมูลในเอกสาร";
+				var Type = "warning";
+				AlertError(Title, Text, Type);
+			} else {
+				var old_code = old_i_code.join(',');
+				var old_qty = old_i_qty.join(',');
+				var old_par = old_i_par.join(',');
+				var new_code = new_i_code.join(',');
+				var new_qty = new_i_qty.join(',');
+				var new_par = new_i_par.join(',');
 
+				var data = {
+					'DocNo': DocNo,
+					'old_code': old_code,
+					'old_qty': old_qty,
+					'old_par': old_par,
+					'new_code': new_code,
+					'new_qty': new_qty,
+					'new_par': new_par,
+					'STATUS': 'add_item'
+				};
+				senddata(JSON.stringify(data));
+			}
+		}
+
+		function del_doc() {
 			var data = {
 				'DocNo': DocNo,
-				'old_code': old_code,
-				'old_qty': old_qty,
-				'old_par': old_par,
-				'new_code': new_code,
-				'new_qty': new_qty,
-				'new_par': new_par,
-				'STATUS': 'add_item'
+				'STATUS': 'del_doc'
 			};
 			senddata(JSON.stringify(data));
 		}
 
 		function back() {
-			var siteCode = '<?php echo $siteCode; ?>';
-			var Menu = '<?php echo $Menu; ?>';
-			window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+			if (Notsave == 1 || Create == 1) {
+				swal({
+					title: "ข้อมูลยังไม่ถูกบันทึก",
+					text: "ต้องการละทิ้งหรือไม่ ?",
+					type: "question",
+					showConfirmButton: true,
+					showCancelButton: true,
+					confirmButtonColor: '#d33',
+					confirmButtonText: '<?php echo $genarray['yes2'][$language]; ?>',
+					cancelButtonText: '<?php echo $genarray['cancel'][$language]; ?>'
+				}).then((result) => {
+					if (Create == 1) {
+						del_doc();
+					} else {
+						window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+					}
+				})
+			} else {
+				window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+			}
 		}
 
 		function AlertError(Title, Text, Type) {
@@ -317,7 +359,6 @@ $genarray = json_decode($json, TRUE);
 
 									$("#item").append(Str);
 								}
-								
 							}
 
 						} else if (temp["form"] == 'choose_items') {
@@ -357,23 +398,10 @@ $genarray = json_decode($json, TRUE);
 							$("#md_chooseitem").modal('hide');
 
 						} else if (temp["form"] == 'add_item') {
-							back();
+							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
 
-						} else if (temp["form"] == 'create_claim') {
-							save_qc();
-
-						} else if (temp["form"] == 'create_rewash') {
-							var NewDocNo = temp['NewDocNo'];
-							send_rewash(NewDocNo);
-
-						} else if (temp["form"] == 'save_qc') {
-							save_item_stock();
-
-						} else if (temp["form"] == 'save_item_stock') {
-							var Menu = "<?php echo $Menu ?>";
-							var siteCode = "<?php echo $siteCode ?>";
-
-							window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + DocNo + '&siteCode=' + siteCode;
+						} else if (temp["form"] == 'del_doc') {
+							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
 
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';

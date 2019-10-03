@@ -173,21 +173,9 @@ require '../getTimeZone.php';
 								var status_line = "";
 
 								if (temp[i]['IsStatus'] == 0) {
-									status_class = "status2";
-									status_text = "หยุดชั่วขณะ";
-									status_line = "StatusLine_2";
-								} else if (temp[i]['IsStatus'] == 3 && temp[i]['DvStartTime'] == null) {
-									status_class = "status4";
-									status_text = "<?php echo $genarray['statusNotWork'][$language]; ?>";
-									status_line = "StatusLine_4";
-								} else if (temp[i]['IsStatus'] == 3 && temp[i]['DvStartTime'] != null) {
 									status_class = "status1";
-									status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
+									status_text = "สร้างเอกสารเสร็จสิ้น";
 									status_line = "StatusLine_1";
-								} else if (temp[i]['IsStatus'] == 4 && temp[i]['signature'] != null) {
-									status_class = "status3";
-									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
-									status_line = "StatusLine_3";
 								}
 
 								var Str = "<button onclick='show_item(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
@@ -204,8 +192,8 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'add_sc') {
 							// var Userid = temp['user']
 							var DepCode = temp['DepCode']
-							var DocNo = temp['DocNo']
-							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu;
+							// var DocNo = temp['DocNo']
+							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + temp['DocNo'] + '&Menu=' + Menu + '&Create=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
