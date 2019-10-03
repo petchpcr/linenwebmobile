@@ -33,6 +33,8 @@ require '../getTimeZone.php';
 	?>
 
 	<script>
+		var siteCode = "<?php echo $siteCode ?>";
+		var Menu = '<?php echo $Menu ?>';
 		$(document).ready(function(e) {
 			load_dep();
 			load_site();
@@ -42,7 +44,6 @@ require '../getTimeZone.php';
 
 		// function
 		function load_dep() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_dep'
@@ -51,7 +52,6 @@ require '../getTimeZone.php';
 		}
 
 		function load_Fac() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'STATUS': 'load_Fac'
 			};
@@ -61,7 +61,6 @@ require '../getTimeZone.php';
 
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_site'
@@ -71,8 +70,6 @@ require '../getTimeZone.php';
 
 		function load_doc() {
 			var search = $('#datepicker').val();
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = "<?php echo $Menu ?>";
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
@@ -82,11 +79,12 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
-		function show_process(DocNo) {
-			var siteCode = '<?php echo $siteCode ?>';
-			var Menu = '<?php echo $Menu ?>';
-
-			window.location.href = 'shelf_process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+		function show_item(DocNo) {
+			var data = {
+				'DocNo': DocNo,
+				'STATUS': 'show_item'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function confirm_yes(DocNo, From) {
@@ -110,7 +108,6 @@ require '../getTimeZone.php';
 
 		function add_sc() {
 			var Userid = "<?php echo $Userid ?>";
-			var siteCode = "<?php echo $siteCode ?>";
 			var DepCode = $("#DepName").val();
 			var FacCode = $("#FacName").val();
 			var data = {
@@ -124,7 +121,6 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			var Menu = '<?php echo $Menu; ?>';
 			if (Menu == "factory") {
 				window.location.href = "hospital.php?Menu=factory";
 			} else {
@@ -194,7 +190,7 @@ require '../getTimeZone.php';
 									status_line = "StatusLine_3";
 								}
 
-								var Str = "<button onclick='show_process(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+								var Str = "<button onclick='show_item(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
 								Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
 								Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
 								Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
@@ -202,12 +198,13 @@ require '../getTimeZone.php';
 								$("#document").append(Str);
 
 							}
+						} else if (temp["form"] == 'show_item') {
+							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&DepCode=' + temp['DepCode'];
+
 						} else if (temp["form"] == 'add_sc') {
-							var Userid = temp['user']
-							var siteCode = temp['siteCode']
+							// var Userid = temp['user']
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
-							var Menu = '<?php echo $Menu; ?>';
 							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';

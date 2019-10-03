@@ -221,7 +221,7 @@
             $return['user'] = $Userid;
             $return['siteCode'] = $siteCode;
             $return['DepCode'] = $DepCode;
-            $return['DocNo'] = $DocNo;
+            // $return['DocNo'] = $DocNo;
 
             $return['status'] = "success";
             $return['form'] = "add_sc";
@@ -236,6 +236,21 @@
             mysqli_close($conn);
             die;
         }
+    }
+
+    function show_item($conn, $DATA) {
+        $DocNo = $DATA["DocNo"];
+        $Sql = "SELECT DepCode FROM shelfcount WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn, $Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $return['DepCode'] = $Result['DepCode'];
+        $return['DocNo'] = $DocNo;
+
+        $return['status'] = "success";
+        $return['form'] = "show_item";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
     }
 
     function load_Fac($conn, $DATA){
@@ -281,6 +296,9 @@
         }
         else if ($DATA['STATUS'] == 'confirm_yes') {
             confirm_yes($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'show_item') {
+            show_item($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'add_sc') {
             add_sc($conn, $DATA);

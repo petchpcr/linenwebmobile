@@ -11,7 +11,6 @@ function load_items($conn, $DATA)
     $return['ItemCode'] = $ItemCode;
     $Sql = "SELECT  item.ItemName,
                         item.ItemCode,
-                        item.UnitCode,
                         shelfcount_detail.ParQty,
                         shelfcount_detail.CcQty,
                         shelfcount_detail.TotalQty
@@ -21,13 +20,13 @@ function load_items($conn, $DATA)
 
                 WHERE   item.ItemCode = shelfcount_detail.ItemCode
 
-                AND     shelfcount_detail.DocNo = '$DocNo'";
+                AND     shelfcount_detail.DocNo = '$DocNo'
+                ORDER BY item.ItemName";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['ItemCode'] = $Result['ItemCode'];
         $return[$count]['ItemName'] = $Result['ItemName'];
-        $return[$count]['UnitCode'] = $Result['UnitCode'];
         $return[$count]['ParQty'] = $Result['ParQty'];
         $return[$count]['CcQty'] = $Result['CcQty'];
         $return[$count]['TotalQty'] = $Result['TotalQty'];
@@ -110,6 +109,49 @@ function get_par($conn, $DATA)
         mysqli_close($conn);
         die;
     }
+}
+
+function add_item($conn, $DATA)
+{
+    $DocNo = $DATA['DocNo'];
+    $old_code = $DATA['old_code'];
+    $old_qty = $DATA['old_qty'];
+    $old_par = $DATA['old_par'];
+    $new_code = $DATA['new_code'];
+    $new_qty = $DATA['new_qty'];
+    $new_par = $DATA['new_par'];
+
+    $ar_old_code = explode(",", $old_code);
+    $ar_old_qty = explode(",", $old_qty);
+    $ar_old_par = explode(",", $old_par);
+    $ar_new_code = explode(",", $new_code);
+    $ar_new_qty = explode(",", $new_qty);
+    $ar_new_par = explode(",", $new_par);
+
+    $Sql = "DELETE FROM shelfcount_detail WHERE DocNo = '$DocNo'";
+    mysqli_query($conn,$Sql);
+
+    foreach($ar_old_code as $i => $val){
+        $total = $ar_old_par[$i]-$ar_old_qty[$i];
+        $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
+                VALUES ('$DocNo','$val',1,$ar_old_par[$i],$ar_old_qty[$i],$total) ";
+        $return[$i]['CcQty'] = $ar_old_qty[$i];
+        mysqli_query($conn,$Sql);
+    }
+
+    foreach($ar_new_code as $i => $val){
+        $total = $ar_new_par[$i]-$ar_new_qty[$i];
+        $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
+                VALUES ('$DocNo','$val',1,$ar_new_par[$i],$ar_new_qty[$i],$total) ";
+        $return[$i]['CcQty'] = $ar_new_qty[$i];
+        mysqli_query($conn,$Sql);
+    }
+
+    $return['status'] = "success";
+    $return['form'] = "add_item";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
 }
 
 function show_quantity($conn, $DATA)
@@ -983,8 +1025,8 @@ if (isset($_POST['DATA'])) {
         choose_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'get_par') {
         get_par($conn, $DATA);
-    } else if ($DATA['STATUS'] == 'show_question') {
-        show_question($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'add_item') {
+        add_item($conn, $DATA);
     } else if ($DATA['STATUS'] == 'chk_items') {
         chk_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'close_question') {
