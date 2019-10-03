@@ -51,6 +51,8 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
 			} else if (menu == 'shelfcount') {
 				window.location.href = 'shelfcount.php?siteCode=<?php echo $HptCode; ?>&Menu=shelfcount';
+			} else if (menu == 'shelf_count') {
+				window.location.href = 'shelf_count.php?siteCode=<?php echo $HptCode; ?>&Menu=shelf_count';
 			} else if (menu == 'newlinentable') {
 				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>&Menu=newlinentable';
 			} else if (menu == 'qr_code') {
@@ -210,6 +212,12 @@ $genarray = json_decode($json, TRUE);
 			}
 
 			?>
+			<div class="my-col-menu">
+				<button onclick="menu_click('shelf_count')" type="button" class="btn btn-mylight btn-block">
+					<img src="../img/storage.png">
+					<div class="text-truncate"><?php echo $array["shelf_count"][$language]; ?></div>
+				</button>
+			</div>
 			<div class="my-col-menu">
 				<button onclick="menu_click('qr_code')" type="button" class="btn btn-mylight btn-block">
 					<img src="../img/qrcode.png">
