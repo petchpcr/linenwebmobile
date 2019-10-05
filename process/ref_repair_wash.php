@@ -41,19 +41,19 @@ function load_doc($conn, $DATA)
     $return['siteCode'] = $siteCode;
     $boolean = false;
     $Sql = "SELECT
-                    dirty.DocNo,
-                    dirty.IsReceive,
-                    dirty.IsProcess,
-                    dirty.IsStatus,
+                    repair_wash.DocNo,
+                    repair_wash.IsReceive,
+                    repair_wash.IsProcess,
+                    repair_wash.IsStatus,
                     site.HptName
                 FROM
-                dirty
-                INNER JOIN site ON site.HptCode = dirty.HptCode 
+                repair_wash
+                INNER JOIN site ON site.HptCode = repair_wash.HptCode 
                 WHERE site.HptCode = '$siteCode' 
-                AND dirty.DocDate LIKE '%$search%'
-                AND dirty.IsStatus = 3
-                AND dirty.IsStatus != 9 
-                ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
+                AND repair_wash.DocDate LIKE '%$search%'
+                AND repair_wash.IsStatus = 3
+                AND repair_wash.IsStatus != 9 
+                ORDER BY repair_wash.IsStatus ASC,repair_wash.DocNo DESC";
     $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {

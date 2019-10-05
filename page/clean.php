@@ -98,9 +98,9 @@ require '../getTimeZone.php';
 			var Menu = '<?php echo $Menu ?>';
 			var slt = $("#DocName").val();
 			if (slt == 1) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=dirty';
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 2) {
-				window.location.href = 'ref_rewash.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
+				window.location.href = 'ref_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 3) {
 				window.location.href = 'ref_newlinentable.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 4) {

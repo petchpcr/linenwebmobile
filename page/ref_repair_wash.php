@@ -93,7 +93,7 @@ require '../getTimeZone.php';
 			form_data.append("DATA", data);
 
 			$.ajax({
-				url: '../process/ref_dirty.php',
+				url: '../process/ref_repair_wash.php',
 				dataType: 'text',
 				cache: false,
 				contentType: false,
