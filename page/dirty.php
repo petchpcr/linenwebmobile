@@ -318,7 +318,7 @@ require '../getTimeZone.php';
 							var siteCode = temp['siteCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

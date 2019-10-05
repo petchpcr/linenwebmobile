@@ -110,7 +110,7 @@ $genarray = json_decode($json, TRUE);
 			var siteCode = '<?php echo $siteCode; ?>';
 			var Menu = '<?php echo $Menu; ?>';
 			var DepCode = $("#add_doc").data("depcode");
-			window.location.href = 'add_items.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid;
+			window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid;
 		}
 
 		function senddata(data) {
