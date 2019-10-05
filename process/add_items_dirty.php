@@ -4,19 +4,8 @@
     require 'logout.php';
 
     function choose_items($conn, $DATA){
-        $DepCode = $DATA["DepCode"];
         $Search = $DATA["Search"];
         $count = 0;
-        $boolean = false;
-        $Sql = "SELECT department.DepName,site.HptName
-                FROM department 
-                INNER JOIN site ON department.HptCode = site.HptCode 
-                WHERE department.DepCode = '$DepCode'";
-        $meQuery = mysqli_query($conn,$Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)){
-            $return['DepName']	=  $Result['DepName'];
-            $return['HptName']	=  $Result['HptName'];
-        }
 
         $Sql = "SELECT  * 
                 FROM    item 
@@ -29,10 +18,10 @@
             $return[$count]['ItemName']	=  $Result['ItemName'];
             $return[$count]['UnitCode']	=  $Result['UnitCode'];
             $count++;
-            $boolean = true;
         }
+        $return['cnt'] = $count;
 
-        if ($boolean) {
+        if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "choose_items";
             echo json_encode($return);
@@ -55,13 +44,14 @@
                         item.ItemName,
                         dirty_detail.UnitCode,
                         dirty_detail.Qty,
-                        dirty_detail.Weight 
+                        dirty_detail.Weight,
+                        dirty_detail.DepCode  
                 FROM dirty_detail,
                      item 
                 WHERE DocNo = '$DocNo'
                 AND	  item.ItemCode = dirty_detail.ItemCode
                 ORDER BY ItemName ASC";
-
+        $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode'] = $Result['ItemCode'];
@@ -69,6 +59,7 @@
             $return[$count]['UnitCode'] = $Result['UnitCode'];
             $return[$count]['Qty'] = $Result['Qty'];
             $return[$count]['Weight'] = $Result['Weight'];
+            $return[$count]['DepCode'] = $Result['DepCode'];
             $count++;
         }
         $return['count'] = $count;
@@ -88,49 +79,55 @@
         }
     }
 
+    function load_dep($conn, $DATA){
+        $siteCode = $DATA['siteCode'];
+        $count = 0;
+
+        $Sql = "SELECT DepCode,DepName FROM department WHERE HptCode = '$siteCode'";
+
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)){
+            $return[$count]['DepCode'] = $Result['DepCode'];
+            $return[$count]['DepName'] = $Result['DepName'];
+            $count++;
+        }
+        $return['count'] = $count;
+        
+        if ($count > 0) {
+            $return['status'] = "success";
+            $return['form'] = "load_dep";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "load_dep";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function add_item($conn, $DATA){
         $DocNo = $DATA['DocNo'];
-        $Userid = $DATA['Userid'];
-        $refDocNo = $DATA['refDocNo'];
-        $arr_old_i = $DATA['old_i'];
-        $arr_old_qty = $DATA['old_qty'];
-        $arr_old_unit = $DATA['old_unit'];
-        $arr_old_weight = $DATA['old_weight'];
-        $arr_new_i = $DATA['new_i'];
-        $arr_new_qty = $DATA['new_qty'];
-        $arr_new_unit = $DATA['new_unit'];
-        $arr_new_weight = $DATA['new_weight'];
-        $arr_del_i = $DATA['del_i'];
-
-        $old_i = explode(",", $arr_old_i);
-        $old_weight = explode(",", $arr_old_weight);
-        $new_i = explode(",", $arr_new_i);
-        $new_unit = explode(",", $arr_new_unit);
-        $new_weight = explode(",", $arr_new_weight);
-        $del_i = explode(",", $arr_del_i);
-
-        $new_qty = explode(",", $arr_new_qty);
-        $old_qty = explode(",", $arr_old_qty);
+        $mul_qty = $DATA['mul_qty'];
+        $mul_weight = $DATA['mul_weight'];
+        $Userid = $_SESSION['Userid'];
+        $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
+        $count = 0;
         
-        $cnt_old = sizeof($old_i, 0);
-        $cnt_new = sizeof($new_i, 0);
-        $cnt_del = sizeof($del_i, 0);
-
-        for ($i = 0; $i < $cnt_del; $i++) {
-            $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
-            mysqli_query($conn,$Sql);
-        }
-
-        for ($i = 0; $i < $cnt_old; $i++) {
-            $Sql = "UPDATE dirty_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
-            mysqli_query($conn,$Sql);
-        }
-
-        for ($i = 0; $i < $cnt_new; $i++) {
-            $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`UnitCode`,`Weight`,`Qty`) 
-                    VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_weight[$i],$new_qty[$i]) ";
-            $return[$i]['Weight'] = $new_weight[$i];
-            mysqli_query($conn,$Sql);
+        foreach($mul_qty as $ikey => $item){
+            foreach($item as $dkey => $qty){
+                if ($qty > 0) {
+                    $weight = $mul_weight[$ikey][$dkey];
+                    $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`DepCode`,`UnitCode`,`Weight`,`Qty`) 
+                            VALUES ('$DocNo','$ikey','$dkey',1,$weight,$qty) ";
+                    mysqli_query($conn,$Sql);
+                    $return[$count]['Sql'] = $Sql;
+                    $count++;
+                }
+            }
         }
 
         $Sql = "SELECT SUM(Weight) AS total FROM dirty_detail WHERE DocNo = '$DocNo'";
@@ -171,6 +168,9 @@
 
         if ($DATA['STATUS'] == 'load_items') {
             load_items($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'load_dep') {
+            load_dep($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'choose_items') {
             choose_items($conn, $DATA);
