@@ -8,12 +8,26 @@
         $From = $DATA["From"];
         $DocNo = $DATA["DocNo"];
         $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
+        $Sql2 = "SELECT department.DepName,department.DepCode 
+                FROM department 
+                INNER JOIN $From ON $From.DepCode = department.DepCode 
+                WHERE $From.DocNo = '$DocNo'";
+        $boolean = false;
+        $boolean2 = false;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return['HptName'] = $Result['HptName'];
             $boolean = true;
         }
+        $meQuery2 = mysqli_query($conn, $Sql2);
+        while ($Result = mysqli_fetch_assoc($meQuery2)) {
+            $return['DepName'] = $Result['DepName'];
+            $return['DepCode'] = $Result['DepCode'];
+            $boolean2 = true;
+        }
+        $return['boolean'] = $boolean;
+        $return['boolean2'] = $boolean2;
 
         if ($boolean) {
             $return['status'] = "success";
@@ -39,13 +53,13 @@
         $Sql = "SELECT RefDocNo,
                         DATE_FORMAT($From.Modify_Date,'%d %M %Y') AS xdate,
                         DATE_FORMAT($From.Modify_Date,'%H:%i') AS xtime,
-                        users.FName,
+                        FName,
                         Total,
-                        site.HptName
-                FROM $From,users,site
+                        $From.DepCode
+                FROM $From, users, site
                 WHERE DocNo ='$DocNo'
-                AND users.ID = Modify_Code
-                AND $From.HptCode = site.HptCode";
+                AND users.ID = $From.Modify_Code
+                AND users.HptCode = site.HptCode";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -54,43 +68,21 @@
             $return['xtime'] = $Result['xtime'];
             $return['FName']  = $Result['FName'];
             $return['Total']  = $Result['Total'];
-            $return['HptName']  = $Result['HptName'];
+            $return['DepCode']  = $Result['DepCode'];
             $boolean = true;
         }
         $return['boolean'] = $boolean;
-        $return['Sql1'] = $Sql;
 
         $Sql2 = "SELECT ".$From."_detail.ItemCode,
                         item.ItemName,
                         ".$From."_detail.UnitCode,
-                        (
-                            SELECT SUM(".$From."_detail.Qty)
-                            FROM
-                            ".$From."_detail
-                            WHERE
-                                DocNo = '$DocNo'
-                            AND item.ItemCode = ".$From."_detail.ItemCode
-                            GROUP BY
-                                item.ItemCode
-                        ) AS Qty,
-                        (
-                            SELECT SUM(".$From."_detail.Weight)
-                            FROM
-                            ".$From."_detail
-                            WHERE
-                                DocNo = '$DocNo'
-                            AND item.ItemCode = ".$From."_detail.ItemCode
-                            GROUP BY
-                                item.ItemCode
-                        ) AS Weight
-
+                        ".$From."_detail.Qty,
+                        ".$From."_detail.Weight 
                 FROM ".$From."_detail,
                      item 
                 WHERE DocNo = '$DocNo'
-                AND item.ItemCode = ".$From."_detail.ItemCode 
-                GROUP BY item.ItemCode
-                ORDER BY item.ItemName";
-        $return['Sql2'] = $Sql2;
+                AND	  item.ItemCode = ".$From."_detail.ItemCode";
+        $return['Sql'] = $Sql2;
         $meQuery2 = mysqli_query($conn, $Sql2);
         while ($Result = mysqli_fetch_assoc($meQuery2)) {
             $return[$count]['ItemCode'] = $Result['ItemCode'];
@@ -101,7 +93,6 @@
             $count++;
             $boolean2 = true;
         }
-        $return['cnt'] = $count;
         $return['boolean2'] = $boolean2;
         if ($boolean) {
             $return['status'] = "success";

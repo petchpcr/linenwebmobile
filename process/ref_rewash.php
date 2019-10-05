@@ -46,19 +46,23 @@ function load_doc($conn, $DATA)
                     $From.IsReceive,
                     $From.IsProcess,
                     $From.IsStatus,
+                    department.DepName,
+                    site.HptCode,
                     site.HptName
                 FROM
                 $From
-                INNER JOIN site ON site.HptCode = $From.HptCode 
+                INNER JOIN department ON department.DepCode = $From.DepCode AND department.DepCode = $From.DepCode
+                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND $From.DocDate LIKE '%$search%'
                 AND $From.IsStatus = 3
                 AND $From.IsStatus != 9 
                 ORDER BY $From.IsStatus ASC,$From.DocNo DESC";
-    $return['Sql'] = $Sql;
+
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['DocNo'] = $Result['DocNo'];
+        $return[$count]['DepName'] = $Result['DepName'];
         $return[$count]['HptName'] = $Result['HptName'];
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];

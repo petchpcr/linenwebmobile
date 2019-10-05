@@ -426,7 +426,7 @@ require '../getTimeZone.php';
 					</button>
 				</div>
 				<div class="modal-body text-center">
-					<?php echo $genarray['chooseDepartment'][$language] . $array['CreateDirtyLinenDoc'][$language]; ?>
+					<!-- <?php echo $genarray['chooseDepartment'][$language] . $array['CreateDirtyLinenDoc'][$language]; ?> -->
 					<div class="input-group my-3" hidden>
 						<div class="input-group-prepend">
 							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>

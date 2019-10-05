@@ -421,14 +421,14 @@ function add_dirty($conn, $DATA)
         // $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
         // mysqli_query($conn, $Sql);
     }
-
+    $return['count'] = $count;
     if ($count == 1) {
 
         $Sql = "    INSERT INTO     dirty
                                         ( 
                                             DocNo,
                                             DocDate,
-                                            DepCode,
+                                            HptCode,
                                             RefDocNo,
                                             TaxNo,
                                             TaxDate,
@@ -445,7 +445,7 @@ function add_dirty($conn, $DATA)
                                         (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$siteCode',
                                             '',
                                             0,
                                             NOW(),0,0,
@@ -454,7 +454,8 @@ function add_dirty($conn, $DATA)
                                             NOW(),
                                             $FacCode
                                         )";
-        // mysqli_query($conn, $Sql);
+        mysqli_query($conn, $Sql);
+        $return['Sql'] = $Sql;
 
         $Sql2 = "    INSERT INTO     daily_request
                                         (
