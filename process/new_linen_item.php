@@ -69,26 +69,19 @@
         $siteCode = $DATA["siteCode"];
         $boolean = false;
         $Sql = "SELECT
-                        newlinentable.DocNo,
-                        newlinentable.IsReceive,
-                        newlinentable.IsProcess,
-                        newlinentable.IsStatus,
-                        department.DepName,
-                        site.HptCode,
-                        site.HptName
+                        DocNo,
+                        IsReceive,
+                        IsProcess,
+                        IsStatus
                 FROM    newlinentable
-                INNER JOIN department ON department.DepCode = newlinentable.DepCode AND department.DepCode = newlinentable.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                WHERE site.HptCode = '$siteCode' 
-                AND newlinentable.DocDate LIKE '%$search%' 
-                AND newlinentable.IsStatus != 9 
-                ORDER BY  newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
+                WHERE HptCode = '$siteCode' 
+                AND DocDate LIKE '%$search%'
+                AND IsStatus != 9 
+                ORDER BY IsStatus ASC,DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['DocNo'] = $Result['DocNo'];
-            $return[$count]['DepName'] = $Result['DepName'];
-            $return[$count]['HptName'] = $Result['HptName'];
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
@@ -96,7 +89,8 @@
             $count++;
             $boolean = true;
         }
-
+        $return['cnt'] = $count;
+        
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_doc";
@@ -138,17 +132,16 @@
     function add_newlinentable($conn, $DATA){
         $Userid = $DATA["Userid"];
         $siteCode = $DATA["siteCode"];
-        $DepCode = $DATA["DepCode"];
         $FacCode = $DATA["FacCode"];
         $Sql = "    SELECT CONCAT('NL',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
                     FROM newlinentable
-                    INNER JOIN department 
-                    ON newlinentable.DepCode = department.DepCode
+                    INNER JOIN site 
+                    ON newlinentable.HptCode = site.HptCode
                     WHERE DocNo Like CONCAT('NL',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
-                    AND department.HptCode = '$siteCode'
+                    AND site.HptCode = '$siteCode'
                     ORDER BY DocNo DESC LIMIT 1";
 
         $meQuery = mysqli_query($conn, $Sql);
@@ -158,8 +151,8 @@
             $DocDate = $Result['DocDate'];
             $RecNow  = $Result['RecNow'];
             $count = 1;
-            $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
-            mysqli_query($conn, $Sql);
+            // $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
+            // mysqli_query($conn, $Sql);
         }
 
         if ($count == 1) {
@@ -168,7 +161,7 @@
                                         ( 
                                             DocNo,
                                             DocDate,
-                                            DepCode,
+                                            HptCode,
                                             RefDocNo,
                                             TaxNo,
                                             TaxDate,
@@ -185,7 +178,7 @@
                                         (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$siteCode',
                                             '',
                                             0,
                                             NOW(),0,0,
@@ -215,11 +208,10 @@
                                             $Userid,
                                             DATE(NOW())
                                         )";
-            mysqli_query($conn, $Sql2);
+            // mysqli_query($conn, $Sql2);
             
             $return['user'] = $Userid;
             $return['siteCode'] = $siteCode;
-            $return['DepCode'] = $DepCode;
             $return['DocNo'] = $DocNo;
 
             $return['status'] = "success";

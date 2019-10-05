@@ -32,9 +32,11 @@ require '../getTimeZone.php';
 	?>
 
 	<script>
+		var siteCode = "<?php echo $siteCode ?>";
+		var Menu = "<?php echo $Menu ?>";
+		var Userid = "<?php echo $Userid ?>";
 		$(document).ready(function(e) {
 
-			var Menu = '<?php echo $Menu; ?>';
 			if (Menu == 'factory') {
 				$("#add_doc").remove();
 			}
@@ -46,7 +48,6 @@ require '../getTimeZone.php';
 
 		// function
 		function load_dep() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_dep'
@@ -55,7 +56,6 @@ require '../getTimeZone.php';
 		}
 
 		function load_Fac() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'STATUS': 'load_Fac'
 			};
@@ -65,7 +65,6 @@ require '../getTimeZone.php';
 
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_site'
@@ -76,8 +75,6 @@ require '../getTimeZone.php';
 		function load_doc() {
 			var search = $('#datepicker').val();
 			// var searchDate = new Date(search);
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = "<?php echo $Menu ?>";
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
@@ -91,7 +88,7 @@ require '../getTimeZone.php';
 			var siteCode = '<?php echo $siteCode ?>';
 			var Menu = '<?php echo $Menu ?>';
 
-			window.location.href = 'dirty_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=newlinentable';
+			window.location.href = 'newlinen_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 
 		}
 
@@ -122,7 +119,7 @@ require '../getTimeZone.php';
 		function change_dep() {
 			var slt = $("#DepName").val();
 			var sltFac = $("#FacName").val();
-			if (slt == 0 || sltFac == 0) {
+			if (sltFac == 0) {
 				$("#btn_add_newlinentable").prop('disabled', true);
 			} else {
 				$("#btn_add_newlinentable").prop('disabled', false);
@@ -130,14 +127,10 @@ require '../getTimeZone.php';
 		}
 
 		function add_newlinentable() {
-			var Userid = "<?php echo $Userid ?>";
-			var siteCode = "<?php echo $siteCode ?>";
-			var DepCode = $("#DepName").val();
 			var FacCode = $("#FacName").val();
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
-				'DepCode': DepCode,
 				'FacCode': FacCode,
 				'STATUS': 'add_newlinentable'
 			};
@@ -193,7 +186,7 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'load_doc') {
 
 							$(".btn.btn-mylight.btn-block").remove();
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var status_class = "";
 								var status_text = "";
 								var status_line = "";
@@ -216,13 +209,11 @@ require '../getTimeZone.php';
 								}
 
 								var Str = "<button onclick='show_process(\"" + temp[i]['DocNo'] + "\",0)' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
-								Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
-								Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
-								Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
+										Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
+										Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left d-flex'>";
+										Str += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div></div></div></button>";
 
 								$("#document").append(Str);
-
-
 							}
 						} else if (temp["form"] == 'confirm_yes') {
 							show_process(temp['DocNo'], temp['From']);
@@ -232,7 +223,7 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid;
+							window.location.href = 'add_items_newlinen.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
@@ -325,8 +316,8 @@ require '../getTimeZone.php';
 					</button>
 				</div>
 				<div class="modal-body text-center">
-					<?php echo $genarray['chooseDepartment'][$language] . $array['CreatenewLinenTableLinenDoc'][$language]; ?>
-					<div class="input-group my-3">
+					<!-- <?php echo $genarray['chooseDepartment'][$language] . $array['CreateDirtyLinenDoc'][$language]; ?> -->
+					<div class="input-group my-3" hidden>
 						<div class="input-group-prepend">
 							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>
 						</div>
