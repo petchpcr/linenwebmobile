@@ -100,9 +100,9 @@ require '../getTimeZone.php';
 			if (slt == 1) {
 				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=dirty';
 			} else if (slt == 2) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=rewash';
+				window.location.href = 'ref_rewash.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 3) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=newlinentable';
+				window.location.href = 'ref_newlinentable.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 4) {
 				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean';
 			}

@@ -41,27 +41,23 @@ function load_doc($conn, $DATA)
     $return['siteCode'] = $siteCode;
     $boolean = false;
     $Sql = "SELECT
-                    rewash.DocNo,
-                    rewash.IsReceive,
-                    rewash.IsProcess,
-                    rewash.IsStatus,
-                    department.DepName,
-                    site.HptCode,
+                    newlinentable.DocNo,
+                    newlinentable.IsReceive,
+                    newlinentable.IsProcess,
+                    newlinentable.IsStatus,
                     site.HptName
                 FROM
-                rewash
-                INNER JOIN department ON department.DepCode = rewash.DepCode AND department.DepCode = rewash.DepCode
-                INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
+                newlinentable
+                INNER JOIN site ON site.HptCode = newlinentable.HptCode 
                 WHERE site.HptCode = '$siteCode' 
-                AND rewash.DocDate LIKE '%$search%'
-                AND rewash.IsStatus = 3
-                AND rewash.IsStatus != 9 
-                ORDER BY rewash.IsStatus ASC,rewash.DocNo DESC";
-
+                AND newlinentable.DocDate LIKE '%$search%'
+                AND newlinentable.IsStatus = 3
+                AND newlinentable.IsStatus != 9 
+                ORDER BY newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
+    $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['DocNo'] = $Result['DocNo'];
-        $return[$count]['DepName'] = $Result['DepName'];
         $return[$count]['HptName'] = $Result['HptName'];
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];

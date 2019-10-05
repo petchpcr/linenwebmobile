@@ -246,14 +246,12 @@ $genarray = json_decode($json, TRUE);
 						</div>
 
 					</div>
-					<div class="d-flex justify-content-center w-100">
-						<div class="col-md-6 col-sm-12 col-12">
-							<div class="input-group mb-2">
-								<div class="input-group-prepend">
-									<span class="input-group-text" style="width:100px;"><?php echo $array['weightSum'][$language] ?></span>
-								</div>
-								<input type="text" id="Weight" class="form-control bg-white" style="color:#1659a2;" readonly>
+					<div class="col-md-6 col-sm-12 col-12 text-left">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<span class="input-group-text" style="width:100px;"><?php echo $array['weightSum'][$language] ?></span>
 							</div>
+							<input type="text" id="Weight" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
 					</div>
 				</div>
