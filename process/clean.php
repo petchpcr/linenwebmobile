@@ -47,7 +47,7 @@
                 FROM
                     clean,department,site
                 WHERE site.HptCode = '$siteCode' 
-                AND clean.DocDate = '$search' 
+                AND clean.DocDate LIKE '%$search%' 
                 AND department.DepCode = clean.DepCode 
                 AND site.HptCode = department.HptCode
                 AND clean.IsStatus != 9 
@@ -65,6 +65,8 @@
             $count++;
             $boolean = true;
         }
+        $return['cnt'] = $count;
+
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_doc";

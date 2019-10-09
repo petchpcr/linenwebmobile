@@ -7,6 +7,7 @@ function checklogin($conn,$DATA)
 {
   if (isset($DATA)) {
     $user = $DATA['USERNAME'];
+    // $password = md5($DATA['PASSWORD']);
     $password = $DATA['PASSWORD'];
     $boolean = false;
     $Sql = "SELECT  users.UserName,

@@ -203,7 +203,7 @@ $genarray = json_decode($json, TRUE);
                     </div>
                     <div class="my-col-menu">
                         <button onclick="menu_click(' . "'shelfcount'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/storage.png">
+                            <img src="../img/shelf_count.png">
                             <div class="text-truncate">' . $array["shelfcount"][$language] . '</div>
                         </button>
 					</div>

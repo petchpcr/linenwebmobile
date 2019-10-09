@@ -123,11 +123,17 @@ require '../getTimeZone.php';
 								status_line = "StatusLine_1";
 
 								if (temp[i]['IsStatus'] == 3) {
+									var dep = "<div class='my-col-7 text-left'>";
+									dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div>";
+									dep += "<div class='font-weight-light align-self-center'>" + temp[i]['DepName'] + "</div></div></div></button>";
+									if (temp[i]['DepName'] == null) {
+										dep = "<div class='my-col-7 text-left d-flex'>";
+										dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div></div></div></button>";
+									}
 
 									var Str = "<button onclick='add_dirty(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
 									Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
-									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
-									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
+									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>" + dep;
 
 									$("#document").append(Str);
 								}
