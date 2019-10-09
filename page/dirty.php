@@ -396,21 +396,6 @@ require '../getTimeZone.php';
 				</button>
 			</div>
 
-			<button onclick='" + onclick + "' class='btn btn-mylight btn-block' style='align-items: center !important;'>
-				<div class='row'>
-					<div class='my-col-5 d-flex justify-content-end align-items-center'>
-						<div class='row'>
-							<div class='card " + status_class + "'>" + status_text + "</div>
-							<img src='../img/" + status_line + ".png' height='50'/>
-						</div>
-					</div>
-					<div class='my-col-7 text-left'>
-						<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div>
-						<div class='font-weight-light'>" + temp[i]['DepName'] + "</div>
-					</div>
-				</div>
-			</button>
-
 		</div>
 
 	</div>
