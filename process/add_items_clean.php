@@ -83,13 +83,13 @@
         $DocNo = $DATA["DocNo"];
         $refDoc = $DATA["refDoc"];
 
-        $Sql = "SELECT Count(*) AS c FROM rewash WHERE docNo= '$refDoc'";
+        $Sql = "SELECT Count(*) AS c FROM repair_wash WHERE docNo= '$refDoc'";
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $c	=  $Result['c'];
         if($c==1){
             $Sql = "SELECT     ItemCode,UnitCode,Qty,Weight
-                    FROM       rewash_detail
+                    FROM       repair_wash_detail
                     WHERE      DocNo = '$refDoc'";
 
             $meQuery = mysqli_query($conn,$Sql);
@@ -114,6 +114,7 @@
                 WHERE DocNo = '$DocNo'
                 AND	  item.ItemCode = clean_detail.ItemCode
                 ORDER BY ItemName ASC";
+        $return['Sql'] = $Sql;
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
