@@ -117,32 +117,34 @@ function add_item($conn, $DATA)
     $old_code = $DATA['old_code'];
     $old_qty = $DATA['old_qty'];
     $old_par = $DATA['old_par'];
+    $old_order = $DATA['old_order'];
     $new_code = $DATA['new_code'];
     $new_qty = $DATA['new_qty'];
     $new_par = $DATA['new_par'];
+    $new_order = $DATA['new_order'];
 
     $ar_old_code = explode(",", $old_code);
     $ar_old_qty = explode(",", $old_qty);
     $ar_old_par = explode(",", $old_par);
+    $ar_old_order = explode(",", $old_order);
     $ar_new_code = explode(",", $new_code);
     $ar_new_qty = explode(",", $new_qty);
     $ar_new_par = explode(",", $new_par);
+    $ar_new_order = explode(",", $new_order);
 
     $Sql = "DELETE FROM shelfcount_detail WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
 
     foreach($ar_old_code as $i => $val){
-        $total = $ar_old_par[$i]-$ar_old_qty[$i];
         $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
-                VALUES ('$DocNo','$val',1,$ar_old_par[$i],$ar_old_qty[$i],$total) ";
+                VALUES ('$DocNo','$val',1,$ar_old_par[$i],$ar_old_qty[$i],$ar_old_order[$i]) ";
         $return[$i]['CcQty'] = $ar_old_qty[$i];
         mysqli_query($conn,$Sql);
     }
 
     foreach($ar_new_code as $i => $val){
-        $total = $ar_new_par[$i]-$ar_new_qty[$i];
         $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
-                VALUES ('$DocNo','$val',1,$ar_new_par[$i],$ar_new_qty[$i],$total) ";
+                VALUES ('$DocNo','$val',1,$ar_new_par[$i],$ar_new_qty[$i],$ar_new_order[$i]) ";
         $return[$i]['CcQty'] = $ar_new_qty[$i];
         mysqli_query($conn,$Sql);
     }

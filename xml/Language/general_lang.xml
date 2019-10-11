@@ -197,6 +197,7 @@
 <itemnew><en>New items</en><th>รายการใหม่</th></itemnew>
 <parnum><en>Par number</en><th>จำนวน Par</th></parnum>
 <addnewitem><en>Add item</en><th>เพิ่มรายการ</th></addnewitem>
+<editnewitem><en>Edit item</en><th>แก้ไขรายการ</th></editnewitem>
 <expireday><en>Expired Date</en><th>วันที่หมดอายุ</th></expireday>
 <pleasefill><en>Please complete field number</en><th>กรุณาใส่หมายเลขให้ถูกต้อง</th></pleasefill>
 <pleasecheck><en>Please select item (At least one)</en><th>กรุณาเลือกรายการอย่างน้อย 1 รายการ</th></pleasecheck>
