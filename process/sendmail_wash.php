@@ -8,7 +8,7 @@ $DocNo = $_POST["DocNo"];
 $siteCode = $_POST["siteCode"];
 
 $Sql = "SELECT FName,email FROM users WHERE HptCode = '$siteCode' AND Active_mail = 1";
-$meQuery=mysqli_query($conn,$Sql);
+$meQuery = mysqli_query($conn, $Sql);
 $Result = mysqli_fetch_assoc($meQuery);
 
 $email = $Result['email'];
@@ -16,7 +16,7 @@ $FName = $Result['FName'];
 $return['email'] = $email;
 
 $Sql = "SELECT WashDetail,DATE_FORMAT(WashEndTime,'%H:%i') AS EndWash FROM process WHERE DocNo='$DocNo'";
-$meQuery=mysqli_query($conn,$Sql);
+$meQuery = mysqli_query($conn, $Sql);
 $Result = mysqli_fetch_assoc($meQuery);
 $WashDetail = $Result['WashDetail'];
 $Ctime = $Result['EndWash'];
@@ -49,12 +49,12 @@ $Sql = "SELECT FacName,FacNameTH,HptName,HptNameTH
                             FROM newlinentable 
                             WHERE DocNo = '$DocNo'
                             )";
-        $meQuery=mysqli_query($conn,$Sql);
-        $Result = mysqli_fetch_assoc($meQuery);
-        $FacName = $Result['FacName'];
-        $FacNameTH = $Result['FacNameTH'];
-        $HptName = $Result['HptName'];
-        $HptNameTH = $Result['HptNameTH'];
+$meQuery = mysqli_query($conn, $Sql);
+$Result = mysqli_fetch_assoc($meQuery);
+$FacName = $Result['FacName'];
+$FacNameTH = $Result['FacNameTH'];
+$HptName = $Result['HptName'];
+$HptNameTH = $Result['HptNameTH'];
 
 
 $Subject = "Problem detail of Wash process";
@@ -65,19 +65,19 @@ $body = "
 
         <hr style='margin:25px 0;'>
 
-        <div style='margin-bottom:10px;'>Laundry : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$FacName."</u>
-         To : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$HptName."</u></div>
-        <div style='margin-bottom:10px;'>Document : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$DocNo."</u></div>
-        <div style='margin-bottom:10px;'>Comment Time : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$Ctime."</u></div>
-        <div style='margin-bottom:10px;'>Problem details : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$WashDetail."</u></div>
+        <div style='margin-bottom:10px;'>Laundry : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $FacName . "</u>
+         To : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $HptName . "</u></div>
+        <div style='margin-bottom:10px;'>Document : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $DocNo . "</u></div>
+        <div style='margin-bottom:10px;'>Comment Time : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $Ctime . "</u></div>
+        <div style='margin-bottom:10px;'>Problem details : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $WashDetail . "</u></div>
         
         <hr style='margin:25px 0;'>
         
-        <div style='margin-bottom:10px;'>โรงซัก : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$FacNameTH."</u>
-         ถึง โรงพยาบาล : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$HptNameTH."</u></div>
-        <div style='margin-bottom:10px;'>เลขที่เอกสาร : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$DocNo."</u></div>
-        <div style='margin-bottom:10px;'>เวลาในการเริ่มกรอกรายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$Ctime."</u></div>
-        <div style='margin-bottom:10px;'>รายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>".$WashDetail."</u></div>
+        <div style='margin-bottom:10px;'>โรงซัก : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $FacNameTH . "</u>
+         ถึง โรงพยาบาล : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $HptNameTH . "</u></div>
+        <div style='margin-bottom:10px;'>เลขที่เอกสาร : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $DocNo . "</u></div>
+        <div style='margin-bottom:10px;'>เวลาในการเริ่มกรอกรายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $Ctime . "</u></div>
+        <div style='margin-bottom:10px;'>รายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $WashDetail . "</u></div>
         
         <hr style='margin:25px 0;'>
 

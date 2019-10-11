@@ -46,6 +46,12 @@ require '../getTimeZone.php';
 		var Menu = "<?php echo $Menu ?>";
 		var From = "<?php echo $From ?>";
 		var TypeDoc = "<?php echo $TypeDoc ?>";
+		var rcv_code = [];
+		var rcv_qty = [];
+		var Arr_ItemCode = [];
+		var Arr_ItemName = [];
+		var Arr_Qty = [];
+		var sendmail = 0;
 
 		$(document).ready(function(e) {
 			if (Menu == 'factory') {
@@ -119,15 +125,24 @@ require '../getTimeZone.php';
 		}
 
 		function confirm_yes(DocNo, From) {
-			var Arr_ItemCode = [];
-			var Arr_Qty = [];
+			sendmail = 0;
+			Arr_ItemCode = [];
+			Arr_ItemName = [];
+			Arr_Qty = [];
 			$('.receive_item').each(function(index) {
 				var ItemCode = $(this).attr("data-itemcode");
-				var Qty = $(this).val();
+				var ItemName = $(this).attr("data-itemname");
+				var Qty = Number($(this).val());
+				var code_i = rcv_code.indexOf(ItemCode);
+				if (code_i >= 0) {
+					if (Qty != rcv_qty[code_i]) {
+						sendmail++;
+					}
+				}
 				Arr_ItemCode.push(ItemCode);
+				Arr_ItemName.push(ItemName);
 				Arr_Qty.push(Qty);
 			});
-
 			var Str_ItemCode = Arr_ItemCode.join(',');
 			var Str_Qty = Arr_Qty.join(',');
 
@@ -250,8 +265,8 @@ require '../getTimeZone.php';
 									}
 									var Str = "<button onclick='show_process(\"" + temp[i]['DocNo'] + "\",0)' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
 									Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
-									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>"+dep;
-									
+									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>" + dep;
+
 									$("#document").append(Str);
 
 								} else if (Menu == 'factory') {
@@ -285,7 +300,7 @@ require '../getTimeZone.php';
 										}
 										var Str = "<button onclick='" + onclick + "' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
 										Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
-										Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>"+dep;
+										Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>" + dep;
 
 										$("#document").append(Str);
 									}
@@ -293,7 +308,11 @@ require '../getTimeZone.php';
 							}
 						} else if (temp["form"] == 'receive_zero') {
 							$("#show_receive").empty();
+							rcv_code = [];
+							rcv_qty = [];
 							for (var i = 0; i < temp['count']; i++) {
+								rcv_code.push(temp[i]['ItemCode']);
+								rcv_qty.push(temp[i]['Qty']);
 								var Str = "<div class='alert alert-info my-2 p-2'>";
 								Str += "<div class='text-center font-weight-bold mb-2'>";
 								Str += temp[i]['ItemName'];
@@ -302,7 +321,7 @@ require '../getTimeZone.php';
 								Str += "<div class='col-6 p-0 text-right'>ทั้งหมด <b>" + temp[i]['Qty'] + "</b> ได้รับ</div>";
 								Str += "<div class='col-6 p-0 text-left'>";
 								Str += "<div class='ml-2' style='width:80px;'>";
-								Str += "<input onkeydown='make_number()' type='text' class='form-control text-center receive_item numonly' data-itemcode='" + temp[i]['ItemCode'] + "' value='" + temp[i]['Qty'] + "'>";
+								Str += "<input onkeydown='make_number()' type='text' class='form-control text-center receive_item numonly' data-itemname='" + temp[i]['ItemName'] + "' data-itemcode='" + temp[i]['ItemCode'] + "' value='" + temp[i]['Qty'] + "'>";
 								Str += "</div>";
 								Str += "</div>";
 								Str += "</div>";
@@ -312,7 +331,32 @@ require '../getTimeZone.php';
 							$("#btn_receive").attr("onclick", "confirm_yes(\"" + temp['DocNo'] + "\",\"" + temp['From'] + "\")");
 							$("#md_receive").modal("show");
 						} else if (temp["form"] == 'confirm_yes') {
-							show_process(temp['DocNo'], temp['From']);
+							if (sendmail == 0) {
+								show_process(temp['DocNo'], temp['From']);
+							} else {
+								swal({
+									title: 'Please wait...',
+									text: 'Processing',
+									allowOutsideClick: false
+								})
+								swal.showLoading()
+								$.ajax({
+									url: '../process/sendmail_receive.php',
+									method: "POST",
+									data: {
+										DocNo: temp['DocNo'],
+										Arr_ItemName: Arr_ItemName,
+										Receive_Qty: Arr_Qty,
+										Total_Qty: rcv_qty,
+										siteCode: '<?php echo $siteCode; ?>'
+									},
+									success: function(data) {
+										swal.close();
+										show_process(temp['DocNo'], temp['From']);
+									}
+								});
+								
+							}
 						} else if (temp["form"] == 'add_dirty') {
 							var Userid = temp['user']
 							var siteCode = temp['siteCode']
