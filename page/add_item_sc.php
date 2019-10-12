@@ -385,7 +385,7 @@ $genarray = json_decode($json, TRUE);
 									var chk_id = "chchk" + i;
 									var qty_id = "chqty" + i;
 									var Str = "<div onclick='select_item(" + i + ")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-									Str += "	<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>";
+									Str += "	<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
 									Str += "		<div class='mr-auto text-truncate'>" + temp[i]['ItemName'] + "</div>";
 									Str += "		<input onclick='event.cancelBubble=true;' onkeydown='make_number()' id='" + qty_id + "' value='1' type='text' class='form-control text-center numonly mx-2' style='max-width:100px;'>";
 									Str += "		<input class='m-0 chk-item' type='checkbox' id='" + chk_id + "' data-code='" + temp[i]['ItemCode'] + "' data-name='" + temp[i]['ItemName'] + "' data-i='" + i + "'>";
@@ -518,7 +518,7 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
 					<input onkeyup="choose_items()" id="search_items" class="form-control mb-2" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
 					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
-						<div class="text-center w-100 p-0"><?php echo $genarray['item'][$language]; ?></div>
+						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['item'][$language]; ?></div>
 						<div class="text-center p-0" style="width:270px;">Variable</div>
 					</div>
 
@@ -560,14 +560,14 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
 					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
-						<div class="text-center w-100 p-0"><?php echo $genarray['item'][$language]; ?></div>
+						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['item'][$language]; ?></div>
 						<div class="text-center p-0" style="width:150px;">Variable</div>
 						<div class="text-center p-0" style="width:140px;">Order</div>
 					</div>
 					<div id="editqty">
 
 						<div class='btn btn-block alert alert-info py-1 pl-3 pr-1 mb-2'>
-							<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>
+							<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold px-0'>
 								<div id='viewname' class='mr-auto text-truncate'></div>
 								<input onkeydown='make_number()' id='newqty' type='text' class='form-control text-center numonly ml-2' style='max-width:80px;'>
 								<input onkeydown='make_number()' id='neworder' type='text' class='form-control text-center numonly ml-2' style='max-width:80px;'>

@@ -110,6 +110,7 @@ $genarray = json_decode($json, TRUE);
 			var Search = $("#search_items").val();
 			var data = {
 				'Search': Search,
+				'siteCode' : siteCode,
 				'refDoc': refDoc,
 				'STATUS': 'choose_items'
 			};
@@ -644,7 +645,7 @@ $genarray = json_decode($json, TRUE);
 								}
 								var id = "depchk" + i;
 								var Str = "<div onclick='chk_dep(\"" + id + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-								Str += "<div class='d-flex align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>";
+								Str += "<div class='d-flex align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
 								Str += "<div class='mr-auto'>" + temp[i]['DepName'] + "</div>";
 								Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number()' class='form-control text-center ml-2 numonly' type='text' id='depqty" + i + "' value='1' style='max-width:80px;'>";
 								Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number_weight(" + i + ")' class='form-control text-center mx-2 weightonly' data-num='" + i + "' type='text' id='depweight" + i + "' placeholder='0.00' style='max-width:80px;'>";
@@ -869,7 +870,7 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
 					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
-						<div class="text-center w-100 p-0"><?php echo $genarray['item'][$language]; ?></div>
+						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['department'][$language]; ?></div>
 						<div class="text-left p-0" style="width:150px;"><?php echo $genarray['qty'][$language]; ?></div>
 						<div class="text-left p-0" style="width:165px;"><?php echo $genarray['weight'][$language]; ?></div>
 					</div>

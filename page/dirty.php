@@ -247,14 +247,14 @@ require '../getTimeZone.php';
 										status_class = "status1";
 										status_text = "<?php echo $genarray['statusCretFin'][$language]; ?>";
 										status_line = "StatusLine_1";
-									} else if (temp[i]['IsStatus'] == 3) {
-										status_class = "status3";
-										status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
-										status_line = "StatusLine_3";
-									} else {
+									} else if (temp[i]['IsStatus'] == 2) {
 										status_class = "status2";
 										status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 										status_line = "StatusLine_2";
+									} else if (temp[i]['IsStatus'] >= 3) {
+										status_class = "status3";
+										status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
+										status_line = "StatusLine_3";
 									}
 									var dep = "<div class='my-col-7 text-left'>";
 									dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div>";

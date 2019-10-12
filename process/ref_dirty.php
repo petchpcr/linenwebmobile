@@ -169,6 +169,9 @@ function add_dirty($conn, $DATA)
                                 DATE(NOW())
                             )";
         mysqli_query($conn, $Sql2);
+        
+        $Sql = "UPDATE dirty SET IsStatus = 4 WHERE DocNo = '$RefDocNo'";
+        mysqli_query($conn, $Sql);
 
         $return['user'] = $Userid;
         $return['siteCode'] = $siteCode;

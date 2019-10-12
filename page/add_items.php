@@ -324,6 +324,7 @@ $genarray = json_decode($json, TRUE);
 			if (Delback == 1) {
 				var data = {
 					'DocNo': DocNo,
+					'refDoc' : refDoc,
 					'Menu': Menu,
 					'STATUS': 'del_back'
 				};

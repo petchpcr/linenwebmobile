@@ -198,14 +198,14 @@ require '../getTimeZone.php';
 									status_class = "status1";
 									status_text = "<?php echo $genarray['statusCretFin'][$language]; ?>";
 									status_line = "StatusLine_1";
-								} else if (temp[i]['IsStatus'] == 3) {
-									status_class = "status3";
-									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
-									status_line = "StatusLine_3";
-								} else {
+								} else if (temp[i]['IsStatus'] == 2) {
 									status_class = "status2";
 									status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 									status_line = "StatusLine_2";
+								} else if (temp[i]['IsStatus'] >= 3) {
+									status_class = "status3";
+									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
+									status_line = "StatusLine_3";
 								}
 
 								var Str = "<button onclick='show_process(\"" + temp[i]['DocNo'] + "\",0)' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";

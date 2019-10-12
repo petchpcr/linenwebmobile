@@ -5,13 +5,17 @@
 
     function choose_items($conn, $DATA){
         $Search = $DATA["Search"];
+        $siteCode = $DATA["siteCode"];
         $count = 0;
 
-        $Sql = "SELECT  * 
+        $Sql = "SELECT DISTINCT item.ItemCode,item.ItemName  
                 FROM    item 
-                WHERE   IsDirtyBag = 1 
-                AND     IsActive = 1
-                AND     item.ItemName LIKE '%$Search%' ";
+                INNER JOIN item_stock ON item_stock.ItemCode = item.ItemCode 
+                INNER JOIN department ON department.DepCode = item_stock.DepCode 
+                WHERE   (item.IsDirtyBag = 1 OR item.IsDirtyBag = 2)
+                AND     item.IsActive = 1 
+                AND     department.HptCode = '$siteCode'
+                AND     item.ItemCode LIKE '%$Search%'";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];
@@ -19,6 +23,7 @@
             $return[$count]['UnitCode']	=  $Result['UnitCode'];
             $count++;
         }
+        $return['Sql'] = $Sql;
         $return['cnt'] = $count;
 
         if ($count > 0) {
@@ -190,4 +195,3 @@
         mysqli_close($conn);
         die;
     }
-?>
