@@ -10,17 +10,16 @@ function load_dep($conn, $DATA)
     $Sql = "SELECT DepCode, DepName FROM department
                 WHERE department.HptCode='$siteCode' AND IsStatus = 0
                 ORDER BY DepName ASC";
-    $boolean = false;
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['DepCode'] = $Result['DepCode'];
         $return[$count]['DepName'] = $Result['DepName'];
         $count++;
-        $boolean = true;
     }
+    $return['cnt'] = $count;
 
-    if ($boolean) {
+    if ($count > 0) {
         $return['status'] = "success";
         $return['form'] = "load_dep";
         echo json_encode($return);
@@ -264,7 +263,6 @@ function load_doc($conn, $DATA)
         $search = date('Y-m-d');
     }
     $siteCode = $DATA["siteCode"];
-    $boolean = false;
     $Sql = "SELECT
                     DocNo,
                     IsReceive,
@@ -284,10 +282,10 @@ function load_doc($conn, $DATA)
         $return[$count]['IsStatus'] = $Result['IsStatus'];
 
         $count++;
-        $boolean = true;
     }
+    $return['cnt'] = $count;
 
-    if ($boolean) {
+    if ($count > 0) {
         $return['status'] = "success";
         $return['form'] = "load_doc";
         echo json_encode($return);
@@ -500,16 +498,16 @@ function load_Fac($conn, $DATA)
 {
     $count = 0;
     $Sql = "SELECT FacCode,FacName FROM factory WHERE IsCancel=0";
-    $boolean = false;
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['FacCode'] = $Result['FacCode'];
         $return[$count]['FacName'] = $Result['FacName'];
         $count++;
-        $boolean = true;
     }
-    if ($boolean) {
+    $return['cnt'] = $count;
+
+    if ($count > 0) {
         $return['status'] = "success";
         $return['form'] = "load_Fac";
         echo json_encode($return);

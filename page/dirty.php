@@ -216,13 +216,13 @@ require '../getTimeZone.php';
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_dep') {
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var Str = "<option value=" + temp[i]['DepCode'] + ">" + temp[i]['DepName'] + "</option>";
 								$("#DepName").append(Str);
 							}
 
 						} else if (temp["form"] == 'load_Fac') {
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var Str = "<option value=" + temp[i]['FacCode'] + ">" + temp[i]['FacName'] + "</option>";
 								$("#FacName").append(Str);
 							}
@@ -232,7 +232,7 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'load_doc') {
 
 							$(".btn.btn-mylight.btn-block").remove();
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var status_class = "";
 								var status_text = "";
 								var status_line = "";

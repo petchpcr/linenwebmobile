@@ -66,6 +66,8 @@
         }
         
         $s = "3";
+        $return['cnt'] = $count;
+        
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_doc";

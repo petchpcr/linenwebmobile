@@ -36,7 +36,6 @@
             $search = date('Y-m-d');
         }
         $siteCode = $DATA["siteCode"];
-        $boolean = false;
         $Sql = "SELECT * 
                 FROM ( 
                         SELECT  clean.DocNo,
@@ -78,9 +77,10 @@
             $return[$count]['IsStatus'] = $Result['IsStatus'];
 
             $count++;
-            $boolean = true;
         }
-        if ($boolean) {
+        $return['cnt'] = $count;
+
+        if ($count > 0) {
             $return['status'] = "success";
             $return['form'] = "load_doc";
             echo json_encode($return);

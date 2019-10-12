@@ -120,7 +120,7 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'load_doc') {
 
 							$(".btn.btn-mylight.btn-block").remove();
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var status_class = "";
 								var status_text = "";
 								var status_line = "";

@@ -47,7 +47,6 @@ $genarray = json_decode($json, TRUE);
 				'STATUS': 'load_doc'
 			};
 			senddata(JSON.stringify(data));
-			console.log(data);
 		}
 
 		function back() {
@@ -125,7 +124,7 @@ $genarray = json_decode($json, TRUE);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
 							var Weight = temp['Total'] + " <?php echo $array['KG'][$language]; ?>";
 							$("#Weight").val(Weight);
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var num = i + 1;
 								var Str = "<tr><td><div class='row'>";
 								Str += "<div scope='row' class='col-5 d-flex align-items-center justify-content-center'>" + num + "</div>";
