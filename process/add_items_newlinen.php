@@ -8,14 +8,12 @@
         $siteCode = $DATA["siteCode"];
         $count = 0;
 
-        $Sql = "SELECT DISTINCT item.ItemCode,item.ItemName  
+        $Sql = "SELECT DISTINCT ItemCode,ItemName  
                 FROM    item 
-                INNER JOIN item_stock ON item_stock.ItemCode = item.ItemCode 
-                INNER JOIN department ON department.DepCode = item_stock.DepCode 
-                WHERE   item.IsActive = 1 
-                AND     item.Itemnew = 1 
-                AND     department.HptCode = '$siteCode'
-                AND     item.ItemCode LIKE '%$Search%'";
+                WHERE   IsActive = 1 
+                AND     Itemnew = 1 
+                AND     HptCode = '$siteCode'
+                AND     ItemCode LIKE '%$Search%'";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];
@@ -54,7 +52,8 @@
                 FROM newlinentable_detail,
                      item 
                 WHERE DocNo = '$DocNo'
-                AND	  item.ItemCode = newlinentable_detail.ItemCode
+                AND	  item.ItemCode = newlinentable_detail.ItemCode 
+                GROUP BY newlinentable_detail.ItemCode 
                 ORDER BY ItemName ASC";
         $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
