@@ -157,6 +157,7 @@ function load_doc_procees($conn, $DATA)
         $boolean = true;
     }
 
+    $return['cnt'] = $count;
     if ($boolean) {
         $return['status'] = "success";
         $return['form'] = "load_doc";
@@ -239,6 +240,7 @@ function load_doc_tracking($conn, $DATA)
         $boolean = true;
     }
 
+    $return['cnt'] = $count;
     if ($boolean) {
         $return['status'] = "success";
         $return['form'] = "load_doc";
