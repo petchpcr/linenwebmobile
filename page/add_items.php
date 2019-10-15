@@ -19,6 +19,11 @@ $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
 $Per = $_SESSION['Permission'];
 $language = $_SESSION['lang'];
+if (isset($_GET['Ref'])){
+	$Ref = $_GET['Ref'];
+} else {
+	$Ref = 0;
+}
 $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
 $json = json_encode($xml);
 $array = json_decode($json, TRUE);
@@ -52,6 +57,7 @@ $genarray = json_decode($json, TRUE);
 		var DepCode = "<?php echo $DepCode ?>";
 		var DocNo = "<?php echo $DocNo ?>";
 		var refDoc = "<?php echo $refDoc ?>";
+		var Ref = "<?php echo $Ref ?>";
 		var Menu = '<?php echo $Menu; ?>';
 		var Userid = "<?php echo $Userid ?>";
 		var Delback = "<?php echo $Delback ?>";
@@ -415,6 +421,10 @@ $genarray = json_decode($json, TRUE);
 									cal_num();
 								}
 							}
+							if (Ref == "dirty") {
+								choose_items();
+								$("#md_item").modal('show');
+							}
 						} else if (temp["form"] == 'choose_items') {
 							var HptName = temp['HptName'];
 							var DepName = temp['DepName'];
@@ -478,6 +488,7 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'load_items') {
 							choose_items();
 							$("#md_item").modal('show');
+								
 						} else if (temp["form"] == 'add_item') {
 							alert("error ADD ITEM");
 						}

@@ -146,7 +146,7 @@ require '../getTimeZone.php';
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

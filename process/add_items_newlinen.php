@@ -12,7 +12,7 @@
                 FROM    item 
                 WHERE   IsActive = 1 
                 AND     Itemnew = 1 
-                AND     HptCode = '$siteCode'
+                AND     (HptCode = '$siteCode' OR HptCode = '0')
                 AND     ItemCode LIKE '%$Search%'";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){

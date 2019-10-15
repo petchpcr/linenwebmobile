@@ -85,14 +85,17 @@ function load_items($conn, $DATA)
     $DocNo = $DATA["DocNo"];
     $refDoc = $DATA["refDoc"];
 
+    $Sql = "DELETE FROM clean_detail WHERE DocNo = '$DocNo'";
+    mysqli_query($conn, $Sql);
+
     $Sql = "SELECT Count(*) AS c FROM repair_wash WHERE DocNo = '$refDoc'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $c    =  $Result['c'];
     if ($c == 1) {
         $Sql = "SELECT     ItemCode,UnitCode,Qty,Weight
-                    FROM       repair_wash_detail
-                    WHERE      DocNo = '$refDoc'";
+                FROM       repair_wash_detail
+                WHERE      DocNo = '$refDoc'";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -110,7 +113,7 @@ function load_items($conn, $DATA)
             FROM dirty_detail 
             INNER JOIN item on item.ItemCode = dirty_detail.ItemCode 
             WHERE DocNo = '$refDoc' 
-            AND item.IsDirtyBag = 2 
+            AND item.IsDirtyBag = 1 
             GROUP BY dirty_detail.ItemCode";
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -127,7 +130,7 @@ function load_items($conn, $DATA)
             FROM newlinentable_detail 
             INNER JOIN item on item.ItemCode = newlinentable_detail.ItemCode 
             WHERE DocNo = '$refDoc' 
-            AND item.IsDirtyBag = 2 
+            AND item.IsDirtyBag = 1 
             GROUP BY newlinentable_detail.ItemCode";
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
