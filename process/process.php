@@ -9,6 +9,7 @@
         $FacCode = $_SESSION["FacCode"];
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
+        $Limit_null = 30;
         $boolean = false;
         $Sql = "SELECT
                     process.DocNo,
@@ -58,7 +59,13 @@
             $return['IsStatus'] = $Result['IsStatus'];
             $return['IsStop'] = $Result['IsStop'];
             $return['Signature'] = $Result['Signature'];
-            $return['LimitTime'] = $Result['LimitTime'];
+            if ($Result['LimitTime'] == null) {
+                $Sql2 = "INSERT INTO delivery_fac_nhealth (HptCode,FacCode,SendTime) VALUES ('$siteCode','$FacCode',$Limit_null)";
+                mysqli_query($conn, $Sql2);
+                $return['LimitTime'] = $Limit_null;
+            } else {
+                $return['LimitTime'] = $Result['LimitTime'];
+            }
             $return['HptCode'] = $Result['HptCode'];
 
             $count++;
