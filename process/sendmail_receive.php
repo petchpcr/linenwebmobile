@@ -37,7 +37,7 @@ $Sql = "SELECT FacName,FacNameTH,HptName,HptNameTH
                             FROM repair_wash 
                             WHERE DocNo = '$DocNo'
                             UNION ALL 
-                            SELECT FacCode 
+                            SELECT HptCode 
                             FROM newlinentable 
                             WHERE DocNo = '$DocNo'
                             )";
@@ -84,10 +84,10 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
     $Differ = $Total_Qty[$key] - $Receive_Qty[$key];
     $text_diff = $Differ;
     if ($Differ > 0) {
-      $text_diff = "over ".$Differ;
+      $text_diff = "shot ".$Differ;
     }
     else if ($Differ < 0) {
-      $text_diff = "shot ".($Differ*-1);
+      $text_diff = "over ".($Differ*-1);
     }
     $body .= "<tr>
 							<td style='text-align:left;padding:10px 0 10px 10px;'>$val</td>
@@ -119,10 +119,10 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
           $Differ = $Total_Qty[$key] - $Receive_Qty[$key];
           $text_diff = $Differ;
           if ($Differ > 0) {
-            $text_diff = "เกิน ".$Differ;
+            $text_diff = "ขาด ".$Differ;
           }
           else if ($Differ < 0) {
-            $text_diff = "ขาด ".($Differ*-1);
+            $text_diff = "เกิน ".($Differ*-1);
           }
           $body .= "<tr>
                     <td style='text-align:left;padding:10px 0 10px 10px;'>$val</td>
