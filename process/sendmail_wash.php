@@ -45,7 +45,7 @@ $Sql = "SELECT FacName,FacNameTH,HptName,HptNameTH
                             FROM repair_wash 
                             WHERE DocNo = '$DocNo'
                             UNION ALL 
-                            SELECT FacCode 
+                            SELECT HptCode 
                             FROM newlinentable 
                             WHERE DocNo = '$DocNo'
                             )";
