@@ -191,6 +191,9 @@ function add_clean($conn, $DATA)
                             )";
         mysqli_query($conn, $Sql3);
                 
+        $Sql = "UPDATE clean SET IsStatus = 4 WHERE DocNo = '$RefDocNo'";
+        mysqli_query($conn, $Sql);
+
         $return['user'] = $Userid;
         $return['siteCode'] = $siteCode;
         $return['DepCode'] = $DepCode;

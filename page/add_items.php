@@ -19,7 +19,7 @@ $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
 $Per = $_SESSION['Permission'];
 $language = $_SESSION['lang'];
-if (isset($_GET['Ref'])){
+if (isset($_GET['Ref'])) {
 	$Ref = $_GET['Ref'];
 } else {
 	$Ref = 0;
@@ -105,12 +105,13 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function select_chk() {
-			$("#md_item").modal('hide');
 			var last_item = $('.item:last').data("num");
 			if (last_item == null || last_item == '') {
 				last_item = 0;
 			}
 			var num = Number(last_item) + 1;
+			var total = $(".chk-item").length;
+			var count = 0;
 
 			$(".chk-item").each(function() {
 				if ($(this).is(':checked')) {
@@ -119,33 +120,34 @@ $genarray = json_decode($json, TRUE);
 					var code = $(this).val();
 					var qty = 0;
 					var unit = 1;
-					if (false) {
-						var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-						Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div>";
-						Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-						Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-						Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-oldnum=0 placeholder='0.0'>";
-						Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-					} else {
-						var idqty = id + "qty";
-						var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-						Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['numberSize'][$language]; ?></label>";
-						Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
-						Str += "id='" + idqty + "' placeholder='0' value='1'>";
-						Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-						Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
-						Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['weight'][$language]; ?></label><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-						Str += "data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
-						Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
-					}
+					var idqty = id + "qty";
+					var div = "#chs"+num;
+
+					var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
+					Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['numberSize'][$language]; ?></label>";
+					Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
+					Str += "id='" + idqty + "' placeholder='0' value='1'>";
+					Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
+					Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
+					Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['weight'][$language]; ?></label><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
+					Str += "data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
+					Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
+
 
 					$("#items").append(Str);
 					arr_new_items.push(code);
+					$(div).remove();
+					count++;
 					num++;
 					cal_weight();
 					cal_num();
 				};
 			});
+			if (total == count) {
+				$("#md_item").modal('hide');
+			} else {
+				choose_items();
+			}
 		}
 
 		function del_items(num) {
@@ -330,7 +332,7 @@ $genarray = json_decode($json, TRUE);
 			if (Delback == 1) {
 				var data = {
 					'DocNo': DocNo,
-					'refDoc' : refDoc,
+					'refDoc': refDoc,
 					'Menu': Menu,
 					'STATUS': 'del_back'
 				};
@@ -429,7 +431,7 @@ $genarray = json_decode($json, TRUE);
 							var HptName = temp['HptName'];
 							var DepName = temp['DepName'];
 							$("#choose_item").empty();
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var have_old = 0;
 								var have_new = 0;
 
@@ -454,7 +456,7 @@ $genarray = json_decode($json, TRUE);
 								if (have_old == 0 && have_new == 0) {
 									var num = i + 1;
 									var chk = "chk" + num;
-									var Str = "<button onclick='chk_items(\"" + chk + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+									var Str = "<button onclick='chk_items(\"" + chk + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
 									Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
 									Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "'></div><hr class='m-0'><div class='col-12 text-truncate text-left'>" + HptName + " / " + DepName + "</div></button>";
 
@@ -488,7 +490,7 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'load_items') {
 							choose_items();
 							$("#md_item").modal('show');
-								
+
 						} else if (temp["form"] == 'add_item') {
 							alert("error ADD ITEM");
 						}

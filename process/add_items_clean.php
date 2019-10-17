@@ -26,7 +26,6 @@ function choose_items($conn, $DATA)
 
     if ($c == 0) {
         $count = 0;
-        $boolean = false;
         $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
     
                     FROM                item_stock,item
@@ -41,12 +40,9 @@ function choose_items($conn, $DATA)
             $return[$count]['ItemName']    =  $Result['ItemName'];
             $return[$count]['UnitCode']    =  $Result['UnitCode'];
             $count++;
-            $boolean = true;
         }
     } else {
         $count = 0;
-        $boolean = false;
-
         $Sql = "SELECT DISTINCT     rewash_detail.ItemCode,ItemName,item.UnitCode
     
                     FROM                rewash_detail,item
@@ -61,12 +57,11 @@ function choose_items($conn, $DATA)
             $return[$count]['ItemName']    =  $Result['ItemName'];
             $return[$count]['UnitCode']    =  $Result['UnitCode'];
             $count++;
-            $boolean = true;
         }
     }
+    $return['cnt'] = $count;
 
-
-    if ($boolean) {
+    if ($count > 0) {
         $return['status'] = "success";
         $return['form'] = "choose_items";
         echo json_encode($return);
