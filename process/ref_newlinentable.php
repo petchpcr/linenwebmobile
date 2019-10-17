@@ -170,6 +170,9 @@ function add_dirty($conn, $DATA)
                             )";
         mysqli_query($conn, $Sql2);
 
+        $Sql = "UPDATE newlinentable SET IsStatus = 4 WHERE DocNo = '$RefDocNo'";
+        mysqli_query($conn, $Sql);
+
         $return['user'] = $Userid;
         $return['siteCode'] = $siteCode;
         $return['DepCode'] = $DepCode;

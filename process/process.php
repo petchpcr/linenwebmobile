@@ -89,9 +89,10 @@
 
     function insert_process($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $Sql = "INSERT INTO process (DocNo) VALUES ('$DocNo') ";
+        $FacCode = $_SESSION['FacCode'];
+        $Sql = "INSERT INTO process (DocNo,FacCode) VALUES ('$DocNo','$FacCode') ";
     
-        if($meQuery = mysqli_query($conn,$Sql)){
+        if(mysqli_query($conn,$Sql)){
 
             $return['status'] = "success";
             $return['form'] = "insert_process";
