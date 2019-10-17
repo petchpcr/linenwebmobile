@@ -77,7 +77,7 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
 						<tr>
 							<th style='padding:10px 0;'>Catagory</th>
 							<th>Unit From Hospital</th>
-							<th>Unit From Laundary</th>
+							<th>Unit From Laundry</th>
 							<th>Result</th>
                         </tr>";
   foreach ($Arr_ItemName as $key => $val) {

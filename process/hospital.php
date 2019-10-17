@@ -5,10 +5,9 @@
 
     function load_site($conn){
         $FacCode = $_SESSION['FacCode'];
-        $lang = $_SESSION['lang'];
-        if ($lang = 'th') {
+        if ($_SESSION['lang'] == 'th') {
             $hptname = "HptNameTH";
-        } else {
+        } else if ($_SESSION['lang'] == 'en'){
             $hptname = "HptName";
         }
         $count = 0;

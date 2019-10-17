@@ -13,7 +13,7 @@
                 WHERE   IsActive = 1 
                 AND     (IsDirtyBag = 1 OR IsDirtyBag = 2)
                 AND     (HptCode = '$siteCode' OR HptCode = '0')
-                AND     ItemCode LIKE '%$Search%'";
+                AND     ItemName LIKE '%$Search%'";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];

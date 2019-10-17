@@ -33,7 +33,8 @@ function choose_items($conn, $DATA)
     
                     WHERE               DepCode='$DepCode'
                     AND                 item_stock.ItemCode=item.ItemCode
-                    AND                 item.ItemName LIKE '%$Search%' ";
+                    AND                 item.ItemName LIKE '%$Search%' 
+                    ORDER BY            item.ItemName ASC";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode']    =  $Result['ItemCode'];
@@ -52,7 +53,8 @@ function choose_items($conn, $DATA)
 
                     WHERE               rewash_detail.DocNo='$refDoc'
                     AND                 rewash_detail.ItemCode=item.ItemCode
-                    AND                 item.ItemName LIKE '%$Search%'";
+                    AND                 item.ItemName LIKE '%$Search%' 
+                    ORDER BY            item.ItemName ASC";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode']    =  $Result['ItemCode'];
@@ -132,6 +134,23 @@ function load_items($conn, $DATA)
             WHERE DocNo = '$refDoc' 
             AND item.IsDirtyBag = 1 
             GROUP BY newlinentable_detail.ItemCode";
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $new_i    =  $Result['ItemCode'];
+        $new_unit    =  $Result['UnitCode'];
+        $new_qty    =  $Result['Qty'];
+        $new_weight    =  $Result['Weight'];
+        $Sql2 = "INSERT INTO clean_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
+        VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
+        mysqli_query($conn, $Sql2);
+    }
+
+    $Sql = "SELECT clean_detail.ItemCode,clean_detail.UnitCode,SUM(clean_detail.Qty) AS Qty,SUM(clean_detail.Weight) AS Weight  
+            FROM clean_detail 
+            INNER JOIN item on item.ItemCode = clean_detail.ItemCode 
+            WHERE DocNo = '$refDoc' 
+            AND clean_detail.IsCheckList = 1 
+            GROUP BY clean_detail.ItemCode";
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $new_i    =  $Result['ItemCode'];
