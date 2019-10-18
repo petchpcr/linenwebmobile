@@ -30,9 +30,7 @@ $genarray = json_decode($json, TRUE);
 	require 'script_css.php';
 	require 'logout_fun.php';
 	?>
-	<script src="../js/vue.min.js"></script>
-	<script src="../js/vue-qrcode-reader.browser.js"></script>
-	<link rel="stylesheet" href="../css/vue-qrcode-reader.css">
+	<script src="../js/jsQR.js"></script>
 	<script>
 		// var getQR = "BHQLPNONO010006,12";
 		var itemCode;
@@ -102,8 +100,18 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
-					} else if (temp['status'] == "failed_QRcode") {
-						clear_text();
+					} else if (temp['status'] == "failed") {
+						swal({
+							title: '',
+							text: '',
+							type: 'warning',
+							showCancelButton: false,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							showConfirmButton: false,
+							timer: 2000,
+							confirmButtonText: 'Error!!'
+						})
 					} else {
 						console.log(temp['msg']);
 					}
@@ -112,6 +120,45 @@ $genarray = json_decode($json, TRUE);
 		}
 		// end display
 	</script>
+	<style>
+		#githubLink {
+			position: absolute;
+			right: 0;
+			top: 12px;
+			color: #2D99FF;
+		}
+
+		h1 {
+			margin: 10px 0;
+			font-size: 40px;
+		}
+
+		#loadingMessage {
+			text-align: center;
+			padding: 40px;
+			background-color: #eee;
+		}
+
+		#canvas {
+			width: 100%;
+		}
+
+		#output {
+			margin-top: 20px;
+			background: #eee;
+			padding: 10px;
+			padding-bottom: 0;
+		}
+
+		#output div {
+			padding-bottom: 10px;
+			word-wrap: break-word;
+		}
+
+		#noQRFound {
+			text-align: center;
+		}
+	</style>
 </head>
 
 <body>
@@ -144,17 +191,12 @@ $genarray = json_decode($json, TRUE);
 		<div id="show_detail" class="row d-flex justify-content-center pt-3 m-0">
 			<div class="col-xl-4 col-lg-5 col-md-6 col-sm-9 col-12 text-center px-3">
 
-				<div id="app">
-					<!-- <p>
-						Last result: <b>{{ decodedContent }}</b>
-					</p> -->
-
-					<p class="error">
-						{{ errorMessage }}
-					</p>
-
-					<qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
-				</div>
+				<div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
+				<canvas id="canvas" hidden></canvas>
+				<!-- <div id="output" hidden>
+					<div id="outputMessage">No QR code detected.</div>
+					<div hidden><b>Data:</b> <span id="outputData"></span></div>
+				</div> -->
 
 				<div class="input-group my-3">
 					<div class="input-group-prepend">
@@ -206,48 +248,68 @@ $genarray = json_decode($json, TRUE);
 		</div>
 
 	</section>
+	<script>
+		var video = document.createElement("video");
+		var canvasElement = document.getElementById("canvas");
+		var canvas = canvasElement.getContext("2d");
+		var loadingMessage = document.getElementById("loadingMessage");
+		// var outputContainer = document.getElementById("output");
+		// var outputMessage = document.getElementById("outputMessage");
+		// var outputData = document.getElementById("outputData");
 
-
-</body>
-<script>
-	new Vue({
-		el: '#app',
-
-		data() {
-			return {
-				decodedContent: '',
-				errorMessage: ''
-			}
-		},
-
-		methods: {
-			onDecode(content) {
-				this.decodedContent = content;
-				load_QRcode(content);
-			},
-
-			onInit(promise) {
-				promise.then(() => {
-						console.log('Successfully initilized! Ready for scanning now!')
-					})
-					.catch(error => {
-						if (error.name === 'NotAllowedError') {
-							this.errorMessage = 'Hey! I need access to your camera'
-						} else if (error.name === 'NotFoundError') {
-							this.errorMessage = 'Do you even have a camera on your device?'
-						} else if (error.name === 'NotSupportedError') {
-							this.errorMessage = 'Seems like this page is served in non-secure context (HTTPS, localhost or file://)'
-						} else if (error.name === 'NotReadableError') {
-							this.errorMessage = 'Couldn\'t access your camera. Is it already in use?'
-						} else if (error.name === 'OverconstrainedError') {
-							this.errorMessage = 'Constraints don\'t match any installed camera. Did you asked for the front camera although there is none?'
-						} else {
-							this.errorMessage = 'UNKNOWN ERROR: ' + error.message
-						}
-					})
-			}
+		function drawLine(begin, end, color) {
+			canvas.beginPath();
+			canvas.moveTo(begin.x, begin.y);
+			canvas.lineTo(end.x, end.y);
+			canvas.lineWidth = 4;
+			canvas.strokeStyle = color;
+			canvas.stroke();
 		}
-	})
-</script>
+
+		// Use facingMode: environment to attemt to get the front camera on phones
+		navigator.mediaDevices.getUserMedia({
+			video: {
+				facingMode: "environment"
+			}
+		}).then(function(stream) {
+			video.srcObject = stream;
+			video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+			video.play();
+			requestAnimationFrame(tick);
+		});
+
+		function tick() {
+			loadingMessage.innerText = "⌛ Loading video..."
+			if (video.readyState === video.HAVE_ENOUGH_DATA) {
+				loadingMessage.hidden = true;
+				canvasElement.hidden = false;
+				// outputContainer.hidden = false;
+
+				canvasElement.height = video.videoHeight;
+				canvasElement.width = video.videoWidth;
+				canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+				var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+				var code = jsQR(imageData.data, imageData.width, imageData.height, {
+					inversionAttempts: "dontInvert",
+				});
+				if (code) { // แสกนไม่เห็น(ซ่อน)
+					drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+					drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+					drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+					drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+					// outputMessage.hidden = true;
+					// outputData.parentElement.hidden = false;
+					// outputData.innerText = code.data;
+					var text = code.data;
+					load_QRcode(code.data);
+				} else { // แสกนเห็น(แสดง)
+					// outputMessage.hidden = false;
+					// outputData.parentElement.hidden = true;
+				}
+			}
+			requestAnimationFrame(tick);
+		}
+	</script>
+</body>
 
 </html>
