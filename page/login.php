@@ -138,8 +138,8 @@ session_start();
 			<div class="d-flex justify-content-center w-100 pt-0 pb-2 px-2">
 				<div class="bg-white card-body" style="border-radius:0 0 30px 30px;max-width:509.42px;">
 					<div class="row text-center mb-3 p-0">
-						<div class="col-12 mb-4"><img src="../img/logo.png" class="logo_login_img" /></div>
-						<div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;" /></div>
+						<div class="col-12 mb-1"><img src="../img/logo.png" class="logo_login_img" /></div>
+						<!-- <div class="col-12 mt-2"><img src="../img/nlinen.png" class="logo_login_img" style="max-height:15px;" /></div> -->
 					</div>
 
 					<div id="row p-0">

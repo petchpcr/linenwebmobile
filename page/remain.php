@@ -340,11 +340,11 @@ require '../getTimeZone.php';
 
 		<div align="center" style="margin:1rem 0;">
 			<div class="mb-3">
-				<img src="../img/logo.png" width="156" height="40" />
+				<img src="../img/logo.png" width="156" height="60" />
 			</div>
-			<div>
+			<!-- <div>
 				<img src="../img/nlinen.png" width="95" height="14" />
-			</div>
+			</div> -->
 		</div>
 		<div class="text-center my-4">
 			<h4 id="HptName" class="text-truncate"></h4>

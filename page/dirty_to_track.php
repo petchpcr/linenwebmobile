@@ -233,11 +233,11 @@ require '../getTimeZone.php';
 	<div class="px-3 pb-4 mb-5">
 		<div align="center" style="margin:1rem 0;">
 			<div class="mb-3">
-				<img src="../img/logo.png" width="156" height="40" />
+				<img src="../img/logo.png" width="156" height="60" />
 			</div>
-			<div>
+			<!-- <div>
 				<img src="../img/nlinen.png" width="95" height="14" />
-			</div>
+			</div> -->
 		</div>
 		<div class="text-center my-4">
 			<div id="HptName" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
