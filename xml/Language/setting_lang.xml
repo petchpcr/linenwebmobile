@@ -13,6 +13,11 @@
 
 <from><en>From</en><th>จาก</th></from>
 <useTime><en>Use time</en><th>ใช้เวลา</th></useTime>
+<Time><en>Time</en><th>เวลา</th></Time>
+<oclock><en>O'clock</en><th>นาฬิกา</th></oclock>
+<factory><en>Factory</en><th>โรงซัก</th></factory>
+<round><en>Round</en><th>รอบ</th></round>
+<havetime><en>Have this time</en><th>เวลาซ้ำ</th></havetime>
 
 <th><en>Thai</en><th>ไทย</th></th>
 <en><en>English</en><th>อังกฤษ</th></en>

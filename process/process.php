@@ -24,15 +24,12 @@
                     process.PackUseTime,
                     process.SendStartTime,
                     process.SendEndTime,
+                    DATE_FORMAT(process.SendLimitTime,'%H:%i:%s') AS SendLimitTime,
                     process.SendUseTime,
                     process.SendOverTime,
                     process.IsStatus,
                     process.IsStop,
                     process.Signature,
-                    (SELECT SendTime 
-                     FROM delivery_fac_nhealth
-                     WHERE HptCode = '$siteCode'
-                     AND FacCode = '$FacCode') AS LimitTime,
                      $From.HptCode  
                 FROM
                     process
@@ -54,18 +51,12 @@
             $return['PackUseTime'] = $Result['PackUseTime'];
             $return['SendStartTime'] = $Result['SendStartTime'];
             $return['SendEndTime'] = $Result['SendEndTime'];
+            $return['SendLimitTime'] = $Result['SendLimitTime'];
             $return['SendUseTime'] = $Result['SendUseTime'];
             $return['SendOverTime'] = $Result['SendOverTime'];
             $return['IsStatus'] = $Result['IsStatus'];
             $return['IsStop'] = $Result['IsStop'];
             $return['Signature'] = $Result['Signature'];
-            if ($Result['LimitTime'] == null) {
-                $Sql2 = "INSERT INTO delivery_fac_nhealth (HptCode,FacCode,SendTime) VALUES ('$siteCode','$FacCode',$Limit_null)";
-                mysqli_query($conn, $Sql2);
-                $return['LimitTime'] = $Limit_null;
-            } else {
-                $return['LimitTime'] = $Result['LimitTime'];
-            }
             $return['HptCode'] = $Result['HptCode'];
 
             $count++;
@@ -81,6 +72,35 @@
         } else {
             $return['status'] = "failed";
             $return['form'] = "load_process";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
+    function load_fac_time($conn, $DATA){
+        $siteCode = $DATA["siteCode"];
+        $FacCode = $_SESSION['FacCode'];
+        $count = 0;
+
+        $Sql = "SELECT SendTime FROM delivery_fac_nhealth WHERE HptCode = '$siteCode' AND FacCode = '$FacCode' ORDER BY SendTime ASC";
+        $meQuery = mysqli_query($conn, $Sql);
+        $return['Sql'] = $Sql;
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return['SendTime'][$count] = $Result['SendTime'];
+            $count++;
+        }
+        $return['cnt'] = $count;
+
+        if($count > 0){
+            $return['status'] = "success";
+            $return['form'] = "load_fac_time";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }else{
+            $return['status'] = "failed";
+            $return['form'] = "load_fac_time";
             echo json_encode($return);
             mysqli_close($conn);
             die;
@@ -264,9 +284,10 @@
     function start_send($conn, $DATA){
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
+        $limit_date = date('Y-m-d '.$DATA["slc_time"]);
         $nowdate = date('Y-m-d H:i:s');
-        $Sql = "UPDATE process SET SendStartTime = '$nowdate' WHERE DocNo = '$DocNo'";
-
+        $Sql = "UPDATE process SET SendStartTime = '$nowdate',SendLimitTime = '$limit_date' WHERE DocNo = '$DocNo'";
+        $return['limit_date'] = $limit_date;
         if(mysqli_query($conn,$Sql)){
             $Sql = "UPDATE $From SET IsProcess = 5 WHERE DocNo = '$DocNo' ";
             mysqli_query($conn,$Sql);
@@ -296,13 +317,11 @@
         $Sql = "UPDATE process SET SendEndTime = NOW(),IsStatus = 4 WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
 
-        $Sql = "SELECT  TIMEDIFF(process.SendEndTime,process.SendStartTime) AS UseTime,
-                        TIMEDIFF((delivery_fac_nhealth.SendTime)*100,TIMEDIFF(process.SendEndTime,process.SendStartTime)) AS Overtime 
+        $Sql = "SELECT  TIMEDIFF(SendEndTime,SendStartTime) AS UseTime,
+                        TIMEDIFF(SendLimitTime,SendEndTime) AS Overtime 
 
-                FROM    process,delivery_fac_nhealth 
-                WHERE   process.DocNo = '$DocNo'
-                AND     delivery_fac_nhealth.HptCode = '$SiteCode'
-                AND     delivery_fac_nhealth.FacCode = '$FacCode'";
+                FROM    process 
+                WHERE   DocNo = '$DocNo'";
 
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -338,6 +357,9 @@
 
         if ($DATA['STATUS'] == 'load_process') {
             load_process($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'load_fac_time') {
+            load_fac_time($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'insert_process') {
             insert_process($conn, $DATA);

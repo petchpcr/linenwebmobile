@@ -29,6 +29,9 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var Del_fac = [];
+		var Del_time = [];
+
 		$(document).ready(function(e) {
 			$("#lang").val('<?php echo $language; ?>');
 		});
@@ -36,6 +39,15 @@ $genarray = json_decode($json, TRUE);
 		// function
 		function back() {
 			window.location.href = "menu.php";
+		}
+
+		function time_to_hpt() {
+			$("#md_fac_time").modal('hide');
+			$("#md_fac_nhealth").modal('show');
+		}
+
+		function enable_add() {
+			$("#AddFacNhealth").prop("disabled",false);
 		}
 
 		function load_site_fac() {
@@ -68,6 +80,52 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
+		function show_fac_time(FacCode) {
+			var data = {
+				'FacCode': FacCode,
+				'STATUS': 'show_fac_time'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function show_hpt_time(HptCode) {
+			var data = {
+				'HptCode': HptCode,
+				'STATUS': 'show_hpt_time'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function save_edit_factime() {
+			var ar_fac = [];
+			var ar_time = [];
+			var ar_newtime = [];
+			$(".fac_time").each(function() {
+				var FacCode = $(this).attr("data-fac");
+				var Time = $(this).attr("data-time");
+				var New_Time = $(this).val();
+				ar_fac.push(FacCode);
+				ar_time.push(Time);
+				ar_newtime.push(New_Time);
+			});
+
+			var data = {
+				'Del_fac': Del_fac,
+				'Del_time': Del_time,
+				'ar_fac': ar_fac,
+				'ar_time': ar_time,
+				'ar_newtime': ar_newtime,
+				'STATUS': 'save_edit_factime'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function del_list_time(list, fac, time) {
+			$("#" + list).remove();
+			Del_fac.push(fac);
+			Del_time.push(time);
+		}
+
 		function LoadDeliveryFacNhealth() {
 			var data = {
 				'STATUS': 'LoadDeliveryFacNhealth'
@@ -77,22 +135,13 @@ $genarray = json_decode($json, TRUE);
 
 		function AddFacNhealth() {
 			var FacCode = $("#from_fac").val();
-			var HptCode = '<?php echo $_SESSION['HptCode']; ?>';
 			var SendTime = $("#new_send_time").val();
-			if (SendTime == null || SendTime == "" || SendTime == 0) {
-				Title = "<?php echo $array['Timencorrect'][$language]; ?>";
-				Type = "warning";
-				Text = "<?php echo $array['Pdeliverytime'][$language]; ?> !";
-				AlertError(Title, Text, Type);
-			} else {
-				var data = {
-					'FacCode': FacCode,
-					'HptCode': HptCode,
-					'SendTime': SendTime,
-					'STATUS': 'AddFacNhealth'
-				};
-				senddata(JSON.stringify(data));
-			}
+			var data = {
+				'FacCode': FacCode,
+				'SendTime': SendTime,
+				'STATUS': 'AddFacNhealth'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function EditFacNhealth(count) {
@@ -193,8 +242,20 @@ $genarray = json_decode($json, TRUE);
 								$("#from_fac").append(Str);
 								$("#AddFacNhealth").hide();
 							}
+
+							$("#AddFacNhealth").prop("disabled",true);
 							$("#new_send_time").val("");
 							$("#md_add_fac_nhealth").modal("show");
+						} else if (temp["form"] == 'load_site') {
+							$("#show_fac_nhealth_time").empty();
+							for (var i = 0; i < temp['count']; i++) {
+								var Str = "<button class='btn btn-block btn-mylight font-weight-bold' onclick='show_hpt_time(\"" + temp['HptCode'][i] + "\")'>" + temp['HptName'][i] + "</button>";
+
+								$("#show_fac_nhealth_time").append(Str);
+							}
+
+							$("#md_fac_nhealth").modal("show");
+
 						} else if (temp["form"] == 'load_site_time') {
 							if (temp['count'] > 0) {
 								$("#show_hpt_fac_time").empty();
@@ -208,22 +269,55 @@ $genarray = json_decode($json, TRUE);
 								$("#md_fac_send_time").modal("show");
 							}
 						} else if (temp["form"] == 'show_fac') {
-							if (temp['count'] > 0) {
-								$("#show_fac_nhealth_time").empty();
-								for (var i = 0; i < temp['count']; i++) {
-									var Str = "<div class='input-group my-3'><div class='input-group-prepend'><label class='input-group-text' style='width:150px;'>" + temp[i]['FacName'] + "</label></div>";
-									Str += "<input onkeydown='make_number()' id='fac_nhealth_time" + i + "' type='text' class='form-control text-center numonly' ";
-									Str += "data-HptCode='" + temp[i]['HptCode'] + "' data-FacCode='" + temp[i]['FacCode'] + "' value='" + temp[i]['SendTime'] + "'>";
-									Str += "<div class='input-group-append'><span class='input-group-text'><?php echo $genarray['minute'][$language]; ?></span></div></div>";
-									$("#show_fac_nhealth_time").append(Str);
-								}
+							$("#show_fac_nhealth_time").empty();
+							for (var i = 0; i < temp['count']; i++) {
+								var Str = "<button class='btn btn-block btn-mylight font-weight-bold' onclick='show_fac_time(\"" + temp['Fcode'][i] + "\")'>" + temp['Fname'][i] + "</button>";
 
-								$("#md_fac_nhealth").modal("show");
-								$("#btn_edit_fac_send_time").attr("onclick", "EditFacNhealth(" + temp['count'] + ")");
-								$("#btn_edit_fac_send_time").prop("disabled", false);
-								$("#show_hpt_fac").hide();
-								$("#show_fac_nhealth_time").show();
+								$("#show_fac_nhealth_time").append(Str);
 							}
+
+							$("#md_fac_nhealth").modal("show");
+							$("#btn_edit_fac_send_time").attr("onclick", "EditFacNhealth(" + temp['count'] + ")");
+							$("#btn_edit_fac_send_time").prop("disabled", false);
+							$("#show_hpt_fac").hide();
+							$("#show_fac_nhealth_time").show();
+
+						} else if (temp["form"] == 'show_fac_time') {
+							Del_fac = [];
+							Del_time = [];
+							$("#fac_time_list").empty();
+							for (var i = 0; i < temp['count']; i++) {
+								var list_time = "list_time" + i;
+								var Str = "<div id='" + list_time + "' class='d-flex'><div class='text-center mr-2' style='width:75px;'><?php echo $array['round'][$language]; ?> " + (i + 1) + "</div>";
+								Str += "<input type='time' class='form-control text-center mb-3 fac_time' data-fac='" + temp['FacCode'] + "' data-time='" + temp['SendTime'][i] + "' value='" + temp['SendTime'][i] + "'>";
+								Str += "<button onclick='del_list_time(\"" + list_time + "\",\"" + temp['FacCode'] + "\",\"" + temp['SendTime'][i] + "\")' class='btn btn-danger ml-2 px-3 py-2' style='height:37px;'><i class='fas fa-times'></i></button></div>";
+
+								$("#fac_time_list").append(Str);
+							}
+
+							$("#btn_to_hpt").remove();
+							$("#md_fac_nhealth").modal("hide");
+							$("#md_fac_time").modal("show");
+
+						} else if (temp["form"] == 'show_hpt_time') {
+							$("#fac_time_list").empty();
+							for (var i = 0; i < temp['count']; i++) {
+								var text = temp['SendTime'][i];
+								var Str = "<div class='d-flex'><div class='text-center mr-2' style='width:75px;'><?php echo $array['round'][$language]; ?> " + (i + 1) + "</div>";
+								Str += "<input type='time' class='form-control text-center mb-3 bg-white' value='" + text + "' disabled>";
+								Str += "</div>";
+
+								$("#fac_time_list").append(Str);
+							}
+
+							$("#btn_save_edit").remove();
+							$("#md_fac_nhealth").modal("hide");
+							$("#md_fac_time").modal("show");
+
+						} else if (temp["form"] == 'save_edit_factime') {
+							$("#md_fac_time").modal("hide");
+							$("#md_fac_nhealth").modal("show");
+
 						} else if (temp["form"] == 'save_lang') {
 							swal({
 								title: '',
@@ -238,18 +332,7 @@ $genarray = json_decode($json, TRUE);
 							})
 							setTimeout('window.location.href = "menu.php"', 1000);
 						} else if (temp["form"] == 'AddFacNhealth') {
-							$("#md_add_fac_nhealth").modal('hide');
-							swal({
-								title: '',
-								text: lang,
-								type: 'success',
-								showCancelButton: false,
-								confirmButtonColor: '#3085d6',
-								cancelButtonColor: '#d33',
-								showConfirmButton: false,
-								timer: 1000,
-								confirmButtonText: 'Error!!'
-							})
+							$("#md_add_fac_nhealth").modal("hide");
 						} else if (temp["form"] == 'EditFacNhealth') {
 							$("#md_fac_nhealth").modal('hide');
 							swal({
@@ -266,16 +349,24 @@ $genarray = json_decode($json, TRUE);
 							window.location.href = '../index.html';
 						}
 					} else if (temp['status'] == "failed") {
-						swal({
-							title: '',
-							type: 'warning',
-							showCancelButton: false,
-							confirmButtonColor: '#3085d6',
-							cancelButtonColor: '#d33',
-							showConfirmButton: false,
-							timer: 2000,
-							confirmButtonText: 'Error!!'
-						})
+						if (temp["form"] == 'AddFacNhealth') {
+							var Title = "<?php echo $array['havetime'][$language]; ?>";
+							var Text = "";
+							var Type = "warning";
+							AlertError(Title, Text, Type);
+						} else {
+							swal({
+								title: '',
+								type: 'warning',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								showConfirmButton: false,
+								timer: 2000,
+								confirmButtonText: 'Error!!'
+							})
+						}
+
 					} else {
 						console.log(temp['msg']);
 					}
@@ -353,9 +444,9 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-12">
-						<button onclick="load_send_time()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 3) {
-																																																echo hidden;
-																																															} ?>>
+						<button onclick="load_site()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 3) {
+																																														echo hidden;
+																																													} ?>>
 							<i class="far fa-clock mr-2"></i><?php echo $array['showTime'][$language]; ?>
 						</button>
 					</div>
@@ -387,7 +478,7 @@ $genarray = json_decode($json, TRUE);
 						<div class="col-md-12 col-sm-12 col-12">
 							<div class="input-group mb-1">
 								<div class="input-group-prepend">
-									<label class="input-group-text" style="width:80px;"><?php echo $array['from'][$language]; ?></label>
+									<label class="input-group-text" style="width:80px;"><?php echo $array['factory'][$language]; ?></label>
 								</div>
 								<select id="from_fac" class="custom-select"></select>
 							</div>
@@ -403,11 +494,11 @@ $genarray = json_decode($json, TRUE);
 					</div>
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
-							<label class="input-group-text" style="width:80px;"><?php echo $array['useTime'][$language]; ?></label>
+							<label class="input-group-text" style="width:80px;"><?php echo $array['Time'][$language]; ?></label>
 						</div>
-						<input onkeydown='make_number()' id="new_send_time" type="text" class="form-control text-center numonly" placeholder="0">
+						<input id="new_send_time" onchange="enable_add()" type="time" class="form-control text-center" value="00:00">
 						<div class="input-group-append">
-							<span class="input-group-text"><?php echo $genarray['minute'][$language]; ?></span>
+							<span class="input-group-text"><?php echo $array['oclock'][$language]; ?></span>
 						</div>
 					</div>
 
@@ -417,6 +508,31 @@ $genarray = json_decode($json, TRUE);
 						<div class="col-12 text-center">
 							<button id="AddFacNhealth" onclick="AddFacNhealth()" type="button" class="btn btn-primary mx-3"><?php echo $genarray['save'][$language]; ?></button>
 							<button type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_fac_time" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog  modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title font-weight-bold text-truncate"><i class="fas fa-edit mr-2"></i><?php echo $array['editTime'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+					<div id="fac_time_list"></div>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-12 text-center">
+							<button id="btn_save_edit" onclick="save_edit_factime()" type="button" class="btn btn-primary mx-3"><?php echo $genarray['save'][$language]; ?></button>
+							<button id="btn_to_hpt" onclick="time_to_hpt()" type="button" class="btn btn-primary mx-3"><i class="fas fa-arrow-circle-left mr-1"></i> <?php echo $genarray['back'][$language]; ?></button>
+							<button id="btn_cancel_edit" type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
 						</div>
 					</div>
 				</div>
@@ -445,8 +561,7 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-12 text-center">
-							<button id="btn_edit_fac_send_time" type="button" class="btn btn-primary mx-3"><?php echo $genarray['save'][$language]; ?></button>
-							<button type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+							<button type="button" class="btn btn-secondary mx-3" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
 						</div>
 					</div>
 				</div>

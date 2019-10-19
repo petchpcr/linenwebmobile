@@ -42,7 +42,7 @@ $genarray = json_decode($json, TRUE);
 		var DocNo = "<?php echo $DocNo ?>";
 
 		$(document).ready(function(e) {
-			load_process();
+			load_fac_time();
 		});
 
 		// function
@@ -52,6 +52,14 @@ $genarray = json_decode($json, TRUE);
 				'DocNo': DocNo,
 				'From': From,
 				'STATUS': 'load_process'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function load_fac_time() {
+			var data = {
+				'siteCode': siteCode,
+				'STATUS': 'load_fac_time'
 			};
 			senddata(JSON.stringify(data));
 		}
@@ -114,12 +122,21 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function start_send() {
-			var data = {
-				'DocNo': DocNo,
-				'From': From,
-				'STATUS': 'start_send'
-			};
-			senddata(JSON.stringify(data));
+			var slc_time = $("#sle_time").val();
+			if (slc_time == null || slc_time == "") {
+				var Title = "ไม่สามารถเริ่มได้";
+				var Text = "กรุณาเลือกรอบส่งผ้า";
+				var Type = "warning";
+				AlertError(Title, Text, Type);
+			} else {
+				var data = {
+					'DocNo': DocNo,
+					'From': From,
+					'slc_time': slc_time,
+					'STATUS': 'start_send'
+				};
+				senddata(JSON.stringify(data));
+			}
 		}
 
 		function question_end_send() {
@@ -136,6 +153,17 @@ $genarray = json_decode($json, TRUE);
 				'STATUS': 'end_send'
 			};
 			senddata(JSON.stringify(data));
+		}
+
+		function AlertError(Title, Text, Type) {
+			swal({
+				title: Title,
+				text: Text,
+				type: Type,
+				showConfirmButton: true,
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: '<?php echo $genarray['yes2'][$language]; ?>'
+			})
 		}
 
 		function back() {
@@ -173,7 +201,6 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_process') {
-							$("#send_time").text("( <?php echo $array['useTimeS'][$language]; ?> " + temp['LimitTime'] + " <?php echo $genarray['minute'][$language]; ?> )");
 							$("#head-back").remove();
 							var Back = "<div id='head-back' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
 							$("#user").before(Back);
@@ -304,6 +331,8 @@ $genarray = json_decode($json, TRUE);
 									$("#S_Start").text("--:--:--");
 									$("#S_End").text("--:--:--");
 								} else if (temp['SendStartTime'] != null) { // ถ้าเคยกดเริ่มแล้ว
+									$("#sle_time").prop("disabled", true);
+									$("#sle_time").val(temp['SendLimitTime']).change();
 									$("#S_Start_btn").hide();
 									$("#S_End_btn").show();
 									var S_Start = new Date(temp['SendStartTime']);
@@ -388,8 +417,18 @@ $genarray = json_decode($json, TRUE);
 								$("#P_End").text(P_End.toLocaleTimeString());
 								$("#S_Start").text(S_Start.toLocaleTimeString());
 								$("#S_End").text(S_End.toLocaleTimeString());
-
+								$("#sle_time").prop("disabled", true);
+								$("#sle_time").val(temp['SendLimitTime']).change();
 							}
+						} else if (temp["form"] == 'load_fac_time') {
+							$("#sle_time").empty();
+							$("#sle_time").append("<option value=''>เลือกรอบส่งผ้า</option>");
+							for (var i = 0; i < temp['cnt']; i++) {
+								var text = temp['SendTime'][i];
+								var Str = "<option value='" + temp['SendTime'][i] + "'>" + text.substring(0, text.length - 3) + " น.</option>";
+								$("#sle_time").append(Str);
+							}
+							load_process();
 						} else if (temp["form"] == 'insert_process') {
 							load_process();
 						} else if (temp["form"] == 'start_wash') {
@@ -442,6 +481,8 @@ $genarray = json_decode($json, TRUE);
 					} else if (temp['status'] == "failed") {
 						if (temp["form"] == 'load_process') {
 							insert_process();
+						} else if (temp["form"] == 'load_fac_time') {
+							load_process();
 						} else if (temp["form"] == 'insert_process') {
 							swal({
 								title: '',
@@ -484,7 +525,6 @@ $genarray = json_decode($json, TRUE);
 			</div>
 		</div>
 		<div class="text-center text-truncate font-weight-bold mt-4" style="font-size:25px;"><?php echo $DocNo; ?></div>
-		<div id="send_time" class="text-center text-truncate font-weight-bold mb-4" style="font-size:20px;"></div>
 
 		<div id="process">
 			<div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">
@@ -590,6 +630,11 @@ $genarray = json_decode($json, TRUE);
 					</div>
 
 					<div class="col-4 text-left align-self-center text-center">
+						<div class="row d-flex justify-content-center mb-3">
+							<div class="col-12 col-lg-8">
+								<select id="sle_time" class="form-control"></select>
+							</div>
+						</div>
 						<div class="row">
 							<div id="S_Start_text" class="col-lg-6 col-md-12 col-sm-12">
 								<div class="head_text"><?php echo $array['Starttime'][$language]; ?></div>
