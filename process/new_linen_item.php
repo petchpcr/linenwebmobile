@@ -230,8 +230,13 @@
     }
 
     function load_Fac($conn, $DATA){
+        if ($_SESSION['lang'] == 'th') {
+            $Fname = "FacNameTH";
+        } else if ($_SESSION['lang'] == 'en') {
+            $Fname = "FacName";
+        }
         $count = 0;
-        $Sql = "SELECT FacCode,FacName FROM factory WHERE IsCancel=0";
+        $Sql = "SELECT FacCode,$Fname AS FacName FROM factory WHERE IsCancel=0";
         $boolean = false;
 
         $meQuery = mysqli_query($conn, $Sql);

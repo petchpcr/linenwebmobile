@@ -49,7 +49,7 @@ $FacNameTH = $Result['FacNameTH'];
 $HptName = $Result['HptName'];
 $HptNameTH = $Result['HptNameTH'];
 
-$Sql = "SELECT FName,email FROM users WHERE HptCode = '$siteCode' AND (PmID = 5 OR PmID = 3) AND Active_mail = 1";
+$Sql = "SELECT FName,email FROM users WHERE HptCode = '$siteCode' AND (PmID = 3 OR PmID = 5 OR PmID = 7)";
 $meQuery = mysqli_query($conn, $Sql);
 while ($Result = mysqli_fetch_assoc($meQuery)) {
 
