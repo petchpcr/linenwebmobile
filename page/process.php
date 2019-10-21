@@ -123,11 +123,25 @@ $genarray = json_decode($json, TRUE);
 
 		function start_send() {
 			var slc_time = $("#sle_time").val();
+			var Hr = slc_time.substring(2, 0);
+			var Mi = slc_time.substring(5, 3);
+			var slc_date = new Date();
+			slc_date.setHours(Hr);
+			slc_date.setMinutes(Mi);
+			slc_date.setSeconds(00);
+			var now = new Date();
+			var Diff = slc_date-now;
+			var Title = "ไม่สามารถเริ่มได้";
+			var Type = "warning";
+
 			if (slc_time == null || slc_time == "") {
-				var Title = "ไม่สามารถเริ่มได้";
 				var Text = "กรุณาเลือกรอบส่งผ้า";
-				var Type = "warning";
 				AlertError(Title, Text, Type);
+
+			} else if (Diff <= 0) {
+				var Text = "รอบเวลาน้อยกว่าเวลาปัจจุบัน";
+				AlertError(Title, Text, Type);
+				
 			} else {
 				var data = {
 					'DocNo': DocNo,
@@ -631,7 +645,7 @@ $genarray = json_decode($json, TRUE);
 
 					<div class="col-4 text-left align-self-center text-center">
 						<div class="row d-flex justify-content-center mb-3">
-							<div class="col-12 col-lg-8">
+							<div class="col-12 col-md-8 col-lg-6 col-xl-4">
 								<select id="sle_time" class="form-control"></select>
 							</div>
 						</div>
