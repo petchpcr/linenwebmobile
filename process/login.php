@@ -69,16 +69,30 @@ function clear_active($conn, $DATA)
   $user = $DATA['USERNAME'];
   $password = $DATA['PASSWORD'];
   // $password = md5($DATA['PASSWORD']);
-  $Sql = "UPDATE users SET IsActive = 0 WHERE UserName = '$user' AND Password = '$password'";
 
-  if (mysqli_query($conn, $Sql)) {
+  $Sql = "SELECT COUNT(*) AS cnt
+          FROM    users INNER JOIN permission ON users.PmID = permission.PmID
+          WHERE   users.UserName = '$user'
+          AND     users.Password = '$password' 
+          AND     users.IsCancel = 0
+
+          AND       (users.PmID=2 OR users.PmID=3 OR users.PmID=4)";
+  $meQuery = mysqli_query($conn, $Sql);
+  $Result = mysqli_fetch_assoc($meQuery);
+  $count = $Result['cnt'];
+
+  if ($count == 1) {
+    $Sql = "UPDATE users SET IsActive = 0 WHERE UserName = '$user' AND Password = '$password'";
+    mysqli_query($conn, $Sql);
     $return['status'] = "success";
     $return['form'] = "clear_active";
     echo json_encode($return);
     mysqli_close($conn);
     die;
+
   } else {
     $return['status'] = "failed";
+    $return['msg'] = "Not found username or password";
     $return['form'] = "clear_active";
     echo json_encode($return);
     mysqli_close($conn);

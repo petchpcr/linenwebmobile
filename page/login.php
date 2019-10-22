@@ -41,12 +41,14 @@ session_start();
 			var user = $("#username").val();
 			var password = $("#password").val();
 
-			var data = {
-				'STATUS': 'clear_active',
-				'USERNAME': user,
-				'PASSWORD': password
-			};
-			senddata(JSON.stringify(data))
+			if (user != "" && password != "") {
+				var data = {
+					'STATUS': 'clear_active',
+					'USERNAME': user,
+					'PASSWORD': password
+				};
+				senddata(JSON.stringify(data))
+			}
 		}
 
 		function make_char() {
@@ -122,18 +124,12 @@ session_start();
 							title: 'Something Wrong',
 							text: temp["msg"],
 							type: 'error',
+							showConfirmButton: false,
 							showCancelButton: false,
 							confirmButtonColor: '#3085d6',
 							cancelButtonColor: '#d33',
-							confirmButtonText: 'Ok'
-						}).then(function() {
-
-						}, function(dismiss) {
-							// dismiss can be 'cancel', 'overlay',
-							// 'close', and 'timer'
-							if (dismiss === 'cancel') {
-
-							}
+							confirmButtonText: 'Ok',
+							timer: 1500
 						})
 					}
 
