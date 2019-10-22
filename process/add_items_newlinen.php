@@ -2,7 +2,8 @@
     session_start();
     require '../connect/connect.php';
     require 'logout.php';
-
+    date_default_timezone_set("Asia/Bangkok");
+    
     function choose_items($conn, $DATA){
         $Search = $DATA["Search"];
         $siteCode = $DATA["siteCode"];

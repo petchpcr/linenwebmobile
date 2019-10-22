@@ -2,7 +2,8 @@
     session_start();
     require '../connect/connect.php';
     require 'logout.php';
-
+    date_default_timezone_set("Asia/Bangkok");
+    
     function load_dep($conn, $DATA){
         $count = 0;
         $siteCode = $DATA["siteCode"];

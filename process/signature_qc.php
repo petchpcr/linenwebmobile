@@ -1,6 +1,7 @@
 <?php
     session_start();
     require '../connect/connect.php';
+    date_default_timezone_set("Asia/Bangkok");
     
     $DocNo = $_POST['DocNo'];
     $SigCode = $_POST['SigCode'];

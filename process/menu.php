@@ -2,7 +2,8 @@
     session_start();
     require '../connect/connect.php';
     require 'logout.php';
-
+    date_default_timezone_set("Asia/Bangkok");
+    
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
