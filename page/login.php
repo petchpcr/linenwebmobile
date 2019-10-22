@@ -22,7 +22,7 @@ session_start();
 
 			if (user != "" && password != "") {
 				var data = {
-					'PAGE': 'login',
+					'STATUS': 'checklogin',
 					'USERNAME': user,
 					'PASSWORD': password
 				};
@@ -35,6 +35,18 @@ session_start();
 					text: 'Please recheck your username and password!'
 				})
 			}
+		}
+
+		function clear_active() {
+			var user = $("#username").val();
+			var password = $("#password").val();
+
+			var data = {
+				'STATUS': 'clear_active',
+				'USERNAME': user,
+				'PASSWORD': password
+			};
+			senddata(JSON.stringify(data))
 		}
 
 		function make_char() {
@@ -73,33 +85,37 @@ session_start();
 						console.log('Error#542-decode error');
 					}
 					if (temp["status"] == 'success') {
-						var PmID = temp['PmID'];
+						if (temp["form"] == 'checklogin') {
+							var PmID = temp['PmID'];
 
-						swal.hideLoading();
-						swal({
-							title: '',
-							text: temp["msg"],
-							type: 'success',
-							showCancelButton: false,
-							confirmButtonColor: '#3085d6',
-							cancelButtonColor: '#d33',
-							timer: 1000,
-							confirmButtonText: 'Ok',
-							showConfirmButton: false
-						}).then(function() {
-							if (PmID == 4) {
-								window.location.href = 'menu.php';
-							} else {
-								window.location.href = 'menu.php';
-							}
-						}, function(dismiss) {
-							if (PmID == 4) {
-								window.location.href = 'menu.php';
-							} else {
-								window.location.href = 'menu.php';
-							}
-						})
-
+							swal.hideLoading();
+							swal({
+								title: '',
+								text: temp["msg"],
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								timer: 1000,
+								confirmButtonText: 'Ok',
+								showConfirmButton: false
+							}).then(function() {
+								if (PmID == 4) {
+									window.location.href = 'menu.php';
+								} else {
+									window.location.href = 'menu.php';
+								}
+							}, function(dismiss) {
+								if (PmID == 4) {
+									window.location.href = 'menu.php';
+								} else {
+									window.location.href = 'menu.php';
+								}
+							})
+						} else if (temp["form"] == 'clear_active') {
+							swal.close();
+							console.log("Clear IsActive Success!");
+						}
 					} else {
 						swal.hideLoading()
 						swal({
@@ -167,6 +183,10 @@ session_start();
 					</div>
 
 					<div class="text-center mt-2">
+						<div id="icon_IsActive" onclick="clear_active()">
+							<i class="fas fa-key"></i>
+						</div>
+
 						<div id="btn_login">
 							<button id="btn_sign_in" onclick="chklogin()" class="btn btn-primary" style="border-radius:30px;width:200px;">
 								<div class="d-flex align-items-center">

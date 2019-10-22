@@ -86,6 +86,15 @@ input{
     margin-top: 28px;
     margin-left: 13px;
 }
+
+#icon_IsActive {
+    position: absolute;
+    font-size: 24px;
+    color:#1659a2;
+    margin-top: 17px;
+    margin-left: 28px;
+}
+
 #label_password{
     padding-left: 50px;
 }
