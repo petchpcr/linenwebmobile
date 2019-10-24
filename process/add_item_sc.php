@@ -56,11 +56,11 @@ function choose_items($conn, $DATA)
             WHERE               DepCode='$DepCode'
             AND                 item_stock.ItemCode=item.ItemCode
             AND                 item.ItemName LIKE '%$Search%' ";
-    $meQuery = mysqli_query($conn,$Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)){
-        $return[$count]['ItemCode']	=  $Result['ItemCode'];
-        $return[$count]['ItemName']	=  $Result['ItemName'];
-        $return[$count]['UnitCode']	=  $Result['UnitCode'];
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $return[$count]['ItemCode']    =  $Result['ItemCode'];
+        $return[$count]['ItemName']    =  $Result['ItemName'];
+        $return[$count]['UnitCode']    =  $Result['UnitCode'];
         $count++;
     }
     $return['cnt'] = $count;
@@ -88,14 +88,14 @@ function get_par($conn, $DATA)
     $new_par = array();
     $cnt_arr = sizeof($new_i_code, 0);
     $count = 0;
-    foreach($new_i_code as $value){
+    foreach ($new_i_code as $value) {
         $Sql = "SELECT DISTINCT ParQty FROM item_stock WHERE DepCode='$DepCode' AND item_stock.ItemCode= '$value'";
-        $meQuery = mysqli_query($conn,$Sql);
+        $meQuery = mysqli_query($conn, $Sql);
         $Result = mysqli_fetch_assoc($meQuery);
-        array_push($new_par,$Result['ParQty']);
+        array_push($new_par, $Result['ParQty']);
         $count++;
     }
-    $return['ar_par'] = implode(",",$new_par);
+    $return['ar_par'] = implode(",", $new_par);
 
     if ($count == $cnt_arr) {
         $return['status'] = "success";
@@ -123,6 +123,7 @@ function add_item($conn, $DATA)
     $new_qty = $DATA['new_qty'];
     $new_par = $DATA['new_par'];
     $new_order = $DATA['new_order'];
+    $Userid = $_SESSION['Userid'];
 
     $ar_old_code = explode(",", $old_code);
     $ar_old_qty = explode(",", $old_qty);
@@ -134,21 +135,24 @@ function add_item($conn, $DATA)
     $ar_new_order = explode(",", $new_order);
 
     $Sql = "DELETE FROM shelfcount_detail WHERE DocNo = '$DocNo'";
-    mysqli_query($conn,$Sql);
+    mysqli_query($conn, $Sql);
 
-    foreach($ar_old_code as $i => $val){
+    foreach ($ar_old_code as $i => $val) {
         $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
                 VALUES ('$DocNo','$val',1,$ar_old_par[$i],$ar_old_qty[$i],$ar_old_order[$i]) ";
         $return[$i]['CcQty'] = $ar_old_qty[$i];
-        mysqli_query($conn,$Sql);
+        mysqli_query($conn, $Sql);
     }
 
-    foreach($ar_new_code as $i => $val){
+    foreach ($ar_new_code as $i => $val) {
         $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
                 VALUES ('$DocNo','$val',1,$ar_new_par[$i],$ar_new_qty[$i],$ar_new_order[$i]) ";
         $return[$i]['CcQty'] = $ar_new_qty[$i];
-        mysqli_query($conn,$Sql);
+        mysqli_query($conn, $Sql);
     }
+
+    $Sql = "UPDATE shelfcount SET Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 0 WHERE DocNo = '$DocNo'";
+    mysqli_query($conn, $Sql);
 
     $return['status'] = "success";
     $return['form'] = "add_item";
@@ -157,10 +161,11 @@ function add_item($conn, $DATA)
     die;
 }
 
-function del_doc($conn, $DATA) {
+function del_doc($conn, $DATA)
+{
     $DocNo = $DATA['DocNo'];
     $Sql = "DELETE FROM shelfcount WHERE DocNo = '$DocNo'";
-    if (mysqli_query($conn,$Sql)) {
+    if (mysqli_query($conn, $Sql)) {
         $return['status'] = "success";
         $return['form'] = "del_doc";
         echo json_encode($return);
