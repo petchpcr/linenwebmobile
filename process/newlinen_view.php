@@ -29,7 +29,7 @@ function load_doc($conn, $DATA)
                         site.HptName
                 FROM newlinentable,users,site
                 WHERE DocNo ='$DocNo'
-                AND users.ID = Modify_Code
+                AND users.ID = newlinentable.Modify_Code
                 AND newlinentable.HptCode = site.HptCode";
 
     $meQuery = mysqli_query($conn, $Sql);
