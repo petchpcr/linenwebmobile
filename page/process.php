@@ -130,7 +130,7 @@ $genarray = json_decode($json, TRUE);
 			slc_date.setMinutes(Mi);
 			slc_date.setSeconds(00);
 			var now = new Date();
-			var Diff = slc_date-now;
+			var Diff = slc_date - now;
 			var Title = "ไม่สามารถเริ่มได้";
 			var Type = "warning";
 
@@ -141,7 +141,7 @@ $genarray = json_decode($json, TRUE);
 			} else if (Diff <= 0) {
 				var Text = "รอบเวลาน้อยกว่าเวลาปัจจุบัน";
 				AlertError(Title, Text, Type);
-				
+
 			} else {
 				var data = {
 					'DocNo': DocNo,
@@ -644,9 +644,10 @@ $genarray = json_decode($json, TRUE);
 					</div>
 
 					<div class="col-4 text-left align-self-center text-center">
-						<div class="row d-flex justify-content-center mb-3">
-							<div class="col-12 col-md-8 col-lg-6 col-xl-4">
-								<select id="sle_time" class="form-control"></select>
+						<div class="row d-flex justify-content-center align-items-center mb-3" style="font-size:20px;">
+							<div>รอบส่งผ้า : </div>
+							<div class="col-12 col-md-8 col-lg-6 col-xl-4 d-flex">
+								<select id="sle_time" class="form-control" style="font-size:20px;"></select>
 							</div>
 						</div>
 						<div class="row">

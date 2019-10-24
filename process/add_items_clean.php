@@ -82,6 +82,7 @@ function load_items($conn, $DATA)
     $count = 0;
     $DocNo = $DATA["DocNo"];
     $refDoc = $DATA["refDoc"];
+    $Unweight = $DATA["Unweight"];
 
     $Sql = "DELETE FROM clean_detail WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
@@ -176,7 +177,11 @@ function load_items($conn, $DATA)
         $return[$count]['ItemName'] = $Result['ItemName'];
         $return[$count]['UnitCode'] = $Result['UnitCode'];
         $return[$count]['Qty'] = $Result['Qty'];
-        $return[$count]['Weight'] = $Result['Weight'];
+        $weight = $Result['Weight'];
+        if ($Unweight == 1) {
+            $weight = 0;
+        }
+        $return[$count]['Weight'] = $weight;
         $count++;
     }
     $return['count'] = $count;

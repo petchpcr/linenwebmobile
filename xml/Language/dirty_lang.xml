@@ -6,6 +6,7 @@
 <chooseFactory><en>Choose Fac.</en><th>เลือกโรงซัก</th></chooseFactory>
 
 <receivedYN><en>You received the dirty document ?</en><th>คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?</th></receivedYN>
+<ConReceived><en>Amount received is that correct ?</en><th>จำนวนที่ได้รับถูกต้องหรือไม่ ?</th></ConReceived>
 
 
 <statusIsreceive><en>Received</en><th>โรงซักรับเอกสาร</th></statusIsreceive>

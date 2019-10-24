@@ -125,35 +125,45 @@ require '../getTimeZone.php';
 		}
 
 		function confirm_yes(DocNo, From) {
-			sendmail = 0;
-			Arr_ItemCode = [];
-			Arr_ItemName = [];
-			Arr_Qty = [];
-			$('.receive_item').each(function(index) {
-				var ItemCode = $(this).attr("data-itemcode");
-				var ItemName = $(this).attr("data-itemname");
-				var Qty = Number($(this).val());
-				var code_i = rcv_code.indexOf(ItemCode);
-				if (code_i >= 0) {
-					if (Qty != rcv_qty[code_i]) {
-						sendmail++;
-					}
-				}
-				Arr_ItemCode.push(ItemCode);
-				Arr_ItemName.push(ItemName);
-				Arr_Qty.push(Qty);
-			});
-			var Str_ItemCode = Arr_ItemCode.join(',');
-			var Str_Qty = Arr_Qty.join(',');
+			swal({
+				title: '<?php echo $genarray['confirmReceivedoc'][$language]; ?>',
+				text: "<?php echo $array['ConReceived'][$language]; ?>",
+				type: 'question',
+				showCancelButton: true,
+				confirmButtonText: '<?php echo $genarray['confirm'][$language]; ?>',
+				cancelButtonText: '<?php echo $genarray['cancel'][$language]; ?>'
 
-			var data = {
-				'DocNo': DocNo,
-				'From': From,
-				'Str_ItemCode': Str_ItemCode,
-				'Str_Qty': Str_Qty,
-				'STATUS': 'confirm_yes'
-			};
-			senddata(JSON.stringify(data));
+			}).then((result) => {
+				sendmail = 0;
+				Arr_ItemCode = [];
+				Arr_ItemName = [];
+				Arr_Qty = [];
+				$('.receive_item').each(function(index) {
+					var ItemCode = $(this).attr("data-itemcode");
+					var ItemName = $(this).attr("data-itemname");
+					var Qty = Number($(this).val());
+					var code_i = rcv_code.indexOf(ItemCode);
+					if (code_i >= 0) {
+						if (Qty != rcv_qty[code_i]) {
+							sendmail++;
+						}
+					}
+					Arr_ItemCode.push(ItemCode);
+					Arr_ItemName.push(ItemName);
+					Arr_Qty.push(Qty);
+				});
+				var Str_ItemCode = Arr_ItemCode.join(',');
+				var Str_Qty = Arr_Qty.join(',');
+
+				var data = {
+					'DocNo': DocNo,
+					'From': From,
+					'Str_ItemCode': Str_ItemCode,
+					'Str_Qty': Str_Qty,
+					'STATUS': 'confirm_yes'
+				};
+				senddata(JSON.stringify(data));
+			})
 		}
 
 		function change_dep() {
@@ -355,7 +365,7 @@ require '../getTimeZone.php';
 										show_process(temp['DocNo'], temp['From']);
 									}
 								});
-								
+
 							}
 						} else if (temp["form"] == 'add_dirty') {
 							var Userid = temp['user']

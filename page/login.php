@@ -116,7 +116,17 @@ session_start();
 							})
 						} else if (temp["form"] == 'clear_active') {
 							swal.close();
-							console.log("Clear IsActive Success!");
+							swal({
+								title: '',
+								text: "Clear active success!",
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								timer: 1000,
+								confirmButtonText: 'Ok',
+								showConfirmButton: false
+							})
 						}
 					} else {
 						swal.hideLoading()

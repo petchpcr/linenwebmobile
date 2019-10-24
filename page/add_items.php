@@ -11,6 +11,11 @@ if (isset($_GET['Delback'])) {
 } else {
 	$Delback = 0;
 }
+if (isset($_GET['Unweight'])) {
+	$Unweight = $_GET['Unweight'];
+} else {
+	$Unweight = 0;
+}
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -61,6 +66,7 @@ $genarray = json_decode($json, TRUE);
 		var Menu = '<?php echo $Menu; ?>';
 		var Userid = "<?php echo $Userid ?>";
 		var Delback = "<?php echo $Delback ?>";
+		var Unweight = "<?php echo $Unweight ?>";
 		var arr_old_items = [];
 		var arr_new_items = [];
 		var arr_del_items = [];
@@ -78,6 +84,7 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DocNo': DocNo,
 				'refDoc': refDoc,
+				'Unweight': Unweight,
 				'STATUS': 'load_items'
 			};
 			senddata(JSON.stringify(data));
