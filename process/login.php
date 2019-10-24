@@ -11,14 +11,15 @@ function checklogin($conn, $DATA)
   // $password = md5($DATA['PASSWORD']);
   $boolean = false;
   $Sql = "SELECT  users.UserName,
-                    users.FName,
-                    users.ID,
-                    users.PmID,
-                    users.HptCode,
-                    users.FacCode,
-                    users.TimeOut,
-                    IFNULL(users.lang,'th') AS lang,
-                    permission.Permission
+                  users.ThName,
+                  users.EngName,
+                  users.ID,
+                  users.PmID,
+                  users.HptCode,
+                  users.FacCode,
+                  users.TimeOut,
+                  IFNULL(users.lang,'th') AS lang,
+                  permission.Permission
 
             FROM    users INNER JOIN permission ON users.PmID = permission.PmID
             WHERE   users.UserName = '$user'
@@ -33,7 +34,6 @@ function checklogin($conn, $DATA)
     $_SESSION['Userid'] = $Result['ID'];
     $Userid = $Result['ID'];
     $_SESSION['Username'] = $Result['UserName'];
-    $_SESSION['FName'] = $Result['FName'];
     $_SESSION['PmID'] = $Result['PmID'];
     $_SESSION['Permission'] = $Result['Permission'];
     $_SESSION['lang'] = $Result['lang'];
@@ -42,6 +42,11 @@ function checklogin($conn, $DATA)
     $_SESSION['FacCode'] = $Result['FacCode'];
     $return['FacCode'] = $Result['FacCode'];
     $return['PmID'] = $Result['PmID'];
+    if ($Result['lang'] == 'en') {
+      $_SESSION['FName'] = $Result['EngName'];
+    } else {
+      $_SESSION['FName'] = $Result['ThName'];
+    }
 
     $boolean = true;
   }

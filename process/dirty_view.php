@@ -37,12 +37,23 @@ function load_doc($conn, $DATA)
   $count = 0;
   $DocNo = $DATA["DocNo"];
   $From = $DATA["From"];
+  if ($_SESSION['lang'] == 'en') {
+    $TName = 'EngPerfix';
+    $FName = 'EngName';
+    $LName = 'EngLName';
+  } else {
+    $TName = 'ThPerfix';
+    $FName = 'ThName';
+    $LName = 'ThLName';
+  }
   $boolean = false;
   $boolean2 = false;
   $Sql = "SELECT RefDocNo,
           DATE_FORMAT($From.Modify_Date,'%d %M %Y') AS xdate,
           DATE_FORMAT($From.Modify_Date,'%H:%i') AS xtime,
-          users.FName,
+          users.$TName AS TName,
+          users.$FName AS FName,
+          users.$LName AS LName,
           Total,
           site.HptName
           FROM $From,users,site
@@ -55,7 +66,7 @@ function load_doc($conn, $DATA)
     $return['DocNo'] = $Result['RefDocNo'];
     $return['xdate'] = $Result['xdate'];
     $return['xtime'] = $Result['xtime'];
-    $return['FName']  = $Result['FName'];
+    $return['FName']  = $Result['TName'].$Result['FName']." ".$Result['LName'];
     $return['Total']  = $Result['Total'];
     $return['HptName']  = $Result['HptName'];
     $boolean = true;

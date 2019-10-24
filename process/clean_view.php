@@ -8,6 +8,15 @@
         $count = 0;
         $DocNo = $DATA["DocNo"];
         $siteCode = $DATA["siteCode"];
+        if ($_SESSION['lang'] == 'en') {
+            $TName = 'EngPerfix';
+            $FName = 'EngName';
+            $LName = 'EngLName';
+        } else {
+            $TName = 'ThPerfix';
+            $FName = 'ThName';
+            $LName = 'ThLName';
+        }
         $boolean = false;
         $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
 
@@ -21,7 +30,9 @@
         $Sql = "SELECT RefDocNo,
                         DATE_FORMAT(clean.Modify_Date,'%d %M %Y') AS xdate,
                         DATE_FORMAT(clean.Modify_Date,'%H:%i') AS xtime,
-                        FName,
+                        users.$TName AS TName,
+                        users.$FName AS FName,
+                        users.$LName AS LName,
                         Total,
                         department.DepCode,
                         department.DepName
@@ -36,7 +47,7 @@
             $return['RefDocNo'] = $Result['RefDocNo'];
             $return['xdate'] = $Result['xdate'];
             $return['xtime'] = $Result['xtime'];
-            $return['FName']  = $Result['FName'];
+            $return['FName']  = $Result['TName'].$Result['FName']." ".$Result['LName'];
             $return['Total']  = $Result['Total'];
             $return['DepCode']  = $Result['DepCode'];
             $return['DepName']  = $Result['DepName'];
