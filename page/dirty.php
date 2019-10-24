@@ -74,6 +74,7 @@ require '../getTimeZone.php';
 
 		function load_Fac() {
 			var data = {
+				'siteCode': siteCode,
 				'STATUS': 'load_Fac'
 			};
 			senddata(JSON.stringify(data));

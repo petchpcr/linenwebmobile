@@ -499,13 +499,14 @@ function add_dirty($conn, $DATA)
 
 function load_Fac($conn, $DATA)
 {
+    $siteCode = $DATA["siteCode"];
     if ($_SESSION['lang'] == "th") {
         $FacName = "FacNameTH";
     } else if ($_SESSION['lang'] == "en") {
         $FacName = "FacName";
     }
     $count = 0;
-    $Sql = "SELECT FacCode,$FacName AS FacName FROM factory WHERE IsCancel = 0";
+    $Sql = "SELECT FacCode,$FacName AS FacName FROM factory WHERE IsCancel = 0 AND HptCode = '$siteCode'";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {

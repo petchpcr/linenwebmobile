@@ -14,7 +14,8 @@
                 WHERE   IsActive = 1 
                 AND     Itemnew = 1 
                 AND     (HptCode = '$siteCode' OR HptCode = '0')
-                AND     ItemCode LIKE '%$Search%'";
+                AND     ItemCode LIKE '%$Search%'
+                ORDER BY ItemName ASC";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];

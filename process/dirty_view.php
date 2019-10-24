@@ -58,7 +58,7 @@ function load_doc($conn, $DATA)
           site.HptName
           FROM $From,users,site
           WHERE DocNo ='$DocNo'
-          AND users.ID = Modify_Code
+          AND users.ID = $From.Modify_Code
           AND $From.HptCode = site.HptCode";
 
   $meQuery = mysqli_query($conn, $Sql);

@@ -55,7 +55,8 @@ function choose_items($conn, $DATA)
 
             WHERE               DepCode='$DepCode'
             AND                 item_stock.ItemCode=item.ItemCode
-            AND                 item.ItemName LIKE '%$Search%' ";
+            AND                 item.ItemName LIKE '%$Search%' 
+            ORDER BY            item.ItemName ASC";
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return[$count]['ItemCode']    =  $Result['ItemCode'];

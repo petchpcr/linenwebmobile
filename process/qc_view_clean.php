@@ -1083,9 +1083,9 @@ function save_item_stock($conn, $DATA)
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $ItemCode = $Result['ItemCode'];
-        $return[$count]['ItemCode'] = $ItemCode;
+        // $return[$count]['ItemCode'] = $ItemCode;
         $Pass = $Result['Pass'];
-        $return[$count]['Pass'] = $Pass;
+        // $return[$count]['Pass'] = $Pass;
 
         $SqlT = "SELECT TotalQty FROM item_stock WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
         $meQueryT = mysqli_query($conn, $SqlT);
@@ -1094,11 +1094,30 @@ function save_item_stock($conn, $DATA)
         $return[$count]['TotalQty'] = $TotalQty;
         $TotalQty = $TotalQty + $Pass;
 
+        // Update  item_stock
         $SqlI = "UPDATE item_stock SET TotalQty  = $TotalQty WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
         // $return[$count]['Sql'] = $SqlI;
         if (mysqli_query($conn, $SqlI)) {
             $return[$count]['count'] = $count;
             $count++;
+        }
+
+        // Update  par_item_stock
+        if ($Pass > 0) {
+            $Sql_old = "SELECT TotalQty FROM par_item_stock WHERE ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+            $meQuery_old = mysqli_query($conn,$Sql_old);
+            $Result_old = mysqli_fetch_assoc($meQuery_old);
+            $Q_old = $Result_old['TotalQty'];
+            $Q_new = $Q_old + $Pass;
+            $return[$count]['Sql_old'] = $Sql_old;
+            // $return[$count]['Q_old'] = $Q_old;
+            // $return[$count]['Pass'] = $Pass;
+            // $return[$count]['Q_new'] = $Q_new;
+
+            $Sql_up = "UPDATE par_item_stock SET TotalQty = $Q_new WHERE ItemCode= '$ItemCode' AND DepCode = '$DepCode'";
+
+            // $return[$count]['Sql_up'] = $Sql_up;
+            if(mysqli_query($conn,$Sql_up)){}
         }
     }
     $return['count_end'] = $count;
