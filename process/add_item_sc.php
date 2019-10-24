@@ -11,18 +11,18 @@ function load_items($conn, $DATA)
     $ItemCode = $DATA['ItemCode'];
     $return['ItemCode'] = $ItemCode;
     $Sql = "SELECT  item.ItemName,
-                        item.ItemCode,
-                        shelfcount_detail.ParQty,
-                        shelfcount_detail.CcQty,
-                        shelfcount_detail.TotalQty
+                    item.ItemCode,
+                    shelfcount_detail.ParQty,
+                    shelfcount_detail.CcQty,
+                    shelfcount_detail.TotalQty
 
-                FROM    item,
-                        shelfcount_detail
+            FROM    item,
+                    shelfcount_detail
 
-                WHERE   item.ItemCode = shelfcount_detail.ItemCode
+            WHERE   item.ItemCode = shelfcount_detail.ItemCode
 
-                AND     shelfcount_detail.DocNo = '$DocNo'
-                ORDER BY item.ItemName";
+            AND     shelfcount_detail.DocNo = '$DocNo'
+            ORDER BY item.ItemName";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -49,12 +49,12 @@ function choose_items($conn, $DATA)
     $DepCode = $DATA["DepCode"];
     $count = 0;
 
-    $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
+    $Sql = "SELECT DISTINCT     par_item_stock.ItemCode,ItemName,item.UnitCode
     
-            FROM                item_stock,item
+            FROM                par_item_stock,item
 
             WHERE               DepCode='$DepCode'
-            AND                 item_stock.ItemCode=item.ItemCode
+            AND                 par_item_stock.ItemCode=item.ItemCode
             AND                 item.ItemName LIKE '%$Search%' 
             ORDER BY            item.ItemName ASC";
     $meQuery = mysqli_query($conn, $Sql);
@@ -90,7 +90,7 @@ function get_par($conn, $DATA)
     $cnt_arr = sizeof($new_i_code, 0);
     $count = 0;
     foreach ($new_i_code as $value) {
-        $Sql = "SELECT DISTINCT ParQty FROM item_stock WHERE DepCode='$DepCode' AND item_stock.ItemCode= '$value'";
+        $Sql = "SELECT DISTINCT ParQty FROM par_item_stock WHERE DepCode='$DepCode' AND par_item_stock.ItemCode= '$value'";
         $meQuery = mysqli_query($conn, $Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         array_push($new_par, $Result['ParQty']);
