@@ -88,7 +88,7 @@
         $siteCode = $DATA['siteCode'];
         $count = 0;
 
-        $Sql = "SELECT DepCode,DepName FROM department WHERE HptCode = '$siteCode'";
+        $Sql = "SELECT DepCode,DepName FROM department WHERE HptCode = '$siteCode' ORDER BY DepName ASC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){

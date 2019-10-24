@@ -49,11 +49,11 @@ while ($Result3 = mysqli_fetch_assoc($meQuery3)) {
     $return['ItemCode'] = $ItemCode;
     $return['Oder'] = $Oder;
 
-    $Sql4 = "SELECT item_stock.TotalQty  
-    FROM item_stock 
-    INNER JOIN department ON department.DepCode = item_stock.DepCode
+    $Sql4 = "SELECT par_item_stock.TotalQty  
+    FROM par_item_stock 
+    INNER JOIN department ON department.DepCode = par_item_stock.DepCode
     INNER JOIN site ON site.HptCode = department.HptCode
-    WHERE item_stock.ItemCode = '$ItemCode'
+    WHERE par_item_stock.ItemCode = '$ItemCode'
     AND site.HptCode = '$HptCode' AND department.IsDefault = 1 LIMIT 1";
     $return['Sql4'] = $Sql4;
     $meQuery4 = mysqli_query($conn, $Sql4);
@@ -62,7 +62,7 @@ while ($Result3 = mysqli_fetch_assoc($meQuery3)) {
         $return['QtyCenter'] = $QtyCenter;
         // if ($QtyCenter > $Oder || $QtyCenter == 0) {
             $return['test'] = 1;
-            $updateQty = "UPDATE item_stock SET TotalQty = TotalQty + $Oder WHERE ItemCode = '$ItemCode' AND DepCode = $SCDepCode";
+            $updateQty = "UPDATE par_item_stock SET TotalQty = TotalQty + $Oder WHERE ItemCode = '$ItemCode' AND DepCode = $SCDepCode";
             // mysqli_query($conn, $updateQty);
             $return['updateQty'] = $updateQty;
             if (mysqli_query($conn, $updateQty)) {
