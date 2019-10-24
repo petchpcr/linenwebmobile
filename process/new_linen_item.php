@@ -238,7 +238,7 @@
             $Fname = "FacName";
         }
         $count = 0;
-        $Sql = "SELECT FacCode,$Fname AS FacName FROM factory WHERE IsCancel=0 AND HptCode ='$siteCode'";
+        $Sql = "SELECT FacCode,$Fname AS FacName FROM factory WHERE IsCancel=0";
         $boolean = false;
 
         $meQuery = mysqli_query($conn, $Sql);
