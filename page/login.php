@@ -16,6 +16,20 @@ session_start();
 
 	<script type="text/javascript">
 		// function
+		$(document).ready(function() {
+      $("#username").keypress(function(event) {
+        if (event.which == 13) {
+          $("#password").focus();
+        }
+      });
+
+      $("#password").keypress(function(event) {
+        if (event.which == 13) {
+          chklogin();
+        }
+      });
+    });
+
 		function chklogin() {
 			var user = $("#username").val();
 			var password = $("#password").val();
@@ -171,7 +185,7 @@ session_start();
 							</div>
 							<div class="form-group bmd-form-group">
 								<label for="username" id="label_username" class="bmd-label-floating">Username (<?php echo "http://{$_SERVER['HTTP_HOST']}"; ?>)</label>
-								<input onkeyup='make_char()' type="text" autocomplete="off" class="form-control" id="username">
+								<input onkeyup='make_char()' type="text" autocomplete="off" class="form-control" id="username" autofocus>
 							</div>
 						</div>
 					</div>
@@ -213,14 +227,6 @@ session_start();
 	<script src="../js/clipboard.min.js"></script>
 	<script src="../js/holder.min.js"></script>
 	<script src="../js/application.js"></script>
-
-	<script>
-		$("#password").keypress(function(event) {
-			if (event.which == 13) {
-				$('#btn_sign_in').click();
-			}
-		});
-	</script>
 </body>
 
 </html>
