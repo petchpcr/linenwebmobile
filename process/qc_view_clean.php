@@ -619,7 +619,9 @@ function create_claim($conn, $DATA)
                         UNION ALL
                         SELECT FacCode FROM remain WHERE remain.DocNo = '$ref'
                         UNION ALL
-                        SELECT FacCode FROM newlinentable WHERE newlinentable.DocNo = '$ref'";
+                        SELECT FacCode FROM newlinentable WHERE newlinentable.DocNo = '$ref'
+                        UNION ALL
+                        SELECT FacCode FROM clean WHERE clean.DocNo = '$ref'";
         $return[$count]['Sql Fac'] = $Sql_fac;
         $meQuery_fac = mysqli_query($conn, $Sql_fac);
         $Result_fac = mysqli_fetch_assoc($meQuery_fac);
