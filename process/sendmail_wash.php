@@ -50,12 +50,12 @@ $FacNameTH = $Result['FacNameTH'];
 $HptName = $Result['HptName'];
 $HptNameTH = $Result['HptNameTH'];
 
-$Sql = "SELECT FName,email FROM users WHERE HptCode = '$siteCode' AND (PmID = 3 OR PmID = 5 OR PmID = 7)";
+$Sql = "SELECT EngPerfix,EngName,EngLName,ThPerfix,ThName,ThLName,email FROM users WHERE HptCode = '$siteCode' AND (PmID = 3 OR PmID = 5 OR PmID = 7)";
 $meQuery = mysqli_query($conn, $Sql);
 while ($Result = mysqli_fetch_assoc($meQuery)) {
 
     $email = $Result['email'];
-    $FName = $Result['FName'];
+    $FName = $Result['EngPerfix'].$Result['EngName']." ".$Result['EngLName'];
 
     $Subject = "Problem detail of Wash process";
     // build message body

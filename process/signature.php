@@ -93,7 +93,7 @@ if ($Time == 1) {
     $SendTime = $Result['SendTime'];
 
     //============= SELECT Email AND Name =============
-    $Sql = "SELECT FName,email
+    $Sql = "SELECT EngPerfix,EngName,EngLName,ThPerfix,ThName,ThLName,email
         FROM users
         WHERE HptCode = (SELECT HptCode 
                         FROM dirty 
@@ -117,7 +117,7 @@ if ($Time == 1) {
         $return['Sql1'] = $Sql;
 
         $email = $Result['email'];
-        $FName = $Result['FName'];
+        $FName = $Result['EngPerfix'].$Result['EngName']." ".$Result['EngLName'];
         $return['email'] = $email;
 
         //============= TEXT OF EMAIL =============
