@@ -54,7 +54,7 @@ $meQuery = mysqli_query($conn, $Sql);
 while ($Result = mysqli_fetch_assoc($meQuery)) {
 
   $email = $Result['email'];
-  $FName = $Result['EngPerfix'].$Result['EngName']." ".$Result['EngLName'];
+  $FName = $Result['EngPerfix'] . $Result['EngName'] . " " . $Result['EngLName'];
 
 
   $count++;
@@ -83,10 +83,9 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
     $Differ = $Total_Qty[$key] - $Receive_Qty[$key];
     $text_diff = $Differ;
     if ($Differ > 0) {
-      $text_diff = "shot ".$Differ;
-    }
-    else if ($Differ < 0) {
-      $text_diff = "over ".($Differ*-1);
+      $text_diff = "shot " . $Differ;
+    } else if ($Differ < 0) {
+      $text_diff = "over " . ($Differ * -1);
     }
     $body .= "<tr>
 							<td style='text-align:left;padding:10px 0 10px 10px;'>$val</td>
@@ -114,23 +113,22 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
 							<th>จำนวนที่โรงซักรับ</th>
 							<th>ผลต่าง</th>
                         </tr>";
-        foreach ($Arr_ItemName as $key => $val) {
-          $Differ = $Total_Qty[$key] - $Receive_Qty[$key];
-          $text_diff = $Differ;
-          if ($Differ > 0) {
-            $text_diff = "ขาด ".$Differ;
-          }
-          else if ($Differ < 0) {
-            $text_diff = "เกิน ".($Differ*-1);
-          }
-          $body .= "<tr>
+  foreach ($Arr_ItemName as $key => $val) {
+    $Differ = $Total_Qty[$key] - $Receive_Qty[$key];
+    $text_diff = $Differ;
+    if ($Differ > 0) {
+      $text_diff = "ขาด " . $Differ;
+    } else if ($Differ < 0) {
+      $text_diff = "เกิน " . ($Differ * -1);
+    }
+    $body .= "<tr>
                     <td style='text-align:left;padding:10px 0 10px 10px;'>$val</td>
                     <td>$Total_Qty[$key]</td>
                     <td>$Receive_Qty[$key]</td>
                     <td>$text_diff</td>
                               </tr>";
-        }
-        $body .= "</tbody>
+  }
+  $body .= "</tbody>
         </table>
         </div>
         <hr style='margin:25px 0;'>
@@ -140,24 +138,35 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
         ";
 
 
-  $mail = new PHPMailer;
-  $mail->CharSet = "UTF-8";
-  $mail->isSMTP();
-  $mail->SMTPDebug = 2;
-  $mail->Debugoutput = 'html';
-  $mail->Host = 'smtp.gmail.com';
-  $mail->Port = 587;
-  $mail->SMTPSecure = 'tls';
-  $mail->SMTPAuth = true;
-  $mail->Username = "poseinttelligence@gmail.com";
-  $mail->Password = "pose6628";
-  $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
+  $strTo = $email;
+  $strSubject = $Subject;
+  $strHeader = "From: poseinttelligence@gmail.com (Pose Intelligence)";
+  $strMessage = $body;
+  $flgSend = @mail($strTo, $strSubject, $strMessage, $strHeader);  // @ = No Show Error //
+  if ($flgSend) {
+    echo "Email Sending.";
+  } else {
+    echo "Email Can Not Send.";
+  }
 
-  $mail->addAddress($email, $FName);
-  $mail->Subject = $Subject;
-  $mail->msgHTML($body);
-  $mail->AltBody = 'This is a plain-text message body';
-  $mail->send();
+  // $mail = new PHPMailer;
+  // $mail->CharSet = "UTF-8";
+  // $mail->isSMTP();
+  // $mail->SMTPDebug = 2;
+  // $mail->Debugoutput = 'html';
+  // $mail->Host = 'smtp.gmail.com';
+  // $mail->Port = 587;
+  // $mail->SMTPSecure = 'tls';
+  // $mail->SMTPAuth = true;
+  // $mail->Username = "poseinttelligence@gmail.com";
+  // $mail->Password = "pose6628";
+  // $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
+
+  // $mail->addAddress($email, $FName);
+  // $mail->Subject = $Subject;
+  // $mail->msgHTML($body);
+  // $mail->AltBody = 'This is a plain-text message body';
+  // $mail->send();
 
   //$mail->addAttachment('images/phpmailer_mini.png');
 }

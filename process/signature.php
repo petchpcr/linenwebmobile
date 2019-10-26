@@ -117,7 +117,7 @@ if ($Time == 1) {
         $return['Sql1'] = $Sql;
 
         $email = $Result['email'];
-        $FName = $Result['EngPerfix'].$Result['EngName']." ".$Result['EngLName'];
+        $FName = $Result['EngPerfix'] . $Result['EngName'] . " " . $Result['EngLName'];
         $return['email'] = $email;
 
         //============= TEXT OF EMAIL =============
@@ -152,25 +152,36 @@ if ($Time == 1) {
             </html>
             ";
 
-        $mail = new PHPMailer;
-        $mail->CharSet = "UTF-8";
-        $mail->isSMTP();
-        $mail->SMTPDebug = 2;
-        $mail->Debugoutput = 'html';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
-        $mail->SMTPAuth = true;
-        $mail->Username = "poseinttelligence@gmail.com";
-        $mail->Password = "pose6628";
-        $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
+        $strTo = $email;
+        $strSubject = $Subject;
+        $strHeader = "From: poseinttelligence@gmail.com (Pose Intelligence)";
+        $strMessage = $body;
+        $flgSend = @mail($strTo, $strSubject, $strMessage, $strHeader);  // @ = No Show Error //
+        if ($flgSend) {
+            echo "Email Sending.";
+        } else {
+            echo "Email Can Not Send.";
+        }
 
-        $mail->addAddress($email, $FName);
-        $mail->Subject = $Subject;
-        $mail->msgHTML($body);
-        $mail->AltBody = 'This is a plain-text message body';
-        //$mail->addAttachment('images/phpmailer_mini.png');
-        $mail->send();
+        // $mail = new PHPMailer;
+        // $mail->CharSet = "UTF-8";
+        // $mail->isSMTP();
+        // $mail->SMTPDebug = 2;
+        // $mail->Debugoutput = 'html';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Port = 587;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->SMTPAuth = true;
+        // $mail->Username = "poseinttelligence@gmail.com";
+        // $mail->Password = "pose6628";
+        // $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
+
+        // $mail->addAddress($email, $FName);
+        // $mail->Subject = $Subject;
+        // $mail->msgHTML($body);
+        // $mail->AltBody = 'This is a plain-text message body';
+        // //$mail->addAttachment('images/phpmailer_mini.png');
+        // $mail->send();
     }
     // if (!$mail->send()) {
     //     $return['msg'] = "Mailer Error: " . $mail->ErrorInfo;
