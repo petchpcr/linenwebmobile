@@ -54,12 +54,12 @@ $Sql = "SELECT EngPerfix,EngName,EngLName,ThPerfix,ThName,ThLName,email FROM use
 $meQuery = mysqli_query($conn, $Sql);
 while ($Result = mysqli_fetch_assoc($meQuery)) {
 
-        $email = $Result['email'];
-        $FName = $Result['EngPerfix'] . $Result['EngName'] . " " . $Result['EngLName'];
+  $email = $Result['email'];
+  $FName = $Result['EngPerfix'] . $Result['EngName'] . " " . $Result['EngLName'];
 
-        $Subject = "Problem detail of Wash process";
-        // build message body
-        $body = "
+  $Subject = "Problem detail of Wash process";
+  // build message body
+  $body = "
             <html>
             <body>
 
@@ -86,36 +86,36 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
             ";
 
 
-        $strTo = $email;
-        $strSubject = $Subject;
-        $strHeader = "From: poseinttelligence@gmail.com (Pose Intelligence)";
-        $strMessage = $body;
-        $flgSend = @mail($strTo, $strSubject, $strMessage, $strHeader);  // @ = No Show Error //
-        if ($flgSend) {
-                echo "Email Sending.";
-        } else {
-                echo "Email Can Not Send.";
-        }
+  $strTo = $email;
+  $strSubject = $Subject;
+  $strHeader = "From: poseinttelligence@gmail.com (Pose Intelligence)";
+  $strMessage = $body;
+  $flgSend = @mail($strTo, $strSubject, $strMessage, $strHeader);  // @ = No Show Error //
+  if ($flgSend) {
+    $return['status'][$count] = "success";
+  } else {
+    $return['status'][$count] = "failed";
+  }
 
-        //     $mail = new PHPMailer;
-        //     $mail->CharSet = "UTF-8";
-        //     $mail->isSMTP();
-        //     $mail->SMTPDebug = 2;
-        //     $mail->Debugoutput = 'html';
-        //     $mail->Host = 'smtp.gmail.com';
-        //     $mail->Port = 587;
-        //     $mail->SMTPSecure = 'tls';
-        //     $mail->SMTPAuth = true;
-        //     $mail->Username = "poseinttelligence@gmail.com";
-        //     $mail->Password = "pose6628";
-        //     $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
+  //     $mail = new PHPMailer;
+  //     $mail->CharSet = "UTF-8";
+  //     $mail->isSMTP();
+  //     $mail->SMTPDebug = 2;
+  //     $mail->Debugoutput = 'html';
+  //     $mail->Host = 'smtp.gmail.com';
+  //     $mail->Port = 587;
+  //     $mail->SMTPSecure = 'tls';
+  //     $mail->SMTPAuth = true;
+  //     $mail->Username = "poseinttelligence@gmail.com";
+  //     $mail->Password = "pose6628";
+  //     $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
 
-        //     $mail->addAddress($email, $FName);
-        //     $mail->Subject = $Subject;
-        //     $mail->msgHTML($body);
-        //     $mail->AltBody = 'This is a plain-text message body';
-        //     //$mail->addAttachment('images/phpmailer_mini.png');
-        //     $mail->send();
+  //     $mail->addAddress($email, $FName);
+  //     $mail->Subject = $Subject;
+  //     $mail->msgHTML($body);
+  //     $mail->AltBody = 'This is a plain-text message body';
+  //     //$mail->addAttachment('images/phpmailer_mini.png');
+  //     $mail->send();
 }
 // if (!$mail->send()) {
 //     $return['status'] = "failed";

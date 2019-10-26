@@ -144,9 +144,9 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
   $strMessage = $body;
   $flgSend = @mail($strTo, $strSubject, $strMessage, $strHeader);  // @ = No Show Error //
   if ($flgSend) {
-    echo "Email Sending.";
+    $return['status'][$count] = "success";
   } else {
-    echo "Email Can Not Send.";
+    $return['status'][$count] = "failed";
   }
 
   // $mail = new PHPMailer;
