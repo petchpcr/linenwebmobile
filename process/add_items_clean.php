@@ -101,7 +101,7 @@ function load_items($conn, $DATA)
             $new_i    =  $Result['ItemCode'];
             $new_unit    =  $Result['UnitCode'];
             $new_qty    =  $Result['Qty'];
-            $new_weight    =  $Result['Weight'];
+            $new_weight    =  0;
             $Sql2 = "INSERT INTO clean_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
                     VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
             mysqli_query($conn, $Sql2);
