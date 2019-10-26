@@ -2,7 +2,7 @@
 session_start();
 require '../connect/connect.php';
 date_default_timezone_set('Asia/Bangkok');
-require 'PHPMailer/PHPMailerAutoload.php';
+// require 'PHPMailer/PHPMailerAutoload.php';
 
 $DocNo = $_POST['DocNo'];
 $From = $_POST['From'];
@@ -154,7 +154,8 @@ if ($Time == 1) {
 
     $strTo = $email;
     $strSubject = $Subject;
-    $strHeader = "From: poseinttelligence@gmail.com (Pose Intelligence)";
+    $strHeader = "Content-type: text/html; charset=UTF-8\r\n"; // or UTF-8 //
+    $strHeader .= "From: poseinttelligence@gmail.com (Pose Intelligence)";
     $strMessage = $body;
     $flgSend = @mail($strTo, $strSubject, $strMessage, $strHeader);  // @ = No Show Error //
     if ($flgSend) {
