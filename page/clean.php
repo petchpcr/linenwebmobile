@@ -32,10 +32,14 @@ require '../getTimeZone.php';
 	?>
 
 	<script>
+		var siteCode = "<?php echo $siteCode ?>";
+		var Menu = "<?php echo $Menu ?>";
+
 		$(document).ready(function(e) {
 			load_dep();
 			load_doc();
 			load_site();
+			load_fac();
 		});
 
 		var depCode;
@@ -43,7 +47,6 @@ require '../getTimeZone.php';
 		// function
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_site'
@@ -61,7 +64,6 @@ require '../getTimeZone.php';
 		}
 
 		function load_dep() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_dep'
@@ -71,8 +73,6 @@ require '../getTimeZone.php';
 
 		function load_doc() {
 			var search = $('#datepicker').val();
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = "<?php echo $Menu ?>";
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
@@ -82,20 +82,23 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
+		function load_fac() {
+			var data = {
+				'siteCode': siteCode,
+				'STATUS': 'load_fac'
+			};
+			senddata(JSON.stringify(data));
+		}
+
 		function show_process(DocNo) {
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = '<?php echo $Menu; ?>';
 			window.location.href = 'clean_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 		}
 
 		function back() {
-			var Menu = '<?php echo $Menu; ?>';
 			window.location.href = "menu.php";
 		}
 
 		function add_clean() {
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = '<?php echo $Menu ?>';
 			var slt = $("#DocName").val();
 			if (slt == 1) {
 				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
@@ -105,7 +108,21 @@ require '../getTimeZone.php';
 				window.location.href = 'ref_newlinentable.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 4) {
 				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean';
+			} else if (slt == 5) {
+				$("#choose_doc").modal('hide');
+				$("#md_factory").modal('show');
 			}
+		}
+
+		function create_clean() {
+			var FacCode = $("#FacName").val();
+			var data = {
+				'siteCode': siteCode,
+				'depCode': depCode,
+				'FacCode': FacCode,
+				'STATUS': 'create_clean'
+			};
+			senddata(JSON.stringify(data));
 		}
 		// end function
 
@@ -185,6 +202,16 @@ require '../getTimeZone.php';
 							window.location.href = '../index.html';
 						} else if (temp["form"] == 'load_dep') {
 							depCode = temp["DepCode"];
+						} else if (temp["form"] == 'load_fac') {
+							$("#FacName").empty();
+							for (var i = 0; i < temp['cnt']; i++) {
+								var Str = "<option value='" + temp['FacCode'][i] + "'>" + temp['FacName'][i] + "</option>";
+								$("#FacName").append(Str);
+							}
+						} else if (temp["form"] == 'create_clean') {
+							var DocNo = temp["DocNo"];
+							var Userid = temp["Userid"];
+							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						}
 					} else if (temp['status'] == "failed") {
 						if (temp["form"] == 'load_doc') {
@@ -265,7 +292,7 @@ require '../getTimeZone.php';
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="choose_doc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="choose_doc" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -286,6 +313,7 @@ require '../getTimeZone.php';
 							<option value="2"><?php echo $array['refDocRewash'][$language]; ?></option>
 							<option value="3"><?php echo $array['refDocnew'][$language]; ?></option>
 							<option value="4"><?php echo $array['refDocRemain'][$language]; ?></option>
+							<option value="5"><?php echo $array['NotRefDoc'][$language]; ?></option>
 						</select>
 					</div>
 				</div>
@@ -296,6 +324,37 @@ require '../getTimeZone.php';
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_factory" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><?php echo $genarray['confirmCreatedocno'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<div class="input-group my-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text"><?php echo $array['chooseFactory'][$language]; ?></label>
+						</div>
+						<select id="FacName" class="custom-select"></select>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-6 text-right">
+							<button id="btn_add_dirty" onclick="create_clean()" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
 						</div>
 					</div>
 				</div>

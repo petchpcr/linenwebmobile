@@ -7,5 +7,7 @@
 <refDocRewash><en>From rewash document</en><th>เอกสารจากส่งซักใหม่</th></refDocRewash>
 <refDocnew><en>From new linen document</en><th>เอกสารจากส่งซักรายการผ้าใหม่</th></refDocnew>
 <refDocRemain><en>From loftover document</en><th>เอกสารจากผ้าค้างโรงซัก</th></refDocRemain>
+<NotRefDoc><en>Not referenc document</en><th>ไม่อ้างอิงเอกสาร</th></NotRefDoc>
+<chooseFactory><en>Choose Fac.</en><th>เลือกโรงซัก</th></chooseFactory>
 
 </lang>
