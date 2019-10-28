@@ -6,16 +6,24 @@ $UserFName = $_SESSION['FName'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+$Delback = 0;
+$Unweight = 0;
+$Ref = 0;
+$NotDelDetail = 0;
+
 if (isset($_GET['Delback'])) {
 	$Delback = $_GET['Delback'];
-} else {
-	$Delback = 0;
 }
 if (isset($_GET['Unweight'])) {
 	$Unweight = $_GET['Unweight'];
-} else {
-	$Unweight = 0;
 }
+if (isset($_GET['Ref'])) {
+	$Ref = $_GET['Ref'];
+}
+if (isset($_GET['NotDelDetail'])) {
+	$NotDelDetail = $_GET['NotDelDetail'];
+}
+
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -24,11 +32,7 @@ $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
 $Per = $_SESSION['Permission'];
 $language = $_SESSION['lang'];
-if (isset($_GET['Ref'])) {
-	$Ref = $_GET['Ref'];
-} else {
-	$Ref = 0;
-}
+
 $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
 $json = json_encode($xml);
 $array = json_decode($json, TRUE);
@@ -67,6 +71,7 @@ $genarray = json_decode($json, TRUE);
 		var Userid = "<?php echo $Userid ?>";
 		var Delback = "<?php echo $Delback ?>";
 		var Unweight = "<?php echo $Unweight ?>";
+		var NotDelDetail = "<?php echo $NotDelDetail ?>";
 		var arr_old_items = [];
 		var arr_new_items = [];
 		var arr_del_items = [];
@@ -85,6 +90,7 @@ $genarray = json_decode($json, TRUE);
 				'DocNo': DocNo,
 				'refDoc': refDoc,
 				'Unweight': Unweight,
+				'NotDelDetail': NotDelDetail,
 				'STATUS': 'load_items'
 			};
 			senddata(JSON.stringify(data));
@@ -128,7 +134,7 @@ $genarray = json_decode($json, TRUE);
 					var qty = 0;
 					var unit = 1;
 					var idqty = id + "qty";
-					var div = "#chs"+num;
+					var div = "#chs" + num;
 
 					var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
 					Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['numberSize'][$language]; ?></label>";

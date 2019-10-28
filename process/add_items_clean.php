@@ -83,9 +83,12 @@ function load_items($conn, $DATA)
     $DocNo = $DATA["DocNo"];
     $refDoc = $DATA["refDoc"];
     $Unweight = $DATA["Unweight"];
+    $NotDelDetail = $DATA["NotDelDetail"];
 
-    $Sql = "DELETE FROM clean_detail WHERE DocNo = '$DocNo'";
-    mysqli_query($conn, $Sql);
+    if ($NotDelDetail != 1) {
+        $Sql = "DELETE FROM clean_detail WHERE DocNo = '$DocNo'";
+        mysqli_query($conn, $Sql);
+    }
 
     $Sql = "SELECT Count(*) AS c FROM repair_wash WHERE DocNo = '$refDoc'";
     $meQuery = mysqli_query($conn, $Sql);
