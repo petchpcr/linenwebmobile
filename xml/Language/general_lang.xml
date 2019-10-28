@@ -9,6 +9,7 @@
 <statusOnQC><en>Doing QC</en><th>กำลังตรวจสอบคุณภาพ</th></statusOnQC>
 <statusClaim><en>Claim</en><th>ส่งเคลม</th></statusClaim>
 <statusNotWork><en>Not Working</en><th>ไม่ทำงาน</th></statusNotWork>
+<statusCancel><en>Doc. cancel</en><th>ยกเลิกเอกสาร</th></statusCancel>
 
 <statusNotQC><en>Do not QC</en><th>ไม่ได้ตรวจสอบ</th></statusNotQC>
 <statusPass><en>QC pass</en><th>ผ่าน</th></statusPass>
@@ -26,11 +27,13 @@
 <titleCreatedocno><en>| Create New document</en><th>| สร้างเอกสารใหม่</th></titleCreatedocno>
 <titleRefDocument><en>| Ref.Document</en><th>| เอกสารอ้างอิง</th></titleRefDocument>
 <createdocno><en>Create document</en><th>สร้างเอกสาร</th></createdocno>
+<canceldocno><en>Cancel document</en><th>ยกเลิกเอกสาร</th></canceldocno>
 
 <notfoundDocInDate><en>Not found Document on </en><th>ไม่พบเอกสารในวันที่</th></notfoundDocInDate>
 
 <confirmReceivedoc><en>Confirm to receive document</en><th>ยืนยันการรับเอกสาร</th></confirmReceivedoc>
 <confirmCreatedocno><en>Confirm to create document</en><th>ยืนยันการสร้างเอกสาร</th></confirmCreatedocno>
+<confirmCanceldocno><en>Confirm to cancel document</en><th>ยืนยันการยกเลิกเอกสาร</th></confirmCanceldocno>
 <chooseDepartmentPl><en>Please Choose department</en><th>กรุณาเลือกแผนก</th></chooseDepartmentPl>
 <chooseDepartment><en>Choose department</en><th>เลือกแผนก</th></chooseDepartment>
 <chooseDep><en>Choose dep.</en><th>เลือกแผนก</th></chooseDep>
@@ -62,6 +65,7 @@
 <selecttypedoc><en>Select type doc.</en><th>เลือกชนิดเอกสาร</th></selecttypedoc>
 <docfirst><en>Please select ref. document</en><th>กรุณาเลือกเอกสารอ้างอิง</th></docfirst>
 <wantlogout><en>Do you want to logout ?</en><th>ต้องการออกจากระบบใช่หรือไม่ ?</th></wantlogout>
+<wantcanceldoc><en>Do you want to cancel document ?</en><th>ต้องการยกเลิกเอกสารใช่หรือไม่ ?</th></wantcanceldoc>
 
 <no><en>No.</en><th>ลำดับ</th></no>
 <yes><en>Yes</en><th>ใช่</th></yes>

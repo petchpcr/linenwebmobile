@@ -19,25 +19,26 @@ function load_doc($conn, $DATA)
     }
     $boolean = false;
     $boolean2 = false;
-    $Sql = "SELECT RefDocNo,
-                        DATE_FORMAT(newlinentable.Modify_Date,'%d %M %Y') AS xdate,
-                        DATE_FORMAT(newlinentable.Modify_Date,'%H:%i') AS xtime,
-                        users.$TName AS TName,
-                        users.$FName AS FName,
-                        users.$LName AS LName,
-                        Total,
-                        site.HptName
-                FROM newlinentable,users,site
-                WHERE DocNo ='$DocNo'
-                AND users.ID = newlinentable.Modify_Code
-                AND newlinentable.HptCode = site.HptCode";
+    $Sql = "SELECT RefDocNo,newlinentable.IsStatus,
+                    DATE_FORMAT(newlinentable.Modify_Date,'%d %M %Y') AS xdate,
+                    DATE_FORMAT(newlinentable.Modify_Date,'%H:%i') AS xtime,
+                    users.$TName AS TName,
+                    users.$FName AS FName,
+                    users.$LName AS LName,
+                    Total,
+                    site.HptName
+            FROM newlinentable,users,site
+            WHERE DocNo ='$DocNo'
+            AND users.ID = newlinentable.Modify_Code
+            AND newlinentable.HptCode = site.HptCode";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return['DocNo'] = $Result['RefDocNo'];
+        $return['IsStatus'] = $Result['IsStatus'];
         $return['xdate'] = $Result['xdate'];
         $return['xtime'] = $Result['xtime'];
-        $return['FName']  = $Result['TName'].$Result['FName']." ".$Result['LName'];
+        $return['FName']  = $Result['TName'] . $Result['FName'] . " " . $Result['LName'];
         $return['Total']  = $Result['Total'];
         $return['HptName']  = $Result['HptName'];
         $boolean = true;
@@ -145,6 +146,27 @@ function view_dep($conn, $DATA)
     }
 }
 
+function CancelDoc($conn, $DATA)
+{
+  $DocNo = $DATA["DocNo"];
+
+  $Sql = "UPDATE newlinentable SET IsStatus = 9 WHERE DocNo = '$DocNo'";
+
+  if (mysqli_query($conn,$Sql)) {
+    $return['status'] = "success";
+    $return['form'] = "CancelDoc";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
+  } else {
+    $return['status'] = "failed";
+    $return['form'] = "CancelDoc";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
+  }
+}
+
 if (isset($_POST['DATA'])) {
     $data = $_POST['DATA'];
     $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -153,6 +175,8 @@ if (isset($_POST['DATA'])) {
         load_doc($conn, $DATA);
     } else if ($DATA['STATUS'] == 'view_dep') {
         view_dep($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'CancelDoc') {
+        CancelDoc($conn, $DATA);
     } else if ($DATA['STATUS'] == 'logout') {
         logout($conn, $DATA);
     }

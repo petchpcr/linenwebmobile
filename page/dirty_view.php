@@ -37,6 +37,8 @@ $genarray = json_decode($json, TRUE);
 	?>
 	<script>
 		var DocNo = "<?php echo $DocNo ?>";
+		var Menu = "<?php echo $Menu ?>";
+		var siteCode = "<?php echo $siteCode ?>";
 
 		$(document).ready(function(e) {
 			// load_site();
@@ -44,7 +46,6 @@ $genarray = json_decode($json, TRUE);
 		});
 
 		function load_site() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var From = "<?php echo $From ?>";
 			var data = {
 				'siteCode': siteCode,
@@ -75,8 +76,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			var siteCode = '<?php echo $siteCode; ?>';
-			var Menu = '<?php echo $Menu; ?>';
 			var From = '<?php echo $From; ?>';
 			if (From == "dirty") {
 				window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
@@ -115,10 +114,27 @@ $genarray = json_decode($json, TRUE);
 
 		function movetoAddItem() {
 			var Userid = '<?php echo $Userid; ?>';
-			var siteCode = '<?php echo $siteCode; ?>';
-			var Menu = '<?php echo $Menu; ?>';
 			var DepCode = $("#add_doc").data("depcode");
 			window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid;
+		}
+
+		function CancelDoc() {
+			swal({
+				title: '<?php echo $genarray['confirmCanceldocno'][$language]; ?>',
+				text: '<?php echo $genarray['wantcanceldoc'][$language]; ?>',
+				type: 'question',
+				showCancelButton: true,
+				showConfirmButton: true,
+				cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>',
+				confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
+				reverseButton: true,
+			}).then(function() {
+				var data = {
+					'DocNo': DocNo,
+					'STATUS': 'CancelDoc'
+				};
+				senddata(JSON.stringify(data));
+			});
 		}
 
 		function senddata(data) {
@@ -151,6 +167,10 @@ $genarray = json_decode($json, TRUE);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
 							var Weight = temp['Total'] + " <?php echo $array['KG'][$language] ?>";
 							$("#Weight").val(Weight);
+							if (temp['IsStatus'] == 9) {
+								$("#btn_create").prop("disabled",true);
+								$("#btn_cancel").prop("disabled",true);
+							}
 							for (var i = 0; i < temp['cnt']; i++) {
 								var num = i + 1;
 								var Str = "<tr><td><div class='row'>";
@@ -175,8 +195,13 @@ $genarray = json_decode($json, TRUE);
 								$('#show_dep').append(Str);
 							}
 							$('#md_view_dep').modal('show');
+
+						} else if (temp["form"] == 'CancelDoc') {
+							window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
+
 						}
 					} else if (temp['status'] == "failed") {
 						if (temp["form"] == 'load_doc') {
@@ -190,6 +215,17 @@ $genarray = json_decode($json, TRUE);
 								showConfirmButton: false,
 								timer: 2000,
 								confirmButtonText: 'Data found'
+							})
+
+						} else if (temp["form"] == 'CancelDoc') {
+							swal({
+								title: 'Cancel document error !',
+								type: 'error',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								showConfirmButton: false,
+								timer: 2000
 							})
 
 						} else {
@@ -303,12 +339,15 @@ $genarray = json_decode($json, TRUE);
 
 				<div class="row">
 					<div class="col-12 d-flex justify-content-center py-2">
-						<button class="btn btn-create btn-block" type="button" style="max-width:250px;" onclick="movetoAddItem()">
+						<button id="btn_create" class="btn btn-create btn-block mr-4" type="button" style="max-width:250px;" onclick="movetoAddItem()">
 							<i class="fas fa-plus mr-1"></i><?php echo $array['addList'][$language]; ?>
 						</button>
+						<button id="btn_cancel" class="btn btn-danger btn-block mt-0" type="button" style="max-width:250px;" onclick="CancelDoc()">
+							<i class="fas fa-times mr-1"></i><?php echo $genarray['canceldocno'][$language]; ?>
+						</button>
 					</div>
-
 				</div>
+
 			</div>
 		</div>
 

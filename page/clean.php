@@ -151,7 +151,7 @@ require '../getTimeZone.php';
 									status_class = "status2";
 									status_text = "<?php echo $genarray['statusOnQC'][$language]; ?>";
 									status_line = "StatusLine_2";
-								} else if (temp[i]['IsStatus'] == 3) {
+								} else if (temp[i]['IsStatus'] == 3 || temp[i]['IsStatus'] == 5) {
 									status_class = "status5";
 									status_text = "<?php echo $genarray['statusClaim'][$language]; ?>";
 									status_line = "StatusLine_5";
@@ -159,6 +159,10 @@ require '../getTimeZone.php';
 									status_class = "status3";
 									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";
+								} else if (temp[i]['IsStatus'] == 9) {
+									status_class = "status5";
+									status_text = "<?php echo $genarray['statusCancel'][$language]; ?>";
+									status_line = "StatusLine_5";
 								}
 								var dep = "<div class='my-col-7 text-left'>";
 								dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div>";
@@ -170,7 +174,7 @@ require '../getTimeZone.php';
 
 								var Str = "<button onclick='show_process(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
 								Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
-								Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>"+dep;
+								Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div>" + dep;
 
 								$("#document").append(Str);
 

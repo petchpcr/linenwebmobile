@@ -51,8 +51,7 @@
                 AND clean.DocDate LIKE '%$search%' 
                 AND department.DepCode = clean.DepCode 
                 AND site.HptCode = department.HptCode
-                AND clean.IsStatus != 9 
-                ORDER BY clean.IsStatus ASC,clean.DocNo DESC";
+                ORDER BY clean.IsCheckList ASC,clean.DocNo DESC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {

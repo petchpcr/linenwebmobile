@@ -77,7 +77,6 @@
                 FROM    newlinentable
                 WHERE HptCode = '$siteCode' 
                 AND DocDate LIKE '%$search%'
-                AND IsStatus != 9 
                 ORDER BY IsStatus ASC,DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
