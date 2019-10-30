@@ -193,7 +193,7 @@ require '../getTimeZone.php';
 							// var Userid = temp['user']
 							var DepCode = temp['DepCode']
 							// var DocNo = temp['DocNo']
-							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + temp['DocNo'] + '&Menu=' + Menu + '&Create=1';
+							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + temp['DocNo'] + '&Menu=' + Menu + '&Create=1&AddAll=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

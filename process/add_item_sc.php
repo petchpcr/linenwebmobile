@@ -36,8 +36,59 @@ function load_items($conn, $DATA)
 
     $return['cnt'] = $count;
 
-    $return['status'] = "success";
+    // if ($count > 0) {
+        $return['status'] = "success";
+    // } else {
+    //     $return['status'] = "failed";
+    // }
     $return['form'] = "load_items";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
+}
+
+function Add_all_items($conn, $DATA)
+{
+    $DocNo = $DATA["DocNo"];
+    $DepCode = $DATA["DepCode"];
+    $count = 0;
+
+    $Sql = "SELECT COUNT(*) AS cntHave FROM shelfcount_detail WHERE DocNo = '$DocNo'";
+    $meQuery = mysqli_query($conn, $Sql);
+    $Result = mysqli_fetch_assoc($meQuery);
+    $cntHave = $Result['cntHave'];
+
+    if ($cntHave == 0) {
+        $Sql = "SELECT DISTINCT     ItemCode 
+    
+                FROM                par_item_stock
+
+                WHERE               DepCode='$DepCode'
+                ORDER BY            ItemCode ASC";
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $ItemCode = $Result['ItemCode'];
+            $pSql = "SELECT DISTINCT ParQty FROM par_item_stock WHERE DepCode='$DepCode' AND par_item_stock.ItemCode= '$ItemCode'";
+            $pmeQuery = mysqli_query($conn, $pSql);
+            $pResult = mysqli_fetch_assoc($pmeQuery);
+            $par = $pResult['ParQty'];
+
+            $aSql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
+                    VALUES ('$DocNo','$ItemCode',1,$par,0,$par) ";
+            mysqli_query($conn, $aSql);
+
+            $count++;
+        }
+    }
+    
+    $return['cnt'] = $count;
+
+    if ($count > 0) {
+        $return['status'] = "success";
+    } else {
+        $return['status'] = "failed";
+    }
+    $return['form'] = "Add_all_items";
     echo json_encode($return);
     mysqli_close($conn);
     die;
@@ -119,35 +170,35 @@ function add_item($conn, $DATA)
     $old_code = $DATA['old_code'];
     $old_qty = $DATA['old_qty'];
     $old_par = $DATA['old_par'];
-    $old_order = $DATA['old_order'];
+    // $old_order = $DATA['old_order'];
     $new_code = $DATA['new_code'];
     $new_qty = $DATA['new_qty'];
     $new_par = $DATA['new_par'];
-    $new_order = $DATA['new_order'];
+    // $new_order = $DATA['new_order'];
     $Userid = $_SESSION['Userid'];
 
     $ar_old_code = explode(",", $old_code);
     $ar_old_qty = explode(",", $old_qty);
     $ar_old_par = explode(",", $old_par);
-    $ar_old_order = explode(",", $old_order);
+    // $ar_old_order = explode(",", $old_order);
     $ar_new_code = explode(",", $new_code);
     $ar_new_qty = explode(",", $new_qty);
     $ar_new_par = explode(",", $new_par);
-    $ar_new_order = explode(",", $new_order);
+    // $ar_new_order = explode(",", $new_order);
 
     $Sql = "DELETE FROM shelfcount_detail WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     foreach ($ar_old_code as $i => $val) {
         $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
-                VALUES ('$DocNo','$val',1,$ar_old_par[$i],$ar_old_qty[$i],$ar_old_order[$i]) ";
+                VALUES ('$DocNo','$val',1,$ar_old_par[$i],$ar_old_qty[$i],0) ";
         $return[$i]['CcQty'] = $ar_old_qty[$i];
         mysqli_query($conn, $Sql);
     }
 
     foreach ($ar_new_code as $i => $val) {
         $Sql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
-                VALUES ('$DocNo','$val',1,$ar_new_par[$i],$ar_new_qty[$i],$ar_new_order[$i]) ";
+                VALUES ('$DocNo','$val',1,$ar_new_par[$i],$ar_new_qty[$i],0) ";
         $return[$i]['CcQty'] = $ar_new_qty[$i];
         mysqli_query($conn, $Sql);
     }
@@ -165,6 +216,7 @@ function add_item($conn, $DATA)
 function del_doc($conn, $DATA)
 {
     $DocNo = $DATA['DocNo'];
+    $Sql = "DELETE FROM shelfcount_detail WHERE DocNo = '$DocNo'";
     $Sql = "DELETE FROM shelfcount WHERE DocNo = '$DocNo'";
     if (mysqli_query($conn, $Sql)) {
         $return['status'] = "success";
@@ -187,6 +239,8 @@ if (isset($_POST['DATA'])) {
 
     if ($DATA['STATUS'] == 'load_items') {
         load_items($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'Add_all_items') {
+        Add_all_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'choose_items') {
         choose_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'get_par') {

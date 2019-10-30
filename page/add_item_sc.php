@@ -12,7 +12,7 @@ $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
 $DepCode = $_GET['DepCode'];
 $Create = $_GET['Create'];
-// $Userid = $_GET['user'];
+$AddAll = $_GET['AddAll'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/clean&dirty_view_lang.xml');
 $json = json_encode($xml);
@@ -39,6 +39,7 @@ $genarray = json_decode($json, TRUE);
 		var Menu = '<?php echo $Menu; ?>';
 		var DocNo = "<?php echo $DocNo ?>";
 		var DepCode = "<?php echo $DepCode ?>";
+		var AddAll = "<?php echo $AddAll ?>";
 		var Create = "<?php echo isset($_GET['Create']) ? $Create : 0; ?>";
 		var Notsave = 0;
 		var old_i_code = [];
@@ -54,12 +55,25 @@ $genarray = json_decode($json, TRUE);
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
-			load_items();
-
+			if (AddAll == 1) {
+				Add_all_items();
+			} else {
+				load_items();
+			}
 		});
 
 		// function
+		function Add_all_items() {
+			var data = {
+				'DocNo': DocNo,
+				'DepCode': DepCode,
+				'STATUS': 'Add_all_items'
+			};
+			senddata(JSON.stringify(data));
+		}
+
 		function load_items() {
+			AddAll = 0;
 			var data = {
 				'DocNo': DocNo,
 				'STATUS': 'load_items'
@@ -142,10 +156,10 @@ $genarray = json_decode($json, TRUE);
 				var Str = "<tr onclick='view_item(\"" + val + "\"," + num + ")' id='list" + num + "'>";
 				Str += "<td>";
 				Str += "	<div class='row'>";
-				Str += "		<div class='col-3 d-flex align-items-center'>" + old_i_name[i] + "</div>";
-				Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + old_i_par[i] + "</div>";
-				Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + old_i_qty[i] + "</div>";
-				Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + old_i_order[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center'>" + old_i_name[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + old_i_par[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + old_i_qty[i] + "</div>";
+				// Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + old_i_order[i] + "</div>";
 				Str += "		</div>";
 				Str += "</td>";
 				Str += "</tr>";
@@ -158,10 +172,10 @@ $genarray = json_decode($json, TRUE);
 				var Str = "<tr onclick='view_item(\"" + val + "\"," + num + ")' id='list" + num + "'>";
 				Str += "<td>";
 				Str += "	<div class='row'>";
-				Str += "		<div class='col-3 d-flex align-items-center'>" + new_i_name[i] + "</div>";
-				Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + new_i_par[i] + "</div>";
-				Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + new_i_qty[i] + "</div>";
-				Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + new_i_order[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center'>" + new_i_name[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + new_i_par[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + new_i_qty[i] + "</div>";
+				// Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + new_i_order[i] + "</div>";
 				Str += "		</div>";
 				Str += "</td>";
 				Str += "</tr>";
@@ -176,14 +190,14 @@ $genarray = json_decode($json, TRUE);
 			var inew = new_i_code.indexOf(code);
 			if (iold != -1) {
 				$("#newqty").val(old_i_qty[iold]);
-				$("#neworder").val(old_i_order[iold]);
+				// $("#neworder").val(old_i_order[iold]);
 				$("#viewname").text(old_i_name[iold]);
 				$("#viewname").attr("data-code", code);
 				$("#viewname").attr("data-ar", "old");
 				$("#md_editqty").modal('show');
 			} else if (inew != -1) {
 				$("#newqty").val(new_i_qty[inew]);
-				$("#neworder").val(new_i_order[inew]);
+				// $("#neworder").val(new_i_order[inew]);
 				$("#viewname").text(new_i_name[inew]);
 				$("#viewname").attr("data-code", code);
 				$("#viewname").attr("data-ar", "new");
@@ -203,7 +217,7 @@ $genarray = json_decode($json, TRUE);
 					AlertError(Title, Text, Type);
 				} else {
 					old_i_qty[index] = $("#newqty").val();
-					old_i_order[index] = $("#neworder").val();
+					// old_i_order[index] = $("#neworder").val();
 					ar_to_site();
 					$("#md_editqty").modal('hide');
 				}
@@ -214,7 +228,7 @@ $genarray = json_decode($json, TRUE);
 					AlertError(Title, Text, Type);
 				} else {
 					new_i_qty[index] = $("#newqty").val();
-					new_i_order[index] = $("#neworder").val();
+					// new_i_order[index] = $("#neworder").val();
 					ar_to_site();
 					$("#md_editqty").modal('hide');
 				}
@@ -255,22 +269,22 @@ $genarray = json_decode($json, TRUE);
 				var old_code = old_i_code.join(',');
 				var old_qty = old_i_qty.join(',');
 				var old_par = old_i_par.join(',');
-				var old_order = old_i_order.join(',');
+				// var old_order = old_i_order.join(',');
 				var new_code = new_i_code.join(',');
 				var new_qty = new_i_qty.join(',');
 				var new_par = new_i_par.join(',');
-				var new_order = new_i_order.join(',');
+				// var new_order = new_i_order.join(',');
 
 				var data = {
 					'DocNo': DocNo,
 					'old_code': old_code,
 					'old_qty': old_qty,
 					'old_par': old_par,
-					'old_order': old_order,
+					// 'old_order': old_order,
 					'new_code': new_code,
 					'new_qty': new_qty,
 					'new_par': new_par,
-					'new_order': new_order,
+					// 'new_order': new_order,
 					'STATUS': 'add_item'
 				};
 				senddata(JSON.stringify(data));
@@ -341,7 +355,10 @@ $genarray = json_decode($json, TRUE);
 					}
 
 					if (temp["status"] == 'success') {
-						if (temp["form"] == 'load_items') {
+						if (temp["form"] == 'Add_all_items') {
+							load_items();
+
+						} else if (temp["form"] == 'load_items') {
 							$("#item").empty();
 							if (temp['cnt'] == 0) {
 								choose_items();
@@ -351,14 +368,14 @@ $genarray = json_decode($json, TRUE);
 									old_i_name.push(temp[i]['ItemName']);
 									old_i_qty.push(temp[i]['CcQty']);
 									old_i_par.push(temp[i]['ParQty']);
-									old_i_order.push(Number(temp[i]['ParQty']) - Number(temp[i]['CcQty']));
+									// old_i_order.push(Number(temp[i]['ParQty']) - Number(temp[i]['CcQty']));
 									var Str = "<tr onclick='view_item(\"" + temp[i]['ItemCode'] + "\"," + i + ")' id='list" + i + "'>";
 									Str += "<td>";
 									Str += "	<div class='row'>";
-									Str += "		<div class='col-3 d-flex align-items-center'>" + temp[i]['ItemName'] + "</div>";
-									Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + temp[i]['ParQty'] + "</div>";
-									Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + temp[i]['CcQty'] + "</div>";
-									Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + temp[i]['TotalQty'] + "</div>";
+									Str += "		<div class='col-4 d-flex align-items-center'>" + temp[i]['ItemName'] + "</div>";
+									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + temp[i]['ParQty'] + "</div>";
+									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + temp[i]['CcQty'] + "</div>";
+									// Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + temp[i]['TotalQty'] + "</div>";
 									Str += "		</div>";
 									Str += "</td>";
 									Str += "</tr>";
@@ -402,7 +419,7 @@ $genarray = json_decode($json, TRUE);
 							new_i_order = [];
 							new_i_par = temp['ar_par'].split(',');
 							new_i_par.forEach(function(val,key) {
-								new_i_order.push(Number(val)-Number(new_i_qty[key]));
+							// new_i_order.push(Number(val)-Number(new_i_qty[key]));
 							});
 							ar_to_site();
 							$("#md_chooseitem").modal('hide');
@@ -418,9 +435,13 @@ $genarray = json_decode($json, TRUE);
 
 					} else if (temp['status'] == "failed") {
 						var message = "";
-						if (temp["form"] == 'choose_items') {
+						if (temp["form"] == 'Add_all_items') {
+							load_items();
+							
+						} else if (temp["form"] == 'choose_items') {
 							$("#choose_item").empty();
-						} else if (temp["form"] == 'save_checklist') {
+
+						} else if (temp["form"] == 'load_items') {
 
 						}
 					}
@@ -462,10 +483,10 @@ $genarray = json_decode($json, TRUE);
 					<tr class="bg-primary text-white">
 						<th scope="col">
 							<div class="row">
-								<div class="col-3 text-center p-0"><?php echo $genarray['item'][$language]; ?></div>
-								<div class="col-3 text-center p-0">Par</div>
-								<div class="col-3 text-center p-0">Variable</div>
-								<div class="col-3 text-center p-0">Order</div>
+								<div class="col-4 text-center p-0"><?php echo $genarray['item'][$language]; ?></div>
+								<div class="col-4 text-center p-0">Par</div>
+								<div class="col-4 text-center p-0">Shelfcount</div>
+								<!-- <div class="col-3 text-center p-0">Order</div> -->
 							</div>
 						</th>
 					</tr>
@@ -519,7 +540,7 @@ $genarray = json_decode($json, TRUE);
 					<input onkeyup="choose_items()" id="search_items" class="form-control mb-2" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
 					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
 						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['item'][$language]; ?></div>
-						<div class="text-center p-0" style="width:270px;">Variable</div>
+						<div class="text-center p-0" style="width:270px;">Shelfcount</div>
 					</div>
 
 					<div id="choose_item">
@@ -561,16 +582,16 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
 					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
 						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['item'][$language]; ?></div>
-						<div class="text-center p-0" style="width:150px;">Variable</div>
-						<div class="text-center p-0" style="width:140px;">Order</div>
+						<div class="text-center p-0" style="width:150px;">Shelfcount</div>
+						<!-- <div class="text-center p-0" style="width:140px;">Order</div> -->
 					</div>
 					<div id="editqty">
 
 						<div class='btn btn-block alert alert-info py-1 pl-3 pr-1 mb-2'>
 							<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold px-0'>
 								<div id='viewname' class='mr-auto text-truncate'></div>
-								<input onkeydown='make_number()' id='newqty' type='text' class='form-control text-center numonly ml-2' style='max-width:80px;'>
-								<input onkeydown='make_number()' id='neworder' type='text' class='form-control text-center numonly ml-2' style='max-width:80px;'>
+								<input onkeydown='make_number()' id='newqty' type='text' class='form-control text-center numonly ml-2' style='max-width:100px;'>
+								<!-- <input onkeydown='make_number()' id='neworder' type='text' class='form-control text-center numonly ml-2' style='max-width:80px;'> -->
 							</div>
 						</div>
 
