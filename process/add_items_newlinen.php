@@ -12,8 +12,9 @@
         $Sql = "SELECT DISTINCT ItemCode,ItemName  
                 FROM    item 
                 WHERE   IsActive = 1 
-                AND     Itemnew = 1 
-                AND     (HptCode = '$siteCode' OR HptCode = '0')
+                -- AND     Itemnew = 1 
+                -- AND     (HptCode = '$siteCode' OR HptCode = '0')
+                AND     HptCode = '$siteCode'
                 AND     ItemCode LIKE '%$Search%'
                 ORDER BY ItemName ASC";
         $meQuery = mysqli_query($conn,$Sql);
@@ -89,7 +90,11 @@
         $siteCode = $DATA['siteCode'];
         $count = 0;
 
-        $Sql = "SELECT DepCode,DepName FROM department WHERE HptCode = '$siteCode' ORDER BY DepName ASC";
+        $Sql = "SELECT DepCode,DepName 
+                FROM department 
+                WHERE HptCode = '$siteCode' 
+                AND IsDefault = 1 
+                ORDER BY DepName ASC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){

@@ -8,7 +8,9 @@
         $count = 0;
         $siteCode = $DATA["siteCode"];
         $Sql = "SELECT DepCode, DepName FROM department
-                WHERE department.HptCode='$siteCode' AND IsStatus = 0
+                WHERE department.HptCode='$siteCode' 
+                AND IsStatus = 0
+                AND IsActive = 1
                 ORDER BY DepName ASC";
         $boolean = false;
 
@@ -19,6 +21,7 @@
             $count++;
             $boolean = true;
         }
+        $return['cnt'] = $count;
         
         if ($boolean) {
             $return['status'] = "success";
@@ -98,8 +101,7 @@
             $count++;
             $boolean = true;
         }
-
-        $Sql = "SELECT ";
+        $return['cnt'] = $count;
 
         if ($boolean) {
             $return['status'] = "success";
@@ -143,7 +145,8 @@
         $Userid = $DATA["Userid"];
         $siteCode = $DATA["siteCode"];
         $DepCode = $DATA["DepCode"];
-        $FacCode = $DATA["FacCode"];
+        $TimeName = $DATA["TimeName"];
+        $return['TimeName'] = $TimeName;
         $Sql = "    SELECT CONCAT('SC',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
@@ -181,8 +184,9 @@
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            shelfcount.Modify_Code,
-                                            shelfcount.Modify_Date
+                                            ScTime,
+                                            Modify_Code,
+                                            Modify_Date
                                         )
                         VALUES
                                         (
@@ -193,6 +197,7 @@
                                             0,
                                             NOW(),0,0,
                                             0,0,'',
+                                            $TimeName,
                                             $Userid,
                                             NOW()
                                         )";
@@ -266,6 +271,8 @@
             $count++;
             $boolean = true;
         }
+        $return['cnt'] = $count;
+
         if ($boolean) {
             $return['status'] = "success";
             $return['form'] = "load_Fac";
@@ -281,6 +288,37 @@
         }
     }
 
+    function load_Time($conn, $DATA){
+        $siteCode = $DATA["siteCode"];
+        $count = 0;
+        $boolean = false;
+        $Sql = "SELECT sc_time_2.ID,sc_time_2.TimeName FROM sc_time_2 
+                INNER JOIN sc_express ON sc_time_2.ID = sc_express.Time_ID 
+                WHERE sc_express.HptCode = '$siteCode'";
+        $return['Sql'] = $Sql;
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return[$count]['ID'] = $Result['ID'];
+            $return[$count]['TimeName'] = $Result['TimeName'];
+            $count++;
+            $boolean = true;
+        }
+        $return['cnt'] = $count;
+
+        if ($boolean) {
+            $return['status'] = "success";
+            $return['form'] = "load_Time";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "load_Time";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
 
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
@@ -306,6 +344,9 @@
         }
         else if ($DATA['STATUS'] == 'load_Fac') {
             load_Fac($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'load_Time') {
+            load_Time($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

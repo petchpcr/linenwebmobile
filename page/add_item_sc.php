@@ -83,8 +83,12 @@ $genarray = json_decode($json, TRUE);
 
 		function make_number() {
 			$('.numonly').on('input', function() {
-				this.value = this.value.replace(/[^0-9]/g, ''); //<-- replace all other than given set of values\
-				this.value = Number(this.value);
+				// this.value = this.value.replace(/[^0-9]/g, ''); //<-- replace all other than given set of values\
+				// this.value = Number(this.value);
+				if (/\D/g.test(this.value)) {
+						// Filter non-digits from input value.
+						this.value = this.value.replace(/\D/g, '');
+				}
 			});
 		}
 
@@ -153,14 +157,15 @@ $genarray = json_decode($json, TRUE);
 			$("#item").empty();
 			var num = 0;
 			old_i_code.forEach(function(val, i) {
-				var Str = "<tr onclick='view_item(\"" + val + "\"," + num + ")' id='list" + num + "'>";
+				var Str = "<tr id='list" + num + "'>";
 				Str += "<td>";
 				Str += "	<div class='row'>";
 				Str += "		<div class='col-4 d-flex align-items-center'>" + old_i_name[i] + "</div>";
 				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + old_i_par[i] + "</div>";
-				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + old_i_qty[i] + "</div>";
-				// Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + old_i_order[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>";
+				Str += "			<input type='text' onkeyup='edit_qty(\"" + old_i_code[i] + "\"," + num + ")' onkeydown='make_number()' id='qty_" + num + "' class='form-control text-center sc_qty numonly' style='max-width:100px;' value='" + old_i_qty[i] + "'>";
 				Str += "		</div>";
+				Str += "	</div>";
 				Str += "</td>";
 				Str += "</tr>";
 
@@ -169,14 +174,15 @@ $genarray = json_decode($json, TRUE);
 			});
 
 			new_i_code.forEach(function(val, i) {
-				var Str = "<tr onclick='view_item(\"" + val + "\"," + num + ")' id='list" + num + "'>";
+				var Str = "<tr id='list" + num + "'>";
 				Str += "<td>";
 				Str += "	<div class='row'>";
 				Str += "		<div class='col-4 d-flex align-items-center'>" + new_i_name[i] + "</div>";
 				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + new_i_par[i] + "</div>";
-				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + new_i_qty[i] + "</div>";
-				// Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + new_i_order[i] + "</div>";
+				Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>";
+				Str += "			<input type='text' onkeyup='edit_qty(\"" + new_i_code[i] + "\"," + num + ")' onkeydown='make_number()' id='qty_" + num + "' class='form-control text-center sc_qty numonly' style='max-width:100px;' value='" + new_i_qty[i] + "'>";
 				Str += "		</div>";
+				Str += "	</div>";
 				Str += "</td>";
 				Str += "</tr>";
 
@@ -185,63 +191,25 @@ $genarray = json_decode($json, TRUE);
 			});
 		}
 
-		function view_item(code, i) {
+		function edit_qty(code,i) {
 			var iold = old_i_code.indexOf(code);
 			var inew = new_i_code.indexOf(code);
+			var id = "#qty_"+i;
+			var value = $(id).val();
+			Notsave = 1;
 			if (iold != -1) {
-				$("#newqty").val(old_i_qty[iold]);
-				// $("#neworder").val(old_i_order[iold]);
-				$("#viewname").text(old_i_name[iold]);
-				$("#viewname").attr("data-code", code);
-				$("#viewname").attr("data-ar", "old");
-				$("#md_editqty").modal('show');
+				old_i_qty[iold] = value;
 			} else if (inew != -1) {
-				$("#newqty").val(new_i_qty[inew]);
-				// $("#neworder").val(new_i_order[inew]);
-				$("#viewname").text(new_i_name[inew]);
-				$("#viewname").attr("data-code", code);
-				$("#viewname").attr("data-ar", "new");
-				$("#md_editqty").modal('show');
+				new_i_qty[inew] = value;
 			}
 		}
 
-		function edit_qty() {
+		function del_item(code,i) {
 			Notsave = 1;
-			var ar = $("#viewname").attr("data-ar");
-			var Title = "จำนวนผิดพลาด";
-			var Type = "warning";
-			if (ar == 'old') {
-				var index = old_i_code.indexOf($("#viewname").attr("data-code"));
-				if (Number($("#newqty").val()) > Number(old_i_par[index])) {
-					var Text = "จำนวนสูงสุดคือ " + old_i_par[index];
-					AlertError(Title, Text, Type);
-				} else {
-					old_i_qty[index] = $("#newqty").val();
-					// old_i_order[index] = $("#neworder").val();
-					ar_to_site();
-					$("#md_editqty").modal('hide');
-				}
-			} else if (ar == 'new') {
-				var index = new_i_code.indexOf($("#viewname").attr("data-code"));
-				if (Number($("#newqty").val()) > Number(new_i_par[index])) {
-					var Text = "จำนวนสูงสุดคือ " + new_i_par[index];
-					AlertError(Title, Text, Type);
-				} else {
-					new_i_qty[index] = $("#newqty").val();
-					// new_i_order[index] = $("#neworder").val();
-					ar_to_site();
-					$("#md_editqty").modal('hide');
-				}
-			}
-		}
-
-		function del_item() {
-			Notsave = 1;
-			var code = $("#viewname").attr("data-code");
 			// หา Index ของคำนั้น
 			var iold = old_i_code.indexOf(code);
 			var inew = new_i_code.indexOf(code);
-
+			var id = "#list"+i;
 			// ลบ Index ที่หาเจอ
 			if (iold != -1) {
 				old_i_code.splice(iold, 1);
@@ -254,7 +222,7 @@ $genarray = json_decode($json, TRUE);
 				new_i_qty.splice(inew, 1);
 				new_i_par.splice(inew, 1);
 			}
-			ar_to_site();
+			$(id).remove();
 		}
 
 		function add_item() {
@@ -369,14 +337,15 @@ $genarray = json_decode($json, TRUE);
 									old_i_qty.push(temp[i]['CcQty']);
 									old_i_par.push(temp[i]['ParQty']);
 									// old_i_order.push(Number(temp[i]['ParQty']) - Number(temp[i]['CcQty']));
-									var Str = "<tr onclick='view_item(\"" + temp[i]['ItemCode'] + "\"," + i + ")' id='list" + i + "'>";
+									var Str = "<tr id='list" + i + "'>";
 									Str += "<td>";
 									Str += "	<div class='row'>";
 									Str += "		<div class='col-4 d-flex align-items-center'>" + temp[i]['ItemName'] + "</div>";
 									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + temp[i]['ParQty'] + "</div>";
-									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + temp[i]['CcQty'] + "</div>";
-									// Str += "		<div class='col-3 d-flex align-items-center justify-content-center'>" + temp[i]['TotalQty'] + "</div>";
+									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>";
+									Str += "			<input type='text' onkeyup='edit_qty(\"" + temp[i]['ItemCode'] + "\"," + i + ")' onkeydown='make_number()' id='qty_" + i + "' class='form-control text-center sc_qty numonly' style='max-width:100px;' value='" + temp[i]['CcQty'] + "'>";
 									Str += "		</div>";
+									Str += "	</div>";
 									Str += "</td>";
 									Str += "</tr>";
 
@@ -543,17 +512,7 @@ $genarray = json_decode($json, TRUE);
 						<div class="text-center p-0" style="width:270px;">Shelfcount</div>
 					</div>
 
-					<div id="choose_item">
-
-						<!-- <div onclick='select_item()' class='btn btn-block alert alert-info py-1 px-3 mb-2'>
-							<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'>
-								<div class='mr-auto text-truncate'>ItemName</div>
-								<input onkeydown='make_number()' type='text' class='form-control text-center numonly mx-2' style='max-width:100px;'>
-								<input class='m-0 chk-item' type='checkbox' id='' data-name='' value=''>
-							</div>
-						</div> -->
-
-					</div>
+					<div id="choose_item"></div>
 
 				</div>
 				<div class="modal-footer text-center">
@@ -563,48 +522,6 @@ $genarray = json_decode($json, TRUE);
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="modal fade" id="md_editqty" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['editnewitem'][$language]; ?></h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
-						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['item'][$language]; ?></div>
-						<div class="text-center p-0" style="width:150px;">Shelfcount</div>
-						<!-- <div class="text-center p-0" style="width:140px;">Order</div> -->
-					</div>
-					<div id="editqty">
-
-						<div class='btn btn-block alert alert-info py-1 pl-3 pr-1 mb-2'>
-							<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold px-0'>
-								<div id='viewname' class='mr-auto text-truncate'></div>
-								<input onkeydown='make_number()' id='newqty' type='text' class='form-control text-center numonly ml-2' style='max-width:100px;'>
-								<!-- <input onkeydown='make_number()' id='neworder' type='text' class='form-control text-center numonly ml-2' style='max-width:80px;'> -->
-							</div>
-						</div>
-
-					</div>
-
-				</div>
-				<div class="modal-footer text-center">
-					<div class="row w-100 d-flex align-items-center m-0">
-						<div class="col-6 text-right">
-							<button onclick="edit_qty()" type="button" class="btn btn-primary m-2"><i class="fas fa-check mr-2"></i><?php echo $genarray['confirm'][$language]; ?></button>
-						</div>
-						<div class="col-6 text-left">
-							<button onclick="del_item()" id="btn_del" type="button" class="btn btn-danger m-2" data-dismiss="modal"><i class="fas fa-trash-alt mr-2"></i><?php echo $genarray['delete'][$language]; ?></button>
 						</div>
 					</div>
 				</div>

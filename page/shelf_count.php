@@ -39,7 +39,8 @@ require '../getTimeZone.php';
 			load_dep();
 			load_site();
 			load_doc();
-			load_Fac();
+			// load_Fac();
+			load_Time();
 		});
 
 		// function
@@ -58,6 +59,13 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
+		function load_Time() {
+			var data = {
+				'siteCode': siteCode,
+				'STATUS': 'load_Time'
+			};
+			senddata(JSON.stringify(data));
+		}
 
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
@@ -98,8 +106,8 @@ require '../getTimeZone.php';
 
 		function change_dep() {
 			var slt = $("#DepName").val();
-			// var sltFac = $("#FacName").val();
-			if (slt == 0) {
+			var sltTime = $("#TimeName").val();
+			if (slt == 0 || sltTime == 0) {
 				$("#btn_add_sc").prop('disabled', true);
 			} else {
 				$("#btn_add_sc").prop('disabled', false);
@@ -109,12 +117,13 @@ require '../getTimeZone.php';
 		function add_sc() {
 			var Userid = "<?php echo $Userid ?>";
 			var DepCode = $("#DepName").val();
-			var FacCode = $("#FacName").val();
+			var TimeName = $("#TimeName").val();
+			
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
 				'DepCode': DepCode,
-				'FacCode': FacCode,
+				'TimeName': TimeName,
 				'STATUS': 'add_sc'
 			};
 			senddata(JSON.stringify(data));
@@ -151,23 +160,30 @@ require '../getTimeZone.php';
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_dep') {
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var Str = "<option value=" + temp[i]['DepCode'] + ">" + temp[i]['DepName'] + "</option>";
 								$("#DepName").append(Str);
 							}
 
 						} else if (temp["form"] == 'load_Fac') {
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var Str = "<option value=" + temp[i]['FacCode'] + ">" + temp[i]['FacName'] + "</option>";
 								$("#FacName").append(Str);
 							}
 
+						} else if (temp["form"] == 'load_Time') {
+							for (var i = 0; i < temp['cnt']; i++) {
+								var Str = "<option value=" + temp[i]['ID'] + ">" + temp[i]['TimeName'] + "</option>";
+								$("#TimeName").append(Str);
+							}
+
 						} else if (temp["form"] == 'load_site') {
 							$("#HptName").text(temp['HptName']);
+
 						} else if (temp["form"] == 'load_doc') {
 
 							$(".btn.btn-mylight.btn-block").remove();
-							for (var i = 0; i < (Object.keys(temp).length - 2); i++) {
+							for (var i = 0; i < temp['cnt']; i++) {
 								var status_class = "";
 								var status_text = "";
 								var status_line = "";
@@ -287,18 +303,18 @@ require '../getTimeZone.php';
 					<?php echo $genarray['chooseDepartment'][$language] . $array['CreateDirtyLinenDoc'][$language]; ?>
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
-							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['chooseDep'][$language]; ?></label>
+							<label class="input-group-text" style="width:100px;"><?php echo $genarray['chooseDep'][$language]; ?></label>
 						</div>
 						<select onchange="change_dep()" id="DepName" class="custom-select">
 							<option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
 						</select>
 					</div>
-					<div class="input-group my-3" hidden>
+					<div class="input-group my-3" >
 						<div class="input-group-prepend">
-							<label class="input-group-text" for="inputGroupSelect01"><?php echo $array['chooseFactory'][$language]; ?></label>
+							<label class="input-group-text" style="width:100px;"><?php echo $array['chooseTime'][$language]; ?></label>
 						</div>
-						<select onchange="change_dep()" id="FacName" class="custom-select">
-							<option value="0" selected><?php echo $array['chooseFactoryPl'][$language]; ?></option>
+						<select onchange="change_dep()" id="TimeName" class="custom-select">
+							<option value="0" selected><?php echo $array['chooseTimePl'][$language]; ?></option>
 						</select>
 					</div>
 				</div>

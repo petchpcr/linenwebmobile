@@ -3,7 +3,9 @@
 
 <CreateCleanLinenDoc><en> for create dirty document ?</en><th>เพื่อสร้างเอกสารผ้าสกปรก</th></CreateCleanLinenDoc>
 <chooseFactoryPl><en>Please Choose Factory</en><th>กรุณาเลือกโรงซัก</th></chooseFactoryPl>
+<chooseTimePl><en>Please Choose Time</en><th>กรุณาเลือกรอบเวลา</th></chooseTimePl>
 <chooseFactory><en>Choose Fac.</en><th>เลือกโรงซัก</th></chooseFactory>
+<chooseTime><en>Choose Time</en><th>เลือกรอบเวลา</th></chooseTime>
 
 <receivedYN><en>You received the dirty document ?</en><th>คุณได้รับเอกสาร ผ้าสกปรกนี้แล้วใช่หรือไม่ ?</th></receivedYN>
 <ConReceived><en>Amount received is that correct ?</en><th>จำนวนที่ได้รับถูกต้องหรือไม่ ?</th></ConReceived>
