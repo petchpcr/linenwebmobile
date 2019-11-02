@@ -28,19 +28,19 @@ function load_doc($conn, $DATA)
   }
 
   $s = "1";
-  $Sql = "SELECT RefDocNo,clean.IsStatus,
-                  DATE_FORMAT(clean.Modify_Date,'%d %M %Y') AS xdate,
-                  DATE_FORMAT(clean.Modify_Date,'%H:%i') AS xtime,
+  $Sql = "SELECT RefDocNo,cleanstock.IsStatus,
+                  DATE_FORMAT(cleanstock.Modify_Date,'%d %M %Y') AS xdate,
+                  DATE_FORMAT(cleanstock.Modify_Date,'%H:%i') AS xtime,
                   users.$TName AS TName,
                   users.$FName AS FName,
                   users.$LName AS LName,
                   Total,
                   department.DepCode,
                   department.DepName
-          FROM clean, users, site, department
+          FROM cleanstock, users, site, department
           WHERE DocNo ='$DocNo'
-          AND users.ID = clean.Modify_Code
-          AND clean.DepCode = department.DepCode
+          AND users.ID = cleanstock.Modify_Code
+          AND cleanstock.DepCode = department.DepCode
           AND users.HptCode = site.HptCode";
 
   $meQuery = mysqli_query($conn, $Sql);
@@ -58,15 +58,15 @@ function load_doc($conn, $DATA)
   $return['boolean'] = $boolean;
 
   $s = "2";
-  $Sql2 = "SELECT clean_detail.ItemCode,
+  $Sql2 = "SELECT cleanstock_detail.ItemCode,
                     item.ItemName,
-                    clean_detail.UnitCode,
-                    clean_detail.Qty,
-                    clean_detail.Weight 
-            FROM clean_detail,
+                    cleanstock_detail.UnitCode,
+                    cleanstock_detail.Qty,
+                    cleanstock_detail.Weight 
+            FROM cleanstock_detail,
                   item 
             WHERE DocNo = '$DocNo'
-            AND	  item.ItemCode = clean_detail.ItemCode";
+            AND	  item.ItemCode = cleanstock_detail.ItemCode";
 
   $meQuery2 = mysqli_query($conn, $Sql2);
   while ($Result = mysqli_fetch_assoc($meQuery2)) {
@@ -103,7 +103,7 @@ function CancelDoc($conn, $DATA)
 {
   $DocNo = $DATA["DocNo"];
 
-  $Sql = "SELECT RefDocNo FROM clean WHERE DocNo = '$DocNo'";
+  $Sql = "SELECT RefDocNo FROM cleanstock WHERE DocNo = '$DocNo'";
   $meQuery = mysqli_query($conn, $Sql);
   $Result = mysqli_fetch_assoc($meQuery);
   $RefDocNo = $Result['RefDocNo'];
@@ -114,10 +114,10 @@ function CancelDoc($conn, $DATA)
   mysqli_query($conn, $Sql);
   $Sql = "UPDATE repair_wash SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
-  $Sql = "UPDATE clean SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
+  $Sql = "UPDATE cleanstock SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
 
-  $Sql = "UPDATE clean SET IsStatus = 9 WHERE DocNo = '$DocNo'";
+  $Sql = "UPDATE cleanstock SET IsStatus = 9 WHERE DocNo = '$DocNo'";
 
   if (mysqli_query($conn,$Sql)) {
     $return['status'] = "success";

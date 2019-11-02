@@ -39,19 +39,19 @@
         $siteCode = $DATA["siteCode"];
         $Sql = "SELECT * 
                 FROM ( 
-                        SELECT  clean.DocNo,
+                        SELECT  cleanstock.DocNo,
                                 department.DepName,
-                                clean.IsCheckList,
-                                clean.IsStatus
+                                cleanstock.IsCheckList,
+                                cleanstock.IsStatus
 
-                        FROM    clean,department,site
+                        FROM    cleanstock,department,site
 
                         WHERE   site.HptCode = '$siteCode' 
-                        AND     clean.DocDate LIKE '%$search%' 
-                        AND     department.DepCode = clean.DepCode 
+                        AND     cleanstock.DocDate LIKE '%$search%' 
+                        AND     department.DepCode = cleanstock.DepCode 
                         AND     site.HptCode = department.HptCode 
-                        AND     clean.IsStatus > 0
-                        AND     clean.IsStatus != 9
+                        AND     cleanstock.IsStatus > 0
+                        AND     cleanstock.IsStatus != 9
                     UNION ALL
                         SELECT  repair.DocNo,
                                 department.DepName,
@@ -199,7 +199,7 @@
         $return['ss'] = "success";
         $DocNo = $DATA["DocNo"];
         $Sql = "SELECT  1 AS x
-                FROM    clean
+                FROM    cleanstock
                 WHERE DocNo = '$DocNo'
 
                 UNION ALL

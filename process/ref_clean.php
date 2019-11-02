@@ -38,28 +38,27 @@ function load_doc($conn, $DATA)
     if ($search == null || $search == "") {
         $search = date('Y-m-d');
     }
-    $From = $DATA["From"];
     $siteCode = $DATA["siteCode"];
     $return['siteCode'] = $siteCode;
     $boolean = false;
     $Sql = "SELECT DISTINCT
-                    $From.DocNo,
-                    $From.IsStatus,
-                    $From.IsCheckList,
+                    cleanstock.DocNo,
+                    cleanstock.IsStatus,
+                    cleanstock.IsCheckList,
                     department.DepName,
                     site.HptCode,
                     site.HptName
                 FROM
-                $From
-                INNER JOIN department ON department.DepCode = $From.DepCode AND department.DepCode = $From.DepCode
+                cleanstock
+                INNER JOIN department ON department.DepCode = cleanstock.DepCode AND department.DepCode = cleanstock.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                INNER JOIN qccheckpass ON qccheckpass.DocNo = $From.DocNo 
+                INNER JOIN qccheckpass ON qccheckpass.DocNo = cleanstock.DocNo 
                 WHERE site.HptCode = '$siteCode' 
-                AND $From.DocDate LIKE '%$search%'
-                AND $From.IsStatus = 3 
-                AND $From.IsStatus != 9 
+                AND cleanstock.DocDate LIKE '%$search%'
+                AND cleanstock.IsStatus = 3 
+                AND cleanstock.IsStatus != 9 
                 AND qccheckpass.Lost > 0
-                ORDER BY $From.IsStatus ASC,$From.DocNo DESC";
+                ORDER BY cleanstock.IsStatus ASC,cleanstock.DocNo DESC";
     $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -95,22 +94,22 @@ function add_clean($conn, $DATA)
     $RefDocNo = $DATA["refDocNo"];
     $return['RefDocNo'] = $RefDocNo;
 
-    $Sql = "SELECT FacCode FROM clean WHERE DocNo = '$RefDocNo'";
+    $Sql = "SELECT FacCode FROM cleanstock WHERE DocNo = '$RefDocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $FacCode = $Result['FacCode'];
 
-    $Sql = "    SELECT          CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
 
-                FROM            clean
+                FROM            cleanstock
 
                 INNER JOIN      department 
-                ON              clean.DepCode = department.DepCode
+                ON              cleanstock.DepCode = department.DepCode
 
-                WHERE           DocNo Like CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";
@@ -128,7 +127,7 @@ function add_clean($conn, $DATA)
     
     if ($count == 1) {
 
-        $Sql = "    INSERT INTO     clean
+        $Sql = "    INSERT INTO     cleanstock
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -142,8 +141,8 @@ function add_clean($conn, $DATA)
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            clean.Modify_Code,
-                                            clean.Modify_Date
+                                            cleanstock.Modify_Code,
+                                            cleanstock.Modify_Date
                                         )
                         VALUES
                                         ( 
@@ -170,7 +169,7 @@ function add_clean($conn, $DATA)
                 $return[$cnt]['Lost'] = $Result['Lost'];
                 $ItemCode = $Result['ItemCode'];
                 $Lost = $Result['Lost'];
-                $Sql2 = "INSERT INTO clean_detail ( DocNo,ItemCode,UnitCode,Qty,Weight,IsCancel,IsCheckList ) VALUES ('$DocNo','$ItemCode',1,$Lost,0,0,0)";
+                $Sql2 = "INSERT INTO cleanstock_detail ( DocNo,ItemCode,UnitCode,Qty,Weight,IsCancel,IsCheckList ) VALUES ('$DocNo','$ItemCode',1,$Lost,0,0,0)";
                 mysqli_query($conn, $Sql2);
                 $cnt++;
             }
@@ -193,13 +192,13 @@ function add_clean($conn, $DATA)
                                 DATE(NOW()),
                                 $DepCode,
                                 '$RefDocNo',
-                                'Clean',
+                                'Cleanstock',
                                 $Userid,
                                 DATE(NOW())
                             )";
         mysqli_query($conn, $Sql3);
                 
-        $Sql = "UPDATE clean SET IsStatus = 5 WHERE DocNo = '$RefDocNo'";
+        $Sql = "UPDATE cleanstock SET IsStatus = 5 WHERE DocNo = '$RefDocNo'";
         mysqli_query($conn, $Sql);
 
         $return['user'] = $Userid;

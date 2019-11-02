@@ -14,5 +14,6 @@
 <shelfcount><en>Delivery to customer</en><th>ส่งผ้า</th></shelfcount>
 <shelf_count><en>Shelf Count</en><th>Shelf Count</th></shelf_count>
 <qr_code><en>QR Code</en><th>QR Code</th></qr_code>
+<stock_receive><en>Stock Receive</en><th>บันทึกรับเข้าคลัง</th></stock_receive>
 
 </lang>

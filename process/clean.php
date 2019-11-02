@@ -41,19 +41,19 @@ function load_doc($conn, $DATA)
     $siteCode = $DATA["siteCode"];
     $boolean = false;
     $Sql = "SELECT
-                    clean.DocNo,
-                    clean.IsStatus,
-                    clean.IsCheckList,
+                    cleanstock.DocNo,
+                    cleanstock.IsStatus,
+                    cleanstock.IsCheckList,
                     department.DepName,
                     site.HptCode,
                     site.HptName
                 FROM
-                    clean,department,site
+                    cleanstock,department,site
                 WHERE site.HptCode = '$siteCode' 
-                AND clean.DocDate LIKE '%$search%' 
-                AND department.DepCode = clean.DepCode 
+                AND cleanstock.DocDate LIKE '%$search%' 
+                AND department.DepCode = cleanstock.DepCode 
                 AND site.HptCode = department.HptCode
-                ORDER BY clean.IsCheckList ASC,clean.DocNo DESC";
+                ORDER BY cleanstock.IsCheckList ASC,cleanstock.DocNo DESC";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -178,18 +178,18 @@ function create_clean($conn, $DATA)
     $Userid = $_SESSION['Userid'];
     $return['Userid'] = $Userid;
     $count = 0;
-    $Sql = "    SELECT          CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
 
-                FROM            clean
+                FROM            cleanstock
 
                 INNER JOIN      department 
-                ON              clean.DepCode = department.DepCode
+                ON              cleanstock.DepCode = department.DepCode
 
 
-                WHERE           DocNo Like CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";
@@ -207,7 +207,7 @@ function create_clean($conn, $DATA)
     $return['DocNo'] = $DocNo;
 
 
-    $Sql = "    INSERT INTO     clean
+    $Sql = "    INSERT INTO     cleanstock
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -221,8 +221,8 @@ function create_clean($conn, $DATA)
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            clean.Modify_Code,
-                                            clean.Modify_Date
+                                            cleanstock.Modify_Code,
+                                            cleanstock.Modify_Date
                                         )
                         VALUES
                                         ( 

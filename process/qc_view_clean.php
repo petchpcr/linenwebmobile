@@ -13,7 +13,7 @@ function load_items($conn, $DATA)
     $Qty = array();
     $Weight = array();
 
-    $Sql = "SELECT IsStatus FROM clean WHERE DocNo = '$DocNo'";
+    $Sql = "SELECT IsStatus FROM cleanstock WHERE DocNo = '$DocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $return['IsStatus'] = $Result['IsStatus'];
@@ -21,15 +21,15 @@ function load_items($conn, $DATA)
     $Sql = "SELECT  item.ItemName,
                         item.ItemCode,
                         item.UnitCode,
-                        clean_detail.Qty,
-                        clean_detail.Weight,
-                        clean_detail.IsCheckList 
+                        cleanstock_detail.Qty,
+                        cleanstock_detail.Weight,
+                        cleanstock_detail.IsCheckList 
 
                 FROM    item,
-                        clean_detail 
+                        cleanstock_detail 
 
-                WHERE   item.ItemCode = clean_detail.ItemCode 
-                AND     clean_detail.DocNo = '$DocNo'";
+                WHERE   item.ItemCode = cleanstock_detail.ItemCode 
+                AND     cleanstock_detail.DocNo = '$DocNo'";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -97,7 +97,7 @@ function show_quantity($conn, $DATA)
                         (SELECT Lost FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Lost, 
                         (SELECT Claim FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Claim, 
                         (SELECT Rewash FROM qccheckpass WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo') AS Rewash 
-                FROM clean_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
+                FROM cleanstock_detail WHERE ItemCode = '$ItemCode' AND DocNo = '$DocNo'";
     $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -158,7 +158,7 @@ function save_checkpass($conn, $DATA)
     if (mysqli_query($conn, $Sql)) {
 
         if ($fail == 0) {
-            $Sql = "UPDATE clean_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+            $Sql = "UPDATE cleanstock_detail SET IsCheckList = 0 WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
             mysqli_query($conn, $Sql);
 
             $Sql = "DELETE FROM qcchecklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
@@ -185,7 +185,7 @@ function save_checkpass($conn, $DATA)
             $checklist = 0;
         }
 
-        $Sql = "UPDATE clean_detail SET IsCheckList = $checklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
+        $Sql = "UPDATE cleanstock_detail SET IsCheckList = $checklist WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         mysqli_query($conn, $Sql);
 
         $return['ItemCode'] = $ItemCode;
@@ -386,7 +386,7 @@ function close_question($conn, $DATA)
         if ($cnum == 0) {
             //4 =ส่งซักทั้งหมด
             if ($wnum == $qcqnum) {
-                $Sql = "    UPDATE      clean_detail
+                $Sql = "    UPDATE      cleanstock_detail
                 
                     SET         IsCheckList = 4
                     
@@ -394,7 +394,7 @@ function close_question($conn, $DATA)
                     AND         ItemCode='$pItemCode'";
                 //3 = ส่งซักบางส่วน 
             } else {
-                $Sql = "    UPDATE      clean_detail
+                $Sql = "    UPDATE      cleanstock_detail
                 
                     SET         IsCheckList = 3
                     
@@ -404,7 +404,7 @@ function close_question($conn, $DATA)
         } else {
             //2=ส่งเครมทั้งหมด
             if ($cnum == $qcqnum) {
-                $Sql = "    UPDATE      clean_detail
+                $Sql = "    UPDATE      cleanstock_detail
             
                     SET         IsCheckList = 2
                     
@@ -414,7 +414,7 @@ function close_question($conn, $DATA)
             } else {
                 //1=ส่งเครมบางส่วน
                 if ($wnum == 0) {
-                    $Sql = "    UPDATE      clean_detail
+                    $Sql = "    UPDATE      cleanstock_detail
                     
                         SET         IsCheckList = 1
                         
@@ -424,7 +424,7 @@ function close_question($conn, $DATA)
                     $return['wnum'] = $wnum;
                     $return['qcqnum'] = $qcqnum;
                 } else {
-                    $Sql = "    UPDATE      clean_detail
+                    $Sql = "    UPDATE      cleanstock_detail
                 
                         SET         IsCheckList = 5
                         
@@ -435,7 +435,7 @@ function close_question($conn, $DATA)
         }
         //0=ผ่าน
     } else {
-        $Sql = "    UPDATE      clean_detail
+        $Sql = "    UPDATE      cleanstock_detail
                 
             SET         IsCheckList = 0
             
@@ -573,22 +573,22 @@ function create_claim($conn, $DATA)
     $Fail = 0;
 
     $Sql = "SELECT      department.HptCode,
-                            clean.DepCode
+                            cleanstock.DepCode
 
-                FROM        clean,department
+                FROM        cleanstock,department
 
-                WHERE       clean.DocNo = '$cleanDocNo'
-                AND         department.DepCode=clean.DepCode";
+                WHERE       cleanstock.DocNo = '$cleanDocNo'
+                AND         department.DepCode=cleanstock.DepCode";
 
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $hotpCode = $Result["HptCode"];
     $deptCode = $Result["DepCode"];
 
-    $Sql = "SELECT clean_detail.ItemCode,clean_detail.UnitCode,clean_detail.Weight,clean_detail.IsCheckList
-                FROM clean_detail
-                INNER JOIN clean ON clean_detail.DocNo = clean.DocNo 
-                WHERE clean_detail.DocNo = '$cleanDocNo'";
+    $Sql = "SELECT cleanstock_detail.ItemCode,cleanstock_detail.UnitCode,cleanstock_detail.Weight,cleanstock_detail.IsCheckList
+                FROM cleanstock_detail
+                INNER JOIN cleanstock ON cleanstock_detail.DocNo = cleanstock.DocNo 
+                WHERE cleanstock_detail.DocNo = '$cleanDocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $itemCode = $Result['ItemCode'];
@@ -607,7 +607,7 @@ function create_claim($conn, $DATA)
         $sum_remain = $Result_qty['Lost'];
 
         // SELECT เพื่อเอา RefDoc
-        $Sql_ref = "SELECT RefDocNo FROM clean WHERE DocNo = '$cleanDocNo'";
+        $Sql_ref = "SELECT RefDocNo FROM cleanstock WHERE DocNo = '$cleanDocNo'";
         $meQuery_ref = mysqli_query($conn, $Sql_ref);
         $Result_ref = mysqli_fetch_assoc($meQuery_ref);
         $ref = $Result_ref['RefDocNo'];
@@ -621,7 +621,7 @@ function create_claim($conn, $DATA)
                         UNION ALL
                         SELECT FacCode FROM newlinentable WHERE newlinentable.DocNo = '$ref'
                         UNION ALL
-                        SELECT FacCode FROM clean WHERE clean.DocNo = '$ref'";
+                        SELECT FacCode FROM cleanstock WHERE cleanstock.DocNo = '$ref'";
         $return[$count]['Sql Fac'] = $Sql_fac;
         $meQuery_fac = mysqli_query($conn, $Sql_fac);
         $Result_fac = mysqli_fetch_assoc($meQuery_fac);
@@ -975,7 +975,7 @@ function save_qc($conn, $DATA)
     $pDocNo = $DATA["DocNo"];
 
     //get number of QC pass
-    $Sql = "SELECT COUNT(*) AS pNum FROM clean_detail WHERE DocNo= '$pDocNo' AND IsCheckList = 0";
+    $Sql = "SELECT COUNT(*) AS pNum FROM cleanstock_detail WHERE DocNo= '$pDocNo' AND IsCheckList = 0";
 
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
@@ -983,7 +983,7 @@ function save_qc($conn, $DATA)
     $pNum = $Result['pNum'];
 
     //get number of all item
-    $Sql = "SELECT COUNT(*) AS itemNum FROM clean_detail WHERE DocNo= '$pDocNo'";
+    $Sql = "SELECT COUNT(*) AS itemNum FROM cleanstock_detail WHERE DocNo= '$pDocNo'";
 
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
@@ -993,10 +993,10 @@ function save_qc($conn, $DATA)
     //0=ยังไม่ได้ตรวจสอบ QC , 1=ผ่าน QC , 2=ส่งเครม
 
     if ($pNum == $itemNum) { // IsCheckList = 1 QC pass all 
-        $Sql = "SELECT clean_detail.ItemCode 
-                    FROM clean_detail
-                    INNER JOIN clean ON clean_detail.DocNo = clean.DocNo 
-                    WHERE clean_detail.DocNo = '$pDocNo'";
+        $Sql = "SELECT cleanstock_detail.ItemCode 
+                    FROM cleanstock_detail
+                    INNER JOIN cleanstock ON cleanstock_detail.DocNo = cleanstock.DocNo 
+                    WHERE cleanstock_detail.DocNo = '$pDocNo'";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $itemCode = $Result['ItemCode'];
@@ -1004,8 +1004,8 @@ function save_qc($conn, $DATA)
             $Sql_DocNo = "SELECT claim_detail.DocNo AS DocDetaliClaim
                                 FROM claim_detail
                                 INNER JOIN claim ON claim.DocNo = claim_detail.DocNo 
-                                INNER JOIN clean ON clean.DocNo = claim.RefDocNo 
-                                WHERE clean.DocNo = '$pDocNo' 
+                                INNER JOIN cleanstock ON cleanstock.DocNo = claim.RefDocNo 
+                                WHERE cleanstock.DocNo = '$pDocNo' 
                                 AND claim_detail.ItemCode = '$itemCode'";
             $meQuery_DocNo = mysqli_query($conn, $Sql_DocNo);
             $Result_DocNo = mysqli_fetch_assoc($meQuery_DocNo);
@@ -1026,8 +1026,8 @@ function save_qc($conn, $DATA)
             $Sql_DocNo = "SELECT rewash_detail.DocNo AS DocDetaliRewash
                                 FROM rewash_detail
                                 INNER JOIN rewash ON rewash.DocNo = rewash_detail.DocNo 
-                                INNER JOIN clean ON clean.DocNo = rewash.RefDocNo 
-                                WHERE clean.DocNo = '$pDocNo' 
+                                INNER JOIN cleanstock ON cleanstock.DocNo = rewash.RefDocNo 
+                                WHERE cleanstock.DocNo = '$pDocNo' 
                                 AND rewash_detail.ItemCode = '$itemCode'";
             $meQuery_DocNo = mysqli_query($conn, $Sql_DocNo);
             $Result_DocNo = mysqli_fetch_assoc($meQuery_DocNo);
@@ -1045,9 +1045,9 @@ function save_qc($conn, $DATA)
                 mysqli_query($conn, $Sql_pass);
             }
         }
-        $Sql = "UPDATE clean SET IsCheckList = 1,IsStatus = 4 WHERE DocNo= '$pDocNo'";
+        $Sql = "UPDATE cleanstock SET IsCheckList = 1,IsStatus = 4 WHERE DocNo= '$pDocNo'";
     } else { // IsCheckList = 2 some send claim
-        $Sql = "UPDATE clean SET IsCheckList = 2,IsStatus = 3 WHERE DocNo= '$pDocNo'";
+        $Sql = "UPDATE cleanstock SET IsCheckList = 2,IsStatus = 3 WHERE DocNo= '$pDocNo'";
     }
 
     if ($meQuery = mysqli_query($conn, $Sql)) {

@@ -95,17 +95,17 @@ function add_dirty($conn, $DATA)
     $Result = mysqli_fetch_assoc($meQuery);
     $FacCode = $Result['FacCode'];
 
-    $Sql = "    SELECT          CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
 
-                FROM            clean
+                FROM            cleanstock
 
                 INNER JOIN      department 
-                ON              clean.DepCode = department.DepCode
+                ON              cleanstock.DepCode = department.DepCode
 
-                WHERE           DocNo Like CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";
@@ -123,7 +123,7 @@ function add_dirty($conn, $DATA)
 
     if ($count == 1) {
 
-        $Sql = "    INSERT INTO     clean
+        $Sql = "    INSERT INTO     cleanstock
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -137,8 +137,8 @@ function add_dirty($conn, $DATA)
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            clean.Modify_Code,
-                                            clean.Modify_Date
+                                            cleanstock.Modify_Code,
+                                            cleanstock.Modify_Date
                                         )
                         VALUES
                                         ( 
@@ -172,7 +172,7 @@ function add_dirty($conn, $DATA)
                                 DATE(NOW()),
                                 $DepCode,
                                 '$RefDocNo',
-                                'Clean',
+                                'Cleanstock',
                                 $Userid,
                                 DATE(NOW())
                             )";

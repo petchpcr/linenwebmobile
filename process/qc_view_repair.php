@@ -611,10 +611,10 @@
             $sum_remain = $Result_qty['Lost'];
 
             // SELECT เพื่อเอา RefDoc
-            $Sql_ref = "SELECT clean.RefDocNo 
-                        FROM clean,repair,claim 
+            $Sql_ref = "SELECT cleanstock.RefDocNo 
+                        FROM cleanstock,repair,claim 
                         WHERE repair.RefDocNo = claim.DocNo 
-                        AND claim.RefDocNo = clean.DocNo 
+                        AND claim.RefDocNo = cleanstock.DocNo 
                         AND repair.DocNo = '$repairDocNo'";
             $meQuery_ref = mysqli_query($conn, $Sql_ref);
             $Result_ref = mysqli_fetch_assoc($meQuery_ref);
@@ -629,7 +629,7 @@
                         UNION ALL
                         SELECT FacCode FROM newlinentable WHERE newlinentable.DocNo = '$ref'
                         UNION ALL
-                        SELECT FacCode FROM clean WHERE clean.DocNo = '$ref'";
+                        SELECT FacCode FROM cleanstock WHERE cleanstock.DocNo = '$ref'";
             $return[$count]['Sql Fac'] = $Sql_fac;
             $meQuery_fac = mysqli_query($conn, $Sql_fac);
             $Result_fac = mysqli_fetch_assoc($meQuery_fac);

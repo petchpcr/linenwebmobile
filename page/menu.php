@@ -192,7 +192,7 @@ $genarray = json_decode($json, TRUE);
                     <div class="my-col-menu">
                         <button onclick="menu_click(' . "'clean'" . ')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/laundry.png">
-                            <div class="text-truncate">' . $array["clean"][$language] . '</div>
+                            <div class="text-truncate">' . $array["stock_receive"][$language] . '</div>
                         </button>
                     </div>
                     <div class="my-col-menu">

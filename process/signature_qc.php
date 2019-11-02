@@ -6,14 +6,14 @@
     $DocNo = $_POST['DocNo'];
     $SigCode = $_POST['SigCode'];
 
-    $Sql = "UPDATE clean SET Signature = '$SigCode' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE cleanstock SET Signature = '$SigCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn,$Sql);
     //update_status($DocNo);
-    $Sql = "UPDATE clean SET IsStatus = 4 WHERE DocNo= '$cleanRefDocNo'";
+    $Sql = "UPDATE cleanstock SET IsStatus = 4 WHERE DocNo= '$cleanRefDocNo'";
     mysqli_query($conn,$Sql);
 
     function update_status($thisDocNo){
-        $Sql = "SELECT RefDocNo FROM clean WHERE DocNo = '$thisDocNo'";
+        $Sql = "SELECT RefDocNo FROM cleanstock WHERE DocNo = '$thisDocNo'";
         $meQuery = mysqli_query($conn, $Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $rewashRefDocNo = $Result['RefDocNo'];
@@ -39,7 +39,7 @@
             }
 
             if($s){
-                $Sql = "UPDATE clean SET IsStatus = 4 WHERE DocNo= '$cleanRefDocNo'";
+                $Sql = "UPDATE cleanstock SET IsStatus = 4 WHERE DocNo= '$cleanRefDocNo'";
                 mysqli_query($conn,$Sql);
             }
             update_status($cleanRefDocNo);
