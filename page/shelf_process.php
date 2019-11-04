@@ -33,14 +33,17 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var Menu = '<?php echo $Menu; ?>';
+		var siteCode = '<?php echo $siteCode; ?>';
+		var DocNo = "<?php echo $DocNo ?>";
+		var From = "<?php echo $From ?>";
+		
 		$(document).ready(function(e) {
 			load_process();
 		});
 
 		// function
 		function load_process() {
-			var siteCode = "<?php echo $siteCode ?>";
-			var DocNo = "<?php echo $DocNo ?>";
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
@@ -50,7 +53,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function insert_process() {
-			var DocNo = "<?php echo $DocNo ?>";
 			var data = {
 				'DocNo': DocNo,
 				'STATUS': 'insert_process'
@@ -94,19 +96,17 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function start_send(DocNo) {
-			var From = "<?php echo $From ?>";
-			var data = {
-				'DocNo': DocNo,
-				'From': From,
-				'STATUS': 'start_send'
-			};
-			senddata(JSON.stringify(data));
+		function start_send() {
+			window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + DocNo + '&siteCode=' + siteCode + '&fnc=start_send';
+			// var data = {
+			// 	'DocNo': DocNo,
+			// 	'From': From,
+			// 	'STATUS': 'start_send'
+			// };
+			// senddata(JSON.stringify(data));
 		}
 
-		function end_send(DocNo) {
-			var siteCode = '<?php echo $siteCode; ?>';
-			var From = "<?php echo $From ?>";
+		function end_send() {
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
@@ -283,6 +283,9 @@ $genarray = json_decode($json, TRUE);
 									$("#S_Start").text(S_Start.toLocaleTimeString());
 									$("#S_End").text("--:--:--");
 
+									var ck_start = temp['signStart'];
+									$("#show_sign_start").html(ck_start);
+									$("#sign_zone_start").removeAttr("hidden");
 								}
 							} else if ((temp['IsStatus'] == 3 && temp['DvEndTime'] != null) || temp['IsStatus'] == 4) { //-----เสร็จสิ้น
 
@@ -299,12 +302,15 @@ $genarray = json_decode($json, TRUE);
 										closeOnConfirm: true,
 										closeOnCancel: true,
 									}).then(result => {
-										var Menu = "<?php echo $Menu ?>";
-										var From = "<?php echo $From ?>";
 										window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&siteCode=' + temp['HptCode'];
 									})
 								} else {
 									var ck = temp['Signature'];
+									var ck_start = temp['signStart'];
+
+									$("#show_sign_start").html(ck_start);
+									$("#sign_zone_start").removeAttr("hidden");
+
 									$("#show_sign").html(ck);
 									$("#sign_zone").removeAttr("hidden");
 								}
@@ -559,22 +565,35 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div id="S_Sum_btn" class="row mt-4">
 					<div class="col-md-2 col-sm-none"></div>
-					<div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
-					<div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send('<?php echo $DocNo; ?>')" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="S_Start_btn"><button onclick="start_send()" type="button" class="btn btn-lg btn-primary btn-block"><?php echo $array['Startshipping'][$language]; ?></button></div>
+					<div class="col-md-8 col-sm-12" id="S_End_btn"><button onclick="end_send()" type="button" class="btn btn-lg btn-success btn-block"><?php echo $array['Finish'][$language]; ?></button></div>
 					<div class="col-md-2 col-sm-none"></div>
 
 				</div>
 			</div>
 
-			<div id="sign_zone" class="mx-3" hidden>
+			<div id="sign_zone_start" class="mx-3 mb-3" hidden>
 				<div class="text-center">
+					<div><b>ลายเซนต์ผู้ส่ง</b></div>
 					<div class="row justify-content-center">
-						<div class="card my-2 p-2">
+						<div class="card mb-2 p-2">
+							<div id="show_sign_start"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="sign_zone" class="mx-3 mb-3" hidden>
+				<div class="text-center">
+					<div><b>ลายเซนต์ผู้รับ</b></div>
+					<div class="row justify-content-center">
+						<div class="card mb-2 p-2">
 							<div id="show_sign"></div>
 						</div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</div>
 

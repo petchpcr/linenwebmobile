@@ -55,24 +55,41 @@ $genarray = json_decode($json, TRUE);
 		var Userid = "<?php echo $Userid ?>";
 		var Delback = "<?php echo $Delback ?>";
 		var Notsave = 0;
-		var arr_old_items = [];
-		var arr_new_items = [];
 		var all_i_code = [];
 		var all_i_name = [];
 		var all_dep_code = [];
 		var all_dep_name = [];
-		var arr_del_items = [];
 		var now_id = "";
 		var now_item = "";
-		var obj = {};
+		var now_dep;
 		var mul_qty = {};
 		var mul_weight = {};
+		var isRound = {};
+		var dep_search = 0;;
+
+		var round = {};
+		round['dep'] = {};
+		round['dep']['item'] = {};
+
+		round['dep']['item'][0] = [159, 40];
+		round['dep']['item'][1] = ['a', 'b'];
+		round['dep']['item'][1] = undefined;
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
-			load_dep();
+			load_dep(0);
 			choose_items();
 			load_items();
+			// test();
+			if (typeof round['dep']['item'][1] === 'undefined') {
+				// console.log("Not have");
+			}
+			$.each(round['dep']['item'], function(key, val) {
+				// console.log(key + " | " + val);
+
+			});
+			// console.log($.type(round['dep']['item'][0][0]));
+
 			// $.each(arr_test, function(item, item_val) {
 			// 		console.log(item);
 			// 		$.each(item_val, function(dep, dep_val) {
@@ -86,21 +103,38 @@ $genarray = json_decode($json, TRUE);
 		});
 
 		// function
-		function load_items() {
-			arr_old_items = [];
-			arr_new_items = [];
-			arr_del_items = [];
+		function test() {
+			var data = {
+				'round': round,
+				'STATUS': 'test'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function load_items(FromDelRound) {
+			mul_qty = {};
+			mul_weight = {};
 			var data = {
 				'DocNo': DocNo,
 				'refDoc': refDoc,
+				'FromDelRound': FromDelRound,
 				'STATUS': 'load_items'
 			};
 			senddata(JSON.stringify(data));
 		}
 
-		function load_dep() {
+		function load_dep(num) {
+			dep_search = num;
+			if (num != 1) {
+				all_dep_code = [];
+				all_dep_name = [];
+			}
+
+			var Search = $("#search_dep").val();
 			var data = {
 				'siteCode': siteCode,
+				'Search': Search,
+				'dep_search': dep_search,
 				'STATUS': 'load_dep'
 			};
 			senddata(JSON.stringify(data));
@@ -110,7 +144,7 @@ $genarray = json_decode($json, TRUE);
 			var Search = $("#search_items").val();
 			var data = {
 				'Search': Search,
-				'siteCode' : siteCode,
+				'siteCode': siteCode,
 				'refDoc': refDoc,
 				'STATUS': 'choose_items'
 			};
@@ -127,275 +161,200 @@ $genarray = json_decode($json, TRUE);
 			var test = $(id).data("name");
 		}
 
-		function chk_dep(dep) {
-			var id = "#" + dep;
-			if ($(id).is(':checked')) {
-				$(id).prop("checked", false);
-			} else {
-				$(id).prop("checked", true);
-			}
+		function chk_dep(DepCode) {
+			now_dep = DepCode;
+			$("#search_items").val("");
+			choose_items();
+			$("#md_dep").modal('hide');
+			$("#md_item").modal('show');
 		}
 
-		function select_item(chk) {
-			now_id = "#" + chk;
-			now_item = $(now_id).val();
-			console.log(now_item);
-
-			if (typeof mul_qty[now_item] !== 'undefined') {
-				all_dep_code.forEach(function(dep) {
-					var qty = mul_qty[now_item][dep];
-
-					console.log("Dep = " + dep + " | Qty = " + qty);
-					var id, qtyid, weightid;
-					var have = 0;
-					$(".chk-dep").each(function() {
-
-						if ($(this).val() == dep) {
-							qtyid = "#depqty" + $(this).attr("data-num");
-							weightid = "#depweight" + $(this).attr("data-num");
-							id = "#" + $(this).attr('id');
-							if (qty > 0) {
-								have++;
-							}
-						};
-						console.log("Dep = " + $(this).val() + " VS Dep = " + dep + " | Have = " + have);
-					});
-
-					if (have > 0) {
-						console.log("Check");
-						$(id).prop("checked", true);
-						$(qtyid).val(qty);
-						$(weightid).val(mul_weight[now_item][dep]);
-					} else {
-						console.log("Un Check");
-						$(id).prop("checked", false);
-						$(qtyid).val(1);
-						$(weightid).val("");
-					}
-
-				});
-			} else {
-				$(".chk-dep").each(function() {
-					var qtyid = "#depqty" + $(this).attr("data-num");
-					var weightid = "#depweight" + $(this).attr("data-num");
-					$(qtyid).val(1);
-					$(weightid).val("");
-					$(this).prop("checked", false);
-				});
-			}
-
-
-
-			// $.each(obj, function(item, item_val) {
-			// 	// console.log(item+" | "+item_val);
-			// 	if (now_item == item_val) {
-			// 		$.each(item_val, function(key, qty) {
-			// 			console.log(key+" | "+qty);
-			// 			if (qty > 0) {
-			// 				$(".chk-item").each(function() {
-			// 					if ($(this).val() == key) {
-			// 						$(this).prop("checked", true);
-			// 					};
-			// 				});
-			// 			} else {
-			// 				$(".chk-item").each(function() {
-			// 					if ($(this).val() == key) {
-			// 						$(this).prop("checked", false);
-			// 					};
-			// 				});
-			// 			}
-			// 		});
-			// 	}
-			// });
-
-			// arr_new_items.forEach(function(value) {
-			// 	console.log(value);
-			// });
-			// var have = 0;
-			// $(".chk-item").each(function() {
-			// 	if ($(this).is(':checked')) {
-			// 		var code = $(this).val();
-			// 		arr_new_items.push(code);
-			// 		// have++;
-			// 	}
-			// });
-			// arr_new_items.forEach(function(value) {
-			// 	console.log(value);
-			// });
-			// if (have == 0) {
-			// 	Title = "คุณไม่ได้เลือกรายการ";
-			// 	Text = "โปรดเลือกรายการก่อนทำขั้นตอนถัดไป !";
-			// 	Type = "warning";
-			// 	AlertError(Title, Text, Type);
-			// } else {
-			$("#md_dep").modal('show');
-			// }
-
+		function before_select_item(chk) {
+			$("#search_dep").val("");
+			load_dep(chk);
 		}
 
-		function select_chk() {
+		function select_item(ItemCode) {
+			now_item = ItemCode;
+
 			$("#md_item").modal('hide');
-			var last_item = $('.item:last').data("num");
-			if (last_item == null || last_item == '') {
-				last_item = 0;
-			}
-			var num = Number(last_item) + 1;
+			edit_round(now_dep, now_item);
+			// $("#md_round").modal('show');
+		}
 
-			$(".chk-item").each(function() {
-				if ($(this).is(':checked')) {
-					var id = "weight" + num;
-					var name = $(this).data('name');
-					var code = $(this).val();
-					var qty = 0;
-					var unit = 1;
-					if (false) {
-						var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
-						Str += "<div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-						Str += "<div class='text-truncate font-weight-bold'>" + name + "</div>";
-						Str += "</div>";
-						Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-						Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-						Str += "id='" + id + "' data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' data-num='" + num + "'data-oldnum=0 placeholder='0.0'>";
-						Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
-						Str += "</div>";
-						Str += "</div>";
-					} else {
-						var idqty = id + "qty";
-						var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
-						Str += "<div class='col'><div class='row'>";
-						Str += "<div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-						Str += "<div class='text-truncate font-weight-bold'>" + name + "</div>";
-						Str += "</div>";
-						Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-						Str += "<label class='mr-1'><?php echo $array['numberSize'][$language]; ?></label>";
-						Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly' id='" + idqty + "' placeholder='0' value='1'>";
-						Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
-						Str += "</div>";
-						Str += "</div>";
-						Str += "<div class='row'>";
-						Str += "<div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-						// Str +=    "<div><button class='btn btn-info py-0'>เลือกแผนก</button></div>";
-						Str += "</div>";
-						Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-						Str += "<label class='mr-1'><?php echo $array['weight'][$language]; ?></label>";
-						Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-						Str += "data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
-						Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'>";
-						Str += "</div>";
-						Str += "</div>";
-						Str += "</div>";
-					}
-
-					$("#items").append(Str);
-					arr_new_items.push(code);
-					num++;
-					cal_weight();
-					cal_num();
-				};
-			});
+		function item_handler() {
+			var RequestName = $("#search_items").val();
+			var data = {
+				'DocNo': DocNo,
+				'now_dep': now_dep,
+				'RequestName': RequestName,
+				'STATUS': 'item_handler'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function list_to_arr() {
-			arr_new_items.push(now_item);
-			arr_new_items = Array.from(new Set(arr_new_items));
-			if (typeof mul_qty[now_item] == 'undefined') {
-				mul_qty[now_item] = {};
-			}
-			if (typeof mul_weight[now_item] == 'undefined') {
-				mul_weight[now_item] = {};
-			}
 			var have = 0;
 			$(".chk-dep").each(function() {
 				var dep = $(this).val();
 				var num = $(this).attr("data-num");
-				if ($(this).is(':checked')) {
-					mul_qty[now_item][dep] = Number($("#depqty" + num).val());
-					mul_weight[now_item][dep] = Number($("#depweight" + num).val());
-					have++;
-				} else {
-					mul_qty[now_item][dep] = 0;
-					mul_weight[now_item][dep] = 0;
+				if (dep_search == 1) { // ถ้ากด search
+					if ($(this).is(':checked')) {
+						if (mul_qty[dep][now_item] == null) {
+							if (typeof mul_qty[dep][now_item] === 'undefined') {
+								if (typeof mul_qty[dep] === 'undefined') {
+									mul_qty[dep] = {};
+									mul_qty[dep][now_item] = {};
+								} else {
+									mul_qty[dep][now_item] = {};
+								}
+							}
+							if (typeof mul_weight[dep][now_item] === 'undefined') {
+								if (typeof mul_weight[dep] === 'undefined') {
+									mul_weight[dep] = {};
+									mul_weight[dep][now_item] = {};
+								} else {
+									mul_weight[dep][now_item] = {};
+								}
+							}
+
+							mul_qty[dep][now_item] = 0;
+							mul_weight[dep][now_item] = 0;
+						}
+						have++;
+					}
+
+				} else { // ถ้าไม่ search
+
+					if ($(this).is(':checked')) {
+						if (mul_qty[dep][now_item] == null) {
+							if (typeof mul_qty[dep][now_item] === 'undefined') {
+								if (typeof mul_qty[dep] === 'undefined') {
+									mul_qty[dep] = {};
+									mul_qty[dep][now_item] = {};
+								} else {
+									mul_qty[dep][now_item] = {};
+								}
+							}
+							if (typeof mul_weight[dep][now_item] === 'undefined') {
+								if (typeof mul_weight[dep] === 'undefined') {
+									mul_weight[dep] = {};
+									mul_weight[dep][now_item] = {};
+								} else {
+									mul_weight[dep][now_item] = {};
+								}
+							}
+
+							mul_qty[dep][now_item] = 0;
+							mul_weight[dep][now_item] = 0;
+						}
+						have++;
+					} else {
+
+						if (typeof mul_qty[dep] === 'undefined') {
+							mul_qty[dep] = {};
+							mul_qty[dep][now_item] = {};
+						}
+						if (typeof mul_weight[dep] === 'undefined') {
+							mul_weight[dep] = {};
+							mul_weight[dep][now_item] = {};
+						}
+						mul_qty[dep][now_item] = null;
+						mul_weight[dep][now_item] = null;
+					}
 				}
 			});
+
+			// if (typeof mul_qty[now_item] == 'undefined') {
+			// 	mul_qty[now_item] = {};
+			// }
+			// if (typeof mul_weight[now_item] == 'undefined') {
+			// 	mul_weight[now_item] = {};
+			// }
+			// var have = 0;
+			// $(".chk-dep").each(function() {
+			// 	var dep = $(this).val();
+			// 	var num = $(this).attr("data-num");
+			// 	if ($(this).is(':checked')) {
+			// 		mul_qty[now_item][dep] = Number($("#depqty" + num).val());
+			// 		mul_weight[now_item][dep] = Number($("#depweight" + num).val());
+			// 		have++;
+			// 	} else {
+			// 		mul_qty[now_item][dep] = 0;
+			// 		mul_weight[now_item][dep] = 0;
+			// 	}
+			// });
 
 			if (have == 0) {
 				$(now_id).prop("checked", false);
 			} else {
 				$(now_id).prop("checked", true);
 			}
-			Notsave = 1;
+			// Notsave = 1;
+
+
 			// console.log(mul_qty);
-
-			// mul_qty['BHQLPPPUP010414'].forEach(function(value,key) {
-			// });
-			// arr_new_items.forEach(function(item) {
-			// 	console.log(key+" | "+value);
-
-			// });
+			add_item(1);
 			gen_to_site();
 		}
 
 		function gen_to_site() {
 			$("#items").empty();
-			var doc_qty = 0;
-			var doc_weight = 0;
-			arr_new_items.forEach(function(item) {
-				var have = 0;
-				var sum_qty = 0;
-				var sum_weight = 0;
-				$.each(mul_qty[item], function(dep, qty) {
-					// console.log(qty + " | " + dep);
-					if (qty > 0) {
-						have++;
-						sum_qty = Number(sum_qty) + Number(qty);
-						sum_weight = Number(sum_weight) + Number(mul_weight[item][dep]);
+			// var doc_qty = 0;
+			var doc_weight = Number(0);
+			$.each(mul_qty, function(dep, qty) {
+				// หาชื่อ Department
+				var dep_name;
+				$.each(all_dep_code, function(dn_key, dn_val) {
+					if (dn_val == dep) {
+						dep_name = all_dep_name[dn_key];
 					}
 				});
-				if (have > 0) {
-					var name, num;
-					$(".chk-item").each(function() {
-						if ($(this).val() == item) {
-							num = $(this).attr("data-num");
-							name = $(this).attr("data-name");
-						};
-					});
-					if (!(sum_weight > 0)) {
-						sum_weight = "";
-					}
-					var click = "chk" + num;
-					var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
-					Str += "<div class='col'><div class='row'>";
-					Str += "<div class='d-flex align-items-center col-12 pr-0'>";
-					Str += "<div class='text-truncate font-weight-bold mr-auto'>" + name + "</div>";
-					Str += "<button class='btn btn-info mt-2 mr-3 py-0 px-5' onclick='select_item(\"" + click + "\")'>แผนก</button>";
-					Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin:5px 5px 5px 5px;'>";
-					Str += "</div>";
-					Str += "<div class='d-flex justify-content-end align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-					Str += "</div>";
-					Str += "</div>";
-					Str += "<div class='row'>";
-					Str += "<div class='d-flex align-items-center col-12 input-group p-0'>";
-					Str += "<label class='ml-auto mr-1'>จำนวน</label>";
-					Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-2' ";
-					Str += "style='max-width:90px;' value='" + sum_qty + "' placeholder='0' disabled>";
-					Str += "<label class='mr-1'><?php echo $array['weight'][$language]; ?></label>";
-					Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1' ";
-					Str += "style='max-width:90px;' value='" + sum_weight + "' placeholder='0.0' disabled>";
-					Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'>";
-					Str += "</div>";
-					Str += "</div>";
-					Str += "</div>";
 
-					$("#items").append(Str);
-				}
-				doc_qty = Number(doc_qty + sum_qty);
-				doc_weight = Number(doc_weight + sum_weight);
+				// หาชื่อ Item
+				var item_name;
+				$.each(qty, function(item, qty_val) {
+					if (qty_val != null) {
+						var DHL = 0;
+						$.each(all_i_code, function(i_key, i_val) {
+							if (i_val == item) {
+								item_name = all_i_name[i_key];
+								DHL++;
+							}
+						});
+						if (DHL == 0) {
+							item_name = item;
+						}
+						// ยัดใส่ใน div#items
+						var Str = "<tr>";
+						Str += "		<td>";
+						Str += "		<div class='row'>";
+						Str += "			<div class='col-4 text-truncate'>" + dep_name + "</div>";
+						Str += "			<div class='col-4 text-truncate'>" + item_name + "</div>";
+						Str += "			<div class='col-4 d-flex'>";
+						Str += "				<div class='mx-auto justify-content-center d-flex align-items-center'>";
+						Str += "					<input type='text' disabled class='form-control text-center bg-white mr-2' value='" + mul_qty[dep][item] + "' style='max-width:70px;'>";
+						Str += "					<input type='text' disabled class='form-control text-center bg-white' value='" + mul_weight[dep][item] + "' style='max-width:70px;'>";
+						Str += "				</div>";
+						Str += "				<button onclick='edit_round(\"" + dep + "\",\"" + item + "\")' class='btn btn-info btn-block p-0 ml-2' style='width:40px;border-radius:225px;'>";
+						Str += "					<i class='fas fa-plus'></i>";
+						Str += "				</button>";
+						Str += "			</div>";
+						Str += "		</div>";
+						Str += "	</td>";
+						Str += "</tr>";
+
+						$("#items").append(Str);
+						doc_weight = Number(doc_weight) + Number(mul_weight[dep][item]);
+					}
+				});
 			});
-			if (doc_qty > 0) {
-				$("#sum_num").val(doc_qty);
-			} else {
-				$("#sum_num").val("");
-			}
+
+			// if (doc_qty > 0) {
+			// 	$("#sum_num").val(doc_qty);
+			// } else {
+			// 	$("#sum_num").val("");
+			// }
 
 			if (doc_weight > 0) {
 				$("#sum_weight").val(doc_weight);
@@ -404,8 +363,75 @@ $genarray = json_decode($json, TRUE);
 			}
 
 			$("#md_dep").modal('hide');
-			// console.log("sum_qty | " + doc_qty);
 			// console.log("sum_weight | " + doc_weight);
+		}
+
+		function edit_round(dep, item) {
+			var Not_Handler = 0;
+			// หาชื่อ Department
+			var dep_name;
+			$.each(all_dep_code, function(dn_key, dn_val) {
+				if (dn_val == dep) {
+					$("#round_depname").text(all_dep_name[dn_key]);
+				}
+			});
+			// หาชื่อ Item
+			$.each(all_i_code, function(i_key, i_val) {
+				if (i_val == item) {
+					$("#round_itemname").text(all_i_name[i_key]);
+					Not_Handler++;
+				}
+			});
+
+			$("#val_qty").val(1);
+			$("#val_weight").val("");
+			$("#show_round").empty();
+
+			if (Not_Handler == 0) {
+				$("#round_itemname").text(item);
+				var click = "add_round('" + dep + "','HDL')";
+			} else {
+				var click = "add_round('" + dep + "','" + item + "')";
+			}
+			console.log(Not_Handler);
+			$("#btn_add_round").attr("onclick", click);
+			var data = {
+				'DocNo': DocNo,
+				'dep': dep,
+				'item': item,
+				'STATUS': 'edit_round'
+			};
+			senddata(JSON.stringify(data));
+
+		}
+
+		function add_round(dep, item) {
+			var qty = $("#val_qty").val();
+			var weight = $("#val_weight").val();
+
+			if (qty != "" && weight != "") {
+				var data = {
+					'DocNo': DocNo,
+					'dep': dep,
+					'item': item,
+					'qty': qty,
+					'weight': weight,
+					'STATUS': 'add_round'
+				};
+				senddata(JSON.stringify(data));
+			}
+
+		}
+
+		function del_round(id, RowID, dep, item) {
+			var data = {
+				'id': id,
+				'RowID': RowID,
+				'dep': dep,
+				'item': item,
+				'STATUS': 'del_round'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function del_items(num) {
@@ -421,23 +447,6 @@ $genarray = json_decode($json, TRUE);
 			console.log("After Delete");
 			Notsave = 1;
 			gen_to_site();
-		}
-
-		function show_weight(num) {
-			var id = "#weight" + num;
-			var val = $(id).val();
-			$("#val_weight").val(val);
-			$("#val_weight").attr("data-num", num);
-			$("#md_weight").modal('show');
-		}
-
-		function change_weight() {
-			var num = $("#val_weight").attr("data-num");
-			var val = $("#val_weight").val();
-			var id = "#weight" + num;
-			$(id).val(val);
-			cal_weight();
-			$("#md_weight").modal('hide');
 		}
 
 		function cal_weight() {
@@ -517,16 +526,22 @@ $genarray = json_decode($json, TRUE);
 			$("#sum_weight").val(price);
 		}
 
-		function add_item() {
-			// var Item = { 
-			// 	BHT0122215: { Dep2 : ['10','2.52'],
-			// 								Dep3 : ['40','10.3']
-			// 							},
-			// 	OUT0122215: { Dep19 : '11'}};
+		function close_open_modal(close, open) {
+			$(close).modal('hide');
+			$(open).modal('show');
+		}
 
-			// Item['BHT0122215']['Dep2'][0] = 11;
+		function sign_fac() {
+			window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + DocNo + '&siteCode=' + siteCode + '&fnc=sign_fac';
+		}
 
+		function sign_nh() {
+			window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + DocNo + '&siteCode=' + siteCode + '&fnc=sign_nh';
+		}
+
+		function add_item(NotBack) {
 			var data = {
+				'NotBack': NotBack,
 				'DocNo': DocNo,
 				'mul_qty': mul_qty,
 				'mul_weight': mul_weight,
@@ -616,18 +631,31 @@ $genarray = json_decode($json, TRUE);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_items') {
 							$("#items").empty();
-							for (var i = 0; i < temp['count']; i++) {
-								arr_new_items.push(temp[i]['ItemCode']);
-							}
-							arr_new_items = Array.from(new Set(arr_new_items));
 
-							arr_new_items.forEach(function(item) {
-								mul_qty[item] = {};
-								mul_weight[item] = {};
+							if (temp['SignFac'] == null && temp['SignNH'] == null) {
+								$("#btn_sign_fac").removeAttr('hidden');
+							}
+							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
+								$("#btn_sign_nh").removeAttr('hidden');
+							}
+							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
+								$("#btn_save").removeAttr('hidden');
+							}
+
+							all_dep_code.forEach(function(dep) {
+								// สร้าง Obj เปล่าๆขึ้นมา
+								if (typeof mul_qty[dep] === 'undefined') {
+									mul_qty[dep] = {};
+								}
+								if (typeof mul_weight[dep] === 'undefined') {
+									mul_weight[dep] = {};
+								}
+
 								for (var i = 0; i < temp['count']; i++) {
-									if (item == temp[i]['ItemCode']) {
-										mul_qty[item][temp[i]['DepCode']] = temp[i]['Qty'];
-										mul_weight[item][temp[i]['DepCode']] = temp[i]['Weight'];
+									if (dep == temp[i]['DepCode']) {
+										// ยัดค่าที่ Select ได้ เข้าไปใน Obj
+										mul_qty[dep][temp[i]['ItemCode']] = temp[i]['Qty'];
+										mul_weight[dep][temp[i]['ItemCode']] = temp[i]['Weight'];
 									}
 								}
 							});
@@ -640,21 +668,30 @@ $genarray = json_decode($json, TRUE);
 								var code_i = all_dep_code.indexOf(temp[i]['DepCode']);
 								var name_i = all_dep_name.indexOf(temp[i]['DepName']);
 								if (!(code_i >= 0) && !(name_i >= 0)) {
+									if (temp['dep_search'] != 1) {
+
+									}
 									all_dep_code.push(temp[i]['DepCode']);
 									all_dep_name.push(temp[i]['DepName']);
 								}
 								var id = "depchk" + i;
-								var Str = "<div onclick='chk_dep(\"" + id + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								var Str = "<div onclick='chk_dep(\"" + temp[i]['DepCode'] + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
 								Str += "<div class='d-flex align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
 								Str += "<div class='mr-auto text-truncate'>" + temp[i]['DepName'] + "</div>";
-								Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number()' class='form-control text-center ml-2 numonly' type='text' id='depqty" + i + "' value='1' style='max-width:80px;'>";
-								Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number_weight(" + i + ")' class='form-control text-center mx-2 weightonly' data-num='" + i + "' type='text' id='depweight" + i + "' placeholder='0.00' style='max-width:80px;'>";
-								Str += "<input class='m-0 chk-dep' type='checkbox' id='" + id + "' data-num='" + i + "' value='" + temp[i]['DepCode'] + "'>";
+								// Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number()' class='form-control text-center ml-2 numonly' type='text' id='depqty" + i + "' value='1' style='max-width:80px;'>";
+								// Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number_weight(" + i + ")' class='form-control text-center mx-2 weightonly' data-num='" + i + "' type='text' id='depweight" + i + "' placeholder='0.00' style='max-width:80px;'>";
+								// Str += "<input class='m-0 chk-dep' type='checkbox' id='" + id + "' data-num='" + i + "' value='" + temp[i]['DepCode'] + "'>";
 								Str += "</div>";
 								Str += "</div>";
 								$("#choose_dep").append(Str);
 							}
-							console.log(all_dep_code);
+							// if (temp['dep_search'] != 1 && temp['dep_search'] != 0) {
+							// 	select_item(temp['dep_search']);
+							// }
+							if (temp['dep_search'] != 0) {
+								$("#md_dep").modal('show');
+							}
+							// console.log(all_dep_code);
 						} else if (temp["form"] == 'choose_items') {
 							var HptName = temp['HptName'];
 							var DepName = temp['DepName'];
@@ -667,70 +704,86 @@ $genarray = json_decode($json, TRUE);
 									all_i_name.push(temp[i]['ItemName']);
 								}
 
-								// var have_old = 0;
-								// var have_new = 0;
-
-								// if (Menu != 'dirty') {
-								// 	if (arr_old_items.length > 0) {
-								// 		for (var ii = 0; ii < arr_old_items.length; ii++) {
-								// 			if (arr_old_items[ii] == temp[i]['ItemCode']) {
-								// 				have_old = 1;
-								// 			}
-								// 		}
-								// 	}
-
-								// 	if (arr_new_items.length > 0) {
-								// 		for (var iii = 0; iii < arr_new_items.length; iii++) {
-								// 			if (arr_new_items[iii] == temp[i]['ItemCode']) {
-								// 				have_new = 1;
-								// 			}
-								// 		}
-								// 	}
-								// }
-
-								// if (have_old == 0 && have_new == 0) {
 								var checked = "";
-								if (typeof mul_qty[temp[i]['ItemCode']] !== 'undefined') {
-									$.each(mul_qty[temp[i]['ItemCode']], function(dep, qty) {
-										// mul_qty[temp[i]['ItemCode']].forEach(function(qty,dep) {
-										if (qty > 0) {
+								$.each(mul_qty, function(dep, qty) {
+									$.each(qty, function(item, qty_val) {
+										if (temp[i]['ItemCode'] == item && qty_val >= 0) {
 											checked = "checked";
 										}
 									});
-								}
+								});
+
 								var num = i + 1;
 								var chk = "chk" + num;
-								// var Str =  "<div onclick='chk_items(\"" + chk + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-								var Str = "<div onclick='select_item(\"" + chk + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								var Str = "<div onclick='select_item(\"" + temp[i]['ItemCode'] + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
 								Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold py-2 pr-0'>";
 								Str += "<div>" + temp[i]['ItemName'] + "</div>";
-								Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "' data-num='" + num + "' " + checked + "></div>";
-								// Str += "<hr class='m-0'><div class='col-12 text-truncate text-left'>" + HptName + " / " + DepName;
+								// Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "' data-num='" + num + "' " + checked + "></div>";
 								Str += "</div>";
 								Str += "</div>";
 
 								$("#choose_item").append(Str);
-								// }
 							}
 						} else if (temp["form"] == 'add_item') {
 							Notsave = 0;
 							Delback = 0;
-							swal({
-								title: '',
-								text: '<?php echo $genarray['savesuccess'][$language]; ?>',
-								type: 'success',
-								showCancelButton: false,
-								confirmButtonColor: '#3085d6',
-								cancelButtonColor: '#d33',
-								showConfirmButton: false,
-								timer: 1200,
-								confirmButtonText: 'Error!!'
-							})
-							setTimeout('back()', 1500);
+							if (temp['NotBack'] == 0) {
+								swal({
+									title: '',
+									text: '<?php echo $genarray['savesuccess'][$language]; ?>',
+									type: 'success',
+									showCancelButton: false,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									showConfirmButton: false,
+									timer: 1200,
+									confirmButtonText: 'Error!!'
+								})
+								setTimeout('back()', 1500);
+							}
+
 						} else if (temp["form"] == 'del_back') {
 							Notsave = 0;
 							Delback = 0;
 							back();
+						} else if (temp["form"] == 'item_handler') {
+							var handler = temp['RequestName'];
+							var DepCode = temp['now_dep'];
+							edit_round(DepCode,handler);
+
+						} else if (temp["form"] == 'edit_round') {
+							for (var i = 0; i < temp['cnt']; i++) {
+								var Str = "<div class='col-12 d-flex mb-2 px-0'>";
+								Str += "<div style='width:50px;'>";
+								Str += "รอบ " + Number(i + 1);
+								Str += "</div>";
+								Str += "<div class='d-flex'>";
+								Str += "<div style='width:110px;'>จำนวน :</div> ";
+								Str += "<input class='form-control text-center' disabled value='" + temp[i]['Qty'] + "' type='text'>";
+								Str += "</div>";
+								Str += "<div class='d-flex'>";
+								Str += "<div style='width:110px;'>น้ำหนัก :</div> ";
+								Str += "<input class='form-control text-center' disabled value='" + temp[i]['Weight'] + "' type='text'>";
+								Str += "</div>";
+								Str += "<button onclick='del_round(\"" + temp[i]['id'] + "\",\"" + temp[i]['RowID'] + "\",\"" + temp['dep'] + "\",\"" + temp['item'] + "\")' class='btn btn-danger p-0 ml-2' style='min-width:40px;'><i class='fas fa-times'></i></button>";
+								Str += "</div>";
+
+								$("#show_round").append(Str);
+							}
+							$("#md_round").modal('show');
+
+						} else if (temp["form"] == 'add_round') {
+							load_items();
+							var dep = temp['dep'];
+							var item = temp['item'];
+							edit_round(dep, item);
+
+						} else if (temp["form"] == 'del_round') {
+							load_items(1);
+							var dep = temp['dep'];
+							var item = temp['item'];
+							edit_round(dep, item);
+
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
@@ -739,10 +792,26 @@ $genarray = json_decode($json, TRUE);
 						if (temp["form"] == 'choose_items') {
 							$("#choose_item").empty();
 						} else if (temp["form"] == 'load_items') {
-							choose_items();
-							$("#md_item").modal('show');
+							// choose_items();
+							// $("#md_item").modal('show');
+							$("#items").empty();
+							if (temp['SignFac'] == null && temp['SignNH'] == null) {
+								$("#btn_sign_fac").removeAttr('hidden');
+							}
+							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
+								$("#btn_sign_nh").removeAttr('hidden');
+							}
+							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
+								$("#btn_save").removeAttr('hidden');
+							}
+							load_dep();
+							$("#md_round").modal('hide');
+							// $("#md_dep").modal('show');
+
 						} else if (temp["form"] == 'add_item') {
 							alert("error ADD ITEM");
+						} else if (temp["form"] == 'edit_round') {
+							$("#md_round").modal('show');
 						}
 					}
 				}
@@ -778,16 +847,35 @@ $genarray = json_decode($json, TRUE);
 			<div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
 		</div>
 		<div class="row justify-content-center px-3 mb-5">
-			<div id="items" class="col-lg-9 col-md-10 col-sm-12 pb-3" style="margin-bottom:100px;">
+			<!-- <div id="items" class="col-lg-9 col-md-10 col-sm-12 pb-3 border" style="margin-bottom:100px;"> -->
+			<table class="table table-hover col-lg-9 col-md-10 col-sm-12" style="margin-bottom:100px;">
+				<thead>
+					<tr class="bg-primary text-white">
+						<th scope="col">
+							<div class="row">
+								<div class="col-4 text-center"><?php echo $genarray['department'][$language]; ?></div>
+								<div class="col-4 text-center"><?php echo $array['list'][$language]; ?></div>
+								<div class="col-4 d-flex">
+									<div class="mx-auto">
+										<?php echo $array['numberSize'][$language] . " / " . $genarray['weight'][$language]; ?>
+									</div>
+									<div style="width:40px;"></div>
+								</div>
+							</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody id="items"></tbody>
+			</table>
 
-			</div>
+			<!-- </div> -->
 		</div>
 	</div>
 
 	<div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
 		<div class="col-lg-9 col-md-10 col-sm-12">
 			<?php
-			if (true) {
+			if (false) {
 				echo '<div class="form-row my-2">
 								<div class="col-12 input-group">
 									<div class="input-group-prepend">
@@ -815,13 +903,19 @@ $genarray = json_decode($json, TRUE);
 			</div>
 			<div class="row">
 				<div class="col-6">
-					<button onclick="choose_items()" class="btn btn-create btn-block" type="button" data-toggle="modal" data-target="#md_item">
+					<button onclick="load_dep()" class="btn btn-create btn-block" type="button">
 						<i class="fas fa-plus mr-1"></i><?php echo $array['addList'][$language]; ?>
 					</button>
 				</div>
 				<div class="col-6">
-					<button onclick="add_item()" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
+					<button id="btn_save" onclick="add_item(0)" class="btn btn-success btn-block mt-0" type="button" data-toggle="modal" data-target="#" hidden>
 						<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
+					</button>
+					<button id="btn_sign_fac" onclick="sign_fac()" class="btn btn-success btn-block mt-0" type="button" hidden>
+						<i class="fas fa-signature mr-1"></i><?php echo $array['signfac'][$language]; ?>
+					</button>
+					<button id="btn_sign_nh" onclick="sign_nh()" class="btn btn-success btn-block mt-0" type="button" hidden>
+						<i class="fas fa-signature mr-1"></i><?php echo $array['signnh'][$language]; ?>
 					</button>
 				</div>
 			</div>
@@ -833,24 +927,26 @@ $genarray = json_decode($json, TRUE);
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel"><?php echo $array['addList'][$language]; ?></h5>
+					<h5 class="modal-title"><?php echo $array['addList'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-					<input onkeyup="choose_items()" id="search_items" class="form-control mb-3" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
-
+					<div class="d-flex mb-3">
+						<input onkeyup="choose_items()" id="search_items" class="form-control" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
+						<button onclick="item_handler()" class="btn btn-success p-0 ml-2" style='min-width:40px;border-radius:225px;'><i class="fas fa-plus"></i></button>
+					</div>
 					<div id="choose_item">
 					</div>
 
 				</div>
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
-						<!-- <div class="col-6 text-right">
-							<button id="btn_add_items" onclick="select_chk()" type="button" class="btn btn-primary m-2"><?php echo $genarray['yes'][$language]; ?></button>
-						</div> -->
-						<div class="col-12 text-center">
+						<div class="col-6 text-right">
+							<button onclick="close_open_modal('#md_item','#md_dep')" type="button" class="btn btn-primary m-2"><?php echo $genarray['back'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
 						</div>
 					</div>
@@ -863,29 +959,72 @@ $genarray = json_decode($json, TRUE);
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">เลือกแผนก</h5>
+					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['chooseDepartment'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
-						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['department'][$language]; ?></div>
-						<div class="text-left p-0" style="width:150px;"><?php echo $genarray['qty'][$language]; ?></div>
-						<div class="text-left p-0" style="width:165px;"><?php echo $genarray['weight'][$language]; ?></div>
-					</div>
+					<input onkeyup="load_dep(1)" id="search_dep" class="form-control mb-3" type="text" placeholder="<?php echo $array['searchdep'][$language]; ?>">
 					<div id="choose_dep"></div>
 
 				</div>
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
-						<div class="col-6 text-right">
-							<button onclick="list_to_arr()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
-						</div>
-						<div class="col-6 text-left">
-							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+						<div class="w-100 d-flex justify-content-center m-0">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_round" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['Getweight'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+
+					<div class="font-weight-bold d-flex justify-content-center"><?php echo $genarray['department'][$language]; ?> : <div id="round_depname"></div>
+					</div>
+					<div class="font-weight-bold d-flex justify-content-center mb-3"><?php echo $array['list'][$language]; ?> : <div id="round_itemname"></div>
+					</div>
+
+					<div class="d-flex">
+						<div class="d-flex">
+							<div style="width:110px;"><?php echo $array['numberSize'][$language]; ?> :</div>
+							<input onkeydown="make_number()" id="val_qty" class="form-control text-center numonly" type="text">
+						</div>
+						<div class="d-flex">
+							<div style="width:110px;"><?php echo $array['weight'][$language]; ?> :</div>
+							<input onkeydown="make_number_weight()" id="val_weight" class="form-control text-center weightonly" placeholder="0.0" type="text">
+						</div>
+						<button id="btn_add_round" class='btn btn-success p-0 ml-2' style='min-width:40px;border-radius:225px;'>
+							<i class='fas fa-plus'></i>
+						</button>
+					</div>
+
+					<hr>
+
+					<div id="show_round"></div>
+
+				</div>
+
+				<div class="modal-footer text-center">
+					<div class="col-6 text-right">
+						<button onclick="close_open_modal('#md_round','#md_item')" type="button" class="btn btn-primary m-2"><?php echo $genarray['back'][$language]; ?></button>
+					</div>
+					<div class="col-6 text-left">
+						<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
+					</div>
+
 				</div>
 			</div>
 		</div>

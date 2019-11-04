@@ -698,6 +698,7 @@ $genarray = json_decode($json, TRUE);
 			var SigCode = dataURL;
 			document.getElementById("h_code").value = SigCode;
 			var Menu = "<?php echo $Menu ?>";
+			var fnc = "<?php echo $_GET['fnc'] ?>";
 			swal({
 				title: 'Please wait...',
 				text: 'Processing',
@@ -726,10 +727,26 @@ $genarray = json_decode($json, TRUE);
 					data: {
 						DocNo: DocNo,
 						From: From,
+						fnc: fnc,
 						SigCode: SigCode
 					},
 					success: function(data) {
 						window.location.href = 'shelf_process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+					}
+				});
+			} else if (Menu == "dirty") {
+				var URL = '../process/signature_dirty.php';
+
+				$.ajax({
+					url: URL,
+					method: "POST",
+					data: {
+						DocNo: DocNo,
+						fnc: fnc,
+						SigCode: SigCode
+					},
+					success: function(data) {
+						window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 					}
 				});
 			} else {

@@ -23,6 +23,7 @@
                     TIMEDIFF(shelfcount.DvEndTime,shelfcount.DvStartTime) AS DvUseTime,
                     shelfcount.IsStatus,
                     shelfcount.signature,
+                    shelfcount.signStart,
                     department.HptCode
                 FROM
                     shelfcount
@@ -43,6 +44,7 @@
             $return['DvUseTime'] = $Result['DvUseTime'];
             $return['IsStatus'] = $Result['IsStatus'];
             $return['Signature'] = $Result['signature'];
+            $return['signStart'] = $Result['signStart'];
             $return['HptCode'] = $Result['HptCode'];
 
             $count++;

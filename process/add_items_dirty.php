@@ -44,22 +44,33 @@
     function load_items($conn, $DATA){
         $count = 0;
         $DocNo = $DATA["DocNo"];
+        $return['FromDelRound'] = $DATA["FromDelRound"];
+
+        $Sql = "SELECT SignFac,SignNH FROM dirty WHERE DocNo = '$DocNo'";
+        $meQuery = mysqli_query($conn, $Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $return['SignFac'] = $Result['SignFac'];
+        $return['SignNH'] = $Result['SignNH'];
 
         $Sql = "SELECT dirty_detail.ItemCode,
                         item.ItemName,
+                        dirty_detail.RequestName,
                         dirty_detail.UnitCode,
                         dirty_detail.Qty,
                         dirty_detail.Weight,
                         dirty_detail.DepCode  
-                FROM dirty_detail,
-                     item 
+                FROM dirty_detail
+                LEFT JOIN item ON item.ItemCode = dirty_detail.ItemCode 
                 WHERE DocNo = '$DocNo'
-                AND	  item.ItemCode = dirty_detail.ItemCode
                 ORDER BY ItemName ASC";
         $return['Sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['ItemCode'] = $Result['ItemCode'];
+            if ($Result['ItemCode'] == 'HDL') {
+                $return[$count]['ItemCode'] = $Result['RequestName'];
+            } else {
+                $return[$count]['ItemCode'] = $Result['ItemCode'];
+            }
             $return[$count]['ItemName'] = $Result['ItemName'];
             $return[$count]['UnitCode'] = $Result['UnitCode'];
             $return[$count]['Qty'] = $Result['Qty'];
@@ -86,9 +97,14 @@
 
     function load_dep($conn, $DATA){
         $siteCode = $DATA['siteCode'];
+        $Search = $DATA['Search'];
+        $return['dep_search'] = $DATA['dep_search'];
         $count = 0;
 
-        $Sql = "SELECT DepCode,DepName FROM department WHERE HptCode = '$siteCode' ORDER BY DepName ASC";
+        $Sql = "SELECT DepCode,DepName FROM department 
+        WHERE HptCode = '$siteCode' 
+        AND     DepName LIKE '%$Search%'
+        ORDER BY DepName ASC";
 
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
@@ -114,24 +130,56 @@
     }
 
     function add_item($conn, $DATA){
+        $NotBack = $DATA['NotBack'];
+        $return['NotBack'] = $NotBack;
+        if ($NotBack == 1) {
+            $zero = -1;
+        } else {
+            $zero = 0;
+        }
         $DocNo = $DATA['DocNo'];
         $mul_qty = $DATA['mul_qty'];
         $mul_weight = $DATA['mul_weight'];
         $Userid = $_SESSION['Userid'];
-        $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo'";
-        mysqli_query($conn,$Sql);
+        // $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo'";
+        // mysqli_query($conn,$Sql);
         $count = 0;
         
-        foreach($mul_qty as $ikey => $item){
-            foreach($item as $dkey => $qty){
-                if ($qty > 0) {
-                    $weight = $mul_weight[$ikey][$dkey];
+        foreach($mul_qty as $DepCode => $item){
+            foreach($item as $ItemCode => $qty){
+                $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+                $meQuery = mysqli_query($conn,$Sql);
+                $Result = mysqli_fetch_assoc($meQuery);
+                $id = $Result['id'];
+                
+                $weight = $mul_weight[$DepCode][$ItemCode];
+
+                $Sql = "SELECT COUNT(*) AS cnt1 FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+                $meQuery = mysqli_query($conn,$Sql);
+                $Result = mysqli_fetch_assoc($meQuery);
+                $cnt1 = $Result['cnt1'];
+                if ($cnt1 > 0) { // ถ้ามีอยู่แล้ว
+                    if ($qty > $zero) {
+                        $Sql = "UPDATE dirty_detail SET Qty = $qty, Weight = '$weight' WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+                        mysqli_query($conn,$Sql);
+                    } else {
+                        $Sql = "DELETE FROM dirty_detail_round WHERE RowID = '$id'";
+                        mysqli_query($conn,$Sql);
+
+                        $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+                        mysqli_query($conn,$Sql);
+                    }
+
+                } else { // ถ้าไม่มี
                     $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`DepCode`,`UnitCode`,`Weight`,`Qty`) 
-                            VALUES ('$DocNo','$ikey','$dkey',1,$weight,$qty) ";
+                            VALUES ('$DocNo','$ItemCode','$DepCode',1,$weight,$qty) ";
                     mysqli_query($conn,$Sql);
                     $return[$count]['Sql'] = $Sql;
                     $count++;
                 }
+                
+                    
+                
             }
         }
 
@@ -167,6 +215,173 @@
         die;
     }
     
+    function item_handler($conn, $DATA) {
+        $DocNo = $DATA['DocNo'];
+        $RequestName = $DATA['RequestName'];
+        $return['RequestName'] = $RequestName;
+        $now_dep = $DATA['now_dep'];
+        $return['now_dep'] = $now_dep;
+        
+        $count = "SELECT COUNT(*) as cnt FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$now_dep' AND RequestName = '$RequestName'";
+        $meQuery = mysqli_query($conn, $count);
+        $Result = mysqli_fetch_assoc($meQuery);
+        if($Result['cnt'] == 0){
+            $Insert = "INSERT dirty_detail (DocNo, RequestName,ItemCode, UnitCode, DepCode, Qty)VALUES('$DocNo', '$RequestName','HDL', 1, '$now_dep', 1)";
+            mysqli_query($conn, $Insert);
+        }
+
+        $return['status'] = "success";
+        $return['form'] = "item_handler";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+
+    function edit_round($conn, $DATA) {
+        $DocNo = $DATA["DocNo"];
+        $dep = $DATA["dep"];
+        $return['dep'] = $dep;
+        $item = $DATA["item"];
+        $return['item'] = $item;
+        $count = 0;
+        
+        $Sql = "SELECT id,RowID,Qty,Weight FROM dirty_detail_round WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        $meQuery = mysqli_query($conn,$Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)){
+            $return[$count]['id'] = $Result['id'];
+            $return[$count]['RowID'] = $Result['RowID'];
+            $return[$count]['Qty'] = $Result['Qty'];
+            $return[$count]['Weight'] = $Result['Weight'];
+            $count++;
+        }
+        $return['Sql'] = $Sql;
+        $return['cnt'] = $count;
+        
+        if ($count > 0) {
+            $return['status'] = "success";
+            $return['form'] = "edit_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "edit_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
+    function add_round($conn, $DATA) {
+        $DocNo = $DATA["DocNo"];
+        $dep = $DATA["dep"];
+        $return['dep'] = $dep;
+        $item = $DATA["item"];
+        $return['item'] = $item;
+        $qty = $DATA["qty"];
+        $weight = $DATA["weight"];
+
+        $Sql = "SELECT count(*) AS cnt_id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $return['Sql'] = $Sql;
+        $return['cnt_id'] = $Result['cnt_id'];
+        if ($Result['cnt_id'] == 0) {
+            $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`DepCode`,`UnitCode`,`Weight`,`Qty`) 
+            VALUES ('$DocNo','$item','$dep',1,0,0) ";
+            mysqli_query($conn,$Sql);
+        }
+
+        $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $RowID = $Result['id'];
+
+        $Sql = "INSERT INTO dirty_detail_round(`DocNo`,`ItemCode`,`DepCode`,`RowID`,`Weight`,`Qty`) 
+                VALUES ('$DocNo','$item','$dep',$RowID,$weight,$qty) ";
+        if(mysqli_query($conn,$Sql)){
+            $Sql2 = "SELECT SUM(Qty) AS sum_qty,SUM(Weight) AS sum_weight FROM dirty_detail_round WHERE RowID = '$RowID'";
+            $meQuery = mysqli_query($conn,$Sql2);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $sum_qty = $Result['sum_qty'];
+            $sum_weight = $Result['sum_weight'];
+            $return['sum_qty'] = $sum_qty;
+            $return['Sql2'] = $Sql2;
+
+            $Sql = "UPDATE dirty_detail SET Qty = $sum_qty, Weight = '$sum_weight' WHERE id = '$RowID'";
+        }
+
+        if(mysqli_query($conn,$Sql)){
+            $return['status'] = "success";
+            $return['form'] = "add_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "add_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
+    function del_round($conn, $DATA) {
+        $id = $DATA["id"];
+        $RowID = $DATA["RowID"];
+        $dep = $DATA["dep"];
+        $return['dep'] = $dep;
+        $item = $DATA["item"];
+        $return['item'] = $item;
+
+        $Sql = "DELETE FROM dirty_detail_round WHERE id = '$id'";
+        mysqli_query($conn,$Sql);
+
+        $Sql2 = "SELECT SUM(Qty) AS sum_qty,SUM(Weight) AS sum_weight FROM dirty_detail_round WHERE RowID = '$RowID'";
+        $meQuery = mysqli_query($conn,$Sql2);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $sum_qty = $Result['sum_qty'];
+        $sum_weight = $Result['sum_weight'];
+        $return['sum_weight'] = $sum_weight;
+        $return['Sql2'] = $Sql2;
+        
+
+        if ($sum_qty == null || $sum_qty == 0) {
+            $Sql = "DELETE FROM dirty_detail WHERE id = '$RowID'";
+        } else {
+            $Sql = "UPDATE dirty_detail SET Qty = $sum_qty, Weight = '$sum_weight' WHERE id = '$RowID'";
+        }
+        $return['Sql'] = $Sql;
+        
+
+        if(mysqli_query($conn,$Sql)){
+            $return['status'] = "success";
+            $return['form'] = "del_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "del_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+    
+    function test($conn, $DATA) {
+        $round = $DATA["round"];
+
+        $return['round'] = $round['dep']['item'][0][0];
+        $return['status'] = "success";
+        $return['form'] = "test";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+
+    
+
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -188,6 +403,21 @@
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'item_handler') {
+            item_handler($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'edit_round') {
+            edit_round($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'add_round') {
+            add_round($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'del_round') {
+            del_round($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'test') {
+            test($conn, $DATA);
         }
     }else {
         $return['status'] = "error";
