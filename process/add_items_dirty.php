@@ -145,43 +145,43 @@
         // mysqli_query($conn,$Sql);
         $count = 0;
         
-        foreach($mul_qty as $DepCode => $item){
-            foreach($item as $ItemCode => $qty){
-                $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
-                $meQuery = mysqli_query($conn,$Sql);
-                $Result = mysqli_fetch_assoc($meQuery);
-                $id = $Result['id'];
+        // foreach($mul_qty as $DepCode => $item){
+        //     foreach($item as $ItemCode => $qty){
+        //         $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+        //         $meQuery = mysqli_query($conn,$Sql);
+        //         $Result = mysqli_fetch_assoc($meQuery);
+        //         $id = $Result['id'];
                 
-                $weight = $mul_weight[$DepCode][$ItemCode];
+        //         $weight = $mul_weight[$DepCode][$ItemCode];
 
-                $Sql = "SELECT COUNT(*) AS cnt1 FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
-                $meQuery = mysqli_query($conn,$Sql);
-                $Result = mysqli_fetch_assoc($meQuery);
-                $cnt1 = $Result['cnt1'];
-                if ($cnt1 > 0) { // ถ้ามีอยู่แล้ว
-                    if ($qty > $zero) {
-                        $Sql = "UPDATE dirty_detail SET Qty = $qty, Weight = '$weight' WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
-                        mysqli_query($conn,$Sql);
-                    } else {
-                        $Sql = "DELETE FROM dirty_detail_round WHERE RowID = '$id'";
-                        mysqli_query($conn,$Sql);
+        //         $Sql = "SELECT COUNT(*) AS cnt1 FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+        //         $meQuery = mysqli_query($conn,$Sql);
+        //         $Result = mysqli_fetch_assoc($meQuery);
+        //         $cnt1 = $Result['cnt1'];
+        //         if ($cnt1 > 0) { // ถ้ามีอยู่แล้ว
+        //             if ($qty > $zero) {
+        //                 $Sql = "UPDATE dirty_detail SET Qty = $qty, Weight = '$weight' WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+        //                 mysqli_query($conn,$Sql);
+        //             } else {
+        //                 $Sql = "DELETE FROM dirty_detail_round WHERE RowID = '$id'";
+        //                 mysqli_query($conn,$Sql);
 
-                        $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
-                        mysqli_query($conn,$Sql);
-                    }
+        //                 $Sql = "DELETE FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode' AND DepCode = '$DepCode'";
+        //                 mysqli_query($conn,$Sql);
+        //             }
 
-                } else { // ถ้าไม่มี
-                    $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`DepCode`,`UnitCode`,`Weight`,`Qty`) 
-                            VALUES ('$DocNo','$ItemCode','$DepCode',1,$weight,$qty) ";
-                    mysqli_query($conn,$Sql);
-                    $return[$count]['Sql'] = $Sql;
-                    $count++;
-                }
+        //         } else { // ถ้าไม่มี
+        //             $Sql = "INSERT INTO dirty_detail(`DocNo`,`ItemCode`,`DepCode`,`UnitCode`,`Weight`,`Qty`) 
+        //                     VALUES ('$DocNo','$ItemCode','$DepCode',1,$weight,$qty) ";
+        //             mysqli_query($conn,$Sql);
+        //             $return[$count]['Sql'] = $Sql;
+        //             $count++;
+        //         }
                 
                     
                 
-            }
-        }
+        //     }
+        // }
 
         $Sql = "SELECT SUM(Weight) AS total FROM dirty_detail WHERE DocNo = '$DocNo'";
         $meQuery = mysqli_query($conn,$Sql);
