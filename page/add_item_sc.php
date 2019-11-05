@@ -337,13 +337,17 @@ $genarray = json_decode($json, TRUE);
 									old_i_qty.push(temp[i]['CcQty']);
 									old_i_par.push(temp[i]['ParQty']);
 									// old_i_order.push(Number(temp[i]['ParQty']) - Number(temp[i]['CcQty']));
+									var Qty = "";
+									if (temp[i]['CcQty'] > 0) {
+										Qty = temp[i]['CcQty'];
+									}
 									var Str = "<tr id='list" + i + "'>";
 									Str += "<td>";
 									Str += "	<div class='row'>";
 									Str += "		<div class='col-4 d-flex align-items-center'>" + temp[i]['ItemName'] + "</div>";
 									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + temp[i]['ParQty'] + "</div>";
 									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>";
-									Str += "			<input type='text' onkeyup='edit_qty(\"" + temp[i]['ItemCode'] + "\"," + i + ")' onkeydown='make_number()' id='qty_" + i + "' class='form-control text-center sc_qty numonly' style='max-width:100px;' value='" + temp[i]['CcQty'] + "'>";
+									Str += "			<input type='text' onkeyup='edit_qty(\"" + temp[i]['ItemCode'] + "\"," + i + ")' onkeydown='make_number()' id='qty_" + i + "' class='form-control text-center sc_qty numonly' style='max-width:100px;' placeholder='0' value='" + Qty + "'>";
 									Str += "		</div>";
 									Str += "	</div>";
 									Str += "</td>";
