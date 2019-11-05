@@ -275,13 +275,20 @@
     function add_round($conn, $DATA) {
         $DocNo = $DATA["DocNo"];
         $dep = $DATA["dep"];
-        $return['dep'] = $dep;
         $item = $DATA["item"];
-        $return['item'] = $item;
+        $HDL = $DATA["HDL"];
         $qty = $DATA["qty"];
         $weight = $DATA["weight"];
 
-        $Sql = "SELECT count(*) AS cnt_id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        $return['dep'] = $dep;
+        $return['item'] = $item;
+
+        if ($HDL == 1) {
+            $Sql = "SELECT count(*) AS cnt_id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = 'HDL' AND RequestName = '$item'";
+        } else {
+            $Sql = "SELECT count(*) AS cnt_id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        }
+
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $return['Sql'] = $Sql;
@@ -292,7 +299,12 @@
             mysqli_query($conn,$Sql);
         }
 
-        $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        if ($HDL == 1) {
+            $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = 'HDL' AND RequestName = '$item'";
+        } else {
+            $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        }
+        
         $meQuery = mysqli_query($conn,$Sql);
         $Result = mysqli_fetch_assoc($meQuery);
         $RowID = $Result['id'];

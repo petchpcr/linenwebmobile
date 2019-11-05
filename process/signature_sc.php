@@ -73,7 +73,7 @@ if ($fnc == 'start_send') {
             $return['QtyCenter'] = $QtyCenter;
             // if ($QtyCenter > $Oder || $QtyCenter == 0) {
                 $return['test'] = 1;
-                $updateQty = "UPDATE par_item_stock SET TotalQty = TotalQty + $Oder WHERE ItemCode = '$ItemCode' AND DepCode = $SCDepCode";
+                $updateQty = "UPDATE par_item_stock SET TotalQty = TotalQty + $Oder WHERE ItemCode = '$ItemCode' AND DepCode = '$SCDepCode'";
                 // mysqli_query($conn, $updateQty);
                 $return['updateQty'] = $updateQty;
                 if (mysqli_query($conn, $updateQty)) {

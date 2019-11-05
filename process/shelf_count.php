@@ -193,7 +193,7 @@
                                         (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$DepCode',
                                             '',
                                             NOW(),
                                             0,
@@ -218,7 +218,7 @@
                         VALUES          (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$DepCode',
                                             '',
                                             'shelfcount',
                                             $Userid,

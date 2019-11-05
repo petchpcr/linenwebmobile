@@ -75,47 +75,44 @@ function load_doc($conn, $DATA)
   $return['boolean'] = $boolean;
   $return['Sql1'] = $Sql;
 
-  $Sql2 = "SELECT " . $From . "_detail.ItemCode,
-                        item.ItemName,
-                        " . $From . "_detail.UnitCode,
-                        (
-                            SELECT SUM(" . $From . "_detail.Qty)
-                            FROM
-                            " . $From . "_detail
-                            WHERE
-                                DocNo = '$DocNo'
-                            AND item.ItemCode = " . $From . "_detail.ItemCode
-                            GROUP BY
-                                item.ItemCode
-                        ) AS Qty,
-                        (
-                            SELECT SUM(" . $From . "_detail.Weight)
-                            FROM
-                            " . $From . "_detail
-                            WHERE
-                                DocNo = '$DocNo'
-                            AND item.ItemCode = " . $From . "_detail.ItemCode
-                            GROUP BY
-                                item.ItemCode
-                        ) AS Weight
+  $Sql = "SELECT ItemCode,RequestName
+            FROM dirty_detail 
+            WHERE DocNo = '$DocNo'
+            GROUP BY ItemCode,RequestName";
+  
+  $return['Sql2'] = $Sql;
+  $ar_item = array();
+  $ar_request = array();
+  $meQuery = mysqli_query($conn, $Sql);
+  while ($Result = mysqli_fetch_assoc($meQuery)) {
+    array_push($ar_item,$Result['ItemCode']);
+    array_push($ar_request,$Result['RequestName']);
+  }
+  $return['ar_item'] = $ar_item;
+  $return['ar_request'] = $ar_request;
 
-                FROM " . $From . "_detail,
-                     item 
-                WHERE DocNo = '$DocNo'
-                AND item.ItemCode = " . $From . "_detail.ItemCode 
-                GROUP BY item.ItemCode
-                ORDER BY item.ItemName";
-  $return['Sql2'] = $Sql2;
-  $meQuery2 = mysqli_query($conn, $Sql2);
-  while ($Result = mysqli_fetch_assoc($meQuery2)) {
-    $return[$count]['ItemCode'] = $Result['ItemCode'];
-    $return[$count]['ItemName'] = $Result['ItemName'];
-    $return[$count]['UnitCode'] = $Result['UnitCode'];
+  foreach ($ar_item as $key => $val) {
+    if ($val == 'HDL') {
+      $ItemName = $ar_request[$key];
+      $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM dirty_detail WHERE DocNo = '$DocNo' AND RequestName = '$ar_request[$key]'";
+    } else {
+      $Sql = "SELECT ItemName FROM item WHERE ItemCode = '$val'";
+      $meQuery = mysqli_query($conn, $Sql);
+      $Result = mysqli_fetch_assoc($meQuery);
+      $ItemName = $Result['ItemName'];
+      $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$val'";
+    }
+    $meQuery = mysqli_query($conn, $Sql);
+    $Result = mysqli_fetch_assoc($meQuery);
+    $return[$count]['ItemCode'] = $val;
+    $return[$count]['RequestName'] = $ar_request[$key];
+    $return[$count]['ItemName'] = $ItemName;
     $return[$count]['Qty'] = $Result['Qty'];
     $return[$count]['Weight'] = $Result['Weight'];
     $count++;
     $boolean2 = true;
   }
+
   $return['cnt'] = $count;
   $return['boolean2'] = $boolean2;
   if ($boolean) {
@@ -137,19 +134,31 @@ function view_dep($conn, $DATA)
 {
   $DocNo = $DATA["DocNo"];
   $ItemCode = $DATA["Item"];
+  $RequestName = $DATA["Request"];
   $count = 0;
 
-  $Sql = "SELECT ItemName FROM item WHERE ItemCode = '$ItemCode'";
-  $meQuery = mysqli_query($conn, $Sql);
-  $Result = mysqli_fetch_assoc($meQuery);
-  $return['ItemName'] = $Result['ItemName'];
+  if ($ItemCode == 'HDL') {
+    $return['ItemName'] = $RequestName;
+    $Sql = "SELECT department.DepName,dirty_detail.Qty,dirty_detail.Weight 
+            FROM dirty_detail 
+            INNER JOIN department ON department.DepCode = dirty_detail.DepCode 
+            WHERE dirty_detail.DocNo = '$DocNo' 
+            AND dirty_detail.RequestName = '$RequestName'
+            ORDER BY department.DepName ASC";
+    
+  } else {
+    $Sql = "SELECT ItemName FROM item WHERE ItemCode = '$ItemCode'";
+    $meQuery = mysqli_query($conn, $Sql);
+    $Result = mysqli_fetch_assoc($meQuery);
+    $return['ItemName'] = $Result['ItemName'];
 
-  $Sql = "SELECT department.DepName,dirty_detail.Qty,dirty_detail.Weight 
-          FROM dirty_detail 
-          INNER JOIN department ON department.DepCode = dirty_detail.DepCode 
-          WHERE dirty_detail.DocNo = '$DocNo' 
-          AND dirty_detail.ItemCode = '$ItemCode'
-          ORDER BY department.DepName ASC";
+    $Sql = "SELECT department.DepName,dirty_detail.Qty,dirty_detail.Weight 
+            FROM dirty_detail 
+            INNER JOIN department ON department.DepCode = dirty_detail.DepCode 
+            WHERE dirty_detail.DocNo = '$DocNo' 
+            AND dirty_detail.ItemCode = '$ItemCode'
+            ORDER BY department.DepName ASC";
+  }
 
   $meQuery = mysqli_query($conn, $Sql);
   while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -181,7 +190,7 @@ function CancelDoc($conn, $DATA)
 
   $Sql = "UPDATE dirty SET IsStatus = 9 WHERE DocNo = '$DocNo'";
 
-  if (mysqli_query($conn,$Sql)) {
+  if (mysqli_query($conn, $Sql)) {
     $return['status'] = "success";
     $return['form'] = "CancelDoc";
     echo json_encode($return);

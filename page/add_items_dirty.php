@@ -178,7 +178,7 @@ $genarray = json_decode($json, TRUE);
 			now_item = ItemCode;
 
 			$("#md_item").modal('hide');
-			edit_round(now_dep, now_item);
+			edit_round(now_dep, now_item, 1);
 			// $("#md_round").modal('show');
 		}
 
@@ -315,14 +315,14 @@ $genarray = json_decode($json, TRUE);
 				var item_name;
 				$.each(qty, function(item, qty_val) {
 					if (qty_val != null) {
-						var DHL = 0;
+						var HDL = 0;
 						$.each(all_i_code, function(i_key, i_val) {
 							if (i_val == item) {
 								item_name = all_i_name[i_key];
-								DHL++;
+								HDL++;
 							}
 						});
-						if (DHL == 0) {
+						if (HDL == 0) {
 							item_name = item;
 						}
 						// ยัดใส่ใน div#items
@@ -336,7 +336,7 @@ $genarray = json_decode($json, TRUE);
 						Str += "					<input type='text' disabled class='form-control text-center bg-white mr-2' value='" + mul_qty[dep][item] + "' style='max-width:70px;'>";
 						Str += "					<input type='text' disabled class='form-control text-center bg-white' value='" + mul_weight[dep][item] + "' style='max-width:70px;'>";
 						Str += "				</div>";
-						Str += "				<button onclick='edit_round(\"" + dep + "\",\"" + item + "\")' class='btn btn-info btn-block p-0 ml-2' style='width:40px;border-radius:225px;'>";
+						Str += "				<button onclick='edit_round(\"" + dep + "\",\"" + item + "\",0)' class='btn btn-info btn-block p-0 ml-2' style='width:40px;border-radius:225px;'>";
 						Str += "					<i class='fas fa-plus'></i>";
 						Str += "				</button>";
 						Str += "			</div>";
@@ -366,7 +366,7 @@ $genarray = json_decode($json, TRUE);
 			// console.log("sum_weight | " + doc_weight);
 		}
 
-		function edit_round(dep, item) {
+		function edit_round(dep, item, form_add) {
 			var Not_Handler = 0;
 			// หาชื่อ Department
 			var dep_name;
@@ -386,15 +386,25 @@ $genarray = json_decode($json, TRUE);
 			$("#val_qty").val(1);
 			$("#val_weight").val("");
 			$("#show_round").empty();
-
+			
+			var HDL = 0;
 			if (Not_Handler == 0) {
 				$("#round_itemname").text(item);
-				var click = "add_round('" + dep + "','HDL')";
-			} else {
-				var click = "add_round('" + dep + "','" + item + "')";
+				HDL = 1;
 			}
-			console.log(Not_Handler);
+			console.log(item);
+
+			var click = "add_round('" + dep + "','" + item + "'," + HDL + ")";
 			$("#btn_add_round").attr("onclick", click);
+
+			if (form_add != null) {
+				if (form_add == 0) {
+					$("#btn_round_back").hide();
+				} else {
+					$("#btn_round_back").show();
+				}
+			} 
+
 			var data = {
 				'DocNo': DocNo,
 				'dep': dep,
@@ -405,7 +415,7 @@ $genarray = json_decode($json, TRUE);
 
 		}
 
-		function add_round(dep, item) {
+		function add_round(dep, item, HDL) {
 			var qty = $("#val_qty").val();
 			var weight = $("#val_weight").val();
 
@@ -414,6 +424,7 @@ $genarray = json_decode($json, TRUE);
 					'DocNo': DocNo,
 					'dep': dep,
 					'item': item,
+					'HDL': HDL,
 					'qty': qty,
 					'weight': weight,
 					'STATUS': 'add_round'
@@ -747,9 +758,10 @@ $genarray = json_decode($json, TRUE);
 							Delback = 0;
 							back();
 						} else if (temp["form"] == 'item_handler') {
+							load_items();
 							var handler = temp['RequestName'];
 							var DepCode = temp['now_dep'];
-							edit_round(DepCode,handler);
+							edit_round(DepCode,handler,1);
 
 						} else if (temp["form"] == 'edit_round') {
 							for (var i = 0; i < temp['cnt']; i++) {
@@ -1017,14 +1029,9 @@ $genarray = json_decode($json, TRUE);
 
 				</div>
 
-				<div class="modal-footer text-center">
-					<div class="col-6 text-right">
-						<button onclick="close_open_modal('#md_round','#md_item')" type="button" class="btn btn-primary m-2"><?php echo $genarray['back'][$language]; ?></button>
-					</div>
-					<div class="col-6 text-left">
-						<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
-					</div>
-
+				<div class="modal-footer d-flex justify-content-center">
+					<button id="btn_round_back"onclick="close_open_modal('#md_round','#md_item')" type="button" class="btn btn-primary m-4"><?php echo $genarray['back'][$language]; ?></button>
+					<button type="button" class="btn btn-secondary m-4" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
 				</div>
 			</div>
 		</div>

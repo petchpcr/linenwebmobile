@@ -190,7 +190,7 @@
                                         (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$DepCode',
                                             '',
                                             0,
                                             NOW(),0,0,
@@ -214,7 +214,7 @@
                         VALUES          (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$DepCode',
                                             '',
                                             'Dirty',
                                             $Userid,
