@@ -160,7 +160,7 @@ $genarray = json_decode($json, TRUE);
 
 		<div class="row w-100 m-0">
 			<?php
-			if ($PM == 4) {
+			if ($PM == 4) { // User โรงซัก
 				echo '<div class="my-col-menu">
                         <button onclick="menu_click(' . "'factory'" . ')" type="button" class="btn btn-mylight btn-block">
                             <img src="../img/Factory.png">
@@ -207,23 +207,23 @@ $genarray = json_decode($json, TRUE);
                             <div class="text-truncate">' . $array["shelfcount"][$language] . '</div>
                         </button>
 					</div>
-					
+					<div class="my-col-menu">
+						<button onclick="menu_click(' . "'shelf_count'" . ')" type="button" class="btn btn-mylight btn-block">
+							<img src="../img/storage.png">
+							<div class="text-truncate">'.$array["shelf_count"][$language].'</div>
+						</button>
+					</div>
+					<div class="my-col-menu">
+						<button onclick="menu_click(' . "'qr_code'" . ')" type="button" class="btn btn-mylight btn-block">
+							<img src="../img/qrcode.png">
+							<div class="text-truncate">'.$array["qr_code"][$language].'</div>
+						</button>
+					</div>
                     ';
 			}
 
 			?>
-			<div class="my-col-menu">
-				<button onclick="menu_click('shelf_count')" type="button" class="btn btn-mylight btn-block">
-					<img src="../img/storage.png">
-					<div class="text-truncate"><?php echo $array["shelf_count"][$language]; ?></div>
-				</button>
-			</div>
-			<div class="my-col-menu">
-				<button onclick="menu_click('qr_code')" type="button" class="btn btn-mylight btn-block">
-					<img src="../img/qrcode.png">
-					<div class="text-truncate"><?php echo $array["qr_code"][$language]; ?></div>
-				</button>
-			</div>
+			
 			<div class="my-col-menu">
 				<button onclick="menu_click('tools')" type="button" class="btn btn-mylight btn-block">
 					<img src="../img/Tools.png">

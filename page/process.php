@@ -395,8 +395,8 @@ $genarray = json_decode($json, TRUE);
 									})
 								} else {
 									var ck = temp['Signature'];
-									$("#show_sign").html(ck);
-									$("#sign_zone").removeAttr("hidden");
+									// $("#show_sign").html(ck);
+									// $("#sign_zone").removeAttr("hidden");
 								}
 
 								$("#W_Sum_btn").remove();
@@ -560,7 +560,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 		<div class="text-center text-truncate font-weight-bold mt-4" style="font-size:25px;"><?php echo $DocNo; ?></div>
 
-		<div id="process">
+		<div id="process" class="mb-5">
 			<div class="card alert alert-info mx-3 mt-3" style="padding:1rem;">
 				<div class="row">
 					<div class="col-4 align-self-center">
