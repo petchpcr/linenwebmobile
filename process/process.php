@@ -285,7 +285,14 @@
     function start_send($conn, $DATA){
         $DocNo = $DATA["DocNo"];
         $From = $DATA["From"];
+        $add_day = $DATA["add_day"];
         $limit_date = date('Y-m-d '.$DATA["slc_time"]);
+        if ($add_day == 1) {
+            $date = strtotime($limit_date);
+            $date = strtotime("+1 day", $date);
+            $date = date('Y-m-d', $date);
+            $limit_date = date($date." ".$DATA["slc_time"]);
+        }
         $nowdate = date('Y-m-d H:i:s');
         $Sql = "UPDATE process SET SendStartTime = '$nowdate',SendLimitTime = '$limit_date' WHERE DocNo = '$DocNo'";
         $return['limit_date'] = $limit_date;

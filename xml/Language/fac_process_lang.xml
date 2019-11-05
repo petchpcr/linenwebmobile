@@ -15,7 +15,6 @@
 <Continue><en>Continue</en><th>ทำต่อ</th></Continue>
 <Stop><en>Stop</en><th>หยุด</th></Stop>
 
-
 <pack><en>Pack</en><th>บรรจุผ้า</th></pack>
 <Startpack><en>Start packing</en><th>เริ่มบรรจุ</th></Startpack>
 
@@ -28,6 +27,13 @@
 <useTime><en>Use time</en><th>ใช้เวลา</th></useTime>
 <useTimeS><en>Shipping time</en><th>ใช้เวลาขนส่ง</th></useTimeS>
 <overTime><en>Over time</en><th>เกินเวลา</th></overTime>
+<cantstart><en>Cannot start</en><th>ไม่สามารถเริ่มได้</th></cantstart>
+
+<sendround><en>Cycle</en><th>รอบส่งผ้า</th></sendround>
+<choosesendround><en>Choose Cycle</en><th>เลือกรอบส่งผ้า</th></choosesendround>
+<sendroundpl><en>Please Choose Cycle</en><th>กรุณาเลือกรอบส่งผ้า</th></sendroundpl>
 
 <ConfFinShipping><en>Shipping Completed Please sign to confirm.</en><th>การขนส่งเสร็จสิ้น โปรดเซ็นต์ชื่อเพื่อยืนยัน</th></ConfFinShipping>
+<finishtomorrow><en>Finish in tomorrow ?</en><th>สิ้นสุดในวันพรุ่งนี้ ?</th></finishtomorrow>
+<finishtomorrow_sub><en>Cycle time less than current time, Cycle of tomorrow</en><th>รอบเวลาน้อยกว่าเวลาปัจจุบัน รอบส่งของวันพรุ่งนี้</th></finishtomorrow_sub>
 </lang>

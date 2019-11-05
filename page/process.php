@@ -131,22 +131,42 @@ $genarray = json_decode($json, TRUE);
 			slc_date.setSeconds(00);
 			var now = new Date();
 			var Diff = slc_date - now;
-			var Title = "ไม่สามารถเริ่มได้";
+			var Title = "<?php echo $array['cantstart'][$language]; ?>";
 			var Type = "warning";
 
 			if (slc_time == null || slc_time == "") {
-				var Text = "กรุณาเลือกรอบส่งผ้า";
+				var Text = "<?php echo $array['sendroundpl'][$language]; ?>";
 				AlertError(Title, Text, Type);
 
 			} else if (Diff <= 0) {
-				var Text = "รอบเวลาน้อยกว่าเวลาปัจจุบัน";
-				AlertError(Title, Text, Type);
+				Title = "<?php echo $array['finishtomorrow'][$language]; ?>";
+				Text = "<?php echo $array['finishtomorrow_sub'][$language]; ?>";
+				Type = "question";
+				swal({
+					title: Title,
+					text: Text,
+					type: Type,
+					showConfirmButton: true,
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: '<?php echo $genarray['yes2'][$language]; ?>'
+				}).then((result) => {
+					var data = {
+						'DocNo': DocNo,
+						'From': From,
+						'slc_time': slc_time,
+						'add_day': 1,
+						'STATUS': 'start_send'
+					};
+					senddata(JSON.stringify(data));
+				})
 
 			} else {
 				var data = {
 					'DocNo': DocNo,
 					'From': From,
 					'slc_time': slc_time,
+					'add_day': 0,
 					'STATUS': 'start_send'
 				};
 				senddata(JSON.stringify(data));
@@ -436,10 +456,10 @@ $genarray = json_decode($json, TRUE);
 							}
 						} else if (temp["form"] == 'load_fac_time') {
 							$("#sle_time").empty();
-							$("#sle_time").append("<option value=''>เลือกรอบส่งผ้า</option>");
+							$("#sle_time").append("<option value=''><?php echo $array['choosesendround'][$language]; ?></option>");
 							for (var i = 0; i < temp['cnt']; i++) {
 								var text = temp['SendTime'][i];
-								var Str = "<option value='" + temp['SendTime'][i] + "'>" + text.substring(0, text.length - 3) + " น.</option>";
+								var Str = "<option value='" + temp['SendTime'][i] + "'>" + text.substring(0, text.length - 3) + "</option>";
 								$("#sle_time").append(Str);
 							}
 							load_process();
@@ -645,7 +665,7 @@ $genarray = json_decode($json, TRUE);
 
 					<div class="col-4 text-left align-self-center text-center">
 						<div class="row d-flex justify-content-center align-items-center mb-3" style="font-size:20px;">
-							<div>รอบส่งผ้า : </div>
+							<div><?php echo $array['sendround'][$language]; ?> : </div>
 							<div class="col-12 col-md-8 col-lg-6 col-xl-4 d-flex">
 								<select id="sle_time" class="form-control" style="font-size:20px;"></select>
 							</div>
