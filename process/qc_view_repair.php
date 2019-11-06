@@ -699,12 +699,12 @@
                 if ($count_claim == 1) { // ถ้าสร้างเลขใหม่ได้
                     if ($chkClaim == 0) { // ถ้าไม่มีเคยมีเอกสารนี้
                         $Sql_claim = "INSERT INTO claim(HptCode,DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsStatus,IsCancel,Detail,Modify_Code,Modify_Date)
-                                        VALUES ('$hotpCode',$deptCode,'$DocNo',DATE(NOW()),'$repairDocNo',null,DATE(NOW()),0,0,0,1,0,'',$userid,NOW())";
+                                        VALUES ('$hotpCode','$deptCode','$DocNo',DATE(NOW()),'$repairDocNo',null,DATE(NOW()),0,0,0,1,0,'',$userid,NOW())";
 
                         mysqli_query($conn, $Sql_claim);
                         
                         $Sql_claim = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,IsStatus,Detail,Modify_Code,Modify_Date)
-                                            VALUES ('$DocNo',DATE(NOW()),$deptCode,'',1,'Claim',$userid,DATE(NOW()))";
+                                            VALUES ('$DocNo',DATE(NOW()),'$deptCode','',1,'Claim',$userid,DATE(NOW()))";
             
                         mysqli_query($conn, $Sql_claim);
                     }
@@ -755,11 +755,11 @@
                 if ($count_rewash == 1) {
                     if ($chkRewash == 0) {
                         $Sql_rewash = "INSERT INTO rewash(DepCode,DocNo,DocDate,RefDocNo,TaxNo,TaxDate,DiscountPercent,DiscountBath,Total,IsCancel,Detail,Modify_Code,Modify_Date,IsStatus,FacCode)
-                                        VALUES ($deptCode,'$DocNo',DATE(NOW()),'$repairDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
+                                        VALUES ('$deptCode','$DocNo',DATE(NOW()),'$repairDocNo',null,DATE(NOW()),0,0,0,0,'',$userid,NOW(),1,$fac)";
                         mysqli_query($conn, $Sql_rewash);
                         
                         $Sql_rewash = "INSERT INTO daily_request(DocNo,DocDate,DepCode,RefDocNo,Detail,Modify_Code,Modify_Date)
-                                        VALUES ('$DocNo',DATE(NOW()),$deptCode,'','Rewash',$userid,DATE(NOW()))";
+                                        VALUES ('$DocNo',DATE(NOW()),'$deptCode','','Rewash',$userid,DATE(NOW()))";
                         mysqli_query($conn, $Sql_rewash);
                     }
                 }

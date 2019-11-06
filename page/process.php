@@ -189,6 +189,23 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
+		function sendmail_overtime() {
+			swal({
+				title: 'Please wait...',
+				text: 'Processing',
+				allowOutsideClick: false
+			})
+			swal.showLoading()
+
+			var data = {
+				'siteCode': siteCode,
+				'DocNo': DocNo,
+				'From': From,
+				'STATUS': 'sendmail_overtime'
+			};
+			senddata(JSON.stringify(data));
+		}
+
 		function AlertError(Title, Text, Type) {
 			swal({
 				title: Title,
@@ -375,29 +392,29 @@ $genarray = json_decode($json, TRUE);
 								}
 							} else if (temp['IsStatus'] == 4) { //-----เสร็จสิ้น
 
-								if (temp['Signature'] == null || temp['Signature'] == "") {
-									swal({
-										title: "<?php echo $genarray['confirm'][$language]; ?>",
-										text: "<?php echo $array['ConfFinShipping'][$language]; ?>",
-										type: "warning",
-										showCancelButton: false,
-										confirmButtonClass: "btn-success",
-										cancelButtonClass: "btn-danger",
-										confirmButtonText: "<?php echo $genarray['yes2'][$language]; ?>",
-										cancelButtonText: "<?php echo $genarray['cancel'][$language]; ?>",
-										closeOnConfirm: true,
-										closeOnCancel: true,
-									}).then(result => {
-										var siteCode = "<?php echo $siteCode ?>";
-										var Menu = "<?php echo $Menu ?>";
-										var From = "<?php echo $From ?>";
-										window.location.href = 'signature.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&From=' + From + '&TypeDoc=' + TypeDoc;
-									})
-								} else {
-									var ck = temp['Signature'];
-									// $("#show_sign").html(ck);
-									// $("#sign_zone").removeAttr("hidden");
-								}
+								// if (temp['Signature'] == null || temp['Signature'] == "") {
+								// 	swal({
+								// 		title: "<?php echo $genarray['confirm'][$language]; ?>",
+								// 		text: "<?php echo $array['ConfFinShipping'][$language]; ?>",
+								// 		type: "warning",
+								// 		showCancelButton: false,
+								// 		confirmButtonClass: "btn-success",
+								// 		cancelButtonClass: "btn-danger",
+								// 		confirmButtonText: "<?php echo $genarray['yes2'][$language]; ?>",
+								// 		cancelButtonText: "<?php echo $genarray['cancel'][$language]; ?>",
+								// 		closeOnConfirm: true,
+								// 		closeOnCancel: true,
+								// 	}).then(result => {
+								// 		var siteCode = "<?php echo $siteCode ?>";
+								// 		var Menu = "<?php echo $Menu ?>";
+								// 		var From = "<?php echo $From ?>";
+								// 		window.location.href = 'signature.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&From=' + From + '&TypeDoc=' + TypeDoc;
+								// 	})
+								// } else {
+								// 	var ck = temp['Signature'];
+								// 	$("#show_sign").html(ck);
+								// 	$("#sign_zone").removeAttr("hidden");
+								// }
 
 								$("#W_Sum_btn").remove();
 								$("#P_Sum_btn").remove();
@@ -509,6 +526,12 @@ $genarray = json_decode($json, TRUE);
 							$("#md_question").modal("hide");
 							$("textarea#ipt_question").val("");
 							load_process();
+							if (temp['Over_Time'] == 1) {
+								sendmail_overtime();
+							}
+						} else if (temp["form"] == 'sendmail_overtime') {
+							swal.close();
+
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

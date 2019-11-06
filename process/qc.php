@@ -118,7 +118,7 @@
             $DocDate = $Result['DocDate'];
             $RecNow  = $Result['RecNow'];
             $count = 1;
-            $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
+            $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: '$DepCode'')";
             mysqli_query($conn, $Sql);
         }
 
@@ -144,7 +144,7 @@
                                         (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$DepCode',
                                             '',
                                             0,
                                             NOW(),0,0,
@@ -167,7 +167,7 @@
                         VALUES          (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            '$DepCode',
                                             '',
                                             'Dirty',
                                             $Userid,

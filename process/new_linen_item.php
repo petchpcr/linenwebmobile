@@ -193,7 +193,7 @@
                                         (
                                             DocNo,
                                             DocDate,
-                                            DepCode,
+                                            -- DepCode,
                                             RefDocNo,
                                             Detail,
                                             Modify_Code,
@@ -202,7 +202,7 @@
                         VALUES          (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            -- $DepCode,
                                             '',
                                             'newlinentable',
                                             $Userid,

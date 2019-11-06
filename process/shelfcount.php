@@ -163,7 +163,7 @@
             $DocDate = $Result['DocDate'];
             $RecNow  = $Result['RecNow'];
             $count = 1;
-            $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: $DepCode')";
+            $Sql = "INSERT INTO log ( log ) VALUES ('" . $Result['DocDate'] . " : " . $Result['DocNo'] . " :: '$siteCode' :: '$DepCode'')";
             mysqli_query($conn, $Sql);
         }
 

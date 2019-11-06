@@ -461,7 +461,7 @@ function add_dirty($conn, $DATA)
                                         (
                                             DocNo,
                                             DocDate,
-                                            DepCode,
+                                            -- DepCode,
                                             RefDocNo,
                                             Detail,
                                             Modify_Code,
@@ -470,7 +470,7 @@ function add_dirty($conn, $DATA)
                         VALUES          (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            $DepCode,
+                                            -- '$DepCode',
                                             '',
                                             'Dirty',
                                             $Userid,
