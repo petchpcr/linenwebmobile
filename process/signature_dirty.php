@@ -4,12 +4,12 @@ require '../connect/connect.php';
 date_default_timezone_set("Asia/Bangkok");
 
 $DocNo = $_POST['DocNo'];
-$SigCode = $_POST['SigCode'];
-$fnc = $_POST['fnc'];
-$return['fnc'] = $fnc;
+$SignCode = $_POST['SignCode'];
+$sign_funciton = $_POST['sign_funciton'];
+$return['sign_funciton'] = $sign_funciton;
 
-if ($fnc == 'sign_fac') {
-    $Sql = "UPDATE dirty SET SignFac = '$SigCode' WHERE DocNo = '$DocNo'";
+if ($sign_funciton == 'sign_fac') {
+    $Sql = "UPDATE dirty SET SignFac = '$SignCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
     
     echo json_encode($return);
@@ -17,8 +17,8 @@ if ($fnc == 'sign_fac') {
     die;
 
 }
-else if ($fnc == 'sign_nh') {
-    $Sql = "UPDATE dirty SET SignNH = '$SigCode' WHERE DocNo = '$DocNo'";
+else if ($sign_funciton == 'sign_nh') {
+    $Sql = "UPDATE dirty SET SignNH = '$SignCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
     
     echo json_encode($return);
