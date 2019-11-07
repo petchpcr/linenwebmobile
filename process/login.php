@@ -25,9 +25,7 @@ function checklogin($conn, $DATA)
             WHERE   users.UserName = '$user'
             AND     users.Password = '$password' 
             AND     users.IsCancel = 0
-            AND     users.IsActive = 0
-
-            AND       (users.PmID=2 OR users.PmID=3 OR users.PmID=4)";
+            AND     users.IsActive = 0";
 
   $meQuery = mysqli_query($conn, $Sql);
   while ($Result = mysqli_fetch_assoc($meQuery)) {

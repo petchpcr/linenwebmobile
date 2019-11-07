@@ -7,6 +7,8 @@
     function choose_items($conn, $DATA){
         $Search = $DATA["Search"];
         $siteCode = $DATA["siteCode"];
+        $Square = $DATA["Square"];
+
         $count = 0;
 
         $Sql = "SELECT DISTINCT ItemCode,ItemName  
@@ -14,8 +16,14 @@
                 WHERE   IsActive = 1 
                 AND     (IsDirtyBag = 1 OR IsDirtyBag = 2)
                 AND     (HptCode = '$siteCode' OR HptCode = '0')
-                AND     ItemName LIKE '%$Search%'
-                ORDER BY ItemName ASC";
+                AND     ItemName LIKE '%$Search%'";
+        if ($Square == 0) {
+            $Sql .= " AND ItemCode != 'Dirty4'";
+            $Sql .= " AND ItemCode != 'Dirty5'";
+            $Sql .= " AND ItemCode != 'Dirty6'";
+        }
+        $Sql .= " ORDER BY ItemName ASC";
+
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['ItemCode']	=  $Result['ItemCode'];

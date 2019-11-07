@@ -67,6 +67,7 @@ $genarray = json_decode($json, TRUE);
 		var isRound = {};
 		var dep_search = 0;
 		var sign_funciton = "";
+		var Square = 0;
 
 		var round = {};
 		round['dep'] = {};
@@ -151,6 +152,7 @@ $genarray = json_decode($json, TRUE);
 				'Search': Search,
 				'siteCode': siteCode,
 				'refDoc': refDoc,
+				'Square': Square,
 				'STATUS': 'choose_items'
 			};
 			senddata(JSON.stringify(data));
@@ -169,6 +171,11 @@ $genarray = json_decode($json, TRUE);
 		function chk_dep(DepCode) {
 			now_dep = DepCode;
 			$("#search_items").val("");
+			if (DepCode == "3211") {
+				Square = 1;
+			} else {
+				Square = 0;
+			}
 			choose_items();
 			$("#md_dep").modal('hide');
 			$("#md_item").modal('show');

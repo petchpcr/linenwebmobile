@@ -400,7 +400,7 @@ $genarray = json_decode($json, TRUE);
 
 		<div class="modal-body text-center">
 			<div class="row">
-				<div class="col-auto"><?php echo $array['settinglang'][$language]; ?><i class="fas fa-lg fa-language ml-2"></i></div>
+				<div class="col-auto"><?php echo $array['settinglang'][$language]; ?></div>
 				<div class="col">
 					<hr>
 				</div>
