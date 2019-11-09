@@ -47,6 +47,9 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'clean.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
 			} else if (menu == 'qc') {
 				window.location.href = 'qc.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
+			} else if (menu == 'kpi') {
+				var slc_kpi = $("#KPI_name").val();
+				window.location.href = 'kpi_'+ slc_kpi +'.php?siteCode=<?php echo $HptCode; ?>';
 			} else if (menu == 'track') {
 				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
 			} else if (menu == 'shelfcount') {
@@ -200,6 +203,12 @@ $genarray = json_decode($json, TRUE);
                             <img src="../img/QC.png">
                             <div class="text-truncate">' . $array["QC"][$language] . '</div>
                         </button>
+										</div>
+										<div class="my-col-menu">
+                        <button data-toggle="modal" data-target="#md_kpi" type="button" class="btn btn-mylight btn-block">
+                            <img src="../img/QC.png">
+                            <div class="text-truncate">' . $array["kpi"][$language] . '</div>
+                        </button>
                     </div>
                     <div class="my-col-menu">
                         <button onclick="menu_click(' . "'shelfcount'" . ')" type="button" class="btn btn-mylight btn-block">
@@ -232,6 +241,43 @@ $genarray = json_decode($json, TRUE);
 			</div>
 		</div>
 	</section>
+
+	<!-- Modal -->
+	<div class="modal fade" id="md_kpi" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<!-- <h5 class="modal-title">เลือกประเภท KPI</h5> -->
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<div class="input-group my-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text">เลือกประเภท KPI</label>
+						</div>
+						<select id="KPI_name" class="custom-select">
+							<option value="dirty1" selected>ผ้าสกปรก 1</option>
+							<option value="clean1">ผ้าสะอาด 1</option>
+							<option value="clean2">ผ้าสะอาด 2</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-6 text-right">
+							<button id="btn_add_dirty" onclick="menu_click('kpi')" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 
 </html>

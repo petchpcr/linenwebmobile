@@ -6,6 +6,7 @@
 <clean><en>Clean Doc.</en><th>ผ้าสะอาด</th></clean>
 <dirty><en>Dirty Doc.</en><th>ผ้าสกปรก</th></dirty>
 <QC><en>QC</en><th>ตรวจสอบคุณภาพ</th></QC>
+<kpi><en>KPI</en><th>KPI</th></kpi>
 <setting><en>Setting</en><th>ตั้งค่า</th></setting>
 <report><en>Report</en><th>รายงาน</th></report>
 <factory><en>Laundry</en><th>โรงงานซัก</th></factory>

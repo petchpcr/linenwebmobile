@@ -77,9 +77,7 @@ function clear_active($conn, $DATA)
           FROM    users INNER JOIN permission ON users.PmID = permission.PmID
           WHERE   users.UserName = '$user'
           AND     users.Password = '$password' 
-          AND     users.IsCancel = 0
-
-          AND       (users.PmID=2 OR users.PmID=3 OR users.PmID=4)";
+          AND     users.IsCancel = 0";
   $meQuery = mysqli_query($conn, $Sql);
   $Result = mysqli_fetch_assoc($meQuery);
   $count = $Result['cnt'];
