@@ -523,15 +523,39 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'start_send') {
 							load_process();
 						} else if (temp["form"] == 'end_send') {
+							if (temp['Over_Time'] == 1) {
+								sendmail_overtime();
+							} else {
+								swal({
+									title: '',
+									text: 'success',
+									type: 'success',
+									showCancelButton: false,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									timer: 1000,
+									confirmButtonText: 'Ok',
+									showConfirmButton: false
+								})
+							}
 							$("#md_question").modal("hide");
 							$("textarea#ipt_question").val("");
 							load_process();
-							if (temp['Over_Time'] == 1) {
-								sendmail_overtime();
-							}
+
 						} else if (temp["form"] == 'sendmail_overtime') {
 							swal.close();
-
+							swal({
+								title: '',
+								text: 'success',
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								timer: 1000,
+								confirmButtonText: 'Ok',
+								showConfirmButton: false
+							})
+							
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

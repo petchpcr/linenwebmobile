@@ -9,7 +9,7 @@ $sign_funciton = $_POST['sign_funciton'];
 $return['sign_funciton'] = $sign_funciton;
 
 if ($sign_funciton == 'sign_fac') {
-    $Sql = "UPDATE dirty SET SignFac = '$SignCode' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE dirty SET SignFac = '$SignCode',SignFacTime = NOW() WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
     
     echo json_encode($return);
@@ -18,7 +18,7 @@ if ($sign_funciton == 'sign_fac') {
 
 }
 else if ($sign_funciton == 'sign_nh') {
-    $Sql = "UPDATE dirty SET SignNH = '$SignCode' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE dirty SET SignNH = '$SignCode',SignNHTime = NOW() WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
     
     echo json_encode($return);

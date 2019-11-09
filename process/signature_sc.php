@@ -17,7 +17,7 @@ if ($SignFnc == 'start_send') {
     die;
 
 } else if ($SignFnc == 'end_send') {
-    $Sql = "UPDATE shelfcount SET signature = '$SignCode',IsStatus = 4  WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE shelfcount SET signature = '$SignCode',SignEndTime = NOW(),IsStatus = 4  WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     $count = 0;
