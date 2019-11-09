@@ -215,6 +215,8 @@
         mysqli_query($conn,$Sql);
         $Sql = "DELETE FROM ".$Menu."_detail WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);
+        $Sql = "DELETE FROM ".$Menu."_detail_round WHERE DocNo = '$DocNo'";
+        mysqli_query($conn,$Sql);
 
         $return['status'] = "success";
         $return['form'] = "del_back";
@@ -346,6 +348,41 @@
         }
     }
 
+    function del_all_round($conn, $DATA) {
+        $DocNo = $DATA["DocNo"];
+        $dep = $DATA["dep"];
+        $item = $DATA["item"];
+        $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        $meQuery = mysqli_query($conn,$Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $id = $Result['id'];
+
+        if ($id == null) { // เป็น Handler
+            $Sql = "SELECT id FROM dirty_detail WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND RequestName = '$item'";
+            $meQuery = mysqli_query($conn,$Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $id = $Result['id'];
+        }
+        $Sql = "DELETE FROM dirty_detail WHERE id = '$id'";
+        mysqli_query($conn,$Sql);
+
+        $Sql = "DELETE FROM dirty_detail_round WHERE RowID = '$id'";
+
+        if(mysqli_query($conn,$Sql)){
+            $return['status'] = "success";
+            $return['form'] = "del_all_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "del_all_round";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     function del_round($conn, $DATA) {
         $id = $DATA["id"];
         $RowID = $DATA["RowID"];
@@ -432,6 +469,9 @@
         }
         else if ($DATA['STATUS'] == 'add_round') {
             add_round($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'del_all_round') {
+            del_all_round($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'del_round') {
             del_round($conn, $DATA);

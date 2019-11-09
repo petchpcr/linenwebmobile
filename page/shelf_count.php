@@ -41,6 +41,7 @@ require '../getTimeZone.php';
 			load_doc();
 			// load_Fac();
 			load_Time();
+			$('.select2').select2();
 		});
 
 		// function
@@ -104,16 +105,6 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
-		function change_dep() {
-			var slt = $("#DepName").val();
-			var sltTime = $("#TimeName").val();
-			if (slt == 0 || sltTime == 0) {
-				$("#btn_add_sc").prop('disabled', true);
-			} else {
-				$("#btn_add_sc").prop('disabled', false);
-			}
-		}
-
 		function add_sc() {
 			var Userid = "<?php echo $Userid ?>";
 			var DepCode = $("#DepName").val();
@@ -164,7 +155,6 @@ require '../getTimeZone.php';
 								var Str = "<option value=" + temp[i]['DepCode'] + ">" + temp[i]['DepName'] + "</option>";
 								$("#DepName").append(Str);
 							}
-
 						} else if (temp["form"] == 'load_Fac') {
 							for (var i = 0; i < temp['cnt']; i++) {
 								var Str = "<option value=" + temp[i]['FacCode'] + ">" + temp[i]['FacName'] + "</option>";
@@ -264,7 +254,6 @@ require '../getTimeZone.php';
 		</div>
 	</header>
 	<div class="px-3 pb-4 mb-5">
-
 		<div align="center" style="margin:1rem 0;">
 			<div class="mb-3">
 				<img src="../img/logo.png" width="156" height="60" />
@@ -290,7 +279,7 @@ require '../getTimeZone.php';
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="md_selectdep" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="md_selectdep" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -299,29 +288,19 @@ require '../getTimeZone.php';
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body text-center">
-					<?php echo $genarray['chooseDepartment'][$language] . $array['CreateDirtyLinenDoc'][$language]; ?>
-					<div class="input-group my-3">
-						<div class="input-group-prepend">
-							<label class="input-group-text" style="width:100px;"><?php echo $genarray['chooseDep'][$language]; ?></label>
-						</div>
-						<select onchange="change_dep()" id="DepName" class="custom-select">
-							<option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
-						</select>
-					</div>
-					<div class="input-group my-3" >
-						<div class="input-group-prepend">
-							<label class="input-group-text" style="width:100px;"><?php echo $array['chooseTime'][$language]; ?></label>
-						</div>
-						<select onchange="change_dep()" id="TimeName" class="custom-select">
-							<option value="0" selected><?php echo $array['chooseTimePl'][$language]; ?></option>
-						</select>
-					</div>
+				<div class="modal-body mb-3 text-center">
+
+					<label class="text-left mb-0" style="width:100%;"><?php echo $genarray['chooseDep'][$language]; ?></label>
+					<select id="DepName" class="select2" style="width:100%;"></select>
+
+					<label class="text-left mb-0 mt-3" style="width:100%;"><?php echo $array['chooseTime'][$language]; ?></label>
+					<select id="TimeName" class="select2" style="width:100%;"></select>
+
 				</div>
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button id="btn_add_sc" onclick="add_sc()" type="button" class="btn btn-primary m-2" style="font-size: 20px;" disabled><?php echo $genarray['confirm'][$language]; ?></button>
+							<button id="btn_add_sc" onclick="add_sc()" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
@@ -331,7 +310,7 @@ require '../getTimeZone.php';
 			</div>
 		</div>
 	</div>
-
+	
 </body>
 
 </html>

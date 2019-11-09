@@ -21,8 +21,8 @@ if ($language == "en") {
 <script src="../js/datepicker-en.js" type="text/javascript"></script>
 <link href="../css/datepicker.min.css" rel="stylesheet" type="text/css" />
 
-<!-- <script src="../js/gijgo.min.js" type="text/javascript"></script>
-<link href="../css/gijgo.min.css" rel="stylesheet" type="text/css" /> -->
+<script src="../js/select2.min.js" type="text/javascript"></script>
+<link href="../css/select2.min.css" rel="stylesheet" type="text/css" />
 
 <script src="../dist/js/sweetalert2.min.js"></script>
 <link rel="stylesheet" href="../dist/css/sweetalert2.min.css">

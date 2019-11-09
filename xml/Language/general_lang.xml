@@ -37,6 +37,7 @@
 <confirmReceivedoc><en>Confirm to receive document</en><th>ยืนยันการรับเอกสาร</th></confirmReceivedoc>
 <confirmCreatedocno><en>Confirm to create document</en><th>ยืนยันการสร้างเอกสาร</th></confirmCreatedocno>
 <confirmCanceldocno><en>Confirm to cancel document</en><th>ยืนยันการยกเลิกเอกสาร</th></confirmCanceldocno>
+<confirmDel><en>Confirm to delete</en><th>ยืนยันการลบ</th></confirmDel>
 <chooseDepartmentPl><en>Please Choose department</en><th>กรุณาเลือกแผนก</th></chooseDepartmentPl>
 <chooseDepartment><en>Choose department</en><th>เลือกแผนก</th></chooseDepartment>
 <chooseDep><en>Choose dep.</en><th>เลือกแผนก</th></chooseDep>
@@ -69,6 +70,7 @@
 <docfirst><en>Please select ref. document</en><th>กรุณาเลือกเอกสารอ้างอิง</th></docfirst>
 <wantlogout><en>Do you want to logout ?</en><th>ต้องการออกจากระบบใช่หรือไม่ ?</th></wantlogout>
 <wantcanceldoc><en>Do you want to cancel document ?</en><th>ต้องการยกเลิกเอกสารใช่หรือไม่ ?</th></wantcanceldoc>
+<wantdelcycle><en>Do you want to delete cycle ?</en><th>ต้องการลบรอบส่งผ้านี้ใช่หรือไม่ ?</th></wantdelcycle>
 
 <no><en>No.</en><th>ลำดับ</th></no>
 <yes><en>Yes</en><th>ใช่</th></yes>

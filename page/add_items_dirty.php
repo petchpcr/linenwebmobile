@@ -351,6 +351,9 @@ $genarray = json_decode($json, TRUE);
 						Str += "				<button onclick='edit_round(\"" + dep + "\",\"" + item + "\",0)' class='btn btn-info btn-block p-0 ml-2' style='width:40px;border-radius:225px;'>";
 						Str += "					<i class='fas fa-plus'></i>";
 						Str += "				</button>";
+						Str += "				<button onclick='del_all_round(\"" + dep + "\",\"" + item + "\")' class='btn btn-danger btn-block p-0 mt-0 ml-2' style='width:40px;border-radius:225px;'>";
+						Str += "					<i class='fas fa-times'></i>";
+						Str += "				</button>";
 						Str += "			</div>";
 						Str += "		</div>";
 						Str += "	</td>";
@@ -444,6 +447,28 @@ $genarray = json_decode($json, TRUE);
 				senddata(JSON.stringify(data));
 			}
 
+		}
+
+		function del_all_round(dep, item) {
+			swal({
+				title: '<?php echo $genarray['confirmDel'][$language]; ?>',
+				text: "<?php echo $genarray['wantdelcycle'][$language]; ?>",
+				type: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '<?php echo $genarray['yes'][$language]; ?>',
+				cancelButtonText: '<?php echo $genarray['isno'][$language]; ?>'
+			}).then((result) => {
+				var data = {
+					'DocNo': DocNo,
+					'dep': dep,
+					'item': item,
+					'STATUS': 'del_all_round'
+				};
+				senddata(JSON.stringify(data));
+			})
+			
 		}
 
 		function del_round(id, RowID, dep, item) {
@@ -849,6 +874,9 @@ $genarray = json_decode($json, TRUE);
 							var item = temp['item'];
 							edit_round(dep, item);
 
+						} else if (temp["form"] == 'del_all_round') {
+							load_items();
+
 						} else if (temp["form"] == 'del_round') {
 							load_items(1);
 							var dep = temp['dep'];
@@ -998,7 +1026,7 @@ $genarray = json_decode($json, TRUE);
 	<div class="modal fade" id="ModalSign" tabindex="-1" role="dialog" aria-hidden='false'>
 		<div class="modal-dialog" role="document">
 			<div class="modal-content" style="background-color:#fff;">
-				<div class="modal-body">
+				<div class="modal-body p-0">
 
 					<div id="maxxx" onselectstart="return false">
 						<div id="signature-pad" class="signature-pad">
@@ -1032,19 +1060,19 @@ $genarray = json_decode($json, TRUE);
 	<div class="modal fade" id="md_item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header" style="border-bottom:0px;">
 					<h5 class="modal-title"><?php echo $array['addList'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
+				<div class="d-flex px-3 mb-2">
+					<input onkeyup="choose_items()" id="search_items" class="form-control" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
+					<button onclick="item_handler()" class="btn btn-success p-0 ml-2" style='min-width:40px;border-radius:225px;'><i class="fas fa-plus"></i></button>
+				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-					<div class="d-flex mb-3">
-						<input onkeyup="choose_items()" id="search_items" class="form-control" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
-						<button onclick="item_handler()" class="btn btn-success p-0 ml-2" style='min-width:40px;border-radius:225px;'><i class="fas fa-plus"></i></button>
-					</div>
-					<div id="choose_item">
-					</div>
+					
+					<div id="choose_item"></div>
 
 				</div>
 				<div class="modal-footer text-center">
@@ -1064,14 +1092,16 @@ $genarray = json_decode($json, TRUE);
 	<div class="modal fade" id="md_dep" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header" style="border-bottom:0px;">
 					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['chooseDepartment'][$language]; ?></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
+				<div class="px-3 mb-2">
+					<input onkeyup="load_dep(1)" id="search_dep" class="form-control" type="text" placeholder="<?php echo $array['searchdep'][$language]; ?>">
+				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-					<input onkeyup="load_dep(1)" id="search_dep" class="form-control mb-3" type="text" placeholder="<?php echo $array['searchdep'][$language]; ?>">
 					<div id="choose_dep"></div>
 
 				</div>

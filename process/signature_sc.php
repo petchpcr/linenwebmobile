@@ -4,20 +4,20 @@ require '../connect/connect.php';
 date_default_timezone_set("Asia/Bangkok");
 
 $DocNo = $_POST['DocNo'];
-$SigCode = $_POST['SigCode'];
-$fnc = $_POST['fnc'];
-$return['fnc'] = $fnc;
+$SignCode = $_POST['SignCode'];
+$SignFnc = $_POST['SignFnc'];
+$return['SignFnc'] = $SignFnc;
 
-if ($fnc == 'start_send') {
-    $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),signStart = '$SigCode' WHERE DocNo = '$DocNo'";
+if ($SignFnc == 'start_send') {
+    $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),signStart = '$SignCode' WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
     
     echo json_encode($return);
     mysqli_close($conn);
     die;
 
-} else {
-    $Sql = "UPDATE shelfcount SET signature = '$SigCode',IsStatus = 4  WHERE DocNo = '$DocNo'";
+} else if ($SignFnc == 'end_send') {
+    $Sql = "UPDATE shelfcount SET signature = '$SignCode',IsStatus = 4  WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     $count = 0;
