@@ -157,6 +157,14 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
+		function view_detail() {
+			var data = {
+				'DocNo': DocNo,
+				'STATUS': 'view_detail'
+			};
+			senddata(JSON.stringify(data));
+		}
+
 		function back() {
 			var Menu = '<?php echo $Menu; ?>';
 			var site = '<?php echo $siteCode; ?>';
@@ -432,6 +440,32 @@ $genarray = json_decode($json, TRUE);
 							load_process();
 						} else if (temp["form"] == 'end_send') {
 							load_process();
+						} else if (temp["form"] == 'view_detail') {
+
+							var Str = "<table class='table table-bordered table-sm'>";
+							Str += "			<thead>";
+							Str += "				<tr>";
+							Str += "					<th><?php echo $genarray['no'][$language]; ?></th>";
+							Str += "					<th><?php echo $genarray['item'][$language]; ?></th>";
+							Str += "					<th><?php echo $genarray['issue'][$language]; ?></th>";
+							Str += "				</tr>";
+							Str += "			</thead>";
+							Str += "			<tbody>";
+
+							for (var i = 0; i < temp['cnt']; i++) {
+								Str += "					<tr>";
+								Str += "						<th>" + Number(i+1) + "</th>";
+								Str += "						<td class='text-left pl-3'>" + temp['ItemName'][i] + "</td>";
+								Str += "						<td>" + temp['TotalQty'][i] + "</td>";
+								Str += "					</tr>";
+							}
+
+							Str += "				</tbody>";
+							Str += "			</table>";
+
+							$("#lg_body").append(Str);
+							$("#md_lg").modal('show');
+
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
@@ -619,7 +653,11 @@ $genarray = json_decode($json, TRUE);
 				</div>
 			</div>
 
-			<div id="sign_zone_start" class="mx-3 mb-3" hidden>
+			<div id="sign_zone_start" class="mx-3 mb-3 text-center" hidden>
+				<div class="col-md-8 col-sm-12 mx-auto my-4">
+					<button onclick="view_detail()" class="btn btn-block btn-info"><?php echo $genarray['detail'][$language]; ?></button>
+				</div>
+				
 				<div class="text-center">
 					<div><b>ลายเซนต์ผู้ส่ง</b></div>
 					<div class="row justify-content-center">
@@ -673,6 +711,23 @@ $genarray = json_decode($json, TRUE);
 							</div>
 						</div>
 					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_lg" tabindex="-1" role="dialog" aria-hidden='false'>
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="lg_body" class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+
+				
 
 				</div>
 			</div>

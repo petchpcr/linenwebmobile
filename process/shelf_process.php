@@ -226,6 +226,37 @@
         }
     }
 
+    function view_detail($conn, $DATA){
+        $DocNo = $DATA["DocNo"];
+        $count = 0;
+        $Sql = "SELECT ItemName,TotalQty 
+                FROM shelfcount_detail 
+                INNER JOIN item ON item.ItemCode = shelfcount_detail.ItemCode
+                WHERE DocNo = '$DocNo' 
+                AND TotalQty != 0";
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return['ItemName'][$count] = $Result['ItemName'];
+            $return['TotalQty'][$count] = $Result['TotalQty'];
+            $count++;
+        }
+        $return['cnt'] = $count;
+
+        if ($count > 0) {
+            $return['status'] = "success";
+            $return['form'] = "view_detail";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        } else {
+            $return['status'] = "failed";
+            $return['form'] = "view_detail";
+            echo json_encode($return);
+            mysqli_close($conn);
+            die;
+        }
+    }
+
     if(isset($_POST['DATA'])){
         $data = $_POST['DATA'];
         $DATA = json_decode(str_replace('\"', '"', $data), true);
@@ -259,6 +290,9 @@
         }
         else if ($DATA['STATUS'] == 'end_send') {
             end_send($conn, $DATA);
+        }
+        else if ($DATA['STATUS'] == 'view_detail') {
+            view_detail($conn, $DATA);
         }
         else if ($DATA['STATUS'] == 'logout') {
             logout($conn, $DATA);

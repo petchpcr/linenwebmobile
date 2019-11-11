@@ -55,6 +55,8 @@ $genarray = json_decode($json, TRUE);
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
+			load_dep()
+			
 			if (AddAll == 1) {
 				Add_all_items();
 			} else {
@@ -68,6 +70,14 @@ $genarray = json_decode($json, TRUE);
 				'DocNo': DocNo,
 				'DepCode': DepCode,
 				'STATUS': 'Add_all_items'
+			};
+			senddata(JSON.stringify(data));
+		}
+
+		function load_dep() {
+			var data = {
+				'DepCode': DepCode,
+				'STATUS': 'load_dep'
 			};
 			senddata(JSON.stringify(data));
 		}
@@ -323,7 +333,10 @@ $genarray = json_decode($json, TRUE);
 					}
 
 					if (temp["status"] == 'success') {
-						if (temp["form"] == 'Add_all_items') {
+						if (temp["form"] == 'load_dep') {
+							$("#DepName").text(temp['DepName']);
+
+						} else if (temp["form"] == 'Add_all_items') {
 							load_items();
 
 						} else if (temp["form"] == 'load_items') {
@@ -446,9 +459,9 @@ $genarray = json_decode($json, TRUE);
 				<img src="../img/nlinen.png" width="95" height="14" />
 			</div> -->
 		</div>
-		<div class="text-center mb-3">
-			<div class="text-truncate font-weight-bold" style="font-size:25px;"><?php echo $genarray['Document'][$language]; ?></div>
-			<div id="DocNo" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
+		<div class="text-center font-weight-bold mb-3" style="font-size:25px;">
+			<div class="text-truncate"><?php echo $genarray['Document'][$language]; ?> : <label id="DocNo" class="mb-0"></label> </div>
+			<div class="text-truncate"><?php echo $genarray['department'][$language]; ?> : <label id="DepName" ></label> </div>
 		</div>
 		<div class="row justify-content-center px-3">
 			<table class="table table-hover col-lg-9 col-md-10 col-sm-12">

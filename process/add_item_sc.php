@@ -4,6 +4,21 @@ require '../connect/connect.php';
 require 'logout.php';
 date_default_timezone_set("Asia/Bangkok");
 
+function load_dep($conn, $DATA)
+{
+    $DepCode = $DATA["DepCode"];
+    $Sql = "SELECT DepName FROM Department WHERE DepCode = '$DepCode'";
+    $meQuery = mysqli_query($conn, $Sql);
+    $Result = mysqli_fetch_assoc($meQuery);
+    $return['DepName'] = $Result['DepName'];
+
+    $return['status'] = "success";
+    $return['form'] = "load_dep";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
+}
+
 function load_items($conn, $DATA)
 {
     $count = 0;
@@ -237,7 +252,9 @@ if (isset($_POST['DATA'])) {
     $data = $_POST['DATA'];
     $DATA = json_decode(str_replace('\"', '"', $data), true);
 
-    if ($DATA['STATUS'] == 'load_items') {
+    if ($DATA['STATUS'] == 'load_dep') {
+        load_dep($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'load_items') {
         load_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'Add_all_items') {
         Add_all_items($conn, $DATA);

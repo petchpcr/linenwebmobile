@@ -143,6 +143,7 @@
 <leftsc><en>Left</en><th>จำนวน</th></leftsc>
 <qty><en>Number</en><th>จำนวน</th></qty>
 <total><en>Number</en><th>จำนวน</th></total>
+<issue><en>Issue</en><th>จำนวนที่จ่าย</th></issue>
 <order><en>Order</en><th>ออเดอร์</th></order>
 <detail><en>Description</en><th>รายละเอียด</th></detail>
 <print><en>Print Report</en><th>พิมพ์รายงาน</th></print>
