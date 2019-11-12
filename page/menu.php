@@ -45,11 +45,14 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=dirty';
 			} else if (menu == 'clean') {
 				window.location.href = 'clean.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
+			} else if (menu == 'signdoc') {
+				var slc_signdoc = $("#sigh_doc").val();
+				window.location.href = 'signdoc_' + slc_signdoc + '.php?siteCode=<?php echo $HptCode; ?>';
 			} else if (menu == 'qc') {
 				window.location.href = 'qc.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
 			} else if (menu == 'kpi') {
 				var slc_kpi = $("#KPI_name").val();
-				window.location.href = 'kpi_'+ slc_kpi +'.php?siteCode=<?php echo $HptCode; ?>';
+				window.location.href = 'kpi_' + slc_kpi + '.php?siteCode=<?php echo $HptCode; ?>';
 			} else if (menu == 'track') {
 				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
 			} else if (menu == 'shelfcount') {
@@ -165,74 +168,87 @@ $genarray = json_decode($json, TRUE);
 			<?php
 			if ($PM == 4) { // User โรงซัก
 				echo '<div class="my-col-menu">
-                        <button onclick="menu_click(' . "'factory'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/Factory.png">
-                            <div class="text-truncate">' . $array["factory"][$language] . '</div>
-                        </button>
-                    </div>
-                    ';
+								<button onclick="menu_click(' . "'factory'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/Factory.png">
+									<div class="text-truncate">' . $array["factory"][$language] . '</div>
+								</button>
+							</div>
+							';
 			} else {
 				echo '<div class="my-col-menu">
-                    <button onclick="menu_click(' . "'dirty'" . ')" type="button" class="btn btn-mylight btn-block">
-                        <img src="../img/tshirt.png">
-                        <div class="text-truncate">' . $array["dirty"][$language] . '</div>
-                        </button>
-					</div>
-					
-                    <div class="my-col-menu">
-                        <button onclick="menu_click(' . "'newlinentable'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/fabric.png">
-                            <div class="text-truncate">' . $array["newLinen"][$language] . '</div>
-                        </button>
-					</div>
-					
-                    <div class="my-col-menu">
-                        <button onclick="menu_click(' . "'track'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/tracking.png">
-                            <div class="text-truncate">' . $array["tracking"][$language] . '</div>
-                        </button>
-                    </div>
-                    <div class="my-col-menu">
-                        <button onclick="menu_click(' . "'clean'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/laundry.png">
-                            <div class="text-truncate">' . $array["stock_receive"][$language] . '</div>
-                        </button>
-                    </div>
-                    <div class="my-col-menu">
-                        <button onclick="menu_click(' . "'qc'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/QC.png">
-                            <div class="text-truncate">' . $array["QC"][$language] . '</div>
-                        </button>
-										</div>
-										<div class="my-col-menu">
-                        <button data-toggle="modal" data-target="#md_kpi" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/QC.png">
-                            <div class="text-truncate">' . $array["kpi"][$language] . '</div>
-                        </button>
-                    </div>
-                    <div class="my-col-menu">
-                        <button onclick="menu_click(' . "'shelfcount'" . ')" type="button" class="btn btn-mylight btn-block">
-                            <img src="../img/shelf_count.png">
-                            <div class="text-truncate">' . $array["shelfcount"][$language] . '</div>
-                        </button>
-					</div>
-					<div class="my-col-menu">
-						<button onclick="menu_click(' . "'shelf_count'" . ')" type="button" class="btn btn-mylight btn-block">
-							<img src="../img/storage.png">
-							<div class="text-truncate">'.$array["shelf_count"][$language].'</div>
-						</button>
-					</div>
-					<div class="my-col-menu">
-						<button onclick="menu_click(' . "'qr_code'" . ')" type="button" class="btn btn-mylight btn-block">
-							<img src="../img/qrcode.png">
-							<div class="text-truncate">'.$array["qr_code"][$language].'</div>
-						</button>
-					</div>
+								<button onclick="menu_click(' . "'dirty'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/tshirt.png">
+									<div class="text-truncate">' . $array["dirty"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'newlinentable'" . ')" type="button" class="btn btn-mylight btn-block">
+										<img src="../img/fabric.png">
+										<div class="text-truncate">' . $array["newLinen"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'track'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/tracking.png">
+									<div class="text-truncate">' . $array["tracking"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button data-toggle="modal" data-target="#md_signdoc" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/laundry.png">
+									<div class="text-truncate">' . $array["signdoc"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'clean'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/laundry.png">
+									<div class="text-truncate">' . $array["stock_receive"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'qc'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/QC.png">
+									<div class="text-truncate">' . $array["QC"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button data-toggle="modal" data-target="#md_kpi" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/QC.png">
+									<div class="text-truncate">' . $array["kpi"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'shelfcount'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/shelf_count.png">
+									<div class="text-truncate">' . $array["shelfcount"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'shelf_count'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/storage.png">
+									<div class="text-truncate">' . $array["shelf_count"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'qr_code'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/qrcode.png">
+									<div class="text-truncate">' . $array["qr_code"][$language] . '</div>
+								</button>
+							</div>
                     ';
 			}
 
 			?>
-			
+
 			<div class="my-col-menu">
 				<button onclick="menu_click('tools')" type="button" class="btn btn-mylight btn-block">
 					<img src="../img/Tools.png">
@@ -268,6 +284,42 @@ $genarray = json_decode($json, TRUE);
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
 							<button id="btn_add_dirty" onclick="menu_click('kpi')" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
+						</div>
+						<div class="col-6 text-left">
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_signdoc" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center">
+					<div class="input-group my-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
+						</div>
+						<select id="sigh_doc" class="custom-select">
+							<option value="dirty" selected><?php echo $array['dirtylinen'][$language]; ?></option>
+							<option value="newlinen"><?php echo $array['newlinen'][$language]; ?></option>
+							<option value="clean"><?php echo $array['cleanlinen'][$language]; ?></option>
+							<option value="claim"><?php echo $array['claimlaundry'][$language]; ?></option>
+							<option value="rewash"><?php echo $array['rewash'][$language]; ?></option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 d-flex align-items-center m-0">
+						<div class="col-6 text-right">
+							<button id="btn_add_dirty" onclick="menu_click('signdoc')" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>

@@ -10,6 +10,7 @@
 <statusClaim><en>Claim</en><th>ส่งเคลม</th></statusClaim>
 <statusNotWork><en>Not Working</en><th>ไม่ทำงาน</th></statusNotWork>
 <statusCancel><en>Doc. cancel</en><th>ยกเลิกเอกสาร</th></statusCancel>
+<statunotsign><en>Not sign.</en><th>ยังไม่ได้เซนต์</th></statunotsign>
 
 <statusNotQC><en>Do not QC</en><th>ไม่ได้ตรวจสอบ</th></statusNotQC>
 <statusPass><en>QC pass</en><th>ผ่าน</th></statusPass>

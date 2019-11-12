@@ -5,6 +5,7 @@
 <menu><en>Menu</en><th>เมนู</th></menu>
 <clean><en>Clean Doc.</en><th>ผ้าสะอาด</th></clean>
 <dirty><en>Dirty Doc.</en><th>ผ้าสกปรก</th></dirty>
+<signdoc><en>Signature Doc.</en><th>เซนต์เอกสาร</th></signdoc>
 <QC><en>QC</en><th>ตรวจสอบคุณภาพ</th></QC>
 <kpi><en>Process Checklist</en><th>Process Checklist</th></kpi>
 <setting><en>Setting</en><th>ตั้งค่า</th></setting>
@@ -16,5 +17,10 @@
 <shelf_count><en>Shelf Count</en><th>Shelf Count</th></shelf_count>
 <qr_code><en>QR Code</en><th>QR Code</th></qr_code>
 <stock_receive><en>Stock Receive</en><th>บันทึกรับเข้าคลัง</th></stock_receive>
+<dirtylinen><en>Dirty linen</en><th>บันทึกรับผ้าสกปรก</th></dirtylinen>
+<newlinen><en>New linen</en><th>บันทึกรับผ้าใหม่ส่งซัก</th></newlinen>
+<cleanlinen><en>Clean linen</en><th>บันทึกรับผ้าสะอาด</th></cleanlinen>
+<claimlaundry><en>Claim laundry</en><th>บันทึกส่งเคลมโรงซัก</th></claimlaundry>
+<rewash><en>Rewash</en><th>บันทึกรับผ้าแก้ไข</th></rewash>
 
 </lang>
