@@ -46,6 +46,11 @@ function load_doc($conn, $DATA)
     $FName = 'ThName';
     $LName = 'ThLName';
   }
+  if ($_SESSION['lang'] == "th") {
+    $FacName = "FacNameTH";
+  } else {
+    $FacName = "FacName";
+  }
   $boolean = false;
   $boolean2 = false;
   $Sql = "SELECT RefDocNo,$From.IsStatus,
@@ -55,9 +60,11 @@ function load_doc($conn, $DATA)
           users.$FName AS FName,
           users.$LName AS LName,
           Total,
+          factory.$FacName AS FacName,
           site.HptName
-          FROM $From,users,site
+          FROM $From,users,site,factory
           WHERE DocNo ='$DocNo'
+          AND factory.FacCode = $From.FacCode 
           AND users.ID = $From.Modify_Code
           AND $From.HptCode = site.HptCode";
 
@@ -70,6 +77,7 @@ function load_doc($conn, $DATA)
     $return['FName']  = $Result['TName'] . $Result['FName'] . " " . $Result['LName'];
     $return['Total']  = $Result['Total'];
     $return['HptName']  = $Result['HptName'];
+    $return['FacName']  = $Result['FacName'];
     $boolean = true;
   }
   $return['boolean'] = $boolean;

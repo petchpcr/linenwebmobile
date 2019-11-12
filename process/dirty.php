@@ -265,14 +265,21 @@ function load_doc($conn, $DATA)
     if ($search == null || $search == "") {
         $search = date('Y-m-d');
     }
+    if ($_SESSION['lang'] == "th") {
+        $FacName = "FacNameTH";
+    } else {
+        $FacName = "FacName";
+    }
     $siteCode = $DATA["siteCode"];
     $Sql = "SELECT
                     DocNo,
                     IsReceive,
                     IsProcess,
-                    IsStatus
+                    IsStatus,
+                    factory.$FacName AS FacName
             FROM    dirty
-            WHERE HptCode = '$siteCode' 
+            INNER JOIN factory ON factory.FacCode = dirty.FacCode
+            WHERE dirty.HptCode = '$siteCode' 
             AND DocDate LIKE '%$search%'
             ORDER BY IsStatus ASC,DocNo DESC";
     $return['sql'] = $Sql;
@@ -282,6 +289,7 @@ function load_doc($conn, $DATA)
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];
         $return[$count]['IsStatus'] = $Result['IsStatus'];
+        $return[$count]['FacName'] = $Result['FacName'];
 
         $count++;
     }

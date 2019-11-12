@@ -66,7 +66,7 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
-		function view_dep(Item,Request) {
+		function view_dep(Item, Request) {
 			var data = {
 				'DocNo': DocNo,
 				'Item': Item,
@@ -165,12 +165,13 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'load_doc') {
 							$("#HptName").val(temp['HptName']);
 							$("#FName").val(temp['FName']);
+							$("#FacName").val(temp['FacName']);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
 							var Weight = temp['Total'] + " <?php echo $array['KG'][$language] ?>";
 							$("#Weight").val(Weight);
 							if (temp['IsStatus'] == 9) {
-								$("#btn_create").prop("disabled",true);
-								$("#btn_cancel").prop("disabled",true);
+								$("#btn_create").prop("disabled", true);
+								$("#btn_cancel").prop("disabled", true);
 							}
 							for (var i = 0; i < temp['cnt']; i++) {
 								var num = i + 1;
@@ -304,9 +305,16 @@ $genarray = json_decode($json, TRUE);
 							</div>
 							<input type="text" id="Date" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
-
 					</div>
-					<div class="col-md-6 col-sm-12 col-12 text-left">
+					<div class="col-sm-6 col-12 text-left">
+						<div class="input-group mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" style="width:100px;"><?php echo $genarray['factory'][$language] ?></span>
+							</div>
+							<input type="text" id="FacName" class="form-control bg-white" style="color:#1659a2;" readonly>
+						</div>
+					</div>
+					<div class="col-sm-6 col-12 text-left">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
 								<span class="input-group-text" style="width:100px;"><?php echo $array['weightSum'][$language] ?></span>

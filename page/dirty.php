@@ -274,8 +274,8 @@ require '../getTimeZone.php';
 									
 									var dep = "<div class='my-col-7 text-left'>";
 									dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div>";
-									dep += "<div class='font-weight-light align-self-center'>" + temp[i]['DepName'] + "</div></div></div></button>";
-									if (temp[i]['DepName'] == null) {
+									dep += "<div class='font-weight-light align-self-center'>" + temp[i]['FacName'] + "</div></div></div></button>";
+									if (temp[i]['FacName'] == null) {
 										dep = "<div class='my-col-7 text-left d-flex'>";
 										dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp[i]['DocNo'] + "</div></div></div></button>";
 									}
