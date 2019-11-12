@@ -441,6 +441,7 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'end_send') {
 							load_process();
 						} else if (temp["form"] == 'view_detail') {
+							$("#lg_body").empty();
 
 							var Str = "<table class='table table-bordered table-sm'>";
 							Str += "			<thead>";

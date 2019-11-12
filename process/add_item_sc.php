@@ -7,9 +7,10 @@ date_default_timezone_set("Asia/Bangkok");
 function load_dep($conn, $DATA)
 {
     $DepCode = $DATA["DepCode"];
-    $Sql = "SELECT DepName FROM Department WHERE DepCode = '$DepCode'";
+    $Sql = "SELECT DepName FROM department WHERE DepCode = '$DepCode'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
+    $return['Sql'] = $Sql;
     $return['DepName'] = $Result['DepName'];
 
     $return['status'] = "success";
