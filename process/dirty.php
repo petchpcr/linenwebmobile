@@ -272,16 +272,16 @@ function load_doc($conn, $DATA)
     }
     $siteCode = $DATA["siteCode"];
     $Sql = "SELECT
-                    DocNo,
-                    IsReceive,
-                    IsProcess,
-                    IsStatus,
+                    dirty.DocNo,
+                    dirty.IsReceive,
+                    dirty.IsProcess,
+                    dirty.IsStatus,
                     factory.$FacName AS FacName
             FROM    dirty
             INNER JOIN factory ON factory.FacCode = dirty.FacCode
             WHERE dirty.HptCode = '$siteCode' 
-            AND DocDate LIKE '%$search%'
-            ORDER BY IsStatus ASC,DocNo DESC";
+            AND dirty.DocDate LIKE '%$search%'
+            ORDER BY dirty.IsStatus ASC,dirty.DocNo DESC";
     $return['sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
