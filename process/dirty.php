@@ -1,4 +1,7 @@
 <?php
+
+use Mpdf\Tag\P;
+
 session_start();
 require '../connect/connect.php';
 require 'logout.php';
@@ -318,19 +321,58 @@ function receive_zero($conn, $DATA)
     $return['DocNo'] = $DocNo;
     $return['From'] = $From;
 
-    $Sql = "SELECT ".$From."_detail.ItemCode,SUM(".$From."_detail.Qty) AS Qty,item.ItemName 
-            FROM ".$From."_detail 
-            INNER JOIN item ON ".$From."_detail.ItemCode = item.ItemCode 
-            WHERE DocNo = '$DocNo'
-            GROUP BY ".$From."_detail.ItemCode";
+    if ($From == "dirty") {
+        $Sql = "SELECT ItemCode,RequestName
+                FROM dirty_detail 
+                WHERE DocNo = '$DocNo'
+                GROUP BY ItemCode,RequestName";
 
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $return[$count]['ItemCode'] = $Result['ItemCode'];
-        $return[$count]['ItemName'] = $Result['ItemName'];
-        $return[$count]['Qty'] = $Result['Qty'];
-        $count++;
+        $ar_item = array();
+        $ar_request = array();
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            array_push($ar_item,$Result['ItemCode']);
+            array_push($ar_request,$Result['RequestName']);
+        }
+        $return['ar_item'] = $ar_item;
+        $return['ar_request'] = $ar_request;
+
+        foreach ($ar_item as $key => $val) {
+            if ($val == 'HDL') {
+                $ItemName = $ar_request[$key];
+                $Sql = "SELECT SUM(Qty) AS Qty FROM dirty_detail WHERE DocNo = '$DocNo' AND RequestName = '$ar_request[$key]'";
+            } else {
+                $Sql = "SELECT ItemName FROM item WHERE ItemCode = '$val'";
+                $meQuery = mysqli_query($conn, $Sql);
+                $Result = mysqli_fetch_assoc($meQuery);
+                $ItemName = $Result['ItemName'];
+                $Sql = "SELECT SUM(Qty) AS Qty FROM dirty_detail WHERE DocNo = '$DocNo' AND ItemCode = '$val'";
+            }
+            $meQuery = mysqli_query($conn, $Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $return[$count]['ItemCode'] = $val;
+            $return[$count]['RequestName'] = $ar_request[$key];
+            $return[$count]['ItemName'] = $ItemName;
+            $return[$count]['Qty'] = $Result['Qty'];
+            $count++;
+        }
+            
+    } else {
+        $Sql = "SELECT ".$From."_detail.ItemCode,SUM(".$From."_detail.Qty) AS Qty,item.ItemName 
+                FROM ".$From."_detail 
+                INNER JOIN item ON ".$From."_detail.ItemCode = item.ItemCode 
+                WHERE DocNo = '$DocNo'
+                GROUP BY ".$From."_detail.ItemCode";
+
+        $meQuery = mysqli_query($conn, $Sql);
+        while ($Result = mysqli_fetch_assoc($meQuery)) {
+            $return[$count]['ItemCode'] = $Result['ItemCode'];
+            $return[$count]['ItemName'] = $Result['ItemName'];
+            $return[$count]['Qty'] = $Result['Qty'];
+            $count++;
+        }
     }
+    
     $return['count'] = $count;
     $return['Sql'] = $Sql;
 
@@ -356,16 +398,22 @@ function confirm_yes($conn, $DATA)
     $DocNo = $DATA["DocNo"];
     $From = $DATA["From"];
     $Str_ItemCode = $DATA["Str_ItemCode"];
+    $Str_ItemName = $DATA["Str_ItemName"];
     $Str_Qty = $DATA["Str_Qty"];
     $count = 0;
     $return['From'] = $From;
 
     $Arr_ItemCode = explode(",", $Str_ItemCode);
+    $Arr_ItemName = explode(",", $Str_ItemName);
     $Arr_Qty = explode(",", $Str_Qty);
     $cnt_Arr = sizeof($Arr_ItemCode, 0);
     
     for ($i = 0; $i < $cnt_Arr; $i++){
-        $Sql = "UPDATE ".$From."_detail SET ReceiveQty = $Arr_Qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$Arr_ItemCode[$i]'";
+        if ($Arr_ItemCode[$i] == "HDL") {
+            $Sql = "UPDATE ".$From."_detail SET ReceiveQty = $Arr_Qty[$i] WHERE DocNo = '$DocNo' AND RequestName = '$Arr_ItemName[$i]'";
+        } else {
+            $Sql = "UPDATE ".$From."_detail SET ReceiveQty = $Arr_Qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$Arr_ItemCode[$i]'";
+        }
         $return['Sql'] = $Sql;
         if (mysqli_query($conn, $Sql)) {
             $count++;

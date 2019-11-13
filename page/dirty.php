@@ -154,12 +154,14 @@ require '../getTimeZone.php';
 					Arr_Qty.push(Qty);
 				});
 				var Str_ItemCode = Arr_ItemCode.join(',');
+				var Str_ItemName = Arr_ItemName.join(',');
 				var Str_Qty = Arr_Qty.join(',');
 
 				var data = {
 					'DocNo': DocNo,
 					'From': From,
 					'Str_ItemCode': Str_ItemCode,
+					'Str_ItemName': Str_ItemName,
 					'Str_Qty': Str_Qty,
 					'STATUS': 'confirm_yes'
 				};
