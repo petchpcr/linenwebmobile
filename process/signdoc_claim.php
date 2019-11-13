@@ -13,10 +13,10 @@ function load_doc($conn, $DATA)
     if ($search == null || $search == "") {
         $search = date('Y-m-d');
     }
-    $Sql = "SELECT c.DocNo,f.FacName 
-            FROM clean c
-            INNER JOIN factory f ON f.FacCode = c.FacCode 
-            WHERE c.DocDate = '$search' 
+    $Sql = "SELECT c.DocNo,f.DepName 
+            FROM damage c
+            INNER JOIN department f ON f.DepCode = c.DepCode 
+            WHERE c.DocDate LIKE '%$search%' 
             AND (c.SignFac IS NULL OR c.SignNH IS NULL) 
             AND c.IsStatus = 1";
 
@@ -24,7 +24,7 @@ function load_doc($conn, $DATA)
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
         $return['DocNo'][$count] = $Result['DocNo'];
-        $return['FacName'][$count] = $Result['FacName'];
+        $return['DepName'][$count] = $Result['DepName'];
         $count++;
     }
     $return['cnt'] = $count;

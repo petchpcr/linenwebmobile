@@ -14,11 +14,11 @@ function load_doc($conn, $DATA)
         $search = date('Y-m-d');
     }
     $Sql = "SELECT c.DocNo,f.FacName 
-            FROM clean c
+            FROM dirty c
             INNER JOIN factory f ON f.FacCode = c.FacCode 
             WHERE c.DocDate = '$search' 
             AND (c.SignFac IS NULL OR c.SignNH IS NULL) 
-            AND c.IsStatus = 1";
+            AND c.IsStatus = 0";
 
     $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);

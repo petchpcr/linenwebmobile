@@ -71,7 +71,7 @@ $genarray = json_decode($json, TRUE);
 				url: "../process/signature_sum.php",
 				method: "POST",
 				data: {
-					IsMenu: "signdoc_clean_detail",
+					IsMenu: "signdoc_claim_detail",
 					DocNo: DocNo,
 					SignCode: dataURL,
 					sign_funciton: sign_funciton
@@ -100,7 +100,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			window.location.href = 'signdoc_clean.php?siteCode=' + siteCode;
+			window.location.href = 'signdoc_claim.php?siteCode=' + siteCode;
 		}
 
 		function logout(num) {
@@ -133,7 +133,7 @@ $genarray = json_decode($json, TRUE);
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/signdoc_clean_detail.php';
+			var URL = '../process/signdoc_claim_detail.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',
@@ -151,9 +151,9 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_doc') {
-							$("#DepName").val(temp['DepName']);
+							$("#HptName").val(temp['HptName']);
 							$("#FName").val(temp['FName']);
-							$("#FacName").val(temp['FacName']);
+							$("#DepName").val(temp['DepName']);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
 							var Weight = temp['Total'] + " <?php echo $array['KG'][$language] ?>";
 							$("#Weight").val(Weight);
@@ -244,15 +244,15 @@ $genarray = json_decode($json, TRUE);
 						</div>
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">
-								<span class="input-group-text" style="width:100px;"><?php echo $genarray['department'][$language] ?></span>
+								<span class="input-group-text" style="width:100px;"><?php echo $genarray['Hospital'][$language] ?></span>
 							</div>
-							<input type="text" id="DepName" class="form-control bg-white" style="color:#1659a2;" readonly>
+							<input type="text" id="HptName" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">
-								<span class="input-group-text" style="width:100px;"><?php echo $genarray['factory'][$language] ?></span>
+								<span class="input-group-text" style="width:100px;"><?php echo $genarray['department'][$language] ?></span>
 							</div>
-							<input type="text" id="FacName" class="form-control bg-white" style="color:#1659a2;" readonly>
+							<input type="text" id="DepName" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
 					</div>
 

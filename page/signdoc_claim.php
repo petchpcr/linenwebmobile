@@ -50,7 +50,7 @@ require '../getTimeZone.php';
 		}
 		
 		function view_detail(DocNo) {
-			window.location.href = 'signdoc_clean_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo;
+			window.location.href = 'signdoc_claim_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo;
 		}
 
 		function back() {
@@ -62,7 +62,7 @@ require '../getTimeZone.php';
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/signdoc_clean.php';
+			var URL = '../process/signdoc_claim.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',
@@ -87,8 +87,8 @@ require '../getTimeZone.php';
 
 								var dep = "<div class='my-col-7 text-left'>";
 								dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp['DocNo'][i] + "</div>";
-								dep += "<div class='font-weight-light align-self-center'>" + temp['FacName'][i] + "</div></div></div></button>";
-								if (temp['FacName'][i] == null) {
+								dep += "<div class='font-weight-light align-self-center'>" + temp['DepName'][i] + "</div></div></div></button>";
+								if (temp['DepName'][i] == null) {
 									dep = "<div class='my-col-7 text-left d-flex'>";
 									dep += "<div class='text-truncate font-weight-bold align-self-center'>" + temp['DocNo'][i] + "</div></div></div></button>";
 								}

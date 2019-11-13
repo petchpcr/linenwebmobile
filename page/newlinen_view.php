@@ -136,6 +136,7 @@ $genarray = json_decode($json, TRUE);
 						if (temp["form"] == 'load_doc') {
 							$("#HptName").val(temp['HptName']);
 							$("#FName").val(temp['FName']);
+							$("#FacName").val(temp['FacName']);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
 							var Weight = temp['Total'] + " <?php echo $array['KG'][$language] ?>";
 							$("#Weight").val(Weight);
@@ -246,6 +247,7 @@ $genarray = json_decode($json, TRUE);
 		<div class="row justify-content-center">
 			<div class="col-lg-9 col-md-10 col-sm-12 mb-3">
 				<div class="row">
+
 					<div class="col-sm-6 col-12 text-left">
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">
@@ -259,7 +261,14 @@ $genarray = json_decode($json, TRUE);
 							</div>
 							<input type="text" id="HptName" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
+						<div class="input-group mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" style="width:100px;"><?php echo $genarray['factory'][$language] ?></span>
+							</div>
+							<input type="text" id="FacName" class="form-control bg-white" style="color:#1659a2;" readonly>
+						</div>
 					</div>
+
 					<div class="col-sm-6 col-12 text-left">
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">
@@ -273,9 +282,6 @@ $genarray = json_decode($json, TRUE);
 							</div>
 							<input type="text" id="Date" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
-
-					</div>
-					<div class="col-md-6 col-sm-12 col-12 text-left">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
 								<span class="input-group-text" style="width:100px;"><?php echo $array['weightSum'][$language] ?></span>
@@ -283,6 +289,7 @@ $genarray = json_decode($json, TRUE);
 							<input type="text" id="Weight" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>

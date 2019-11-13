@@ -10,35 +10,35 @@ function load_doc($conn, $DATA)
   $DocNo = $DATA["DocNo"];
   if ($_SESSION['lang'] == "th") {
     $FacName = "FacNameTH";
-    $DepName = "DepNameTH";
+    $HptName = "HptNameTH";
     $TName = 'ThPerfix';
     $FName = 'ThName';
     $LName = 'ThLName';
   } else {
     $FacName = "FacName";
-    $DepName = "DepName";
+    $HptName = "HptName";
     $TName = 'EngPerfix';
     $FName = 'EngName';
     $LName = 'EngLName';
   }
   $boolean = false;
   $boolean2 = false;
-  $Sql = "SELECT RefDocNo,clean.IsStatus,
-          DATE_FORMAT(clean.Modify_Date,'%d %M %Y') AS xdate,
-          DATE_FORMAT(clean.Modify_Date,'%H:%i') AS xtime,
+  $Sql = "SELECT RefDocNo,damage.IsStatus,
+          DATE_FORMAT(damage.Modify_Date,'%d %M %Y') AS xdate,
+          DATE_FORMAT(damage.Modify_Date,'%H:%i') AS xtime,
           Total,
           SignFac,
           SignNH,
           users.$TName AS TName,
           users.$FName AS FName,
           users.$LName AS LName,
-          department.DepName,
-          factory.$FacName AS FacName
+          site.$HptName AS HptName,
+          department.DepName
 
-          FROM clean
-          INNER JOIN users ON users.ID = clean.Modify_Code
-          INNER JOIN department ON department.DepCode = clean.DepCode
-          INNER JOIN factory ON factory.FacCode = clean.FacCode 
+          FROM damage
+          INNER JOIN users ON users.ID = damage.Modify_Code
+          INNER JOIN department ON department.DepCode = damage.DepCode 
+          INNER JOIN site ON site.HptCode = department.HptCode
           WHERE DocNo ='$DocNo'";
 
   $meQuery = mysqli_query($conn, $Sql);
@@ -51,15 +51,15 @@ function load_doc($conn, $DATA)
     $return['xdate'] = $Result['xdate'];
     $return['xtime'] = $Result['xtime'];
     $return['FName']  = $Result['TName'] . $Result['FName'] . " " . $Result['LName'];
+    $return['HptName']  = $Result['HptName'];
     $return['DepName']  = $Result['DepName'];
-    $return['FacName']  = $Result['FacName'];
     $boolean = true;
   }
   $return['boolean'] = $boolean;
   $return['Sql1'] = $Sql;
 
   $Sql = "SELECT ItemCode
-            FROM clean_detail 
+            FROM damage_detail 
             WHERE DocNo = '$DocNo'
             GROUP BY ItemCode";
   
@@ -76,7 +76,7 @@ function load_doc($conn, $DATA)
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $ItemName = $Result['ItemName'];
-    $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM clean_detail WHERE DocNo = '$DocNo' AND ItemCode = '$val'";
+    $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM damage_detail WHERE DocNo = '$DocNo' AND ItemCode = '$val'";
 
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
@@ -105,12 +105,35 @@ function load_doc($conn, $DATA)
   }
 }
 
+function save_signature($conn, $DATA)
+{
+  $DocNo = $DATA["DocNo"];
+
+  $Sql = "UPDATE damage SET IsStatus = 9 WHERE DocNo = '$DocNo'";
+
+  if (mysqli_query($conn, $Sql)) {
+    $return['status'] = "success";
+    $return['form'] = "CancelDoc";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
+  } else {
+    $return['status'] = "failed";
+    $return['form'] = "CancelDoc";
+    echo json_encode($return);
+    mysqli_close($conn);
+    die;
+  }
+}
+
 if (isset($_POST['DATA'])) {
   $data = $_POST['DATA'];
   $DATA = json_decode(str_replace('\"', '"', $data), true);
 
   if ($DATA['STATUS'] == 'load_doc') {
     load_doc($conn, $DATA);
+  } else if ($DATA['STATUS'] == 'save_signature') {
+    save_signature($conn, $DATA);
   } else if ($DATA['STATUS'] == 'logout') {
     logout($conn, $DATA);
   }

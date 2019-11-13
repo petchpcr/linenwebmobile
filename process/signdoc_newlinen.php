@@ -14,7 +14,7 @@ function load_doc($conn, $DATA)
         $search = date('Y-m-d');
     }
     $Sql = "SELECT c.DocNo,f.FacName 
-            FROM clean c
+            FROM newlinentable c
             INNER JOIN factory f ON f.FacCode = c.FacCode 
             WHERE c.DocDate = '$search' 
             AND (c.SignFac IS NULL OR c.SignNH IS NULL) 

@@ -53,6 +53,16 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
+		function view_dep(Item, Request) {
+			var data = {
+				'DocNo': DocNo,
+				'Item': Item,
+				'Request': Request,
+				'STATUS': 'view_dep'
+			};
+			senddata(JSON.stringify(data));
+		}
+
 		function md_signature(FNC) {
 			signaturePad.clear();
 			sign_funciton = FNC;
@@ -71,7 +81,7 @@ $genarray = json_decode($json, TRUE);
 				url: "../process/signature_sum.php",
 				method: "POST",
 				data: {
-					IsMenu: "signdoc_clean_detail",
+					IsMenu: "signdoc_newlinen_detail",
 					DocNo: DocNo,
 					SignCode: dataURL,
 					sign_funciton: sign_funciton
@@ -100,7 +110,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			window.location.href = 'signdoc_clean.php?siteCode=' + siteCode;
+			window.location.href = 'signdoc_newlinen.php?siteCode=' + siteCode;
 		}
 
 		function logout(num) {
@@ -133,7 +143,7 @@ $genarray = json_decode($json, TRUE);
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/signdoc_clean_detail.php';
+			var URL = '../process/signdoc_newlinen_detail.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',
@@ -151,7 +161,7 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_doc') {
-							$("#DepName").val(temp['DepName']);
+							$("#HptName").val(temp['HptName']);
 							$("#FName").val(temp['FName']);
 							$("#FacName").val(temp['FacName']);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
@@ -167,12 +177,28 @@ $genarray = json_decode($json, TRUE);
 							for (var i = 0; i < temp['cnt']; i++) {
 								var num = i + 1;
 								var Str = "<tr><td><div class='row'>";
-								Str += "<div scope='row' class='col-5 d-flex align-items-center justify-content-center'>" + num + "</div>";
-								Str += "<div class='col-7'><div class='row'><div class='col-12 text-truncate font-weight-bold mb-1'>" + temp[i]['ItemName'] + "</div>";
-								Str += "<div class='col-12 text-black-50 mb-1'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div></div></td></tr>";
+								Str += "<div scope='row' class='col-3 d-flex align-items-center justify-content-center'>" + num + "</div>";
+								Str += "<div class='col-6'><div class='row'><div class='col-12 text-truncate font-weight-bold mb-1'>" + temp[i]['ItemName'] + "</div>";
+								Str += "<div class='col-12 text-black-50 mb-1'><?php echo $array['numberSize'][$language]; ?> " + temp[i]['Qty'] + " / <?php echo $array['weight'][$language]; ?> " + temp[i]['Weight'] + " </div></div></div>";
+								Str += "<div class='col-3 justify-content-center d-flex align-items-center'><button onclick='view_dep(\"" + temp[i]['ItemCode'] + "\",\"" + temp[i]['RequestName'] + "\")' class='btn btn-info'>แผนก</button></div></div></td></tr>";
 
 								$("#item").append(Str);
 							}
+						} else if (temp["form"] == 'view_dep') {
+							$("#item_name").text(temp['ItemName']);
+							$('#show_dep').empty();
+							for (var i = 0; i < temp['cnt']; i++) {
+								var Str = "<div class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								Str += "<div class='d-flex align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
+								Str += "<div class='mr-auto'>" + temp['DepName'][i] + "</div>";
+								Str += "<input type='text' class='form-control text-center bg-white ml-2' style='max-width:80px;' value='" + temp['Qty'][i] + "' disabled>";
+								Str += "<input type='text' class='form-control text-center bg-white mx-2' style='max-width:80px;' value='" + temp['Weight'][i] + "' disabled>";
+								Str += "</div>";
+								Str += "</div>";
+								$('#show_dep').append(Str);
+							}
+							$('#md_view_dep').modal('show');
+
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 
@@ -244,9 +270,9 @@ $genarray = json_decode($json, TRUE);
 						</div>
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">
-								<span class="input-group-text" style="width:100px;"><?php echo $genarray['department'][$language] ?></span>
+								<span class="input-group-text" style="width:100px;"><?php echo $genarray['Hospital'][$language] ?></span>
 							</div>
-							<input type="text" id="DepName" class="form-control bg-white" style="color:#1659a2;" readonly>
+							<input type="text" id="HptName" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">
@@ -286,8 +312,9 @@ $genarray = json_decode($json, TRUE);
 					<tr class="bg-primary text-white">
 						<th scope="col">
 							<div class="row">
-								<div class="col-5 text-center"><?php echo $array['no'][$language]; ?></div>
-								<div class="col-7 text-left"><?php echo $array['list'][$language]; ?></div>
+								<div class="col-3 text-center"><?php echo $array['no'][$language]; ?></div>
+								<div class="col-6 text-left"><?php echo $array['list'][$language]; ?></div>
+								<div class="col-3 text-center"><?php echo $genarray['department'][$language]; ?></div>
 							</div>
 						</th>
 					</tr>
@@ -316,6 +343,34 @@ $genarray = json_decode($json, TRUE);
 	</div>
 
 	<!-- Modal -->
+	<div class="modal fade" id="md_view_dep" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="item_name"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+					<div class="bg-primary text-white d-flex mb-2 mx-0" style="border-radius:0.25rem;">
+						<div class="text-left w-100 py-0 pr-0 pl-4"><?php echo $genarray['department'][$language]; ?></div>
+						<div class="text-left p-0" style="width:140px;"><?php echo $genarray['qty'][$language]; ?></div>
+						<div class="text-left p-0" style="width:145px;"><?php echo $genarray['weight'][$language]; ?></div>
+					</div>
+					<div id="show_dep"></div>
+				</div>
+
+				<div class="modal-footer text-center">
+					<div class="w-100 d-flex justify-content-center m-0">
+						<button id="btn_add_items" data-dismiss="modal" type="button" class="btn btn-secondary m-2"><?php echo $genarray['close'][$language]; ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="modal fade" id="ModalSign" tabindex="-1" role="dialog" aria-hidden='false'>
 		<div class="modal-dialog" role="document">
 			<div class="modal-content" style="background-color:#fff;">

@@ -4,77 +4,50 @@ require '../connect/connect.php';
 require 'logout.php';
 date_default_timezone_set("Asia/Bangkok");
 
-function load_site($conn, $DATA)
-{
-  $siteCode = $DATA["siteCode"];
-  $From = $DATA["From"];
-  $DocNo = $DATA["DocNo"];
-  $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
-
-  $meQuery = mysqli_query($conn, $Sql);
-  while ($Result = mysqli_fetch_assoc($meQuery)) {
-    $return['HptName'] = $Result['HptName'];
-    $boolean = true;
-  }
-
-  if ($boolean) {
-    $return['status'] = "success";
-    $return['form'] = "load_site";
-    echo json_encode($return);
-    mysqli_close($conn);
-    die;
-  } else {
-    $return['status'] = "failed";
-    $return['form'] = "load_site";
-    echo json_encode($return);
-    mysqli_close($conn);
-    die;
-  }
-}
-
 function load_doc($conn, $DATA)
 {
   $count = 0;
   $DocNo = $DATA["DocNo"];
-  $From = $DATA["From"];
-  if ($_SESSION['lang'] == 'en') {
-    $TName = 'EngPerfix';
-    $FName = 'EngName';
-    $LName = 'EngLName';
-  } else {
-    $TName = 'ThPerfix';
-    $FName = 'ThName';
-    $LName = 'ThLName';
-  }
   if ($_SESSION['lang'] == "th") {
     $FacName = "FacNameTH";
     $HptName = "HptNameTH";
+    $TName = 'ThPerfix';
+    $FName = 'ThName';
+    $LName = 'ThLName';
   } else {
     $FacName = "FacName";
     $HptName = "HptName";
+    $TName = 'EngPerfix';
+    $FName = 'EngName';
+    $LName = 'EngLName';
   }
   $boolean = false;
   $boolean2 = false;
-  $Sql = "SELECT RefDocNo,$From.IsStatus,
-          DATE_FORMAT($From.Modify_Date,'%d %M %Y') AS xdate,
-          DATE_FORMAT($From.Modify_Date,'%H:%i') AS xtime,
+  $Sql = "SELECT RefDocNo,dirty.IsStatus,
+          DATE_FORMAT(dirty.Modify_Date,'%d %M %Y') AS xdate,
+          DATE_FORMAT(dirty.Modify_Date,'%H:%i') AS xtime,
+          Total,
+          SignFac,
+          SignNH,
           users.$TName AS TName,
           users.$FName AS FName,
           users.$LName AS LName,
-          Total,
-          factory.$FacName AS FacName,
-          site.$HptName AS HptName
-          FROM $From,users,site,factory
-          WHERE DocNo ='$DocNo'
-          AND factory.FacCode = $From.FacCode 
-          AND users.ID = $From.Modify_Code
-          AND $From.HptCode = site.HptCode";
+          site.$HptName AS HptName,
+          factory.$FacName AS FacName
+
+          FROM dirty
+          INNER JOIN users ON users.ID = dirty.Modify_Code
+          INNER JOIN site ON site.HptCode = dirty.HptCode
+          INNER JOIN factory ON factory.FacCode = dirty.FacCode 
+          WHERE DocNo ='$DocNo'";
 
   $meQuery = mysqli_query($conn, $Sql);
   while ($Result = mysqli_fetch_assoc($meQuery)) {
     $return['DocNo'] = $Result['RefDocNo'];
     $return['IsStatus'] = $Result['IsStatus'];
     $return['Total']  = $Result['Total'];
+    $return['SignFac']  = $Result['SignFac'];
+    $return['SignNH']  = $Result['SignNH'];
     $return['xdate'] = $Result['xdate'];
     $return['xtime'] = $Result['xtime'];
     $return['FName']  = $Result['TName'] . $Result['FName'] . " " . $Result['LName'];
@@ -194,7 +167,7 @@ function view_dep($conn, $DATA)
   }
 }
 
-function CancelDoc($conn, $DATA)
+function save_signature($conn, $DATA)
 {
   $DocNo = $DATA["DocNo"];
 
@@ -219,14 +192,12 @@ if (isset($_POST['DATA'])) {
   $data = $_POST['DATA'];
   $DATA = json_decode(str_replace('\"', '"', $data), true);
 
-  if ($DATA['STATUS'] == 'load_site') {
-    load_site($conn, $DATA);
-  } else if ($DATA['STATUS'] == 'load_doc') {
+  if ($DATA['STATUS'] == 'load_doc') {
     load_doc($conn, $DATA);
   } else if ($DATA['STATUS'] == 'view_dep') {
     view_dep($conn, $DATA);
-  } else if ($DATA['STATUS'] == 'CancelDoc') {
-    CancelDoc($conn, $DATA);
+  } else if ($DATA['STATUS'] == 'save_signature') {
+    save_signature($conn, $DATA);
   } else if ($DATA['STATUS'] == 'logout') {
     logout($conn, $DATA);
   }

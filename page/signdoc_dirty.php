@@ -50,7 +50,7 @@ require '../getTimeZone.php';
 		}
 		
 		function view_detail(DocNo) {
-			window.location.href = 'signdoc_clean_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo;
+			window.location.href = 'signdoc_dirty_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo;
 		}
 
 		function back() {
@@ -62,7 +62,7 @@ require '../getTimeZone.php';
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/signdoc_clean.php';
+			var URL = '../process/signdoc_dirty.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',

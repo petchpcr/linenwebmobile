@@ -8,14 +8,18 @@ function load_doc($conn, $DATA)
 {
     $count = 0;
     $DocNo = $DATA["DocNo"];
-    if ($_SESSION['lang'] == 'en') {
-        $TName = 'EngPerfix';
-        $FName = 'EngName';
-        $LName = 'EngLName';
-    } else {
+    if ($_SESSION['lang'] == 'th') {
+        $FacName = "FacNameTH";
+        $HptName = "HptNameTH";
         $TName = 'ThPerfix';
         $FName = 'ThName';
         $LName = 'ThLName';
+    } else {
+        $FacName = "FacName";
+        $HptName = "HptName";
+        $TName = 'EngPerfix';
+        $FName = 'EngName';
+        $LName = 'EngLName';
     }
     $boolean = false;
     $boolean2 = false;
@@ -26,11 +30,14 @@ function load_doc($conn, $DATA)
                     users.$FName AS FName,
                     users.$LName AS LName,
                     Total,
-                    site.HptName
-            FROM newlinentable,users,site
-            WHERE DocNo ='$DocNo'
-            AND users.ID = newlinentable.Modify_Code
-            AND newlinentable.HptCode = site.HptCode";
+                    site.$HptName AS HptName,
+                    factory.$FacName AS FacName
+
+            FROM newlinentable
+            INNER JOIN users ON users.ID = newlinentable.Modify_Code
+            INNER JOIN site ON site.HptCode = newlinentable.HptCode
+            INNER JOIN factory ON factory.FacCode = newlinentable.FacCode 
+            WHERE DocNo ='$DocNo'";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -41,6 +48,7 @@ function load_doc($conn, $DATA)
         $return['FName']  = $Result['TName'] . $Result['FName'] . " " . $Result['LName'];
         $return['Total']  = $Result['Total'];
         $return['HptName']  = $Result['HptName'];
+        $return['FacName']  = $Result['FacName'];
         $boolean = true;
     }
     $return['boolean'] = $boolean;
