@@ -196,13 +196,15 @@ $genarray = json_decode($json, TRUE);
 
 		function item_handler() {
 			var RequestName = $("#search_items").val();
-			var data = {
-				'DocNo': DocNo,
-				'now_dep': now_dep,
-				'RequestName': RequestName,
-				'STATUS': 'item_handler'
-			};
-			senddata(JSON.stringify(data));
+			if (RequestName != "") {
+				var data = {
+					'DocNo': DocNo,
+					'now_dep': now_dep,
+					'RequestName': RequestName,
+					'STATUS': 'item_handler'
+				};
+				senddata(JSON.stringify(data));
+			}
 		}
 
 		function list_to_arr() {
@@ -433,8 +435,11 @@ $genarray = json_decode($json, TRUE);
 		function add_round(dep, item, HDL) {
 			var qty = $("#val_qty").val();
 			var weight = $("#val_weight").val();
-
-			if (qty != "" && weight != "") {
+			
+			if (qty != "") {
+				if (weight == "") { // ถ้าไม่กรอกให้เซ็ทเป็น 0
+					weight = 0;
+				}
 				var data = {
 					'DocNo': DocNo,
 					'dep': dep,
@@ -446,7 +451,6 @@ $genarray = json_decode($json, TRUE);
 				};
 				senddata(JSON.stringify(data));
 			}
-
 		}
 
 		function del_all_round(dep, item) {

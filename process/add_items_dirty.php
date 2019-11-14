@@ -255,7 +255,7 @@
         $return['item'] = $item;
         $count = 0;
         
-        $Sql = "SELECT id,RowID,Qty,Weight FROM dirty_detail_round WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item'";
+        $Sql = "SELECT id,RowID,Qty,Weight FROM dirty_detail_round WHERE DocNo = '$DocNo' AND DepCode = '$dep' AND ItemCode = '$item' ORDER BY Id ASC";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
             $return[$count]['id'] = $Result['id'];
