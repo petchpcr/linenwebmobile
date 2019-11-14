@@ -67,7 +67,7 @@ $genarray = json_decode($json, TRUE);
 		var isRound = {};
 		var dep_search = 0;
 		var sign_funciton = "";
-		var Square = 0;
+		var Square = 1;
 
 		var round = {};
 		round['dep'] = {};
