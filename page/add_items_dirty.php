@@ -854,7 +854,7 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'edit_round') {
 							for (var i = 0; i < temp['cnt']; i++) {
 								var Str = "<div class='col-12 d-flex mb-2 px-0'>";
-								Str += "<div style='width:50px;'>";
+								Str += "<div style='min-width:50px;'>";
 								Str += "รอบ " + Number(i + 1);
 								Str += "</div>";
 								Str += "<div class='d-flex'>";
