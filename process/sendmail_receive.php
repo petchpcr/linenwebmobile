@@ -149,43 +149,11 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
   } else {
     $return['status'][$count] = "failed";
   }
-
-  // $mail = new PHPMailer;
-  // $mail->CharSet = "UTF-8";
-  // $mail->isSMTP();
-  // $mail->SMTPDebug = 2;
-  // $mail->Debugoutput = 'html';
-  // $mail->Host = 'smtp.gmail.com';
-  // $mail->Port = 587;
-  // $mail->SMTPSecure = 'tls';
-  // $mail->SMTPAuth = true;
-  // $mail->Username = "poseinttelligence@gmail.com";
-  // $mail->Password = "pose6628";
-  // $mail->setFrom('poseinttelligence@gmail.com', 'Pose Intelligence');
-
-  // $mail->addAddress($email, $FName);
-  // $mail->Subject = $Subject;
-  // $mail->msgHTML($body);
-  // $mail->AltBody = 'This is a plain-text message body';
-  // $mail->send();
-
-  //$mail->addAttachment('images/phpmailer_mini.png');
 }
-// if (!$mail->send()) {
-//     $return['status'] = "failed";
-//     $return['form'] = "sendmail";
-//     $return['msg'] = "Mailer Error: " . $mail->ErrorInfo;
+
 echo json_encode($return);
 mysqli_close($conn);
 die;
-// } else {
-//     $return['status'] = "success";
-//     $return['form'] = "sendmail";
-//     $return['msg'] = "Message sent!";
-//     echo json_encode($return);
-//     mysqli_close($conn);
-//     die;
-// }
 
 function getTHmonthFromnum($month)
 {

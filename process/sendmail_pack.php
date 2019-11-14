@@ -6,17 +6,13 @@ date_default_timezone_set('Asia/Bangkok');
 
 $DocNo = $_POST["DocNo"];
 $siteCode = $_POST["siteCode"];
-$detail = $_POST["detail"];
-$From = $_POST["From"];
 
-$Sql = "UPDATE $From SET ReceiveDetail = '$detail' WHERE DocNo = '$DocNo'";
-mysqli_query($conn, $Sql);
-
-$Sql = "SELECT DATE_FORMAT(ReceiveDate,'%H:%i') AS Ctime FROM $From WHERE DocNo='$DocNo'";
+$Sql = "SELECT PackDetail,DATE_FORMAT(PackEndTime,'%H:%i') AS EndPack FROM process WHERE DocNo='$DocNo'";
 $meQuery = mysqli_query($conn, $Sql);
 $Result = mysqli_fetch_assoc($meQuery);
-$Ctime = $Result['Ctime'];
-$return['detail'] = $detail;
+$PackDetail = $Result['PackDetail'];
+$Ctime = $Result['EndPack'];
+$return['PackDetail'] = $PackDetail;
 
 $Sql = "SELECT FacName,FacNameTH,HptName,HptNameTH 
         FROM site,factory 
@@ -59,7 +55,7 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
   $email = $Result['email'];
   $FName = $Result['EngPerfix'] . $Result['EngName'] . " " . $Result['EngLName'];
 
-  $Subject = "Problem of receive detail";
+  $Subject = "Problem detail of Pack process";
   // build message body
   $body = "
             <html>
@@ -71,7 +67,7 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
             To : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $HptName . "</u></div>
             <div style='margin-bottom:10px;'>Document : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $DocNo . "</u></div>
             <div style='margin-bottom:10px;'>Comment Time : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $Ctime . "</u></div>
-            <div style='margin-bottom:10px;'>Problem details : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $detail . "</u></div>
+            <div style='margin-bottom:10px;'>Problem details : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $PackDetail . "</u></div>
             
             <hr style='margin:25px 0;'>
             
@@ -79,7 +75,7 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
             ถึง โรงพยาบาล : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $HptNameTH . "</u></div>
             <div style='margin-bottom:10px;'>เลขที่เอกสาร : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $DocNo . "</u></div>
             <div style='margin-bottom:10px;'>เวลาในการเริ่มกรอกรายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $Ctime . "</u></div>
-            <div style='margin-bottom:10px;'>รายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $detail . "</u></div>
+            <div style='margin-bottom:10px;'>รายละเอียด : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $PackDetail . "</u></div>
             
             <hr style='margin:25px 0;'>
 

@@ -160,11 +160,9 @@ function end_wash($conn, $DATA)
 {
     $DocNo = $DATA["DocNo"];
     $From = $DATA["From"];
-    $question = $DATA["question"];
-    $return['question'] = $question;
     $boolean = false;
 
-    $Sql = "UPDATE process SET WashEndTime = NOW(),WashDetail = '$question' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE process SET WashEndTime = NOW() WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     $Sql = "SELECT  TIMEDIFF(WashEndTime,WashStartTime) AS UseTime
@@ -203,7 +201,10 @@ function start_pack($conn, $DATA)
 {
     $DocNo = $DATA["DocNo"];
     $From = $DATA["From"];
-    $Sql = "UPDATE process SET PackStartTime = NOW() WHERE DocNo = '$DocNo'";
+    $question = $DATA["question"];
+    $return['question'] = $question;
+    $Sql = "UPDATE process SET PackStartTime = NOW(),WashDetail = '$question' WHERE DocNo = '$DocNo'";
+    mysqli_query($conn, $Sql);
 
     if (mysqli_query($conn, $Sql)) {
         $Sql = "UPDATE $From SET IsProcess = 3 WHERE DocNo = '$DocNo' ";

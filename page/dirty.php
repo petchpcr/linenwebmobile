@@ -52,6 +52,7 @@ require '../getTimeZone.php';
 		var Arr_ItemName = [];
 		var Arr_Qty = [];
 		var sendmail = 0;
+		var comment = 0;
 
 		$(document).ready(function(e) {
 			if (Menu == 'factory') {
@@ -125,7 +126,7 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
-		function confirm_yes(DocNo, From) {
+		function confirm_yes(DocNo, GetFrom) {
 			swal({
 				title: '<?php echo $genarray['confirmReceivedoc'][$language]; ?>',
 				text: "<?php echo $array['ConReceived'][$language]; ?>",
@@ -136,9 +137,14 @@ require '../getTimeZone.php';
 
 			}).then((result) => {
 				sendmail = 0;
+				comment = 0;
 				Arr_ItemCode = [];
 				Arr_ItemName = [];
 				Arr_Qty = [];
+				var question = $("textarea#ipt_question").val();
+				if (question != "") {
+					comment = 1;
+				}
 				$('.receive_item').each(function(index) {
 					var ItemCode = $(this).attr("data-itemcode");
 					var ItemName = $(this).attr("data-itemname");
@@ -146,7 +152,7 @@ require '../getTimeZone.php';
 					var code_i = rcv_code.indexOf(ItemCode);
 					if (code_i >= 0) {
 						if (Qty != rcv_qty[code_i]) {
-							sendmail++;
+							sendmail = 1;
 						}
 					}
 					Arr_ItemCode.push(ItemCode);
@@ -159,7 +165,7 @@ require '../getTimeZone.php';
 
 				var data = {
 					'DocNo': DocNo,
-					'From': From,
+					'From': GetFrom,
 					'Str_ItemCode': Str_ItemCode,
 					'Str_ItemName': Str_ItemName,
 					'Str_Qty': Str_Qty,
@@ -167,6 +173,7 @@ require '../getTimeZone.php';
 				};
 				senddata(JSON.stringify(data));
 			})
+			
 		}
 
 		function change_dep() {
@@ -325,6 +332,7 @@ require '../getTimeZone.php';
 								}
 							}
 						} else if (temp["form"] == 'receive_zero') {
+							$("textarea#ipt_question").val("");
 							$("#show_receive").empty();
 							rcv_code = [];
 							rcv_qty = [];
@@ -349,31 +357,83 @@ require '../getTimeZone.php';
 							$("#btn_receive").attr("onclick", "confirm_yes(\"" + temp['DocNo'] + "\",\"" + temp['From'] + "\")");
 							$("#md_receive").modal("show");
 						} else if (temp["form"] == 'confirm_yes') {
-							if (sendmail == 0) {
-								show_process(temp['DocNo'], temp['From']);
-							} else {
+							if (sendmail == 1 || comment == 1) {
+								var detail = $("textarea#ipt_question").val();
 								swal({
 									title: 'Please wait...',
 									text: 'Processing',
 									allowOutsideClick: false
 								})
 								swal.showLoading()
-								$.ajax({
-									url: '../process/sendmail_receive.php',
-									method: "POST",
-									data: {
-										DocNo: temp['DocNo'],
-										Arr_ItemName: Arr_ItemName,
-										Receive_Qty: Arr_Qty,
-										Total_Qty: rcv_qty,
-										siteCode: '<?php echo $siteCode; ?>'
-									},
-									success: function(data) {
-										swal.close();
-										show_process(temp['DocNo'], temp['From']);
-									}
-								});
 
+								if (sendmail == 1 && comment == 1) {
+									$.ajax({
+										url: '../process/sendmail_receive.php',
+										method: "POST",
+										data: {
+											DocNo: temp['DocNo'],
+											Arr_ItemName: Arr_ItemName,
+											Receive_Qty: Arr_Qty,
+											Total_Qty: rcv_qty,
+											siteCode: '<?php echo $siteCode; ?>'
+										},
+										success: function(data) {
+											console.log("comment!");
+											$.ajax({
+												url: '../process/sendmail_wash.php',
+												method: "POST",
+												data: {
+													DocNo: temp['DocNo'],
+													siteCode: '<?php echo $siteCode; ?>',
+													detail: detail,
+													From: temp['From']
+												},
+												success: function(data) {
+													swal.close();
+													show_process(temp['DocNo'], temp['From']);
+												}
+											});
+										}
+									});
+
+								} else if (sendmail == 1 && comment == 0) {
+									$.ajax({
+										url: '../process/sendmail_receive.php',
+										method: "POST",
+										data: {
+											DocNo: temp['DocNo'],
+											Arr_ItemName: Arr_ItemName,
+											Receive_Qty: Arr_Qty,
+											Total_Qty: rcv_qty,
+											siteCode: '<?php echo $siteCode; ?>'
+										},
+										success: function(data) {
+											swal.close();
+											show_process(temp['DocNo'], temp['From']);
+										}
+									});
+									
+								} else if (sendmail == 0 && comment == 1) {
+									$.ajax({
+										url: '../process/sendmail_wash.php',
+										method: "POST",
+										data: {
+											DocNo: temp['DocNo'],
+											siteCode: '<?php echo $siteCode; ?>',
+											detail: detail,
+											From: temp['From']
+										},
+										success: function(data) {
+											swal.close();
+											show_process(temp['DocNo'], temp['From']);
+										}
+									});
+								} else {
+									console.log("No Case...");
+								}
+
+							} else {
+								show_process(temp['DocNo'], temp['From']);
 							}
 						} else if (temp["form"] == 'add_dirty') {
 							var Userid = temp['user']
@@ -533,6 +593,10 @@ require '../getTimeZone.php';
 						</div> -->
 
 					</div>
+					<div class="mb-2">โปรดกรอกรายละเอียดหากมีปัญหาเกิดขึ้น</div>
+					<textarea id="ipt_question" cols="20" rows="10" class="form-control"></textarea>
+
+
 				</div>
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
