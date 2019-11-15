@@ -7,12 +7,13 @@ date_default_timezone_set('Asia/Bangkok');
 $DocNo = $_POST["DocNo"];
 $siteCode = $_POST["siteCode"];
 
-$Sql = "SELECT PackDetail,DATE_FORMAT(PackEndTime,'%H:%i') AS EndPack FROM process WHERE DocNo='$DocNo'";
+$Sql = "SELECT PackDetail,DATE_FORMAT(PackStartTime,'%H:%i') AS StartPack FROM process WHERE DocNo='$DocNo'";
 $meQuery = mysqli_query($conn, $Sql);
 $Result = mysqli_fetch_assoc($meQuery);
 $PackDetail = $Result['PackDetail'];
-$Ctime = $Result['EndPack'];
+$Ctime = $Result['StartPack'];
 $return['PackDetail'] = $PackDetail;
+$return['Ctime'] = $Ctime;
 
 $Sql = "SELECT FacName,FacNameTH,HptName,HptNameTH 
         FROM site,factory 
@@ -54,6 +55,8 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
 
   $email = $Result['email'];
   $FName = $Result['EngPerfix'] . $Result['EngName'] . " " . $Result['EngLName'];
+  $return['email'] = $email;
+  $return['FName'] = $FName;
 
   $Subject = "Problem detail of Pack process";
   // build message body

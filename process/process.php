@@ -203,7 +203,7 @@ function start_pack($conn, $DATA)
     $From = $DATA["From"];
     $question = $DATA["question"];
     $return['question'] = $question;
-    $Sql = "UPDATE process SET PackStartTime = NOW(),WashDetail = '$question' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE process SET PackStartTime = NOW(),PackDetail = '$question' WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     if (mysqli_query($conn, $Sql)) {
