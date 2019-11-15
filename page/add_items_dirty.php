@@ -540,7 +540,7 @@ $genarray = json_decode($json, TRUE);
 				if ((num1 - num2) >= 2) {
 					this.value = $("#" + this.id).data("oldnum");
 				} else if ((num1 - num2) == 0) {
-					this.value = Number(this.value);
+					// this.value = Number(this.value);
 				}
 				$("#" + this.id).data("oldnum", $("#" + this.id).val());
 				// cal_weight();
