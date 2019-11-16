@@ -90,7 +90,7 @@ function Add_all_items($conn, $DATA)
             $par = $pResult['ParQty'];
 
             $aSql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
-                    VALUES ('$DocNo','$ItemCode',1,$par,0,$par) ";
+                    VALUES ('$DocNo','$ItemCode',1,$par,0,0) ";
             mysqli_query($conn, $aSql);
 
             $count++;
@@ -233,6 +233,7 @@ function del_doc($conn, $DATA)
 {
     $DocNo = $DATA['DocNo'];
     $Sql = "DELETE FROM shelfcount_detail WHERE DocNo = '$DocNo'";
+    mysqli_query($conn, $Sql);
     $Sql = "DELETE FROM shelfcount WHERE DocNo = '$DocNo'";
     if (mysqli_query($conn, $Sql)) {
         $return['status'] = "success";
