@@ -96,20 +96,22 @@ function load_doc_procees($conn, $DATA)
     
             UNION ALL       
     
-            SELECT
-            repair_wash.DocNo,
-            repair_wash.IsReceive,
-            repair_wash.IsProcess,
-            repair_wash.IsStatus,
-            'repair_wash' AS F
-            FROM
-                repair_wash
-            WHERE HptCode = '$siteCode' 
-            AND repair_wash.DocDate LIKE '%$search%'
-            AND repair_wash.FacCode = '$FacCode'
-            AND repair_wash.IsStatus > 0 
-            AND repair_wash.IsStatus != 9 
-            UNION ALL                 
+            -- SELECT
+            -- repair_wash.DocNo,
+            -- repair_wash.IsReceive,
+            -- repair_wash.IsProcess,
+            -- repair_wash.IsStatus,
+            -- 'repair_wash' AS F
+            -- FROM
+            --     repair_wash
+            -- WHERE HptCode = '$siteCode' 
+            -- AND repair_wash.DocDate LIKE '%$search%'
+            -- AND repair_wash.FacCode = '$FacCode'
+            -- AND repair_wash.IsStatus > 0 
+            -- AND repair_wash.IsStatus != 9 
+
+            -- UNION ALL      
+
             SELECT
             dirty.DocNo,
             dirty.IsReceive,
@@ -201,19 +203,23 @@ function load_doc_tracking($conn, $DATA)
                 AND dirty.DocDate LIKE '%$search%'
                 AND dirty.IsStatus > 1 
                 AND dirty.IsStatus != 9 
+
                 UNION ALL
-                SELECT
-                    repair_wash.DocNo,
-                    repair_wash.IsReceive,
-                    repair_wash.IsStatus,
-                    repair_wash.IsProcess,
-                'repair_wash' AS F
-                FROM repair_wash
-                WHERE HptCode = '$siteCode' 
-                AND repair_wash.IsStatus > 1
-                AND repair_wash.IsStatus != 9 
-                AND repair_wash.DocDate LIKE '%$search%'
-                UNION ALL
+
+                -- SELECT
+                --     repair_wash.DocNo,
+                --     repair_wash.IsReceive,
+                --     repair_wash.IsStatus,
+                --     repair_wash.IsProcess,
+                -- 'repair_wash' AS F
+                -- FROM repair_wash
+                -- WHERE HptCode = '$siteCode' 
+                -- AND repair_wash.IsStatus > 1
+                -- AND repair_wash.IsStatus != 9 
+                -- AND repair_wash.DocDate LIKE '%$search%'
+
+                -- UNION ALL
+
                 SELECT
                     newlinentable.DocNo,
                     newlinentable.IsReceive,

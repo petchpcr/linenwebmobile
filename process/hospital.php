@@ -27,14 +27,14 @@
                             WHERE newlinentable.FacCode = $FacCode
                             AND site.IsStatus = 0
                             
-                            UNION ALL
+                            -- UNION ALL
                             
-                            SELECT site.HptCode,site.$hptname AS Hname 
-                            FROM rewash 
-                            INNER JOIN department on department.DepCode = rewash.DepCode
-                            INNER JOIN site on site.HptCode = department.HptCode
-                            WHERE rewash.FacCode = $FacCode
-                            AND site.IsStatus = 0
+                            -- SELECT site.HptCode,site.$hptname AS Hname 
+                            -- FROM rewash 
+                            -- INNER JOIN department on department.DepCode = rewash.DepCode
+                            -- INNER JOIN site on site.HptCode = department.HptCode
+                            -- WHERE rewash.FacCode = $FacCode
+                            -- AND site.IsStatus = 0
                             ) h
                  GROUP BY HptCode
                  ORDER BY Hname ASC";
