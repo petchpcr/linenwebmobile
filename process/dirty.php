@@ -11,9 +11,11 @@ function load_dep($conn, $DATA)
 {
     $count = 0;
     $siteCode = $DATA["siteCode"];
-    $Sql = "SELECT DepCode, DepName FROM department
-                WHERE department.HptCode='$siteCode' AND IsStatus = 0
-                ORDER BY DepName ASC";
+    $Sql = "SELECT DepCode, DepName 
+            FROM department
+            WHERE department.HptCode='$siteCode' 
+            AND IsStatus = 0
+            ORDER BY DepName ASC";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -22,6 +24,7 @@ function load_dep($conn, $DATA)
         $count++;
     }
     $return['cnt'] = $count;
+    // $return['Sql'] = $Sql;
 
     if ($count > 0) {
         $return['status'] = "success";
@@ -561,7 +564,10 @@ function load_Fac($conn, $DATA)
         $FacName = "FacName";
     }
     $count = 0;
-    $Sql = "SELECT FacCode,$FacName AS FacName FROM factory WHERE IsCancel = 0";
+    $Sql = "SELECT FacCode,$FacName AS FacName 
+            FROM factory 
+            WHERE IsCancel = 0 
+            AND HptCode = '$siteCode'";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -570,6 +576,7 @@ function load_Fac($conn, $DATA)
         $count++;
     }
     $return['cnt'] = $count;
+    // $return['Sql'] = $Sql;
 
     if ($count > 0) {
         $return['status'] = "success";

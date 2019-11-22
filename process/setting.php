@@ -6,6 +6,7 @@ date_default_timezone_set("Asia/Bangkok");
 
 function load_site_fac($conn)
 {
+    $HptCode = $_SESSION['HptCode'];
     $cnt_Fac = 0;
     if ($_SESSION['lang'] == "th") {
         $FacName = "FacNameTH";
@@ -14,8 +15,9 @@ function load_site_fac($conn)
     }
 
     $Sql = "SELECT FacCode,$FacName AS Fname 
-                FROM factory 
-                WHERE IsCancel = 0 ";
+            FROM factory 
+            WHERE IsCancel = 0 
+            AND HptCode = '$HptCode'";
     $meQuery = mysqli_query($conn, $Sql);
     $return['Faode'] = $Sql;
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -24,6 +26,7 @@ function load_site_fac($conn)
         $cnt_Fac++;
     }
     $return['cnt_Fac'] = $cnt_Fac;
+    // $return['Sql'] = $Sql;
 
     $return['status'] = "success";
     $return['form'] = "load_site_fac";
