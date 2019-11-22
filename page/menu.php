@@ -184,7 +184,7 @@ $genarray = json_decode($json, TRUE);
 
 							<div class="my-col-menu">
 								<button onclick="menu_click(' . "'newlinentable'" . ')" type="button" class="btn btn-mylight btn-block">
-										<img src="../img/fabric.png">
+										<img src="../img/laundry.png">
 										<div class="text-truncate">' . $array["newLinen"][$language] . '</div>
 								</button>
 							</div>
@@ -198,19 +198,19 @@ $genarray = json_decode($json, TRUE);
 
 							<div class="my-col-menu">
 								<button data-toggle="modal" data-target="#md_signdoc" type="button" class="btn btn-mylight btn-block">
-									<img src="../img/laundry.png">
+									<img src="../img/signing.png">
 									<div class="text-truncate">' . $array["signdoc"][$language] . '</div>
 								</button>
 							</div>
 
 							<div class="my-col-menu">
 								<button onclick="menu_click(' . "'clean'" . ')" type="button" class="btn btn-mylight btn-block">
-									<img src="../img/laundry.png">
+									<img src="../img/fabric.png">
 									<div class="text-truncate">' . $array["stock_receive"][$language] . '</div>
 								</button>
 							</div>
 
-							<div class="my-col-menu">
+							<div class="my-col-menu" hidden>
 								<button onclick="menu_click(' . "'qc'" . ')" type="button" class="btn btn-mylight btn-block">
 									<img src="../img/QC.png">
 									<div class="text-truncate">' . $array["QC"][$language] . '</div>

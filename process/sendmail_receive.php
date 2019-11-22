@@ -67,8 +67,8 @@ while ($Result = mysqli_fetch_assoc($meQuery)) {
 
         <hr style='margin:25px 0;'>
         <div style='width: 100%;text-align: center;'>
-        <div style='margin-bottom:10px;'>Laundry : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $HptName . "</u>
-         To : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $FacName . "</u></div>
+        <div style='margin-bottom:10px;'>Hospital : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $HptName . "</u>
+         To Laundry : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $FacName . "</u></div>
         <div style='margin-bottom:10px;'>Document : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $DocNo . "</u></div>
         <div style='margin-bottom:10px;'>Date : <u style='text-decoration: underline;text-decoration-style: dotted;margin:0 10px;'>" . $dateEN . "</u></div>
         <table cellspacing='0' cellpadding='1' border='1' style='width:80%;margin:0 10%;text-align:center;'>
