@@ -3,13 +3,14 @@ session_start();
 require '../connect/connect.php';
 date_default_timezone_set("Asia/Bangkok");
 
+$UserID = $_SESSION['Userid'];
 $DocNo = $_POST['DocNo'];
 $SignCode = $_POST['SignCode'];
 $SignFnc = $_POST['SignFnc'];
 $return['SignFnc'] = $SignFnc;
 
 if ($SignFnc == 'start_send') {
-    $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),signStart = '$SignCode' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),signStart = '$SignCode',UserID = '$UserID' WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
     
     echo json_encode($return);
