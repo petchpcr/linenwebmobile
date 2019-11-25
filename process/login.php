@@ -26,6 +26,7 @@ function checklogin($conn, $DATA)
             AND     users.Password = '$password' 
             AND     users.IsCancel = 0
             AND     users.IsActive = 0";
+  $return['Sql'] = $Sql;
 
   $meQuery = mysqli_query($conn, $Sql);
   while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -81,6 +82,7 @@ function clear_active($conn, $DATA)
   $meQuery = mysqli_query($conn, $Sql);
   $Result = mysqli_fetch_assoc($meQuery);
   $count = $Result['cnt'];
+  $return['Sql'] = $Sql;
 
   if ($count == 1) {
     $Sql = "UPDATE users SET IsActive = 0 WHERE UserName = '$user' AND Password = '$password'";

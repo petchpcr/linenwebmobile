@@ -17,6 +17,7 @@ function load_doc($conn, $DATA)
             FROM damage c
             INNER JOIN department f ON f.DepCode = c.DepCode 
             WHERE c.DocDate LIKE '%$search%' 
+            AND f.HptCode = '$siteCode'
             AND (c.SignFac IS NULL OR c.SignNH IS NULL) 
             AND c.IsStatus = 1";
 

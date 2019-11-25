@@ -67,17 +67,24 @@
         if($search == null || $search == ""){
             $search = date('Y-m-d');
         }
+        if ($_SESSION['lang'] == "th") {
+            $FacName = "FacNameTH";
+        } else {
+            $FacName = "FacName";
+        }
         $siteCode = $DATA["siteCode"];
         $boolean = false;
         $Sql = "SELECT
-                        DocNo,
-                        IsReceive,
-                        IsProcess,
-                        IsStatus
+                        newlinentable.DocNo,
+                        newlinentable.IsReceive,
+                        newlinentable.IsProcess,
+                        newlinentable.IsStatus,
+                        factory.$FacName AS FacName
                 FROM    newlinentable
-                WHERE HptCode = '$siteCode' 
-                AND DocDate LIKE '%$search%'
-                ORDER BY IsStatus ASC,DocNo DESC";
+                INNER JOIN factory ON factory.FacCode = newlinentable.FacCode 
+                WHERE newlinentable.HptCode = '$siteCode' 
+                AND newlinentable.DocDate LIKE '%$search%'
+                ORDER BY newlinentable.IsStatus ASC,newlinentable.DocNo DESC";
         $return['sql'] = $Sql;
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -85,6 +92,7 @@
             $return[$count]['IsReceive'] = $Result['IsReceive'];
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
+            $return[$count]['FacName'] = $Result['FacName'];
 
             $count++;
             $boolean = true;
@@ -237,7 +245,10 @@
             $Fname = "FacName";
         }
         $count = 0;
-        $Sql = "SELECT FacCode,$Fname AS FacName FROM factory WHERE IsCancel=0";
+        $Sql = "SELECT FacCode,$Fname AS FacName 
+                FROM factory 
+                WHERE IsCancel = 0
+                AND HptCode = '$siteCode'";
         $boolean = false;
 
         $meQuery = mysqli_query($conn, $Sql);

@@ -168,10 +168,10 @@ $genarray = json_decode($json, TRUE);
 			var test = $(id).data("name");
 		}
 
-		function chk_dep(DepCode) {
+		function chk_dep(DepCode,DepName) {
 			now_dep = DepCode;
 			$("#search_items").val("");
-			if (DepCode == "3211") {
+			if (DepName == "linen") {
 				Square = 1;
 			} else {
 				Square = 0;
@@ -774,7 +774,7 @@ $genarray = json_decode($json, TRUE);
 									all_dep_name.push(temp[i]['DepName']);
 								}
 								var id = "depchk" + i;
-								var Str = "<div onclick='chk_dep(\"" + temp[i]['DepCode'] + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								var Str = "<div onclick='chk_dep(\"" + temp[i]['DepCode'] + "\",\"" + temp[i]['DepName'] + "\")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
 								Str += "<div class='d-flex align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
 								Str += "<div class='mr-auto text-truncate'>" + temp[i]['DepName'] + "</div>";
 								// Str += "<input onclick='event.cancelBubble=true;' onkeydown='make_number()' class='form-control text-center ml-2 numonly' type='text' id='depqty" + i + "' value='1' style='max-width:80px;'>";
