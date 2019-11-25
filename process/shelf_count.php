@@ -170,10 +170,20 @@
         }
 
         if ($count == 1) {
+            $Sql = "SELECT CONCAT(
+                        SUBSTR('$DocNo', 3, 3),
+                        YEAR (DATE(NOW())),
+                        LPAD(MONTH(DATE(NOW())), 2, 0),
+                        SUBSTR('$DocNo', 11, 6)
+                    ) LabNumber";
+            $meQuery = mysqli_query($conn, $Sql);
+            $Result = mysqli_fetch_assoc($meQuery);
+            $LabNumber  = $Result['LabNumber'];
 
             $Sql = "    INSERT INTO     shelfcount
                                         ( 
                                             DocNo,
+                                            LabNumber,
                                             DocDate,
                                             DepCode,
                                             RefDocNo,
@@ -192,6 +202,7 @@
                         VALUES
                                         (
                                             '$DocNo',
+                                            '$LabNumber',
                                             DATE(NOW()),
                                             '$DepCode',
                                             '',
@@ -361,4 +372,3 @@
         mysqli_close($conn);
         die;
     }
-?>

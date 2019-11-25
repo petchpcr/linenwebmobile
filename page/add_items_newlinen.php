@@ -323,7 +323,7 @@ $genarray = json_decode($json, TRUE);
 			}
 
 			if (doc_weight > 0) {
-				$("#sum_weight").val(doc_weight);
+				$("#sum_weight").val(doc_weight.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
 			} else {
 				$("#sum_weight").val("");
 			}
@@ -430,7 +430,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function currencyFormat(num) {
-			var price = num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+			var price = num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 			$("#sum_weight").val(price);
 		}
 

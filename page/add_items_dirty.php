@@ -374,7 +374,7 @@ $genarray = json_decode($json, TRUE);
 			// }
 
 			if (doc_weight > 0) {
-				$("#sum_weight").val(doc_weight);
+				$("#sum_weight").val(doc_weight.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
 			} else {
 				$("#sum_weight").val("");
 			}
@@ -409,7 +409,7 @@ $genarray = json_decode($json, TRUE);
 				$("#round_itemname").text(item);
 				HDL = 1;
 			}
-			console.log(item);
+			// console.log(item);
 
 			var click = "add_round('" + dep + "','" + item + "'," + HDL + ")";
 			$("#btn_add_round").attr("onclick", click);
@@ -574,7 +574,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function currencyFormat(num) {
-			var price = num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+			var price = num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 			$("#sum_weight").val(price);
 		}
 
