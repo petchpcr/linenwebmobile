@@ -80,6 +80,7 @@ require '../getTimeZone.php';
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_doc') {
+							$("#document").empty();
 							for (var i = 0; i < temp['cnt']; i++) {
 								var status_class = "status4";
 								var status_text = "<?php echo $genarray['statunotsign'][$language]; ?>";
