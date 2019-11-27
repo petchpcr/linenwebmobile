@@ -295,6 +295,7 @@ function load_doc($conn, $DATA)
                     dirty.IsReceive,
                     dirty.IsProcess,
                     dirty.IsStatus,
+                    dirty.Modify_Date,
                     factory.$FacName AS FacName
             FROM    dirty
             INNER JOIN factory ON factory.FacCode = dirty.FacCode
@@ -309,6 +310,8 @@ function load_doc($conn, $DATA)
         $return[$count]['IsProcess'] = $Result['IsProcess'];
         $return[$count]['IsStatus'] = $Result['IsStatus'];
         $return[$count]['FacName'] = $Result['FacName'];
+        $return[$count]['Modify_Date'] = date_format(date_create($Result['Modify_Date']),"d-m-Y");
+        $return[$count]['Modify_Time'] = date_format(date_create($Result['Modify_Date']),"H:i:s");
 
         $count++;
     }

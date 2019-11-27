@@ -79,6 +79,7 @@
                         newlinentable.IsReceive,
                         newlinentable.IsProcess,
                         newlinentable.IsStatus,
+                        newlinentable.Modify_Date,
                         factory.$FacName AS FacName
                 FROM    newlinentable
                 INNER JOIN factory ON factory.FacCode = newlinentable.FacCode 
@@ -93,6 +94,8 @@
             $return[$count]['IsProcess'] = $Result['IsProcess'];
             $return[$count]['IsStatus'] = $Result['IsStatus'];
             $return[$count]['FacName'] = $Result['FacName'];
+            $return[$count]['Modify_Date'] = date_format(date_create($Result['Modify_Date']),"d-m-Y");
+            $return[$count]['Modify_Time'] = date_format(date_create($Result['Modify_Date']),"H:i:s");
 
             $count++;
             $boolean = true;
@@ -310,4 +313,3 @@
         mysqli_close($conn);
         die;
     }
-?>
