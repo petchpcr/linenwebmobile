@@ -85,6 +85,7 @@ function load_doc_procees($conn, $DATA)
             newlinentable.IsReceive,
             newlinentable.IsProcess,
             newlinentable.IsStatus,
+            newlinentable.Modify_Date,
             'newlinentable' AS F
             FROM
                 newlinentable
@@ -117,6 +118,7 @@ function load_doc_procees($conn, $DATA)
             dirty.IsReceive,
             dirty.IsProcess,
             dirty.IsStatus,
+            dirty.Modify_Date,
             'dirty' AS F
             FROM
                 dirty
@@ -133,6 +135,7 @@ function load_doc_procees($conn, $DATA)
                         IsReceive,
                         IsProcess,
                         IsStatus,
+                        Modify_Date,
                         '$From' AS F
                     FROM
                         $From
@@ -153,6 +156,10 @@ function load_doc_procees($conn, $DATA)
         $return[$count]['IsReceive'] = $Result['IsReceive'];
         $return[$count]['IsProcess'] = $Result['IsProcess'];
         $return[$count]['IsStatus'] = $Result['IsStatus'];
+        $Modify_Date = date_format(date_create($Result['Modify_Date']),"d-m-Y");
+        $Modify_Time = date_format(date_create($Result['Modify_Date']),"H:i:s");
+        $return[$count]['Modify_Date'] = $Modify_Date;
+        $return[$count]['Modify_Time'] = $Modify_Time;
         $return[$count]['From'] = $Result['F'];
 
         $DocNo = $Result['DocNo'];

@@ -313,6 +313,7 @@ $genarray = json_decode($json, TRUE);
 							<option value="clean"><?php echo $array['cleanlinen'][$language]; ?></option>
 							<option value="claim"><?php echo $array['claimlaundry'][$language]; ?></option>
 							<option value="rewash"><?php echo $array['rewash'][$language]; ?></option>
+							<option value="return_wash"><?php echo $array['return_wash'][$language]; ?></option>
 						</select>
 					</div>
 				</div>
