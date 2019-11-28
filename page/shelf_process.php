@@ -337,38 +337,27 @@ $genarray = json_decode($json, TRUE);
 									$("#sign_zone_start").removeAttr("hidden");
 								}
 							} else if ((temp['IsStatus'] == 3 && temp['DvEndTime'] != null) || temp['IsStatus'] == 4) { //-----เสร็จสิ้น
+								var ck_start = temp['signStart'];
+								var ck_end = temp['Signature'];
 
-								if (temp['Signature'] == null || temp['Signature'] == "") {
-									// swal({
-									// 	title: "<?php echo $genarray['confirm'][$language]; ?>",
-									// 	text: "<?php echo $array['ConfFinShipping'][$language]; ?>",
-									// 	type: "warning",
-									// 	showCancelButton: false,
-									// 	confirmButtonClass: "btn-success",
-									// 	cancelButtonClass: "btn-danger",
-									// 	confirmButtonText: "<?php echo $genarray['yes2'][$language]; ?>",
-									// 	cancelButtonText: "<?php echo $genarray['isno'][$language]; ?>",
-									// 	closeOnConfirm: true,
-									// 	closeOnCancel: true,
-									// }).then(result => {
-									// 	window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&siteCode=' + temp['HptCode'];
-									// })
-									var ck_start = temp['signStart'];
+								if (temp['IsSign'] == 1) {
+									if (temp['Signature'] == null || temp['Signature'] == "") {
+										$("#show_sign_start").html(ck_start);
+										$("#sign_zone_start").removeAttr("hidden");
+										md_send('end_send');
+										
+									} else {
+										$("#show_sign_start").html(ck_start);
+										$("#sign_zone_start").removeAttr("hidden");
 
-									$("#show_sign_start").html(ck_start);
-									$("#sign_zone_start").removeAttr("hidden");
-									md_send('end_send');
-									
+										$("#show_sign").html(ck_end);
+										$("#sign_zone").removeAttr("hidden");
+									}
 								} else {
-									var ck = temp['Signature'];
-									var ck_start = temp['signStart'];
-
 									$("#show_sign_start").html(ck_start);
 									$("#sign_zone_start").removeAttr("hidden");
-
-									$("#show_sign").html(ck);
-									$("#sign_zone").removeAttr("hidden");
 								}
+								
 
 								$("#W_Sum_btn").remove();
 								$("#P_Sum_btn").remove();

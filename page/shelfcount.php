@@ -188,7 +188,7 @@ require '../getTimeZone.php';
 									status_class = "status1";
 									status_text = "<?php echo $genarray['statusOnWork'][$language]; ?>";
 									status_line = "StatusLine_1";
-								} else if (temp[i]['IsStatus'] == 4 && temp[i]['signature'] != null) {
+								} else if (temp[i]['IsStatus'] == 4) {
 									status_class = "status3";
 									status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 									status_line = "StatusLine_3";

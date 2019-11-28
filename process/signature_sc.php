@@ -21,8 +21,6 @@ if ($SignFnc == 'start_send') {
     $Sql = "UPDATE shelfcount SET signature = '$SignCode',SignEndTime = NOW(),IsStatus = 4  WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
-    $count = 0;
-    $cnk = 0;
     $Sql1 = "SELECT department.HptCode, shelfcount.DepCode 
     FROM shelfcount  INNER JOIN department ON shelfcount.DepCode = department.DepCode  WHERE shelfcount.DocNo = '$DocNo'";
     $meQuery1 = mysqli_query($conn, $Sql1);
