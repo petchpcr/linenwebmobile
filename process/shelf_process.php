@@ -197,8 +197,9 @@
     }
 
     function start_send($conn, $DATA){
+        $UserID = $_SESSION['Userid'];
         $DocNo = $DATA["DocNo"];
-        $Sql = "UPDATE shelfcount SET DvStartTime = NOW() WHERE DocNo = '$DocNo'";
+        $Sql = "UPDATE shelfcount SET DvStartTime = NOW(),UserID = '$UserID' WHERE DocNo = '$DocNo'";
 
         if(mysqli_query($conn,$Sql)){
             $return['status'] = "success";

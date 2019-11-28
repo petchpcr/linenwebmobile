@@ -38,6 +38,7 @@ $genarray = json_decode($json, TRUE);
 		var DocNo = "<?php echo $DocNo ?>";
 		var From = "<?php echo $From ?>";
 		var SignFnc = "";
+		var IsSign;
 		
 		$(document).ready(function(e) {
 			load_process();
@@ -103,7 +104,15 @@ $genarray = json_decode($json, TRUE);
 
 		function md_send(fnc) {
 			SignFnc = fnc;
-			$("#ModalSign").modal('show');
+			if (SignFnc == 'start_send') {
+				if (IsSign == 1) {
+					$("#ModalSign").modal('show');
+				} else {
+					start_send();
+				}
+			} else {
+				$("#ModalSign").modal('show');
+			}
 		}
 
 		function save_sign(dataURL) {
@@ -138,13 +147,12 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function start_send() {
-			window.location.href = 'signature.php?Menu=' + Menu + '&DocNo=' + DocNo + '&siteCode=' + siteCode + '&fnc=start_send';
-			// var data = {
-			// 	'DocNo': DocNo,
-			// 	'From': From,
-			// 	'STATUS': 'start_send'
-			// };
-			// senddata(JSON.stringify(data));
+			var data = {
+				'DocNo': DocNo,
+				'From': From,
+				'STATUS': 'start_send'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function end_send() {
@@ -194,6 +202,7 @@ $genarray = json_decode($json, TRUE);
 
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_process') {
+							IsSign = temp['IsSign'];
 							$("#back_div").remove();
 							var Back = "<div id='back_div' style='width:139.14px;'><button onclick='back(\"" + temp['HptCode'] + "\")' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i><?php echo $genarray['back'][$language]; ?></button></div>";
 							$("#user").before(Back);
@@ -332,15 +341,18 @@ $genarray = json_decode($json, TRUE);
 									$("#S_Start").text(S_Start.toLocaleTimeString());
 									$("#S_End").text("--:--:--");
 
-									var ck_start = temp['signStart'];
-									$("#show_sign_start").html(ck_start);
-									$("#sign_zone_start").removeAttr("hidden");
+									if (IsSign == 1) {
+										var ck_start = temp['signStart'];
+										$("#show_sign_start").html(ck_start);
+										$("#sign_zone_start").removeAttr("hidden");
+									}
+									
 								}
 							} else if ((temp['IsStatus'] == 3 && temp['DvEndTime'] != null) || temp['IsStatus'] == 4) { //-----เสร็จสิ้น
 								var ck_start = temp['signStart'];
 								var ck_end = temp['Signature'];
 
-								if (temp['IsSign'] == 1) {
+								if (IsSign == 1) {
 									if (temp['Signature'] == null || temp['Signature'] == "") {
 										$("#show_sign_start").html(ck_start);
 										$("#sign_zone_start").removeAttr("hidden");
@@ -353,12 +365,8 @@ $genarray = json_decode($json, TRUE);
 										$("#show_sign").html(ck_end);
 										$("#sign_zone").removeAttr("hidden");
 									}
-								} else {
-									$("#show_sign_start").html(ck_start);
-									$("#sign_zone_start").removeAttr("hidden");
 								}
 								
-
 								$("#W_Sum_btn").remove();
 								$("#P_Sum_btn").remove();
 								$("#S_Sum_btn").remove();
@@ -643,12 +651,12 @@ $genarray = json_decode($json, TRUE);
 				</div>
 			</div>
 
-			<div id="sign_zone_start" class="mx-3 mb-3 text-center" hidden>
+			<div class="mx-3 mb-3 text-center">
 				<div class="col-md-8 col-sm-12 mx-auto my-4">
 					<button onclick="view_detail()" class="btn btn-block btn-info"><?php echo $genarray['detail'][$language]; ?></button>
 				</div>
 				
-				<div class="text-center">
+				<div id="sign_zone_start" class="text-center" hidden>
 					<div><b>ลายเซนต์ผู้ส่ง</b></div>
 					<div class="row justify-content-center">
 						<div class="card mb-2 p-2">
