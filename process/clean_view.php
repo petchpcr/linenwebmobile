@@ -9,6 +9,12 @@ function load_doc($conn, $DATA)
   $count = 0;
   $DocNo = $DATA["DocNo"];
   $siteCode = $DATA["siteCode"];
+  
+  if ($DATA["Menu"] == 'clean') {
+    $Menu = "cleanstock";
+  } else if ($DATA["Menu"] == 'clean_real') {
+    $Menu = "clean";
+  }
   if ($_SESSION['lang'] == 'en') {
     $TName = 'EngPerfix';
     $FName = 'EngName';
@@ -28,19 +34,19 @@ function load_doc($conn, $DATA)
   }
 
   $s = "1";
-  $Sql = "SELECT RefDocNo,cleanstock.IsStatus,
-                  DATE_FORMAT(cleanstock.Modify_Date,'%d %M %Y') AS xdate,
-                  DATE_FORMAT(cleanstock.Modify_Date,'%H:%i') AS xtime,
+  $Sql = "SELECT RefDocNo,$Menu.IsStatus,
+                  DATE_FORMAT($Menu.Modify_Date,'%d %M %Y') AS xdate,
+                  DATE_FORMAT($Menu.Modify_Date,'%H:%i') AS xtime,
                   users.$TName AS TName,
                   users.$FName AS FName,
                   users.$LName AS LName,
                   Total,
                   department.DepCode,
                   department.DepName
-          FROM cleanstock, users, site, department
+          FROM $Menu, users, site, department
           WHERE DocNo ='$DocNo'
-          AND users.ID = cleanstock.Modify_Code
-          AND cleanstock.DepCode = department.DepCode
+          AND users.ID = $Menu.Modify_Code
+          AND $Menu.DepCode = department.DepCode
           AND users.HptCode = site.HptCode";
 
   $meQuery = mysqli_query($conn, $Sql);
@@ -58,18 +64,18 @@ function load_doc($conn, $DATA)
   $return['boolean'] = $boolean;
 
   $s = "2";
-  $Sql2 = "SELECT cleanstock_detail.ItemCode,
-                    item.ItemName,
-                    cleanstock_detail.UnitCode,
-                    cleanstock_detail.Qty,
-                    cleanstock_detail.Weight 
-            FROM cleanstock_detail,
-                  item 
-            WHERE DocNo = '$DocNo'
-            AND	  item.ItemCode = cleanstock_detail.ItemCode";
+  if ($DATA["Menu"] == 'clean') {
+    $Sql2 = "SELECT $Menu"."_detail.ItemCode,
+                  item.ItemName,
+                  $Menu"."_detail.UnitCode,
+                  $Menu"."_detail.Qty,
+                  $Menu"."_detail.Weight 
+              FROM $Menu"."_detail,item 
+              WHERE DocNo = '$DocNo'
+              AND	  item.ItemCode = $Menu"."_detail.ItemCode";
 
-  $meQuery2 = mysqli_query($conn, $Sql2);
-  while ($Result = mysqli_fetch_assoc($meQuery2)) {
+    $meQuery2 = mysqli_query($conn, $Sql2);
+    while ($Result = mysqli_fetch_assoc($meQuery2)) {
     $return[$count]['ItemCode'] = $Result['ItemCode'];
     $return[$count]['ItemName'] = $Result['ItemName'];
     $return[$count]['UnitCode'] = $Result['UnitCode'];
@@ -77,7 +83,46 @@ function load_doc($conn, $DATA)
     $return[$count]['Weight'] = $Result['Weight'];
     $count++;
     $s = "true";
+    }
+  } else if ($DATA["Menu"] == 'clean_real') {
+    $ar_item = array();
+    $ar_request = array();
+
+    $Sql = "SELECT ItemCode,RequestName
+            FROM clean_detail 
+            WHERE DocNo = '$DocNo'
+            GROUP BY ItemCode,RequestName";
+    
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+      array_push($ar_item,$Result['ItemCode']);
+      array_push($ar_request,$Result['RequestName']);
+    }
+    $return['ar_item'] = $ar_item;
+    $return['ar_request'] = $ar_request;
+
+    foreach ($ar_item as $key => $val) {
+      if ($val == 'HDL') {
+        $ItemName = $ar_request[$key];
+        $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM clean_detail WHERE DocNo = '$DocNo' AND RequestName = '$ar_request[$key]'";
+      } else {
+        $Sql = "SELECT ItemName FROM item WHERE ItemCode = '$val'";
+        $meQuery = mysqli_query($conn, $Sql);
+        $Result = mysqli_fetch_assoc($meQuery);
+        $ItemName = $Result['ItemName'];
+        $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM clean_detail WHERE DocNo = '$DocNo' AND ItemCode = '$val'";
+      }
+      $meQuery = mysqli_query($conn, $Sql);
+      $Result = mysqli_fetch_assoc($meQuery);
+      $return[$count]['ItemCode'] = $val;
+      $return[$count]['RequestName'] = $ar_request[$key];
+      $return[$count]['ItemName'] = $ItemName;
+      $return[$count]['Qty'] = $Result['Qty'];
+      $return[$count]['Weight'] = $Result['Weight'];
+      $count++;
+    }
   }
+
 
   $s = "3";
   $return['cnt'] = $count;
@@ -102,8 +147,13 @@ function load_doc($conn, $DATA)
 function CancelDoc($conn, $DATA)
 {
   $DocNo = $DATA["DocNo"];
+  if ($DATA["Menu"] == 'clean') {
+    $Menu = "cleanstock";
+  } else if ($DATA["Menu"] == 'clean_real') {
+    $Menu = "clean";
+  }
 
-  $Sql = "SELECT RefDocNo FROM cleanstock WHERE DocNo = '$DocNo'";
+  $Sql = "SELECT RefDocNo FROM $Menu WHERE DocNo = '$DocNo'";
   $meQuery = mysqli_query($conn, $Sql);
   $Result = mysqli_fetch_assoc($meQuery);
   $RefDocNo = $Result['RefDocNo'];
@@ -114,10 +164,10 @@ function CancelDoc($conn, $DATA)
   mysqli_query($conn, $Sql);
   $Sql = "UPDATE repair_wash SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
-  $Sql = "UPDATE cleanstock SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
+  $Sql = "UPDATE $Menu SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
 
-  $Sql = "UPDATE cleanstock SET IsStatus = 9 WHERE DocNo = '$DocNo'";
+  $Sql = "UPDATE $Menu SET IsStatus = 9 WHERE DocNo = '$DocNo'";
 
   if (mysqli_query($conn,$Sql)) {
     $return['status'] = "success";

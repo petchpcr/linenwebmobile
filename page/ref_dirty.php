@@ -69,11 +69,13 @@ require '../getTimeZone.php';
 			var Userid = "<?php echo $Userid ?>";
 			var siteCode = "<?php echo $siteCode ?>";
 			var DepCode = "<?php echo $DepCode ?>";
+			var Menu = "<?php echo $Menu ?>";
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
 				'DepCode': DepCode,
 				'refDocNo': refDocNo,
+				'Menu': Menu,
 				'STATUS': 'add_dirty'
 			};
 			senddata(JSON.stringify(data));
@@ -146,7 +148,11 @@ require '../getTimeZone.php';
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty';
+							if (Menu == 'clean') {
+								window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty';
+							} else if (Menu == 'clean_real') {
+								window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty';
+							}
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

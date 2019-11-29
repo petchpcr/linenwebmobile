@@ -45,6 +45,8 @@ $genarray = json_decode($json, TRUE);
 				window.location.href = 'dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=dirty';
 			} else if (menu == 'clean') {
 				window.location.href = 'clean.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
+			} else if (menu == 'clean_real') {
+				window.location.href = 'clean_real.php?siteCode=<?php echo $HptCode; ?>&Menu=clean_real';
 			} else if (menu == 'signdoc') {
 				var slc_signdoc = $("#sigh_doc").val();
 				window.location.href = 'signdoc_' + slc_signdoc + '.php?siteCode=<?php echo $HptCode; ?>';
@@ -200,6 +202,13 @@ $genarray = json_decode($json, TRUE);
 								<button data-toggle="modal" data-target="#md_signdoc" type="button" class="btn btn-mylight btn-block">
 									<img src="../img/signing.png">
 									<div class="text-truncate">' . $array["signdoc"][$language] . '</div>
+								</button>
+							</div>
+
+							<div class="my-col-menu">
+								<button onclick="menu_click(' . "'clean_real'" . ')" type="button" class="btn btn-mylight btn-block">
+									<img src="../img/fabric.png">
+									<div class="text-truncate">' . $array["clean"][$language] . '</div>
 								</button>
 							</div>
 

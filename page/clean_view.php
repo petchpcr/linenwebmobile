@@ -46,6 +46,7 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'siteCode': siteCode,
 				'DocNo': DocNo,
+				'Menu': Menu,
 				'STATUS': 'load_doc'
 			};
 			senddata(JSON.stringify(data));
@@ -86,7 +87,7 @@ $genarray = json_decode($json, TRUE);
 			var Userid = '<?php echo $Userid; ?>';
 			var DepCode = $("#add_doc").data("depcode");
 			var RefDocNo = $("#RefDocNo").val();
-			window.location.href = 'add_items.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1';
+			window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1';
 		}
 
 		function CancelDoc() {
@@ -102,6 +103,7 @@ $genarray = json_decode($json, TRUE);
 			}).then(function() {
 				var data = {
 					'DocNo': DocNo,
+					'Menu': Menu,
 					'STATUS': 'CancelDoc'
 				};
 				senddata(JSON.stringify(data));
