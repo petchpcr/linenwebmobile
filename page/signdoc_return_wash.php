@@ -48,7 +48,7 @@ require '../getTimeZone.php';
 			};
 			senddata(JSON.stringify(data));
 		}
-		
+
 		function view_detail(DocNo) {
 			window.location.href = 'signdoc_return_wash_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo;
 		}
@@ -167,11 +167,12 @@ require '../getTimeZone.php';
 		<div class="text-center my-4">
 			<div id="HptName" class="text-truncate font-weight-bold" style="font-size:25px;"></div>
 		</div>
+		<div class="d-flex justify-content-center mb-3">
+			<div width="50"><input type="text" id="datepicker" class="form-control bg-white text-center datepicker-here" style="font-size:20px;" data-language=<?php echo $language ?> data-date-format='dd-mm-yyyy' readonly></div>
+			<button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
+		</div>
 		<div id="document" style="margin-bottom:70px;">
-			<div class="d-flex justify-content-center mb-3">
-				<div width="50"><input type="text" id="datepicker" class="form-control bg-white text-center datepicker-here" style="font-size:20px;" data-language=<?php echo $language ?> data-date-format='dd-mm-yyyy' readonly></div>
-				<button onclick="load_doc()" class="btn btn-info ml-2 p-1" type="button"><i class="fas fa-search mr-1"></i><?php echo $genarray['search'][$language]; ?></button>
-			</div>
+
 		</div>
 	</div>
 
