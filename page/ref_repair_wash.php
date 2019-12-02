@@ -36,6 +36,11 @@ require '../getTimeZone.php';
 	<script src="../dist/js/sweetalert2.min.js"></script>
 	<link rel="stylesheet" href="../dist/css/sweetalert2.min.css">
 	<script>
+		var Userid = "<?php echo $Userid ?>";
+		var DepCode = "<?php echo $DepCode ?>";
+		var siteCode = "<?php echo $siteCode ?>";
+		var Menu = "<?php echo $Menu ?>";
+
 		$(document).ready(function(e) {
 			load_site();
 			load_doc();
@@ -44,7 +49,6 @@ require '../getTimeZone.php';
 		// function
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_site'
@@ -54,8 +58,6 @@ require '../getTimeZone.php';
 
 		function load_doc() {
 			var search = $('#datepicker').val();
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = "<?php echo $Menu ?>";
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
@@ -66,12 +68,10 @@ require '../getTimeZone.php';
 		}
 
 		function add_dirty(refDocNo) {
-			var Userid = "<?php echo $Userid ?>";
-			var siteCode = "<?php echo $siteCode ?>";
-			var DepCode = "<?php echo $DepCode ?>";
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
+				'Menu': Menu,
 				'DepCode': DepCode,
 				'refDocNo': refDocNo,
 				'STATUS': 'add_dirty'
@@ -81,9 +81,7 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = '<?php echo $Menu; ?>';
-			window.location.href = "clean.php?siteCode=" + siteCode + "&Menu=" + Menu;
+			window.location.href = Menu + ".php?siteCode=" + siteCode + "&Menu=" + Menu;
 		}
 		// end function
 
@@ -145,8 +143,11 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
-							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							if (Menu == 'clean') {
+								window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							} else if (Menu == 'clean_real') {
+								window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							}
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

@@ -178,7 +178,7 @@ function create_clean($conn, $DATA)
     $Userid = $_SESSION['Userid'];
     $return['Userid'] = $Userid;
     $count = 0;
-    $Sql = "    SELECT          CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
@@ -189,7 +189,7 @@ function create_clean($conn, $DATA)
                 ON              clean.DepCode = department.DepCode
 
 
-                WHERE           DocNo Like CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('CN',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";

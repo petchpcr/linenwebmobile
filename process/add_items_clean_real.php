@@ -12,16 +12,14 @@
         $show_md = $DATA["show_md"];
         $count = 0;
 
-        $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
+        $Sql = "SELECT DISTINCT     ItemCode,ItemName,UnitCode
     
-                FROM                item_stock,item
+                FROM                item
 
-                WHERE               DepCode = '$DepCode'
-                AND                 HptCode = '$siteCode'
-                AND                 item_stock.ItemCode = item.ItemCode
-                AND                 item.IsClean = 1
-                AND                 item.ItemName LIKE '%$Search%' 
-                ORDER BY            item.ItemName ASC";
+                WHERE               HptCode = '$siteCode'
+                AND                 IsClean = 1
+                AND                 ItemName LIKE '%$Search%' 
+                ORDER BY            ItemName ASC";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $return[$count]['ItemCode']    =  $Result['ItemCode'];

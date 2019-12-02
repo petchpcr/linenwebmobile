@@ -32,6 +32,11 @@ function load_site($conn, $DATA)
 
 function load_doc($conn, $DATA)
 {
+    if ($DATA["Menu"] == 'clean') {
+        $Menu = "cleanstock";
+    } else if ($DATA["Menu"] == 'clean_real') {
+        $Menu = "clean";
+    }
     $count = 0;
     $search = date_format(date_create($DATA["search"]),"Y-m-d");
     $return['search'] = $DATA["search"];
@@ -42,23 +47,23 @@ function load_doc($conn, $DATA)
     $return['siteCode'] = $siteCode;
     $boolean = false;
     $Sql = "SELECT DISTINCT
-                    cleanstock.DocNo,
-                    cleanstock.IsStatus,
-                    cleanstock.IsCheckList,
+                    $Menu.DocNo,
+                    $Menu.IsStatus,
+                    $Menu.IsCheckList,
                     department.DepName,
                     site.HptCode,
                     site.HptName
                 FROM
-                cleanstock
-                INNER JOIN department ON department.DepCode = cleanstock.DepCode AND department.DepCode = cleanstock.DepCode
+                $Menu
+                INNER JOIN department ON department.DepCode = $Menu.DepCode AND department.DepCode = $Menu.DepCode
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
-                INNER JOIN qccheckpass ON qccheckpass.DocNo = cleanstock.DocNo 
+                INNER JOIN qccheckpass ON qccheckpass.DocNo = $Menu.DocNo 
                 WHERE site.HptCode = '$siteCode' 
-                AND cleanstock.DocDate LIKE '%$search%'
-                AND cleanstock.IsStatus = 3 
-                AND cleanstock.IsStatus != 9 
+                AND $Menu.DocDate LIKE '%$search%'
+                AND $Menu.IsStatus = 3 
+                AND $Menu.IsStatus != 9 
                 AND qccheckpass.Lost > 0
-                ORDER BY cleanstock.IsStatus ASC,cleanstock.DocNo DESC";
+                ORDER BY $Menu.IsStatus ASC,$Menu.DocNo DESC";
     $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -88,28 +93,35 @@ function load_doc($conn, $DATA)
 
 function add_clean($conn, $DATA)
 {
+    if ($DATA["Menu"] == 'clean') {
+        $Menu = "cleanstock";
+        $H_doc = "CK";
+    } else if ($DATA["Menu"] == 'clean_real') {
+        $Menu = "clean";
+        $H_doc = "CN";
+    }
     $Userid = $DATA["Userid"];
     $siteCode = $DATA["siteCode"];
     $DepCode = $DATA["DepCode"];
     $RefDocNo = $DATA["refDocNo"];
     $return['RefDocNo'] = $RefDocNo;
 
-    $Sql = "SELECT FacCode FROM cleanstock WHERE DocNo = '$RefDocNo'";
+    $Sql = "SELECT FacCode FROM $Menu"." WHERE DocNo = '$RefDocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $FacCode = $Result['FacCode'];
 
-    $Sql = "    SELECT          CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('$H_doc',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
 
-                FROM            cleanstock
+                FROM            $Menu"."
 
                 INNER JOIN      department 
-                ON              cleanstock.DepCode = department.DepCode
+                ON              $Menu".".DepCode = department.DepCode
 
-                WHERE           DocNo Like CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('$H_doc',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";
@@ -127,7 +139,7 @@ function add_clean($conn, $DATA)
     
     if ($count == 1) {
 
-        $Sql = "    INSERT INTO     cleanstock
+        $Sql = "    INSERT INTO     $Menu"."
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -141,8 +153,8 @@ function add_clean($conn, $DATA)
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            cleanstock.Modify_Code,
-                                            cleanstock.Modify_Date
+                                            Modify_Code,
+                                            Modify_Date
                                         )
                         VALUES
                                         ( 
@@ -169,7 +181,7 @@ function add_clean($conn, $DATA)
                 $return[$cnt]['Lost'] = $Result['Lost'];
                 $ItemCode = $Result['ItemCode'];
                 $Lost = $Result['Lost'];
-                $Sql2 = "INSERT INTO cleanstock_detail ( DocNo,ItemCode,UnitCode,Qty,Weight,IsCancel,IsCheckList ) VALUES ('$DocNo','$ItemCode',1,$Lost,0,0,0)";
+                $Sql2 = "INSERT INTO $Menu"."_detail ( DocNo,ItemCode,UnitCode,Qty,Weight,IsCancel,IsCheckList ) VALUES ('$DocNo','$ItemCode',1,$Lost,0,0,0)";
                 mysqli_query($conn, $Sql2);
                 $cnt++;
             }
@@ -192,14 +204,14 @@ function add_clean($conn, $DATA)
                                 DATE(NOW()),
                                 '$DepCode',
                                 '$RefDocNo',
-                                'Cleanstock',
+                                '$Menu',
                                 $Userid,
                                 DATE(NOW())
                             )";
         mysqli_query($conn, $Sql3);
                 
-        $Sql = "UPDATE cleanstock SET IsStatus = 5 WHERE DocNo = '$RefDocNo'";
-        mysqli_query($conn, $Sql);
+        // $Sql = "UPDATE $Menu SET IsStatus = 5 WHERE DocNo = '$RefDocNo'";
+        // mysqli_query($conn, $Sql);
 
         $return['user'] = $Userid;
         $return['siteCode'] = $siteCode;

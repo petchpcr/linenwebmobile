@@ -107,7 +107,7 @@ require '../getTimeZone.php';
 			} else if (slt == 3) {
 				window.location.href = 'ref_newlinentable.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
 			} else if (slt == 4) {
-				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean';
+				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean_real';
 			} else if (slt == 5) {
 				$("#choose_doc").modal('hide');
 				$("#md_factory").modal('show');
@@ -211,7 +211,7 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'create_clean') {
 							var DocNo = temp["DocNo"];
 							var Userid = temp["Userid"];
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						}
 					} else if (temp['status'] == "failed") {
 						if (temp["form"] == 'load_doc') {

@@ -74,6 +74,7 @@ require '../getTimeZone.php';
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
+				'Menu': Menu,
 				'DepCode': DepCode,
 				'refDocNo': refDocNo,
 				'STATUS': 'add_clean'
@@ -83,7 +84,7 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			window.location.href = "clean.php?siteCode=" + siteCode + "&Menu=" + Menu + "&From=" + From;
+			window.location.href = Menu + ".php?siteCode=" + siteCode + "&Menu=" + Menu + "&From=" + From;
 		}
 		// end function
 
@@ -139,7 +140,6 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
-							var Menu = '<?php echo $Menu; ?>';
 							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + '&Unweight=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';

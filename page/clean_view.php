@@ -53,7 +53,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+				window.location.href = Menu + '.php?siteCode=' + siteCode + '&Menu=' + Menu;
 		}
 
 		function logout(num) {

@@ -84,6 +84,13 @@ function load_doc($conn, $DATA)
 
 function add_dirty($conn, $DATA)
 {
+    if ($DATA["Menu"] == 'clean') {
+        $Menu = "cleanstock";
+        $H_doc = "CK";
+    } else if ($DATA["Menu"] == 'clean_real') {
+        $Menu = "clean";
+        $H_doc = "CN";
+    }
     $Userid = $DATA["Userid"];
     $siteCode = $DATA["siteCode"];
     $DepCode = $DATA["DepCode"];
@@ -95,17 +102,17 @@ function add_dirty($conn, $DATA)
     $Result = mysqli_fetch_assoc($meQuery);
     $FacCode = $Result['FacCode'];
 
-    $Sql = "    SELECT          CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('$H_doc',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
 
-                FROM            cleanstock
+                FROM            $Menu
 
                 INNER JOIN      department 
-                ON              cleanstock.DepCode = department.DepCode
+                ON              $Menu.DepCode = department.DepCode
 
-                WHERE           DocNo Like CONCAT('CK',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('$H_doc',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";
@@ -123,7 +130,7 @@ function add_dirty($conn, $DATA)
 
     if ($count == 1) {
 
-        $Sql = "    INSERT INTO     cleanstock
+        $Sql = "    INSERT INTO     $Menu
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -137,8 +144,8 @@ function add_dirty($conn, $DATA)
                                             Total,
                                             IsCancel,
                                             Detail,
-                                            cleanstock.Modify_Code,
-                                            cleanstock.Modify_Date
+                                            Modify_Code,
+                                            Modify_Date
                                         )
                         VALUES
                                         ( 
@@ -172,14 +179,14 @@ function add_dirty($conn, $DATA)
                                 DATE(NOW()),
                                 '$DepCode',
                                 '$RefDocNo',
-                                'Cleanstock',
+                                '$Menu',
                                 $Userid,
                                 DATE(NOW())
                             )";
         mysqli_query($conn, $Sql2);
 
-        $Sql = "UPDATE newlinentable SET IsStatus = 4 WHERE DocNo = '$RefDocNo'";
-        mysqli_query($conn, $Sql);
+        // $Sql = "UPDATE newlinentable SET IsStatus = 4 WHERE DocNo = '$RefDocNo'";
+        // mysqli_query($conn, $Sql);
 
         $return['user'] = $Userid;
         $return['siteCode'] = $siteCode;
