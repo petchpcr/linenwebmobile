@@ -517,7 +517,7 @@ $genarray = json_decode($json, TRUE);
 									var chk = "chk" + num;
 									var Str = "<button onclick='chk_items(\"" + chk + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
 									Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
-									Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "'></div><hr class='m-0'><div class='col-12 text-truncate text-left'>" + HptName + " / " + DepName + "</div></button>";
+									Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "'></div></button>";
 
 									$("#choose_item").append(Str);
 								}

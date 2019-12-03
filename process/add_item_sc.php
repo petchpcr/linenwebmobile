@@ -219,7 +219,7 @@ function add_item($conn, $DATA)
         mysqli_query($conn, $Sql);
     }
 
-    $Sql = "UPDATE shelfcount SET Modify_Code = '$Userid', Modify_Date = NOW(), ScEndTime = NOW(), IsStatus = 1, IsMobile = 1 WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE shelfcount SET Modify_Code = '$Userid', Modify_Date = NOW(), ScEndTime = NOW(), IsStatus = 0, IsMobile = 1 WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     $return['status'] = "success";
