@@ -70,14 +70,14 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
-		function add_rewash(refDocNo) {
+		function add_repair_wash(refDocNo) {
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
 				'Menu': Menu,
 				'DepCode': DepCode,
 				'refDocNo': refDocNo,
-				'STATUS': 'add_rewash'
+				'STATUS': 'add_repair_wash'
 			};
 			senddata(JSON.stringify(data));
 			console.log(data);
@@ -123,23 +123,20 @@ require '../getTimeZone.php';
 								status_text = "<?php echo $genarray['statusfin'][$language]; ?>";
 								status_line = "StatusLine_1";
 
-								if (temp[i]['IsStatus'] == 1) {
+								var Str = "<button onclick='add_repair_wash(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
+								Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
+								Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
+								Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
 
-									var Str = "<button onclick='add_rewash(\"" + temp[i]['DocNo'] + "\")' class='btn btn-mylight btn-block' style='align-items: center !important;'><div class='row'><div class='my-col-5 d-flex justify-content-end align-items-center'>";
-									Str += "<div class='row'><div class='card " + status_class + "'>" + status_text + "</div>";
-									Str += "<img src='../img/" + status_line + ".png' height='50'/></div></div><div class='my-col-7 text-left'>";
-									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['DocNo'] + "</div><div class='font-weight-light'>" + temp[i]['DepName'] + "</div></div></div></button>";
-
-									$("#document").append(Str);
-								}
+								$("#document").append(Str);
 							}
-						} else if (temp["form"] == 'add_rewash') {
+						} else if (temp["form"] == 'add_repair_wash') {
 							var Userid = temp['user']
 							var siteCode = temp['siteCode']
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
-							window.location.href = 'add_items_rewash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + '&Unweight=1';
+							window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + '&Unweight=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

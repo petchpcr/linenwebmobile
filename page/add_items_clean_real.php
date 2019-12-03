@@ -789,10 +789,16 @@ $genarray = json_decode($json, TRUE);
 							$("#items").empty();
 							if (temp['SignFac'] == null && temp['SignNH'] == null) {
 								$("#btn_sign_fac").removeAttr('hidden');
-							} else if (temp['SignFac'] != null && temp['SignNH'] == null) {
+								$("#btn_sign_nh").prop('hidden',true);
+							}
+							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
 								$("#btn_sign_nh").removeAttr('hidden');
-							} else if (temp['SignFac'] != null && temp['SignNH'] != null) {
+								$("#btn_sign_fac").prop('hidden',true);
+							}
+							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
 								$("#btn_save").removeAttr('hidden');
+								$("#btn_sign_fac").prop('hidden',true);
+								$("#btn_sign_nh").prop('hidden',true);
 							}
 							$("#md_round").modal('hide');
 							// $("#md_dep").modal('show');

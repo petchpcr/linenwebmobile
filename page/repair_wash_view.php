@@ -87,7 +87,7 @@ $genarray = json_decode($json, TRUE);
 			var Userid = '<?php echo $Userid; ?>';
 			var DepCode = $("#add_doc").data("depcode");
 			var RefDocNo = $("#RefDocNo").val();
-			window.location.href = 'add_items_rewash.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1';
+			window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1';
 		}
 
 		function CancelDoc() {
@@ -115,7 +115,7 @@ $genarray = json_decode($json, TRUE);
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/rewash_view.php';
+			var URL = '../process/repair_wash_view.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',

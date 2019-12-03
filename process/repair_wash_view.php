@@ -29,19 +29,19 @@ function load_doc($conn, $DATA)
   }
 
   $s = "1";
-  $Sql = "SELECT RefDocNo,rewash.IsStatus,
-                  DATE_FORMAT(rewash.Modify_Date,'%d %M %Y') AS xdate,
-                  DATE_FORMAT(rewash.Modify_Date,'%H:%i') AS xtime,
+  $Sql = "SELECT RefDocNo,repair_wash.IsStatus,
+                  DATE_FORMAT(repair_wash.Modify_Date,'%d %M %Y') AS xdate,
+                  DATE_FORMAT(repair_wash.Modify_Date,'%H:%i') AS xtime,
                   users.$TName AS TName,
                   users.$FName AS FName,
                   users.$LName AS LName,
                   Total,
                   department.DepCode,
                   department.DepName
-          FROM rewash, users, site, department
+          FROM repair_wash, users, site, department
           WHERE DocNo ='$DocNo'
-          AND users.ID = rewash.Modify_Code
-          AND rewash.DepCode = department.DepCode
+          AND users.ID = repair_wash.Modify_Code
+          AND repair_wash.DepCode = department.DepCode
           AND users.HptCode = site.HptCode";
 
   $meQuery = mysqli_query($conn, $Sql);
@@ -59,14 +59,14 @@ function load_doc($conn, $DATA)
   $return['boolean'] = $boolean;
 
   $s = "2";
-  $Sql2 = "SELECT rewash_detail.ItemCode,
+  $Sql2 = "SELECT repair_wash_detail.ItemCode,
                   item.ItemName,
-                  rewash_detail.UnitCode,
-                  rewash_detail.Qty,
-                  rewash_detail.Weight 
-              FROM rewash_detail,item 
+                  repair_wash_detail.UnitCode,
+                  repair_wash_detail.Qty,
+                  repair_wash_detail.Weight 
+              FROM repair_wash_detail,item 
               WHERE DocNo = '$DocNo'
-              AND	  item.ItemCode = rewash_detail.ItemCode";
+              AND	  item.ItemCode = repair_wash_detail.ItemCode";
 
   $meQuery2 = mysqli_query($conn, $Sql2);
   while ($Result = mysqli_fetch_assoc($meQuery2)) {
@@ -103,21 +103,15 @@ function CancelDoc($conn, $DATA)
 {
   $DocNo = $DATA["DocNo"];
 
-  $Sql = "SELECT RefDocNo FROM rewash WHERE DocNo = '$DocNo'";
+  $Sql = "SELECT RefDocNo FROM repair_wash WHERE DocNo = '$DocNo'";
   $meQuery = mysqli_query($conn, $Sql);
   $Result = mysqli_fetch_assoc($meQuery);
   $RefDocNo = $Result['RefDocNo'];
 
-  $Sql = "UPDATE dirty SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
-  mysqli_query($conn, $Sql);
-  $Sql = "UPDATE newlinentable SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
-  mysqli_query($conn, $Sql);
-  $Sql = "UPDATE repair_wash SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
-  mysqli_query($conn, $Sql);
-  $Sql = "UPDATE rewash SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
+  $Sql = "UPDATE clean SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
 
-  $Sql = "UPDATE rewash SET IsStatus = 9 WHERE DocNo = '$DocNo'";
+  $Sql = "UPDATE repair_wash SET IsStatus = 9 WHERE DocNo = '$DocNo'";
 
   if (mysqli_query($conn, $Sql)) {
     $return['status'] = "success";

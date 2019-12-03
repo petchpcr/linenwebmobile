@@ -29,7 +29,7 @@ function choose_items($conn, $DATA)
 
                 FROM                item_stock,item
 
-                WHERE               (item.HptCode = '$siteCode' OR item.HptCode = '0')
+                WHERE               item.HptCode = '$siteCode'
                 AND                 item_stock.ItemCode = item.ItemCode
                 AND                 item.ItemName LIKE '%$Search%' 
                 AND                 item.IsClean != 1 
@@ -66,39 +66,21 @@ function load_items($conn, $DATA)
     $refDoc = $DATA["refDoc"];
     $Unweight = $DATA["Unweight"];
 
-    $Sql = "SELECT Count(*) AS cnt FROM rewash_detail WHERE DocNo = '$DocNo'";
+    $Sql = "SELECT SignFac,SignNH FROM repair_wash WHERE DocNo = '$DocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
-    $cnt    =  $Result['cnt'];
+    $return['SignFac'] = $Result['SignFac'];
+    $return['SignNH'] = $Result['SignNH'];
 
-    if ($cnt == 0) {
-        $Sql = "SELECT clean_detail.ItemCode,clean_detail.UnitCode,SUM(clean_detail.Qty) AS Qty,SUM(clean_detail.Weight) AS Weight  
-                FROM clean_detail 
-                INNER JOIN item on item.ItemCode = clean_detail.ItemCode 
-                WHERE DocNo = '$refDoc' 
-                AND clean_detail.IsCheckList = 1 
-                GROUP BY clean_detail.ItemCode";
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $new_i    =  $Result['ItemCode'];
-            $new_unit    =  $Result['UnitCode'];
-            $new_qty    =  $Result['Qty'];
-            $new_weight    =  $Result['Weight'];
-            $Sql2 = "INSERT INTO rewash_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-            VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
-            mysqli_query($conn, $Sql2);
-        }
-    }
-
-    $Sql = "SELECT rewash_detail.ItemCode,
+    $Sql = "SELECT repair_wash_detail.ItemCode,
                         item.ItemName,
-                        rewash_detail.UnitCode,
-                        rewash_detail.Qty,
-                        rewash_detail.Weight 
-                FROM rewash_detail,
+                        repair_wash_detail.UnitCode,
+                        repair_wash_detail.Qty,
+                        repair_wash_detail.Weight  
+                FROM repair_wash_detail,
                      item 
                 WHERE DocNo = '$DocNo' 
-                AND	  item.ItemCode = rewash_detail.ItemCode
+                AND	  item.ItemCode = repair_wash_detail.ItemCode
                 ORDER BY ItemName ASC";
     $return['Sql'] = $Sql;
 
@@ -132,8 +114,34 @@ function load_items($conn, $DATA)
     }
 }
 
+function check_signature($conn, $DATA) {
+    $DocNo = $DATA["DocNo"];
+
+    $Sql = "SELECT SignFac,SignNH FROM repair_wash WHERE DocNo = '$DocNo'";
+    $meQuery = mysqli_query($conn, $Sql);
+    $Result = mysqli_fetch_assoc($meQuery);
+    $return['SignFac'] = $Result['SignFac'];
+    $return['SignNH'] = $Result['SignNH'];
+    $boolean = true;
+
+    if ($boolean) {
+        $return['status'] = "success";
+        $return['form'] = "check_signature";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['status'] = "failed";
+        $return['form'] = "check_signature";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
 function add_item($conn, $DATA)
 {
+    $lastsave = $DATA['lastsave'];
     $DocNo = $DATA['DocNo'];
     $Userid = $DATA['Userid'];
     $refDocNo = $DATA['refDocNo'];
@@ -162,30 +170,31 @@ function add_item($conn, $DATA)
     $cnt_del = sizeof($del_i, 0);
 
     for ($i = 0; $i < $cnt_del; $i++) {
-        $Sql = "DELETE FROM rewash_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
+        $Sql = "DELETE FROM repair_wash_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
         mysqli_query($conn, $Sql);
     }
 
     for ($i = 0; $i < $cnt_old; $i++) {
-        $Sql = "UPDATE rewash_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
+        $Sql = "UPDATE repair_wash_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
         mysqli_query($conn, $Sql);
     }
 
     for ($i = 0; $i < $cnt_new; $i++) {
-        $Sql = "INSERT INTO rewash_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
+        $Sql = "INSERT INTO repair_wash_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
                     VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_qty[$i],$new_weight[$i]) ";
         $return[$i]['Weight'] = $new_weight[$i];
         mysqli_query($conn, $Sql);
     }
 
-    $Sql = "SELECT SUM(Weight) AS total FROM rewash_detail WHERE DocNo = '$DocNo'";
+    $Sql = "SELECT SUM(Weight) AS total FROM repair_wash_detail WHERE DocNo = '$DocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $total = $Result['total'];
 
-    $Sql = "UPDATE rewash SET Total = $total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1,RefDocNo = '$refDocNo' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE repair_wash SET Total = $total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1,RefDocNo = '$refDocNo' WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
+    $return['lastsave'] = $lastsave;
     $return['status'] = "success";
     $return['form'] = "add_item";
     echo json_encode($return);
@@ -198,9 +207,9 @@ function del_back($conn, $DATA)
     $DocNo = $DATA["DocNo"];
     $RefDocNo = $DATA["refDoc"];
     
-    $Sql = "DELETE FROM rewash WHERE DocNo = '$DocNo'";
+    $Sql = "DELETE FROM repair_wash WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
-    $Sql = "DELETE FROM rewash_detail WHERE DocNo = '$DocNo'";
+    $Sql = "DELETE FROM repair_wash_detail WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     $Sql = "UPDATE clean SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
@@ -220,6 +229,8 @@ if (isset($_POST['DATA'])) {
 
     if ($DATA['STATUS'] == 'load_items') {
         load_items($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'check_signature') {
+        check_signature($conn, $DATA);
     } else if ($DATA['STATUS'] == 'choose_items') {
         choose_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'add_item') {

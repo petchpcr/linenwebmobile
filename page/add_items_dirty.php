@@ -69,41 +69,17 @@ $genarray = json_decode($json, TRUE);
 		var sign_funciton = "";
 		var Square = 1;
 
-		var round = {};
-		round['dep'] = {};
-		round['dep']['item'] = {};
-
-		round['dep']['item'][0] = [159, 40];
-		round['dep']['item'][1] = ['a', 'b'];
-		round['dep']['item'][1] = undefined;
-
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
 			load_dep(0);
 			choose_items();
 			load_items();
-			// test();
-			if (typeof round['dep']['item'][1] === 'undefined') {
-				// console.log("Not have");
-			}
-			$.each(round['dep']['item'], function(key, val) {
-				// console.log(key + " | " + val);
-
-			});
-			// console.log($.type(round['dep']['item'][0][0]));
-
-			// $.each(arr_test, function(item, item_val) {
-			// 		console.log(item);
-			// 		$.each(item_val, function(dep, dep_val) {
-			// 				console.log(dep+" | "+dep_val);
-			// 		});
-			// });
-			// console.log(items);
-			// arr_test['item'].forEach(function(value,index) {
-			// 	console.log(index+" = "+value);
-			// });
+			
 			$('#ModalSign').on('shown.bs.modal', function () {
 				resizeCanvas();
+			})
+
+			$('#ModalSign').on('hidden.bs.modal', function () {
 				signaturePad.clear();
 			})
 		});
@@ -279,35 +255,12 @@ $genarray = json_decode($json, TRUE);
 				}
 			});
 
-			// if (typeof mul_qty[now_item] == 'undefined') {
-			// 	mul_qty[now_item] = {};
-			// }
-			// if (typeof mul_weight[now_item] == 'undefined') {
-			// 	mul_weight[now_item] = {};
-			// }
-			// var have = 0;
-			// $(".chk-dep").each(function() {
-			// 	var dep = $(this).val();
-			// 	var num = $(this).attr("data-num");
-			// 	if ($(this).is(':checked')) {
-			// 		mul_qty[now_item][dep] = Number($("#depqty" + num).val());
-			// 		mul_weight[now_item][dep] = Number($("#depweight" + num).val());
-			// 		have++;
-			// 	} else {
-			// 		mul_qty[now_item][dep] = 0;
-			// 		mul_weight[now_item][dep] = 0;
-			// 	}
-			// });
-
 			if (have == 0) {
 				$(now_id).prop("checked", false);
 			} else {
 				$(now_id).prop("checked", true);
 			}
-			// Notsave = 1;
-
-
-			// console.log(mul_qty);
+			
 			add_item(1);
 			gen_to_site();
 		}
@@ -900,12 +853,16 @@ $genarray = json_decode($json, TRUE);
 							$("#items").empty();
 							if (temp['SignFac'] == null && temp['SignNH'] == null) {
 								$("#btn_sign_fac").removeAttr('hidden');
+								$("#btn_sign_nh").prop('hidden',true);
 							}
 							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
 								$("#btn_sign_nh").removeAttr('hidden');
+								$("#btn_sign_fac").prop('hidden',true);
 							}
 							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
 								$("#btn_save").removeAttr('hidden');
+								$("#btn_sign_fac").prop('hidden',true);
+								$("#btn_sign_nh").prop('hidden',true);
 							}
 							load_dep();
 							$("#md_round").modal('hide');

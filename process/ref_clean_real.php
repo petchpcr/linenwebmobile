@@ -54,7 +54,8 @@ function load_doc($conn, $DATA)
                 INNER JOIN site ON site.HptCode = department.HptCode AND site.HptCode = department.HptCode
                 WHERE site.HptCode = '$siteCode' 
                 AND clean.DocDate LIKE '%$search%'
-                AND clean.IsStatus = 1 
+                AND clean.IsStatus >= 1 
+                AND clean.IsStatus <= 3 
                 ORDER BY clean.IsStatus ASC,clean.DocNo DESC";
     $return['Sql'] = $Sql;
     $meQuery = mysqli_query($conn, $Sql);
@@ -83,10 +84,10 @@ function load_doc($conn, $DATA)
     }
 }
 
-function add_rewash($conn, $DATA)
+function add_repair_wash($conn, $DATA)
 {
-    $Menu = "rewash";
-    $H_doc = "RW";
+    $Menu = "repair_wash";
+    $H_doc = "RPW";
     $Userid = $DATA["Userid"];
     $Menu = $DATA["Menu"];
     $siteCode = $DATA["siteCode"];
@@ -212,13 +213,13 @@ function add_rewash($conn, $DATA)
         $return['RefDocNo'] = $RefDocNo;
 
         $return['status'] = "success";
-        $return['form'] = "add_rewash";
+        $return['form'] = "add_repair_wash";
         echo json_encode($return);
         mysqli_close($conn);
         die;
     } else {
         $return['status'] = "failed";
-        $return['form'] = "add_rewash";
+        $return['form'] = "add_repair_wash";
         echo json_encode($return);
         mysqli_close($conn);
         die;
@@ -233,8 +234,8 @@ if (isset($_POST['DATA'])) {
         load_site($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_doc') {
         load_doc($conn, $DATA);
-    } else if ($DATA['STATUS'] == 'add_rewash') {
-        add_rewash($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'add_repair_wash') {
+        add_repair_wash($conn, $DATA);
     } else if ($DATA['STATUS'] == 'logout') {
         logout($conn, $DATA);
     }

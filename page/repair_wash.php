@@ -81,7 +81,7 @@ require '../getTimeZone.php';
 		}
 
 		function show_process(DocNo, From) {
-			window.location.href = 'rewash_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+			window.location.href = 'repair_wash_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
 		}
 
 		function receive_zero(DocNo, From) {
@@ -119,7 +119,7 @@ require '../getTimeZone.php';
 			}
 		}
 
-		function add_rewash() {
+		function add_repair_wash() {
 			var Type = $("#TypeName").val();
 			var FacCode = $("#FacName").val();
 
@@ -131,7 +131,7 @@ require '../getTimeZone.php';
 					'siteCode': siteCode,
 					'Type': Type,
 					'FacCode': FacCode,
-					'STATUS': 'add_rewash'
+					'STATUS': 'add_repair_wash'
 				};
 				senddata(JSON.stringify(data));
 			}
@@ -158,7 +158,7 @@ require '../getTimeZone.php';
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			var URL = '../process/rewash.php';
+			var URL = '../process/repair_wash.php';
 			$.ajax({
 				url: URL,
 				dataType: 'text',
@@ -227,13 +227,13 @@ require '../getTimeZone.php';
 							}
 						} else if (temp["form"] == 'confirm_yes') {
 							show_process(temp['DocNo'], temp['From']);
-						} else if (temp["form"] == 'add_rewash') {
+						} else if (temp["form"] == 'add_repair_wash') {
 							var Userid = temp['Userid']
 							var siteCode = temp['siteCode']
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items_rewash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}
@@ -345,7 +345,7 @@ require '../getTimeZone.php';
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button id="btn_add_rewash" onclick="add_rewash()" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
+							<button id="btn_add_repair_wash" onclick="add_repair_wash()" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>

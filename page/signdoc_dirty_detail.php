@@ -43,6 +43,9 @@ $genarray = json_decode($json, TRUE);
 			$('#ModalSign').on('shown.bs.modal', function () {
 				resizeCanvas();
 			})
+			$('#ModalSign').on('hidden.bs.modal', function () {
+				signaturePad.clear();
+			})
 		});
 
 		function load_doc() {
@@ -64,7 +67,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function md_signature(FNC) {
-			signaturePad.clear();
 			sign_funciton = FNC;
 			$("#ModalSign").modal('show');
 		}

@@ -41,19 +41,19 @@ function load_doc($conn, $DATA)
     $siteCode = $DATA["siteCode"];
     $boolean = false;
     $Sql = "SELECT
-                rewash.DocNo,
-                rewash.IsStatus,
-                rewash.Modify_Date,
+                repair_wash.DocNo,
+                repair_wash.IsStatus,
+                repair_wash.Modify_Date,
                 department.DepName,
                 site.HptCode,
                 site.HptName
             FROM
-                rewash,department,site
+                repair_wash,department,site
             WHERE site.HptCode = '$siteCode' 
-            AND rewash.DocDate LIKE '%$search%' 
-            AND department.DepCode = rewash.DepCode 
+            AND repair_wash.DocDate LIKE '%$search%' 
+            AND department.DepCode = repair_wash.DepCode 
             AND site.HptCode = department.HptCode
-            ORDER BY rewash.DocNo DESC";
+            ORDER BY repair_wash.DocNo DESC";
 
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -172,7 +172,7 @@ function load_Fac($conn, $DATA)
     }
 }
 
-function add_rewash($conn, $DATA)
+function add_repair_wash($conn, $DATA)
 {
     $siteCode = $DATA["siteCode"];
     $FacCode = $DATA["FacCode"];
@@ -184,18 +184,18 @@ function add_rewash($conn, $DATA)
     $Result = mysqli_fetch_assoc($meQuery);
     $DepCode = $Result['DepCode'];
 
-    $Sql = "    SELECT          CONCAT('RW',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
+    $Sql = "    SELECT          CONCAT('RPW',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
                                 CURRENT_TIME() AS RecNow
 
-                FROM            rewash
+                FROM            repair_wash
 
                 INNER JOIN      department 
-                ON              rewash.DepCode = department.DepCode
+                ON              repair_wash.DepCode = department.DepCode
 
 
-                WHERE           DocNo Like CONCAT('RW',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
+                WHERE           DocNo Like CONCAT('RPW',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'%')
                 AND             department.HptCode = '$siteCode'
 
                 ORDER BY        DocNo DESC LIMIT 1";
@@ -215,8 +215,7 @@ function add_rewash($conn, $DATA)
     $return['DepCode'] = $DepCode;
     $return['siteCode'] = $siteCode;
 
-
-    $Sql = "    INSERT INTO     rewash
+    $Sql = "    INSERT INTO     repair_wash
                                         ( 
                                             DocNo,
                                             DocDate,
@@ -252,13 +251,13 @@ function add_rewash($conn, $DATA)
 
     if (mysqli_query($conn, $Sql)) {
         $return['status'] = "success";
-        $return['form'] = "add_rewash";
+        $return['form'] = "add_repair_wash";
         echo json_encode($return);
         mysqli_close($conn);
         die;
     } else {
         $return['status'] = "failed";
-        $return['form'] = "add_rewash";
+        $return['form'] = "add_repair_wash";
         echo json_encode($return);
         mysqli_close($conn);
         die;
@@ -281,8 +280,8 @@ if (isset($_POST['DATA'])) {
         load_dep($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_Fac') {
         load_Fac($conn, $DATA);
-    } else if ($DATA['STATUS'] == 'add_rewash') {
-        add_rewash($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'add_repair_wash') {
+        add_repair_wash($conn, $DATA);
     }
 } else {
     $return['status'] = "error";
