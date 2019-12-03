@@ -99,6 +99,7 @@ $genarray = json_decode($json, TRUE);
 		function choose_items() {
 			var Search = $("#search_items").val();
 			var data = {
+				'siteCode': siteCode,
 				'DepCode': DepCode,
 				'Search': Search,
 				'refDoc': refDoc,
