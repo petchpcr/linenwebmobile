@@ -164,19 +164,19 @@ function add_rewash($conn, $DATA)
                                         )";
         
         if (mysqli_query($conn, $Sql)) {
-            $cnt = 0;
-            $Sql2 = "SELECT ItemCode,UnitCode,Qty,Weight FROM clean_detail WHERE DocNo = '$RefDocNo'";
-            $meQuery = mysqli_query($conn, $Sql2);
-            while ($Result = mysqli_fetch_assoc($meQuery)) {
-                $return[$cnt]['ItemCode'] = $Result['ItemCode'];
-                $ItemCode = $Result['ItemCode'];
-                $UnitCode = $Result['UnitCode'];
-                $Qty = $Result['Qty'];
-                $Weight = $Result['Weight'];
-                $Sql2 = "INSERT INTO $Menu"."_detail ( DocNo,ItemCode,UnitCode,Qty,Weight,IsCancel ) VALUES ('$DocNo','$ItemCode','$UnitCode',$Qty,$Weight,0)";
-                mysqli_query($conn, $Sql2);
-                $cnt++;
-            }
+            // $cnt = 0;
+            // $Sql2 = "SELECT ItemCode,UnitCode,Qty,Weight FROM clean_detail WHERE DocNo = '$RefDocNo'";
+            // $meQuery = mysqli_query($conn, $Sql2);
+            // while ($Result = mysqli_fetch_assoc($meQuery)) {
+            //     $return[$cnt]['ItemCode'] = $Result['ItemCode'];
+            //     $ItemCode = $Result['ItemCode'];
+            //     $UnitCode = $Result['UnitCode'];
+            //     $Qty = $Result['Qty'];
+            //     $Weight = $Result['Weight'];
+            //     $Sql2 = "INSERT INTO $Menu"."_detail ( DocNo,ItemCode,UnitCode,Qty,Weight,IsCancel ) VALUES ('$DocNo','$ItemCode','$UnitCode',$Qty,$Weight,0)";
+            //     mysqli_query($conn, $Sql2);
+            //     $cnt++;
+            // }
         }
         
 
