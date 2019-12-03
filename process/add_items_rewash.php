@@ -29,7 +29,7 @@ function choose_items($conn, $DATA)
 
                 FROM                item_stock,item
 
-                WHERE               item.HptCode = '$siteCode'
+                WHERE               (item.HptCode = '$siteCode' OR item.HptCode = '0')
                 AND                 item_stock.ItemCode = item.ItemCode
                 AND                 item.ItemName LIKE '%$Search%' 
                 AND                 item.IsClean != 1 
