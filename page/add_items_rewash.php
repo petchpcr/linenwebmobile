@@ -342,7 +342,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			console.log(Delback);
 			if (Delback == 1) {
 				var data = {
 					'DocNo': DocNo,
@@ -352,13 +351,7 @@ $genarray = json_decode($json, TRUE);
 				};
 				senddata(JSON.stringify(data));
 			} else {
-				if (Menu == 'dirty') {
-					window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
-				} else if (Menu == 'clean') {
-					window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
-				} else if (Menu == 'newlinentable') {
-					window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu;
-				}
+				window.location.href = 'rewash.php?siteCode=' + siteCode + '&Menu=' + Menu;
 			}
 		}
 		// end function
@@ -367,13 +360,7 @@ $genarray = json_decode($json, TRUE);
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			if (Menu == 'dirty') {
-				var URL = '../process/add_items_dirty.php';
-			} else if (Menu == 'clean') {
-				var URL = '../process/add_items_clean.php';
-			} else {
-				var URL = '../process/add_items_new_linen.php';
-			}
+			var URL = '../process/add_items_rewash.php';
 
 			$.ajax({
 				url: URL,
@@ -393,53 +380,28 @@ $genarray = json_decode($json, TRUE);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_items') {
 							$("#items").empty();
-							if (false) {
-								for (var i = 0; i < temp['count']; i++) {
-									var num = Number(i) + 1;
-									var id = "weight" + num;
-									var weight = temp[i]['Weight'];
-									if (temp[i]['Weight'] == 0.00) {
-										weight = "";
-									}
-									var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-									Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-									Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
-									Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-									$("#items").append(Str);
-									arr_old_items.push(temp[i]['ItemCode']);
-
-									cal_weight();
-									cal_num();
+							for (var i = 0; i < temp['count']; i++) {
+								var num = Number(i) + 1;
+								var id = "weight" + num;
+								var idqty = id + "qty";
+								var weight = temp[i]['Weight'];
+								if (temp[i]['Weight'] == 0.00) {
+									weight = "";
 								}
-							} else {
-								for (var i = 0; i < temp['count']; i++) {
-									var num = Number(i) + 1;
-									var id = "weight" + num;
-									var idqty = id + "qty";
-									var weight = temp[i]['Weight'];
-									if (temp[i]['Weight'] == 0.00) {
-										weight = "";
-									}
-									var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
-									Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
-									Str += "id='" + idqty + "' value='" + temp[i]['Qty'] + "' placeholder='0'>";
-									Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-									Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
-									Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-									Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
-									Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
-									$("#items").append(Str);
-									arr_old_items.push(temp[i]['ItemCode']);
+								var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
+								Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
+								Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
+								Str += "id='" + idqty + "' value='" + temp[i]['Qty'] + "' placeholder='0'>";
+								Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
+								Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
+								Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+								Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
+								Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
+								$("#items").append(Str);
+								arr_old_items.push(temp[i]['ItemCode']);
 
-									cal_weight();
-									cal_num();
-								}
-							}
-							if (Ref == "dirty") {
-								choose_items();
-								$("#md_item").modal('show');
+								cal_weight();
+								cal_num();
 							}
 						} else if (temp["form"] == 'choose_items') {
 							var HptName = temp['HptName'];

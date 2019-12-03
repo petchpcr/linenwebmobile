@@ -1,4 +1,7 @@
 <?php
+
+use Mpdf\Tag\P;
+
 session_start();
 require '../connect/connect.php';
 require 'logout.php';
@@ -90,11 +93,17 @@ function load_items($conn, $DATA)
         mysqli_query($conn, $Sql);
     }
 
+    $Sql = "SELECT Count(*) AS cnt FROM cleanstock_detail WHERE DocNo = '$DocNo'";
+    $meQuery = mysqli_query($conn, $Sql);
+    $Result = mysqli_fetch_assoc($meQuery);
+    $cnt    =  $Result['cnt'];
+
     $Sql = "SELECT Count(*) AS c FROM repair_wash WHERE DocNo = '$refDoc'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $c    =  $Result['c'];
-    if ($c == 1) {
+
+    if ($c == 1 && $cnt == 0) {
         $Sql = "SELECT     ItemCode,UnitCode,Qty,Weight
                 FROM       repair_wash_detail
                 WHERE      DocNo = '$refDoc'";
@@ -188,6 +197,7 @@ function load_items($conn, $DATA)
         $count++;
     }
     $return['count'] = $count;
+    $return['NotDelDetail'] = $NotDelDetail;
 
     if ($count > 0) {
         $return['status'] = "success";
@@ -269,7 +279,11 @@ function del_back($conn, $DATA)
 {
     $DocNo = $DATA["DocNo"];
     $RefDocNo = $DATA["refDoc"];
-    $Menu = $DATA["Menu"];
+    if ($DATA["Menu"] == "clean") {
+        $Menu = "cleanstock";
+    } else if ($DATA["Menu"] == "clean_real") {
+        $Menu = "clean";
+    }
     $return['Menu'] = $Menu;
     $Sql = "DELETE FROM $Menu WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);

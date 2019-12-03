@@ -9,12 +9,7 @@ function load_doc($conn, $DATA)
   $count = 0;
   $DocNo = $DATA["DocNo"];
   $siteCode = $DATA["siteCode"];
-  
-  if ($DATA["Menu"] == 'clean') {
-    $Menu = "cleanstock";
-  } else if ($DATA["Menu"] == 'clean_real') {
-    $Menu = "clean";
-  }
+
   if ($_SESSION['lang'] == 'en') {
     $TName = 'EngPerfix';
     $FName = 'EngName';
@@ -26,7 +21,6 @@ function load_doc($conn, $DATA)
   }
   $boolean = false;
   $Sql = "SELECT site.HptName FROM site WHERE site.HptCode = '$siteCode'";
-  $return['Sql1'] = $Sql;
 
   $meQuery = mysqli_query($conn, $Sql);
   while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -35,21 +29,20 @@ function load_doc($conn, $DATA)
   }
 
   $s = "1";
-  $Sql = "SELECT RefDocNo,$Menu.IsStatus,
-                  DATE_FORMAT($Menu.Modify_Date,'%d %M %Y') AS xdate,
-                  DATE_FORMAT($Menu.Modify_Date,'%H:%i') AS xtime,
+  $Sql = "SELECT RefDocNo,rewash.IsStatus,
+                  DATE_FORMAT(rewash.Modify_Date,'%d %M %Y') AS xdate,
+                  DATE_FORMAT(rewash.Modify_Date,'%H:%i') AS xtime,
                   users.$TName AS TName,
                   users.$FName AS FName,
                   users.$LName AS LName,
                   Total,
                   department.DepCode,
                   department.DepName
-          FROM $Menu, users, site, department
+          FROM rewash, users, site, department
           WHERE DocNo ='$DocNo'
-          AND users.ID = $Menu.Modify_Code
-          AND $Menu.DepCode = department.DepCode
+          AND users.ID = rewash.Modify_Code
+          AND rewash.DepCode = department.DepCode
           AND users.HptCode = site.HptCode";
-  $return['Sql2'] = $Sql;
 
   $meQuery = mysqli_query($conn, $Sql);
   while ($Result = mysqli_fetch_assoc($meQuery)) {
@@ -66,69 +59,28 @@ function load_doc($conn, $DATA)
   $return['boolean'] = $boolean;
 
   $s = "2";
-  if ($DATA["Menu"] == 'clean') {
-    $Sql2 = "SELECT cleanstock_detail.ItemCode,
+  $Sql2 = "SELECT rewash_detail.ItemCode,
                   item.ItemName,
-                  cleanstock_detail.UnitCode,
-                  cleanstock_detail.Qty,
-                  cleanstock_detail.Weight 
-              FROM cleanstock_detail,item 
+                  rewash_detail.UnitCode,
+                  rewash_detail.Qty,
+                  rewash_detail.Weight 
+              FROM rewash_detail,item 
               WHERE DocNo = '$DocNo'
-              AND	  item.ItemCode = cleanstock_detail.ItemCode";
+              AND	  item.ItemCode = rewash_detail.ItemCode";
 
-    $meQuery2 = mysqli_query($conn, $Sql2);
-    while ($Result = mysqli_fetch_assoc($meQuery2)) {
-      $return[$count]['ItemCode'] = $Result['ItemCode'];
-      $return[$count]['ItemName'] = $Result['ItemName'];
-      $return[$count]['UnitCode'] = $Result['UnitCode'];
-      $return[$count]['Qty'] = $Result['Qty'];
-      $return[$count]['Weight'] = $Result['Weight'];
-      $count++;
-      $s = "true";
-    }
-  } else if ($DATA["Menu"] == 'clean_real') {
-    $ar_item = array();
-    $ar_request = array();
-
-    $Sql = "SELECT ItemCode,RequestName
-            FROM clean_detail 
-            WHERE DocNo = '$DocNo'
-            GROUP BY ItemCode,RequestName";
-    
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-      array_push($ar_item,$Result['ItemCode']);
-      array_push($ar_request,$Result['RequestName']);
-    }
-    $return['ar_item'] = $ar_item;
-    $return['ar_request'] = $ar_request;
-
-    foreach ($ar_item as $key => $val) {
-      if ($val == 'HDL') {
-        $ItemName = $ar_request[$key];
-        $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM clean_detail WHERE DocNo = '$DocNo' AND RequestName = '$ar_request[$key]'";
-      } else {
-        $Sql = "SELECT ItemName FROM item WHERE ItemCode = '$val'";
-        $meQuery = mysqli_query($conn, $Sql);
-        $Result = mysqli_fetch_assoc($meQuery);
-        $ItemName = $Result['ItemName'];
-        $Sql = "SELECT SUM(Qty) AS Qty,SUM(Weight) AS Weight FROM clean_detail WHERE DocNo = '$DocNo' AND ItemCode = '$val'";
-      }
-      $meQuery = mysqli_query($conn, $Sql);
-      $Result = mysqli_fetch_assoc($meQuery);
-      $return[$count]['ItemCode'] = $val;
-      $return[$count]['RequestName'] = $ar_request[$key];
-      $return[$count]['ItemName'] = $ItemName;
-      $return[$count]['Qty'] = $Result['Qty'];
-      $return[$count]['Weight'] = $Result['Weight'];
-      $count++;
-    }
+  $meQuery2 = mysqli_query($conn, $Sql2);
+  while ($Result = mysqli_fetch_assoc($meQuery2)) {
+    $return[$count]['ItemCode'] = $Result['ItemCode'];
+    $return[$count]['ItemName'] = $Result['ItemName'];
+    $return[$count]['UnitCode'] = $Result['UnitCode'];
+    $return[$count]['Qty'] = $Result['Qty'];
+    $return[$count]['Weight'] = $Result['Weight'];
+    $count++;
+    $s = "true";
   }
-
 
   $s = "3";
   $return['cnt'] = $count;
-  $return['Menu'] = $Menu;
 
   if ($boolean) {
     $return['status'] = "success";
@@ -150,13 +102,8 @@ function load_doc($conn, $DATA)
 function CancelDoc($conn, $DATA)
 {
   $DocNo = $DATA["DocNo"];
-  if ($DATA["Menu"] == 'clean') {
-    $Menu = "cleanstock";
-  } else if ($DATA["Menu"] == 'clean_real') {
-    $Menu = "clean";
-  }
 
-  $Sql = "SELECT RefDocNo FROM $Menu WHERE DocNo = '$DocNo'";
+  $Sql = "SELECT RefDocNo FROM rewash WHERE DocNo = '$DocNo'";
   $meQuery = mysqli_query($conn, $Sql);
   $Result = mysqli_fetch_assoc($meQuery);
   $RefDocNo = $Result['RefDocNo'];
@@ -167,12 +114,12 @@ function CancelDoc($conn, $DATA)
   mysqli_query($conn, $Sql);
   $Sql = "UPDATE repair_wash SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
-  $Sql = "UPDATE $Menu SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
+  $Sql = "UPDATE rewash SET IsStatus = 3 WHERE DocNo = '$RefDocNo'";
   mysqli_query($conn, $Sql);
 
-  $Sql = "UPDATE $Menu SET IsStatus = 9 WHERE DocNo = '$DocNo'";
+  $Sql = "UPDATE rewash SET IsStatus = 9 WHERE DocNo = '$DocNo'";
 
-  if (mysqli_query($conn,$Sql)) {
+  if (mysqli_query($conn, $Sql)) {
     $return['status'] = "success";
     $return['form'] = "CancelDoc";
     echo json_encode($return);

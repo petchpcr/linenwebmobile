@@ -32,6 +32,8 @@
 <titleRefDocument><en>| Ref.Document</en><th>| เอกสารอ้างอิง</th></titleRefDocument>
 <createdocno><en>Create document</en><th>สร้างเอกสาร</th></createdocno>
 <canceldocno><en>Cancel document</en><th>ยกเลิกเอกสาร</th></canceldocno>
+<notreffactory><en>Not refer factory</en><th>ไม่อ้างอิงโรงซัก</th></notreffactory>
+<refDocClean><en>From dirty document</en><th>เอกสารจากการส่งผ้าสะอาด</th></refDocClean>
 
 <notfoundDocInDate><en>Not found Document on </en><th>ไม่พบเอกสารในวันที่</th></notfoundDocInDate>
 
@@ -42,6 +44,7 @@
 <chooseDepartmentPl><en>Please Choose department</en><th>กรุณาเลือกแผนก</th></chooseDepartmentPl>
 <chooseDepartment><en>Choose department</en><th>เลือกแผนก</th></chooseDepartment>
 <chooseDep><en>Choose dep.</en><th>เลือกแผนก</th></chooseDep>
+<chooseType><en>Choose type</en><th>เลือกประเภท</th></chooseType>
 
 <Hospital><en>Hospital</en><th>โรงพยาบาล</th></Hospital>
 <docno><en>Doc No</en><th>เลขที่เอกสาร</th></docno>
