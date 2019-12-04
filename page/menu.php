@@ -209,21 +209,21 @@ $genarray = json_decode($json, TRUE);
 
 							<div class="my-col-menu">
 								<button onclick="menu_click(' . "'clean_real'" . ')" type="button" class="btn btn-mylight btn-block">
-									<img src="../img/fabric.png">
+									<img src="../img/clean.png">
 									<div class="text-truncate">' . $array["clean"][$language] . '</div>
 								</button>
 							</div>
 
 							<div class="my-col-menu">
 								<button onclick="menu_click(' . "'clean'" . ')" type="button" class="btn btn-mylight btn-block">
-									<img src="../img/fabric.png">
+									<img src="../img/cleanstock.png">
 									<div class="text-truncate">' . $array["stock_receive"][$language] . '</div>
 								</button>
 							</div>
 
 							<div class="my-col-menu">
 								<button onclick="menu_click(' . "'repair_wash'" . ')" type="button" class="btn btn-mylight btn-block">
-									<img src="../img/fabric.png">
+									<img src="../img/repair_wash.png">
 									<div class="text-truncate">' . $array["rewash"][$language] . '</div>
 								</button>
 							</div>
@@ -331,6 +331,7 @@ $genarray = json_decode($json, TRUE);
 							<option value="clean"><?php echo $array['cleanlinen'][$language]; ?></option>
 							<option value="claim"><?php echo $array['claimlaundry'][$language]; ?></option>
 							<option value="rewash"><?php echo $array['rewash'][$language]; ?></option>
+							<option value="return_doc"><?php echo $array['return_doc'][$language]; ?></option>
 							<option value="return_wash"><?php echo $array['return_wash'][$language]; ?></option>
 						</select>
 					</div>

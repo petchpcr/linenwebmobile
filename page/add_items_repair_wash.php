@@ -155,15 +155,30 @@ $genarray = json_decode($json, TRUE);
 					var idqty = id + "qty";
 					var div = "#chs" + num;
 
-					var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-					Str += "<div class='text-truncate font-weight-bold'>" + name + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['numberSize'][$language]; ?></label>";
-					Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
-					Str += "id='" + idqty + "' placeholder='0' value='1'>";
-					Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-					Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
-					Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><label class='mr-1'><?php echo $array['weight'][$language]; ?></label><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item new numonly' ";
-					Str += "data-code='" + code + "' data-qty='" + qty + "' data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
-					Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
+					var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
+					Str += "		<div class='col'>";
+					Str += "			<div class='row'>";
+
+					Str += "				<div class='d-flex align-items-center col-lg-8 col-md-7 col-sm-6 col-6'>";
+					Str += "					<div class='text-truncate font-weight-bold'>" + name + "</div>";
+					Str += "				</div>";
+
+					Str += "				<div class='d-flex align-items-center col-lg-4 col-md-5 col-sm-6 col-6 input-group p-0'>";
+					Str += "					<div class='pr-1'><?php echo $array['numberSize'][$language]; ?></div>";
+					Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
+					Str += "					bg-white my-2 mr-1 itemnum numonly'id='" + idqty + "' placeholder='0' value='1'>";
+
+					Str += "					<div class='pr-1'><?php echo $array['weight'][$language]; ?></div>";
+					Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
+					Str += "					bg-white my-2 mr-1 item new numonly' data-code='" + code + "' data-qty='" + qty + "'";
+					Str += "					data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
+
+					Str += "					<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
+					Str += "				</div>";
+					
+					Str += "			</div>";
+					Str += "		</div>";
+					Str += "	</div>";
 
 					$("#items").append(Str);
 					arr_new_items.push(code);
@@ -457,15 +472,30 @@ $genarray = json_decode($json, TRUE);
 								if (temp[i]['Weight'] == 0.00) {
 									weight = "";
 								}
-								var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-								Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
-								Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
-								Str += "id='" + idqty + "' value='" + temp[i]['Qty'] + "' placeholder='0'>";
-								Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-								Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
-								Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-								Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
-								Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
+								var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
+								Str += "		<div class='col'>";
+								Str += "			<div class='row'>";
+
+								Str += "				<div class='d-flex align-items-center col-lg-8 col-md-7 col-sm-6 col-6'>";
+								Str += "					<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div>";
+								Str += "				</div>";
+
+								Str += "				<div class='d-flex align-items-center col-lg-4 col-md-5 col-sm-6 col-6 input-group p-0'>";
+								Str += "					<div class='pr-1'><?php echo $array['numberSize'][$language]; ?></div>";
+								Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white ";
+								Str += "					my-2 mr-1 itemnum numonly' id='" + idqty + "' value='" + temp[i]['Qty'] + "' placeholder='0'>";
+
+								Str += "					<div class='pr-1'><?php echo $array['weight'][$language]; ?></div>";
+								Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+								Str += "					data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "'";
+								Str += "					data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
+
+								Str += "					<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
+								Str += "				</div>";
+
+								Str += "			</div>";
+								Str += "		</div>";
+								Str += "	</div>";
 								$("#items").append(Str);
 								arr_old_items.push(temp[i]['ItemCode']);
 

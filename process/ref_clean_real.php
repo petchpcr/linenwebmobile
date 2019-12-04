@@ -98,7 +98,7 @@ function add_repair_wash($conn, $DATA)
     $Result = mysqli_fetch_assoc($meQuery);
     $DepCode = $Result['DepCode'];
 
-    $Sql = "SELECT FacCode FROM $Menu"." WHERE DocNo = '$RefDocNo'";
+    $Sql = "SELECT FacCode FROM clean WHERE DocNo = '$RefDocNo'";
     $meQuery = mysqli_query($conn, $Sql);
     $Result = mysqli_fetch_assoc($meQuery);
     $FacCode = $Result['FacCode'];
