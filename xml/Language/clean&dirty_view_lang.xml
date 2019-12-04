@@ -22,5 +22,6 @@
 <searchdep><en>Search Department</en><th>ค้นหาแผนก</th></searchdep>
 
 <signfac><en>Laundry Signature</en><th>ลายเซนต์โรงซัก</th></signfac>
+<signnurse><en>Nurse Signature</en><th>ลายเซนต์พยาบาล</th></signnurse>
 <signnh><en>N Health Signature</en><th>ลายเซนต์ N Health</th></signnh>
 </lang>

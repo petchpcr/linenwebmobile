@@ -85,6 +85,8 @@
 <question><en>Question</en><th>คำถาม</th></question>
 <result><en>Result</en><th>ผลลัพธ์</th></result>
 
+<fromdep><en>From dep.</en><th>มาจากแผนก</th></fromdep>
+
 //old
 
 <activeItem><en>Active</en><th>Active</th></activeItem>

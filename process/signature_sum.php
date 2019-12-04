@@ -48,6 +48,10 @@ else if ($IsMenu == 'signdoc_return_wash_detail') {
     $Sql = "UPDATE return_wash SET $sign_funciton = '$SignCode',$sign_funciton"."Time = NOW() WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 }
+else if ($IsMenu == 'signdoc_return_doc_detail') {
+    $Sql = "UPDATE return_doc SET $sign_funciton = '$SignCode',$sign_funciton"."Time = NOW() WHERE DocNo = '$DocNo'";
+    mysqli_query($conn, $Sql);
+}
 $return['Sql'] = $Sql;
 
 echo json_encode($return);
