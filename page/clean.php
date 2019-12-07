@@ -312,7 +312,7 @@ require '../getTimeZone.php';
 							<option value="1"><?php echo $array['refDocDirty'][$language]; ?></option>
 							<option value="2"><?php echo $array['refDocRewash'][$language]; ?></option>
 							<option value="3"><?php echo $array['refDocnew'][$language]; ?></option>
-							<option value="4"><?php echo $array['refDocRemain'][$language]; ?></option>
+							<!-- <option value="4"><?php echo $array['refDocRemain'][$language]; ?></option> -->
 							<option value="5"><?php echo $array['NotRefDoc'][$language]; ?></option>
 						</select>
 					</div>

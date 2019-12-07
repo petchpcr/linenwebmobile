@@ -963,7 +963,7 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="d-flex px-3 mb-2">
 					<input onkeyup="choose_items()" id="search_items" class="form-control" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
-					<button onclick="item_handler()" class="btn btn-success p-0 ml-2" style='min-width:40px;border-radius:225px;' hidden><i class="fas fa-plus"></i></button>
+					<button onclick="item_handler()" class="btn btn-success p-0 ml-2" style='min-width:40px;border-radius:225px;'><i class="fas fa-plus"></i></button>
 				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
 

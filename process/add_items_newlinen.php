@@ -7,6 +7,7 @@
     function choose_items($conn, $DATA){
         $Search = $DATA["Search"];
         $siteCode = $DATA["siteCode"];
+        $first = $DATA["first"];
         $count = 0;
 
         $Sql = "SELECT DISTINCT ItemCode,ItemName  
@@ -15,7 +16,7 @@
                 -- AND     Itemnew = 1 
                 -- AND     (HptCode = '$siteCode' OR HptCode = '0')
                 AND     HptCode = '$siteCode'
-                AND     ItemCode LIKE '%$Search%'
+                AND     ItemName LIKE '%$Search%'
                 ORDER BY ItemName ASC";
         $meQuery = mysqli_query($conn,$Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)){
@@ -26,6 +27,7 @@
         }
         $return['cnt'] = $count;
         $return['Sql'] = $Sql;
+        $return['first'] = $first;
         
         if ($count > 0) {
             $return['status'] = "success";

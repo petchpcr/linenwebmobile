@@ -69,6 +69,7 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DocNo': DocNo,
 				'DepCode': DepCode,
+				'siteCode': siteCode,
 				'STATUS': 'Add_all_items'
 			};
 			senddata(JSON.stringify(data));

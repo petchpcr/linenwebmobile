@@ -67,6 +67,7 @@ function Add_all_items($conn, $DATA)
 {
     $DocNo = $DATA["DocNo"];
     $DepCode = $DATA["DepCode"];
+    $siteCode = $DATA["siteCode"];
     $count = 0;
 
     $Sql = "SELECT COUNT(*) AS cntHave FROM shelfcount_detail WHERE DocNo = '$DocNo'";
@@ -75,22 +76,35 @@ function Add_all_items($conn, $DATA)
     $cntHave = $Result['cntHave'];
 
     if ($cntHave == 0) {
-        $Sql = "SELECT DISTINCT     ItemCode 
-    
-                FROM                par_item_stock
+        $Sql = "SELECT
+                par_item_stock.RowID,
+                site.HptName,
+                department.DepName,
+                item_category.CategoryName,
+                item.ItemCode,
+                item.ItemName,
+                item.UnitCode,
+                item_unit.UnitName,
+                par_item_stock.ParQty,
+                par_item_stock.TotalQty,
+                item.Weight
+                FROM site
+                INNER JOIN department ON site.HptCode = department.HptCode
+                INNER JOIN par_item_stock ON department.DepCode = par_item_stock.DepCode
+                INNER JOIN item ON par_item_stock.ItemCode = item.ItemCode
+                INNER JOIN item_category ON item.CategoryCode= item_category.CategoryCode
+                INNER JOIN item_unit ON item.UnitCode = item_unit.UnitCode
+                WHERE  par_item_stock.DepCode = '$DepCode' AND par_item_stock.HptCode = '$siteCode' AND item.IsActive = 1
+                GROUP BY item.ItemCode
+                ORDER BY item.ItemName ASC LImit 100";
 
-                WHERE               DepCode='$DepCode'
-                ORDER BY            ItemCode ASC";
         $meQuery = mysqli_query($conn, $Sql);
         while ($Result = mysqli_fetch_assoc($meQuery)) {
             $ItemCode = $Result['ItemCode'];
-            $pSql = "SELECT DISTINCT ParQty FROM par_item_stock WHERE DepCode='$DepCode' AND par_item_stock.ItemCode= '$ItemCode'";
-            $pmeQuery = mysqli_query($conn, $pSql);
-            $pResult = mysqli_fetch_assoc($pmeQuery);
-            $par = $pResult['ParQty'];
-
+            $ParQty = $Result['ParQty'];
+            
             $aSql = "INSERT INTO shelfcount_detail(`DocNo`,`ItemCode`,`UnitCode`,`ParQty`,`CcQty`,`TotalQty`) 
-                    VALUES ('$DocNo','$ItemCode',1,$par,0,0) ";
+                    VALUES ('$DocNo','$ItemCode',1,$ParQty,0,0) ";
             mysqli_query($conn, $aSql);
 
             $count++;

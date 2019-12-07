@@ -82,11 +82,11 @@ $genarray = json_decode($json, TRUE);
 			load_items();
 			check_signature();
 
-			$('#ModalSign').on('shown.bs.modal', function () {
+			$('#ModalSign').on('shown.bs.modal', function() {
 				resizeCanvas();
 			})
 
-			$('#ModalSign').on('hidden.bs.modal', function () {
+			$('#ModalSign').on('hidden.bs.modal', function() {
 				signaturePad.clear();
 			})
 		});
@@ -126,6 +126,68 @@ $genarray = json_decode($json, TRUE);
 			senddata(JSON.stringify(data));
 		}
 
+		function new_value(item, name) {
+			$("#new_qty").val(1);
+			$("#new_weight").val("");
+			$("#btn_edit").attr("onclick", "change_value(\"" + item + "\",\"" + name + "\")");
+			$("#md_edit").modal('show');
+		}
+
+		function change_value(item, name) {
+			var qty = $("#new_qty").val();
+			if (qty > 0) {
+
+				var weight = $("#new_weight").val();
+				var last_item = $('.item:last').data("num");
+				if (last_item == null || last_item == '') {
+					last_item = 0;
+				}
+				var num = Number(last_item) + 1;
+				var total = $(".chk-item").length;
+
+				var id = "weight" + num;
+				var unit = 1;
+				var idqty = id + "qty";
+				var div = "#chs" + num;
+
+				var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
+				Str += "		<div class='col'>";
+				Str += "			<div class='row'>";
+
+				Str += "				<div class='d-flex align-items-center col-lg-8 col-md-7 col-sm-6 col-6'>";
+				Str += "					<div class='text-truncate font-weight-bold'>" + name + "</div>";
+				Str += "				</div>";
+
+				Str += "				<div class='d-flex align-items-center col-lg-4 col-md-5 col-sm-6 col-6 input-group p-0'>";
+				Str += "					<div class='pr-1'><?php echo $array['numberSize'][$language]; ?></div>";
+				Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
+				Str += "					bg-white my-2 mr-1 itemnum numonly'id='" + idqty + "' placeholder='0' value='" + qty + "'>";
+
+				Str += "					<div class='pr-1'><?php echo $array['weight'][$language]; ?></div>";
+				Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
+				Str += "					bg-white my-2 mr-1 item new numonly' data-code='" + item + "' data-qty='" + qty + "'";
+				Str += "					data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0' value='" + weight + "'>";
+
+				Str += "					<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
+				Str += "				</div>";
+
+				Str += "			</div>";
+				Str += "		</div>";
+				Str += "	</div>";
+
+				$("#items").append(Str);
+				arr_new_items.push(item);
+				num++;
+
+				cal_weight();
+				cal_num();
+
+				choose_items();
+			}
+			$("#md_edit").modal('hide');
+			
+		}
+
 		function chk_items(chk) {
 			var id = "#" + chk;
 			if ($(id).is(':checked')) {
@@ -134,66 +196,6 @@ $genarray = json_decode($json, TRUE);
 				$(id).prop("checked", true);
 			}
 			var test = $(id).data("name");
-		}
-
-		function select_chk() {
-			var last_item = $('.item:last').data("num");
-			if (last_item == null || last_item == '') {
-				last_item = 0;
-			}
-			var num = Number(last_item) + 1;
-			var total = $(".chk-item").length;
-			var count = 0;
-
-			$(".chk-item").each(function() {
-				if ($(this).is(':checked')) {
-					var id = "weight" + num;
-					var name = $(this).data('name');
-					var code = $(this).val();
-					var qty = 0;
-					var unit = 1;
-					var idqty = id + "qty";
-					var div = "#chs" + num;
-
-					var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
-					Str += "		<div class='col'>";
-					Str += "			<div class='row'>";
-
-					Str += "				<div class='d-flex align-items-center col-lg-8 col-md-7 col-sm-6 col-6'>";
-					Str += "					<div class='text-truncate font-weight-bold'>" + name + "</div>";
-					Str += "				</div>";
-
-					Str += "				<div class='d-flex align-items-center col-lg-4 col-md-5 col-sm-6 col-6 input-group p-0'>";
-					Str += "					<div class='pr-1'><?php echo $array['numberSize'][$language]; ?></div>";
-					Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
-					Str += "					bg-white my-2 mr-1 itemnum numonly'id='" + idqty + "' placeholder='0' value='1'>";
-
-					Str += "					<div class='pr-1'><?php echo $array['weight'][$language]; ?></div>";
-					Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
-					Str += "					bg-white my-2 mr-1 item new numonly' data-code='" + code + "' data-qty='" + qty + "'";
-					Str += "					data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0'>";
-
-					Str += "					<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
-					Str += "				</div>";
-					
-					Str += "			</div>";
-					Str += "		</div>";
-					Str += "	</div>";
-
-					$("#items").append(Str);
-					arr_new_items.push(code);
-					$(div).remove();
-					count++;
-					num++;
-					cal_weight();
-					cal_num();
-				};
-			});
-			if (total == count) {
-				$("#md_item").modal('hide');
-			} else {
-				choose_items();
-			}
 		}
 
 		function del_items(num) {
@@ -414,12 +416,12 @@ $genarray = json_decode($json, TRUE);
 						confirmButtonText: 'Ok',
 						showConfirmButton: false
 					}).then(function() {
-							
+
 						},
 						function(dismiss) {
 							swal.close();
 							check_signature();
-					})
+						})
 				}
 			});
 		}
@@ -505,16 +507,14 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'check_signature') {
 							if (temp['SignFac'] == null && temp['SignNH'] == null) {
 								$("#btn_sign_fac").removeAttr('hidden');
-								$("#btn_sign_nh").prop('hidden',true);
-							}
-							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
+								$("#btn_sign_nh").prop('hidden', true);
+							} else if (temp['SignFac'] != null && temp['SignNH'] == null) {
 								$("#btn_sign_nh").removeAttr('hidden');
-								$("#btn_sign_fac").prop('hidden',true);
-							}
-							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
+								$("#btn_sign_fac").prop('hidden', true);
+							} else if (temp['SignFac'] != null && temp['SignNH'] != null) {
 								$("#btn_save").removeAttr('hidden');
-								$("#btn_sign_fac").prop('hidden',true);
-								$("#btn_sign_nh").prop('hidden',true);
+								$("#btn_sign_fac").prop('hidden', true);
+								$("#btn_sign_nh").prop('hidden', true);
 							}
 						} else if (temp["form"] == 'choose_items') {
 							var HptName = temp['HptName'];
@@ -545,12 +545,16 @@ $genarray = json_decode($json, TRUE);
 								if (have_old == 0 && have_new == 0) {
 									var num = i + 1;
 									var chk = "chk" + num;
-									var Str = "<button onclick='chk_items(\"" + chk + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+									var Str = "<button onclick='new_value(\"" + temp[i]['ItemCode'] + "\",\"" + temp[i]['ItemName'] + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
 									Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
-									Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "'></div></button>";
+									Str += "</div></button>";
 
 									$("#choose_item").append(Str);
 								}
+							}
+							var count = $("#choose_item").children().length;
+							if (count == 0) {
+								$("#md_item").modal('hide');
 							}
 						} else if (temp["form"] == 'add_item') {
 							Delback = 0;
@@ -730,12 +734,49 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
-						<div class="col-6 text-right">
-							<button id="btn_add_items" onclick="select_chk()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
-						</div>
-						<div class="col-6 text-left">
+						<div class="col-12 text-center">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"><?php echo $genarray['Getweight'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+
+					<div class="row">
+						<div class="col-6">
+							<div class="bg-primary text-center text-white mb-2 p-0" style="border-radius:0.25rem;"><?php echo $genarray['qty'][$language]; ?></div>
+						</div>
+						<div class="col-6">
+							<div class="bg-primary text-center text-white mb-2 p-0" style="border-radius:0.25rem;"><?php echo $genarray['weight'][$language]; ?></div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-6">
+							<input onkeydown="make_number()" id="new_qty" class="form-control text-center mb-3 numonly" type="text" placeholder="0">
+						</div>
+						<div class="col-6">
+							<input onkeydown="make_number()" id="new_weight" class="form-control text-center mb-3 numonly" type="text" placeholder="0.00">
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer text-center">
+					<div class="w-100 d-flex justify-content-center m-0">
+						<button id="btn_edit" type="button" class="btn btn-primary m-2"><?php echo $genarray['yes'][$language]; ?></button>
 					</div>
 				</div>
 			</div>

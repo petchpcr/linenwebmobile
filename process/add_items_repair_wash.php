@@ -43,6 +43,7 @@ function choose_items($conn, $DATA)
         $count++;
     }
     $return['cnt'] = $count;
+    $return['Sql'] = $Sql;
 
     if ($count > 0) {
         $return['status'] = "success";
