@@ -63,10 +63,12 @@ function load_doc($conn, $DATA)
           users.$LName AS LName,
           Total,
           factory.$FacName AS FacName,
+          TimeName,
           site.$HptName AS HptName
-          FROM $From,users,site,factory
+          FROM $From,users,site,factory,time_dirty
           WHERE DocNo ='$DocNo'
           AND factory.FacCode = $From.FacCode 
+          AND time_dirty.ID = $From.Time_ID 
           AND users.ID = $From.Modify_Code
           AND $From.HptCode = site.HptCode";
 
@@ -80,6 +82,7 @@ function load_doc($conn, $DATA)
     $return['FName']  = $Result['TName'] . $Result['FName'] . " " . $Result['LName'];
     $return['HptName']  = $Result['HptName'];
     $return['FacName']  = $Result['FacName'];
+    $return['RoundTime']  = $Result['TimeName'];
     $boolean = true;
   }
   $return['boolean'] = $boolean;

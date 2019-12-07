@@ -166,6 +166,7 @@ $genarray = json_decode($json, TRUE);
 							$("#HptName").val(temp['HptName']);
 							$("#FName").val(temp['FName']);
 							$("#FacName").val(temp['FacName']);
+							$("#RoundTime").val(temp['RoundTime']);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
 							var Weight = temp['Total'] + " <?php echo $array['KG'][$language] ?>";
 							$("#Weight").val(Weight);
@@ -296,6 +297,12 @@ $genarray = json_decode($json, TRUE);
 								<span class="input-group-text" style="width:100px;"><?php echo $genarray['factory'][$language] ?></span>
 							</div>
 							<input type="text" id="FacName" class="form-control bg-white" style="color:#1659a2;" readonly>
+						</div>
+						<div class="input-group mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" style="width:100px;"><?php echo $genarray['roundtime'][$language] ?></span>
+							</div>
+							<input type="text" id="RoundTime" class="form-control bg-white" style="color:#1659a2;" readonly>
 						</div>
 					</div>
 

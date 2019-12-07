@@ -86,6 +86,8 @@
 <result><en>Result</en><th>ผลลัพธ์</th></result>
 
 <fromdep><en>From dep.</en><th>มาจากแผนก</th></fromdep>
+<roundtimedirty><en>Round time dirty</en><th>รอบชั่งผ้าสกปรก</th></roundtimedirty>
+<roundtime><en>Round time</en><th>รอบชั่งผ้า</th></roundtime>
 
 //old
 

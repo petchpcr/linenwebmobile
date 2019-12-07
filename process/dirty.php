@@ -67,6 +67,41 @@ function load_site($conn, $DATA)
     }
 }
 
+function load_round($conn, $DATA)
+{
+    $count = 0;
+    $boolean = false;
+    $siteCode = $DATA["siteCode"];
+    $Sql = "SELECT t.TimeName,r.Time_ID 
+            FROM round_time_dirty r 
+            INNER JOIN time_dirty t 
+            ON  r.Time_ID = t.ID 
+            WHERE r.HptCode = '$siteCode'";
+
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $return['TimeName'][$count] = $Result['TimeName'];
+        $return['Time_ID'][$count] = $Result['Time_ID'];
+        $count++;
+        $boolean = true;
+    }
+    $return['cnt'] = $count;
+
+    if ($boolean) {
+        $return['status'] = "success";
+        $return['form'] = "load_round";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['status'] = "failed";
+        $return['form'] = "load_round";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
 function load_doc_procees($conn, $DATA)
 {
     $count = 0;
@@ -475,6 +510,7 @@ function add_dirty($conn, $DATA)
     $Userid = $DATA["Userid"];
     $siteCode = $DATA["siteCode"];
     $FacCode = $DATA["FacCode"];
+    $RoundTime = $DATA["RoundTime"];
     $Sql = "    SELECT CONCAT('DT',lpad('$siteCode', 3, 0),SUBSTRING(YEAR(DATE(NOW())),3,4),LPAD(MONTH(DATE(NOW())),2,0),'-',
                                 LPAD( (COALESCE(MAX(CONVERT(SUBSTRING(DocNo,12,5),UNSIGNED INTEGER)),0)+1) ,5,0)) AS DocNo,
                                 DATE(NOW()) AS DocDate,
@@ -514,7 +550,8 @@ function add_dirty($conn, $DATA)
                                             Detail,
                                             dirty.Modify_Code,
                                             dirty.Modify_Date,
-                                            FacCode
+                                            FacCode,
+                                            Time_ID
                                         )
                         VALUES
                                         (
@@ -523,11 +560,16 @@ function add_dirty($conn, $DATA)
                                             '$siteCode',
                                             '',
                                             0,
-                                            NOW(),0,0,
-                                            0,0,'',
+                                            NOW(),
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            '',
                                             $Userid,
                                             NOW(),
-                                            $FacCode
+                                            $FacCode,
+                                            $RoundTime
                                         )";
         mysqli_query($conn, $Sql);
         $return['Sql'] = $Sql;
@@ -536,7 +578,6 @@ function add_dirty($conn, $DATA)
                                         (
                                             DocNo,
                                             DocDate,
-                                            -- DepCode,
                                             RefDocNo,
                                             Detail,
                                             Modify_Code,
@@ -545,7 +586,6 @@ function add_dirty($conn, $DATA)
                         VALUES          (
                                             '$DocNo',
                                             DATE(NOW()),
-                                            -- '$DepCode',
                                             '',
                                             'Dirty',
                                             $Userid,
@@ -618,6 +658,8 @@ if (isset($_POST['DATA'])) {
         load_dep($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_site') {
         load_site($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'load_round') {
+        load_round($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_doc') {
         load_doc($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_doc_procees') {

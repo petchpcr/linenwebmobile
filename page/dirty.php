@@ -62,6 +62,7 @@ require '../getTimeZone.php';
 			load_site();
 			load_doc();
 			load_Fac();
+			load_round();
 		});
 
 		// function
@@ -81,6 +82,13 @@ require '../getTimeZone.php';
 			senddata(JSON.stringify(data));
 		}
 
+		function load_round() {
+			var data = {
+				'siteCode': siteCode,
+				'STATUS': 'load_round'
+			};
+			senddata(JSON.stringify(data));
+		}
 
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
@@ -188,10 +196,12 @@ require '../getTimeZone.php';
 
 		function add_dirty() {
 			var FacCode = $("#FacName").val();
+			var RoundTime = $("#RoundTime").val();
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
 				'FacCode': FacCode,
+				'RoundTime': RoundTime,
 				'STATUS': 'add_dirty'
 			};
 			senddata(JSON.stringify(data));
@@ -249,8 +259,14 @@ require '../getTimeZone.php';
 
 						} else if (temp["form"] == 'load_site') {
 							$("#HptName").text(temp['HptName']);
-						} else if (temp["form"] == 'load_doc') {
 
+						} else if (temp["form"] == 'load_round') {
+							for (var i = 0; i < temp['cnt']; i++) {
+								var Str = "<option value=" + temp['Time_ID'][i] + ">" + temp['TimeName'][i] + "</option>";
+								$("#RoundTime").append(Str);
+							}
+
+						} else if (temp["form"] == 'load_doc') {
 							$(".btn.btn-mylight.btn-block").remove();
 							for (var i = 0; i < temp['cnt']; i++) {
 								var status_class = "";
@@ -544,13 +560,21 @@ require '../getTimeZone.php';
 							<option value="0" selected><?php echo $genarray['chooseDepartmentPl'][$language]; ?></option>
 						</select>
 					</div>
+
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
-							<label class="input-group-text" for="inputGroupSelect01"><?php echo $array['chooseFactory'][$language]; ?></label>
+							<label class="input-group-text" style="width:120px;"><?php echo $array['chooseFactory'][$language]; ?></label>
 						</div>
 						<select onchange="change_dep()" id="FacName" class="custom-select">
 							<option value="0" selected><?php echo $array['chooseFactoryPl'][$language]; ?></option>
 						</select>
+					</div>
+
+					<div class="input-group my-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text" style="width:120px;"><?php echo $genarray['roundtimedirty'][$language]; ?></label>
+						</div>
+						<select id="RoundTime" class="custom-select"></select>
 					</div>
 				</div>
 				<div class="modal-footer text-center">
