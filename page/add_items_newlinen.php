@@ -394,6 +394,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item() {
+			$("#btn_save").prop("disabled",true);
 			var data = {
 				'DocNo': DocNo,
 				'mul_qty': mul_qty,
@@ -682,7 +683,7 @@ $genarray = json_decode($json, TRUE);
 					</button>
 				</div>
 				<div class="col-6">
-					<button onclick="add_item()" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
+					<button id="btn_save" onclick="add_item()" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#">
 						<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 					</button>
 				</div>

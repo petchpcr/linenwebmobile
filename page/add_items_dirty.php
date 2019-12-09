@@ -74,12 +74,12 @@ $genarray = json_decode($json, TRUE);
 			load_dep(0);
 			choose_items();
 			load_items();
-			
-			$('#ModalSign').on('shown.bs.modal', function () {
+
+			$('#ModalSign').on('shown.bs.modal', function() {
 				resizeCanvas();
 			})
 
-			$('#ModalSign').on('hidden.bs.modal', function () {
+			$('#ModalSign').on('hidden.bs.modal', function() {
 				signaturePad.clear();
 			})
 		});
@@ -144,7 +144,7 @@ $genarray = json_decode($json, TRUE);
 			var test = $(id).data("name");
 		}
 
-		function chk_dep(DepCode,DepName) {
+		function chk_dep(DepCode, DepName) {
 			now_dep = DepCode;
 			$("#search_items").val("");
 			if (DepName == "linen") {
@@ -260,7 +260,7 @@ $genarray = json_decode($json, TRUE);
 			} else {
 				$(now_id).prop("checked", true);
 			}
-			
+
 			add_item(1);
 			gen_to_site();
 		}
@@ -356,7 +356,7 @@ $genarray = json_decode($json, TRUE);
 			$("#val_qty").val(1);
 			$("#val_weight").val("");
 			$("#show_round").empty();
-			
+
 			var HDL = 0;
 			if (Not_Handler == 0) {
 				$("#round_itemname").text(item);
@@ -373,7 +373,7 @@ $genarray = json_decode($json, TRUE);
 				} else {
 					$("#btn_round_back").show();
 				}
-			} 
+			}
 
 			var data = {
 				'DocNo': DocNo,
@@ -386,9 +386,12 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_round(dep, item, HDL) {
+			$("#btn_add_round").prop("disabled", true);
+			$("#val_qty").prop("disabled", true);
+			$("#val_weight").prop("disabled", true);
 			var qty = $("#val_qty").val();
 			var weight = $("#val_weight").val();
-			
+
 			if (qty != "") {
 				if (weight == "") { // ถ้าไม่กรอกให้เซ็ทเป็น 0
 					weight = 0;
@@ -425,7 +428,7 @@ $genarray = json_decode($json, TRUE);
 				};
 				senddata(JSON.stringify(data));
 			})
-			
+
 		}
 
 		function del_round(id, RowID, dep, item) {
@@ -577,12 +580,12 @@ $genarray = json_decode($json, TRUE);
 						confirmButtonText: 'Ok',
 						showConfirmButton: false
 					}).then(function() {
-							
+
 						},
 						function(dismiss) {
 							swal.close();
 							load_items();
-					})
+						})
 				}
 			});
 		}
@@ -682,16 +685,14 @@ $genarray = json_decode($json, TRUE);
 
 							if (temp['SignFac'] == null && temp['SignNH'] == null) {
 								$("#btn_sign_fac").removeAttr('hidden');
-								$("#btn_sign_nh").prop('hidden',true);
-							}
-							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
+								$("#btn_sign_nh").prop('hidden', true);
+							} else if (temp['SignFac'] != null && temp['SignNH'] == null) {
 								$("#btn_sign_nh").removeAttr('hidden');
-								$("#btn_sign_fac").prop('hidden',true);
-							}
-							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
+								$("#btn_sign_fac").prop('hidden', true);
+							} else if (temp['SignFac'] != null && temp['SignNH'] != null) {
 								$("#btn_save").removeAttr('hidden');
-								$("#btn_sign_fac").prop('hidden',true);
-								$("#btn_sign_nh").prop('hidden',true);
+								$("#btn_sign_fac").prop('hidden', true);
+								$("#btn_sign_nh").prop('hidden', true);
 							}
 
 							all_dep_code.forEach(function(dep) {
@@ -802,7 +803,7 @@ $genarray = json_decode($json, TRUE);
 							load_items();
 							var handler = temp['RequestName'];
 							var DepCode = temp['now_dep'];
-							edit_round(DepCode,handler,1);
+							edit_round(DepCode, handler, 1);
 
 						} else if (temp["form"] == 'edit_round') {
 							for (var i = 0; i < temp['cnt']; i++) {
@@ -826,6 +827,9 @@ $genarray = json_decode($json, TRUE);
 							$("#md_round").modal('show');
 
 						} else if (temp["form"] == 'add_round') {
+							$("#btn_add_round").prop("disabled", false);
+							$("#val_qty").prop("disabled", false);
+							$("#val_weight").prop("disabled", false);
 							load_items();
 							var dep = temp['dep'];
 							var item = temp['item'];
@@ -853,16 +857,14 @@ $genarray = json_decode($json, TRUE);
 							$("#items").empty();
 							if (temp['SignFac'] == null && temp['SignNH'] == null) {
 								$("#btn_sign_fac").removeAttr('hidden');
-								$("#btn_sign_nh").prop('hidden',true);
-							}
-							else if (temp['SignFac'] != null && temp['SignNH'] == null) {
+								$("#btn_sign_nh").prop('hidden', true);
+							} else if (temp['SignFac'] != null && temp['SignNH'] == null) {
 								$("#btn_sign_nh").removeAttr('hidden');
-								$("#btn_sign_fac").prop('hidden',true);
-							}
-							else if (temp['SignFac'] != null && temp['SignNH'] != null) {
+								$("#btn_sign_fac").prop('hidden', true);
+							} else if (temp['SignFac'] != null && temp['SignNH'] != null) {
 								$("#btn_save").removeAttr('hidden');
-								$("#btn_sign_fac").prop('hidden',true);
-								$("#btn_sign_nh").prop('hidden',true);
+								$("#btn_sign_fac").prop('hidden', true);
+								$("#btn_sign_nh").prop('hidden', true);
 							}
 							load_dep();
 							$("#md_round").modal('hide');
@@ -983,7 +985,7 @@ $genarray = json_decode($json, TRUE);
 	</div>
 
 	<!-- Modal -->
-	
+
 	<div class="modal fade" id="ModalSign" tabindex="-1" role="dialog" aria-hidden='false'>
 		<div class="modal-dialog" role="document">
 			<div class="modal-content" style="background-color:#fff;">
@@ -1032,7 +1034,7 @@ $genarray = json_decode($json, TRUE);
 					<button onclick="item_handler()" class="btn btn-success p-0 ml-2" style='min-width:40px;border-radius:225px;'><i class="fas fa-plus"></i></button>
 				</div>
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
-					
+
 					<div id="choose_item"></div>
 
 				</div>
@@ -1115,7 +1117,7 @@ $genarray = json_decode($json, TRUE);
 				</div>
 
 				<div class="modal-footer d-flex justify-content-center">
-					<button id="btn_round_back"onclick="close_open_modal('#md_round','#md_item')" type="button" class="btn btn-primary m-4"><?php echo $genarray['back'][$language]; ?></button>
+					<button id="btn_round_back" onclick="close_open_modal('#md_round','#md_item')" type="button" class="btn btn-primary m-4"><?php echo $genarray['back'][$language]; ?></button>
 					<button type="button" class="btn btn-secondary m-4" data-dismiss="modal"><?php echo $genarray['close'][$language]; ?></button>
 				</div>
 			</div>

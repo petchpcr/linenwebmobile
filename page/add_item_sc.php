@@ -123,6 +123,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function select_chk() {
+			$("#btn_select").prop("disabled",true);
 			$(".chk-item").each(function() {
 				var code, name, qty;
 				if ($(this).is(':checked')) {
@@ -237,6 +238,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item() {
+			$("#btn_save").prop("disabled",true);
 			var old_size = old_i_code.length;
 			var new_size = new_i_code.length;
 			if (old_size == 0 && new_size == 0) {
@@ -399,6 +401,8 @@ $genarray = json_decode($json, TRUE);
 									$("#choose_item").append(Str);
 								}
 							}
+
+							$("#btn_select").prop("disabled",false);
 							$("#md_chooseitem").modal('show');
 
 						} else if (temp["form"] == 'get_par') {
@@ -427,6 +431,7 @@ $genarray = json_decode($json, TRUE);
 							
 						} else if (temp["form"] == 'choose_items') {
 							$("#choose_item").empty();
+							$("#btn_select").prop("disabled",true);
 
 						} else if (temp["form"] == 'load_items') {
 
@@ -505,7 +510,7 @@ $genarray = json_decode($json, TRUE);
 					</button>
 				</div>
 				<div class="col-6">
-					<button onclick="add_item()" class="btn btn-success btn-block m-0" style="max-width:250px;" type="button">
+					<button id="btn_save" onclick="add_item()" class="btn btn-success btn-block m-0" style="max-width:250px;" type="button">
 						<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 					</button>
 				</div>
@@ -536,7 +541,7 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button onclick="select_chk()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
+							<button id="btn_select" onclick="select_chk()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
 							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>

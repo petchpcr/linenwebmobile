@@ -362,6 +362,9 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_round(item, HDL) {
+			$("#btn_add_round").prop("disabled",true);
+			$("#val_qty").prop("disabled",true);
+			$("#val_weight").prop("disabled",true);
 			var qty = $("#val_qty").val();
 			var weight = $("#val_weight").val();
 
@@ -568,6 +571,9 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item(NotBack) {
+			if (NotBack == 0) {
+				$("#btn_save").prop("disabled",true);
+			}
 			var data = {
 				'NotBack': NotBack,
 				'DocNo': DocNo,
@@ -764,6 +770,9 @@ $genarray = json_decode($json, TRUE);
 							$("#md_round").modal('show');
 
 						} else if (temp["form"] == 'add_round') {
+							$("#btn_add_round").prop("disabled",false);
+							$("#val_qty").prop("disabled",false);
+							$("#val_weight").prop("disabled",false);
 							load_items();
 							var item = temp['item'];
 							edit_round(item);

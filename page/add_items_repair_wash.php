@@ -130,10 +130,18 @@ $genarray = json_decode($json, TRUE);
 			$("#new_qty").val(1);
 			$("#new_weight").val("");
 			$("#btn_edit").attr("onclick", "change_value(\"" + item + "\",\"" + name + "\")");
+
+			$("#btn_edit").prop("disabled",false);
+			$("#new_qty").prop("disabled",false);
+			$("#new_weight").prop("disabled",false);
+
 			$("#md_edit").modal('show');
 		}
 
 		function change_value(item, name) {
+			$("#btn_edit").prop("disabled",true);
+			$("#new_qty").prop("disabled",true);
+			$("#new_weight").prop("disabled",true);
 			var qty = $("#new_qty").val();
 			if (qty > 0) {
 
@@ -299,6 +307,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item(lastsave) {
+			$("#btn_save").prop("disabled",true);
 			var arr_old_Qty = [];
 			var arr_old_UnitCode = [];
 			var arr_old_weight = [];
