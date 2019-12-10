@@ -196,8 +196,11 @@
                                             IsCancel,
                                             Detail,
                                             ScTime,
-                                            Modify_Code,
-                                            Modify_Date
+                                            Modify_Code,";
+            if ($TimeName == 0) {
+                $Sql .= "DeliveryTime,";
+            }
+            $Sql .= "                       Modify_Date
                                         )
                         VALUES
                                         (
@@ -211,8 +214,11 @@
                                             NOW(),0,0,
                                             0,0,'',
                                             $TimeName,
-                                            $Userid,
-                                            NOW()
+                                            $Userid,";
+            if ($TimeName == 0) {
+                $Sql .= "0,";
+            }
+            $Sql .= "                        NOW()
                                         )";
             mysqli_query($conn,$Sql);
 

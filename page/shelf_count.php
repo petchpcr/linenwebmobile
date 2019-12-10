@@ -39,7 +39,6 @@ require '../getTimeZone.php';
 			load_dep();
 			load_site();
 			load_doc();
-			// load_Fac();
 			load_Time();
 			$('.select2').select2();
 		});
@@ -109,7 +108,7 @@ require '../getTimeZone.php';
 			var Userid = "<?php echo $Userid ?>";
 			var DepCode = $("#DepName").val();
 			var TimeName = $("#TimeName").val();
-			
+
 			var data = {
 				'Userid': Userid,
 				'siteCode': siteCode,
@@ -166,6 +165,8 @@ require '../getTimeZone.php';
 								var Str = "<option value=" + temp[i]['ID'] + ">" + temp[i]['TimeName'] + "</option>";
 								$("#TimeName").append(Str);
 							}
+							var Str = "<option value='0'>Extra</option>";
+							$("#TimeName").append(Str);
 
 						} else if (temp["form"] == 'load_site') {
 							$("#HptName").text(temp['HptName']);
@@ -275,7 +276,7 @@ require '../getTimeZone.php';
 				<i class="fas fa-plus mr-1"></i><?php echo $genarray['createdocno'][$language]; ?>
 			</button>
 		</div>
-		
+
 	</div>
 
 	<!-- Modal -->
@@ -310,7 +311,7 @@ require '../getTimeZone.php';
 			</div>
 		</div>
 	</div>
-	
+
 </body>
 
 </html>
