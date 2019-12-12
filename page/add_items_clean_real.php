@@ -11,6 +11,7 @@ if (isset($_GET['Delback'])) {
 } else {
 	$Delback = 0;
 }
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -69,6 +70,13 @@ $genarray = json_decode($json, TRUE);
 		var dep_search = 0;
 		var sign_funciton = "";
 		var Square = 1;
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
@@ -614,11 +622,11 @@ $genarray = json_decode($json, TRUE);
 						};
 						senddata(JSON.stringify(data));
 					} else {
-						window.location.href = 'clean_real.php?siteCode=' + siteCode + '&Menu=' + Menu;
+						window.location.href = 'clean_real.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 					}
 				});
 			} else {
-				window.location.href = 'clean_real.php?siteCode=' + siteCode + '&Menu=' + Menu;
+				window.location.href = 'clean_real.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 			}
 		}
 		// end function

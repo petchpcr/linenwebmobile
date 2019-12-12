@@ -9,6 +9,8 @@ if ($Userid == "") {
 }
 
 $language = $_SESSION['lang'];
+$form_out = $_GET['form_out'];
+$siteCode = $_GET['siteCode'];
 $xml = simplexml_load_file('../xml/Language/setting_lang.xml');
 $json = json_encode($xml);
 $array = json_decode($json, TRUE);
@@ -29,8 +31,16 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var form_out = '<?php echo $form_out ?>';
+		var siteCode = '<?php echo $siteCode ?>';
 		var Del_fac = [];
 		var Del_time = [];
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			$("#lang").val('<?php echo $language; ?>');
@@ -38,7 +48,11 @@ $genarray = json_decode($json, TRUE);
 
 		// function
 		function back() {
-			window.location.href = "menu.php";
+			if (form_out == 1) {
+				window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
+			} else {
+				window.location.href = "menu.php";
+			}
 		}
 
 		function time_to_hpt() {
@@ -47,7 +61,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function enable_add() {
-			$("#AddFacNhealth").prop("disabled",false);
+			$("#AddFacNhealth").prop("disabled", false);
 		}
 
 		function load_site_fac() {
@@ -243,7 +257,7 @@ $genarray = json_decode($json, TRUE);
 								$("#AddFacNhealth").hide();
 							}
 
-							$("#AddFacNhealth").prop("disabled",true);
+							$("#AddFacNhealth").prop("disabled", true);
 							$("#new_send_time").val("");
 							$("#md_add_fac_nhealth").modal("show");
 						} else if (temp["form"] == 'load_site') {
@@ -330,7 +344,8 @@ $genarray = json_decode($json, TRUE);
 								timer: 2000,
 								confirmButtonText: 'Error!!'
 							})
-							setTimeout('window.location.href = "menu.php"', 1000);
+							var link = "window.location.href = 'menu.php?siteCode=" + siteCode + txt_form_out + "'";
+							setTimeout(link, 1000);
 						} else if (temp["form"] == 'AddFacNhealth') {
 							$("#md_add_fac_nhealth").modal("hide");
 						} else if (temp["form"] == 'EditFacNhealth') {

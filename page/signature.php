@@ -718,37 +718,6 @@ $genarray = json_decode($json, TRUE);
 						window.location.href = 'qc.php?siteCode=' + siteCode + '&Menu=qc';
 					}
 				});
-			} else if (Menu == "shelfcount") {
-				var URL = '../process/signature_sc.php';
-
-				$.ajax({
-					url: URL,
-					method: "POST",
-					data: {
-						DocNo: DocNo,
-						From: From,
-						fnc: fnc,
-						SigCode: SigCode
-					},
-					success: function(data) {
-						window.location.href = 'shelf_process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
-					}
-				});
-			} else if (Menu == "dirty") {
-				var URL = '../process/signature_dirty.php';
-
-				$.ajax({
-					url: URL,
-					method: "POST",
-					data: {
-						DocNo: DocNo,
-						fnc: fnc,
-						SigCode: SigCode
-					},
-					success: function(data) {
-						window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
-					}
-				});
 			} else {
 				var URL = '../process/signature.php';
 

@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $DepCode = $_GET['DepCode'];
 $language = $_SESSION['lang'];
@@ -40,6 +41,13 @@ require '../getTimeZone.php';
 		var DepCode = "<?php echo $DepCode ?>";
 		var siteCode = "<?php echo $siteCode ?>";
 		var Menu = "<?php echo $Menu ?>";
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			load_site();
@@ -81,7 +89,7 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			window.location.href = Menu + ".php?siteCode=" + siteCode + "&Menu=" + Menu;
+			window.location.href = Menu + ".php?siteCode=" + siteCode + "&Menu=" + Menu + txt_form_out;
 		}
 		// end function
 
@@ -144,9 +152,9 @@ require '../getTimeZone.php';
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
 							if (Menu == 'clean') {
-								window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty';
+								window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty' + txt_form_out;
 							} else if (Menu == 'clean_real') {
-								window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty';
+								window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1&Ref=dirty' + txt_form_out;
 							}
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';

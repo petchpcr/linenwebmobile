@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
@@ -35,6 +36,14 @@ require '../getTimeZone.php';
 		var siteCode = "<?php echo $siteCode ?>";
 		var Menu = "<?php echo $Menu ?>";
 		var Userid = "<?php echo $Userid ?>";
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			load_site();
 			load_doc();
@@ -81,7 +90,7 @@ require '../getTimeZone.php';
 		}
 
 		function show_process(DocNo, From) {
-			window.location.href = 'repair_wash_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+			window.location.href = 'repair_wash_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + txt_form_out;
 		}
 
 		function receive_zero(DocNo, From) {
@@ -124,7 +133,7 @@ require '../getTimeZone.php';
 			var FacCode = $("#FacName").val();
 
 			if (Type == 0) {
-				window.location.href = 'ref_clean_real.php?siteCode=' + siteCode  + '&Menu=' + Menu;
+				window.location.href = 'ref_clean_real.php?siteCode=' + siteCode  + '&Menu=' + Menu + txt_form_out;
 			} else if (Type == 1) {
 				var data = {
 					'Userid': Userid,
@@ -141,7 +150,7 @@ require '../getTimeZone.php';
 			var Userid = '<?php echo $Userid; ?>';
 			var DepCode = $("#add_doc").data("depcode");
 			var RefDocNo = $("#RefDocNo").val();
-			window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1';
+			window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1' + txt_form_out;
 		}
 
 		function back() {
@@ -149,7 +158,7 @@ require '../getTimeZone.php';
 			if (Menu == "factory") {
 				window.location.href = "hospital.php?Menu=factory";
 			} else {
-				window.location.href = "menu.php";
+				window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 			}
 		}
 		// end function
@@ -233,7 +242,7 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + txt_form_out;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

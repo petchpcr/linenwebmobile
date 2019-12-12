@@ -10,6 +10,7 @@ if ($Userid == "") {
 }
 $From = $_GET['From'];
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $DocNo = $_GET['DocNo'];
 $language = $_SESSION['lang'];
@@ -34,6 +35,13 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			load_process();
 		});
@@ -59,7 +67,7 @@ $genarray = json_decode($json, TRUE);
 		}, 1000);
 
 		function back() {
-			window.location.href = "dirty_to_track.php?siteCode=<?php echo $siteCode ?>&Menu=track";
+			window.location.href = "dirty_to_track.php?siteCode=<?php echo $siteCode ?>&Menu=track" + txt_form_out;
 		}
 		// end function
 

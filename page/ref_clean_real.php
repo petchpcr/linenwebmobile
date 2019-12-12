@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $DepCode = $_GET['DepCode'];
 $From = $_GET['From'];
@@ -42,6 +43,13 @@ require '../getTimeZone.php';
 		var DepCode = "<?php echo $DepCode ?>";
 		var Menu = "<?php echo $Menu ?>";
 		var From = '<?php echo $From; ?>';
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			load_site();
@@ -84,7 +92,7 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			window.location.href = Menu + ".php?siteCode=" + siteCode + "&Menu=" + Menu;
+			window.location.href = Menu + ".php?siteCode=" + siteCode + "&Menu=" + Menu + txt_form_out;
 		}
 		// end function
 
@@ -136,7 +144,7 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var RefDocNo = temp['RefDocNo']
-							window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + '&Unweight=1';
+							window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&RefDocNo=' + RefDocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + '&Unweight=1' + txt_form_out;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

@@ -116,14 +116,14 @@ session_start();
 								confirmButtonText: 'Ok',
 								showConfirmButton: false
 							}).then(function() {
-								if (PmID == 4) {
-									window.location.href = 'menu.php';
+								if (PmID == 1 || PmID == 6) {
+									window.location.href = 'hospital.php?form_out=1';
 								} else {
 									window.location.href = 'menu.php';
 								}
 							}, function(dismiss) {
-								if (PmID == 4) {
-									window.location.href = 'menu.php';
+								if (PmID == 1 || PmID == 6) {
+									window.location.href = 'hospital.php?form_out=1';
 								} else {
 									window.location.href = 'menu.php';
 								}

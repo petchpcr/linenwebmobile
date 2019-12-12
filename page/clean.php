@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/clean_lang.xml');
@@ -34,6 +35,13 @@ require '../getTimeZone.php';
 	<script>
 		var siteCode = "<?php echo $siteCode ?>";
 		var Menu = "<?php echo $Menu ?>";
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			load_dep();
@@ -91,23 +99,23 @@ require '../getTimeZone.php';
 		}
 
 		function show_process(DocNo) {
-			window.location.href = 'clean_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+			window.location.href = 'clean_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + txt_form_out;
 		}
 
 		function back() {
-			window.location.href = "menu.php";
+			window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 		}
 
 		function add_clean() {
 			var slt = $("#DocName").val();
 			if (slt == 1) {
-				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
+				window.location.href = 'ref_dirty.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + txt_form_out;
 			} else if (slt == 2) {
-				window.location.href = 'ref_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
+				window.location.href = 'ref_repair_wash.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + txt_form_out;
 			} else if (slt == 3) {
-				window.location.href = 'ref_newlinentable.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu;
+				window.location.href = 'ref_newlinentable.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + txt_form_out;
 			} else if (slt == 4) {
-				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean';
+				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean' + txt_form_out;
 			} else if (slt == 5) {
 				$("#choose_doc").modal('hide');
 				$("#md_factory").modal('show');
@@ -197,7 +205,7 @@ require '../getTimeZone.php';
 
 							}
 						} else if (temp["form"] == 'show_process') {
-							window.location.href = 'process.php?siteCode=' + temp['siteCode'];
+							window.location.href = 'process.php?siteCode=' + temp['siteCode'] + txt_form_out;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						} else if (temp["form"] == 'load_dep') {
@@ -211,7 +219,7 @@ require '../getTimeZone.php';
 						} else if (temp["form"] == 'create_clean') {
 							var DocNo = temp["DocNo"];
 							var Userid = temp["Userid"];
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + txt_form_out;
 						}
 					} else if (temp['status'] == "failed") {
 						if (temp["form"] == 'load_doc') {

@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
@@ -35,6 +36,13 @@ require '../getTimeZone.php';
 	<script>
 		var siteCode = "<?php echo $siteCode ?>";
 		var Menu = '<?php echo $Menu ?>';
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			load_dep();
 			load_site();
@@ -123,7 +131,7 @@ require '../getTimeZone.php';
 			if (Menu == "factory") {
 				window.location.href = "hospital.php?Menu=factory";
 			} else {
-				window.location.href = "menu.php";
+				window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 			}
 		}
 		// end function
@@ -194,13 +202,13 @@ require '../getTimeZone.php';
 
 							}
 						} else if (temp["form"] == 'show_item') {
-							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&DepCode=' + temp['DepCode'];
+							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + temp['DocNo'] + '&DepCode=' + temp['DepCode'] + txt_form_out;
 
 						} else if (temp["form"] == 'add_sc') {
 							// var Userid = temp['user']
 							var DepCode = temp['DepCode']
 							// var DocNo = temp['DocNo']
-							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + temp['DocNo'] + '&Menu=' + Menu + '&Create=1&AddAll=1';
+							window.location.href = 'add_item_sc.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + temp['DocNo'] + '&Menu=' + Menu + '&Create=1&AddAll=1' + txt_form_out;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

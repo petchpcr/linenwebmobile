@@ -9,6 +9,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $DocNo = $_GET['DocNo'];
 $language = $_SESSION['lang'];
@@ -40,6 +41,13 @@ $genarray = json_decode($json, TRUE);
 		var SignFnc = "";
 		var IsSign;
 		
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			load_process();
 			$('#ModalSign').on('shown.bs.modal', function () {
@@ -67,7 +75,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function start_wash(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -77,7 +84,6 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function end_wash(DocNo) {
-			var From = "<?php echo $From ?>";
 			var data = {
 				'DocNo': DocNo,
 				'From': From,
@@ -176,7 +182,7 @@ $genarray = json_decode($json, TRUE);
 		function back() {
 			var Menu = '<?php echo $Menu; ?>';
 			var site = '<?php echo $siteCode; ?>';
-			window.location.href = 'shelfcount.php?siteCode=' + site + '&Menu=' + Menu;
+			window.location.href = 'shelfcount.php?siteCode=' + site + '&Menu=' + Menu + txt_form_out;
 		}
 		// end function
 

@@ -7,6 +7,7 @@ $Per = $_SESSION['Permission'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/clean_lang.xml');
@@ -32,6 +33,12 @@ require '../getTimeZone.php';
 
 	<script>
 		var siteCode = "<?php echo $siteCode ?>";
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
@@ -50,11 +57,11 @@ require '../getTimeZone.php';
 		}
 
 		function view_detail(DocNo) {
-			window.location.href = 'signdoc_return_doc_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo;
+			window.location.href = 'signdoc_return_doc_detail.php?siteCode=' + siteCode + '&DocNo=' + DocNo + txt_form_out;
 		}
 
 		function back() {
-			window.location.href = "menu.php";
+			window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 		}
 		// end function
 

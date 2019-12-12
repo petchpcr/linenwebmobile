@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
@@ -33,6 +34,16 @@ require '../getTimeZone.php';
 	?>
 
 	<script>
+		var Userid = "<?php echo $Userid ?>";
+		var Menu = '<?php echo $Menu ?>';
+		var siteCode = "<?php echo $siteCode ?>";
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			load_dep();
 			load_site();
@@ -42,7 +53,6 @@ require '../getTimeZone.php';
 
 		// function
 		function load_dep() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_dep'
@@ -51,7 +61,6 @@ require '../getTimeZone.php';
 		}
 
 		function load_Fac() {
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'STATUS': 'load_Fac'
 			};
@@ -61,7 +70,6 @@ require '../getTimeZone.php';
 
 		function load_site() {
 			$('#datepicker').val("<?php echo date("d-m-Y"); ?>");
-			var siteCode = "<?php echo $siteCode ?>";
 			var data = {
 				'siteCode': siteCode,
 				'STATUS': 'load_site'
@@ -71,8 +79,6 @@ require '../getTimeZone.php';
 
 		function load_doc() {
 			var search = $('#datepicker').val();
-			var siteCode = "<?php echo $siteCode ?>";
-			var Menu = "<?php echo $Menu ?>";
 			var data = {
 				'search': search,
 				'siteCode': siteCode,
@@ -83,10 +89,7 @@ require '../getTimeZone.php';
 		}
 
 		function show_process(DocNo) {
-			var siteCode = '<?php echo $siteCode ?>';
-			var Menu = '<?php echo $Menu ?>';
-
-			window.location.href = 'shelf_process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+			window.location.href = 'shelf_process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + txt_form_out;
 		}
 
 		function confirm_yes(DocNo, From) {
@@ -109,8 +112,6 @@ require '../getTimeZone.php';
 		}
 
 		function add_dirty() {
-			var Userid = "<?php echo $Userid ?>";
-			var siteCode = "<?php echo $siteCode ?>";
 			var DepCode = $("#DepName").val();
 			var FacCode = $("#FacName").val();
 			var data = {
@@ -124,11 +125,10 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			var Menu = '<?php echo $Menu; ?>';
 			if (Menu == "factory") {
 				window.location.href = "hospital.php?Menu=factory";
 			} else {
-				window.location.href = "menu.php";
+				window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 			}
 		}
 		// end function
@@ -208,7 +208,7 @@ require '../getTimeZone.php';
 							var DepCode = temp['DepCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid;
+							window.location.href = 'add_items.php?siteCode=' + siteCode + '&DepCode=' + DepCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + txt_form_out;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

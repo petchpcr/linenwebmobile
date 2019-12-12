@@ -10,6 +10,8 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $language = $_SESSION['lang'];
+$Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $xml = simplexml_load_file('../xml/Language/menu_lang.xml');
 $json = json_encode($xml);
 $array = json_decode($json, TRUE);
@@ -32,6 +34,17 @@ $genarray = json_decode($json, TRUE);
 	?>
 
 	<script>
+		var Menu = '<?php echo $Menu ?>';
+		var form_out = '<?php echo $form_out ?>';
+
+		if (form_out == 1) {
+			var siteCode = '<?php echo $_GET['siteCode'] ?>';
+			var txt_form_out = "&form_out=1";
+		} else {
+			var siteCode = '<?php echo $_SESSION['HptCode'] ?>';
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			sendTimeout();
 		});
@@ -39,35 +52,34 @@ $genarray = json_decode($json, TRUE);
 		// function
 		function menu_click(menu) {
 			if (menu == 'tools') {
-				window.location.href = 'setting.php?';
-
+				window.location.href = 'setting.php?siteCode=' + siteCode + txt_form_out;
 			} else if (menu == 'dirty') {
-				window.location.href = 'dirty.php?siteCode=<?php echo $HptCode; ?>&Menu=dirty';
+				window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=dirty' + txt_form_out;
 			} else if (menu == 'clean') {
-				window.location.href = 'clean.php?siteCode=<?php echo $HptCode; ?>&Menu=clean';
+				window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=clean' + txt_form_out;
 			} else if (menu == 'clean_real') {
-				window.location.href = 'clean_real.php?siteCode=<?php echo $HptCode; ?>&Menu=clean_real';
+				window.location.href = 'clean_real.php?siteCode=' + siteCode + '&Menu=clean_real' + txt_form_out;
 			} else if (menu == 'repair_wash') {
-				window.location.href = 'repair_wash.php?siteCode=<?php echo $HptCode; ?>&Menu=repair_wash';
+				window.location.href = 'repair_wash.php?siteCode=' + siteCode + '&Menu=repair_wash' + txt_form_out;
 			} else if (menu == 'signdoc') {
 				var slc_signdoc = $("#sigh_doc").val();
-				window.location.href = 'signdoc_' + slc_signdoc + '.php?siteCode=<?php echo $HptCode; ?>';
+				window.location.href = 'signdoc_' + slc_signdoc + '.php?siteCode=' + siteCode + txt_form_out
 			} else if (menu == 'qc') {
-				window.location.href = 'qc.php?siteCode=<?php echo $HptCode; ?>&Menu=qc';
+				window.location.href = 'qc.php?siteCode=' + siteCode + '&Menu=qc';
 			} else if (menu == 'kpi') {
 				var slc_kpi = $("#KPI_name").val();
-				window.location.href = 'kpi_' + slc_kpi + '.php?siteCode=<?php echo $HptCode; ?>';
+				window.location.href = 'kpi_' + slc_kpi + '.php?siteCode=' + siteCode + txt_form_out;
 			} else if (menu == 'track') {
-				window.location.href = 'dirty_to_track.php?siteCode=<?php echo $HptCode; ?>&Menu=track';
+				window.location.href = 'dirty_to_track.php?siteCode=' + siteCode + '&Menu=track' + txt_form_out;
 			} else if (menu == 'shelfcount') {
-				window.location.href = 'shelfcount.php?siteCode=<?php echo $HptCode; ?>&Menu=shelfcount';
+				window.location.href = 'shelfcount.php?siteCode=' + siteCode + '&Menu=shelfcount' + txt_form_out;
 			} else if (menu == 'shelf_count') {
-				window.location.href = 'shelf_count.php?siteCode=<?php echo $HptCode; ?>&Menu=shelf_count';
+				window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=shelf_count' + txt_form_out;
 			} else if (menu == 'newlinentable') {
-				window.location.href = 'new_linen_item.php?siteCode=<?php echo $HptCode; ?>&Menu=newlinentable';
+				window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=newlinentable' + txt_form_out;
 			} else if (menu == 'qr_code') {
-				window.location.href = 'read_QRcode.php';
-			} else {
+				window.location.href = 'read_QRcode.php?siteCode=' + siteCode + txt_form_out;
+			} else if (menu == 'factory') {
 				window.location.href = 'hospital.php?Menu=' + menu;
 			}
 		}
@@ -82,16 +94,17 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			swal({
-				title: '',
-				text: 'Logout',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				showConfirmButton: true,
-			}).then(function() {
-				logout(1);
-			});
+			window.location.href = "hospital.php?form_out=1";
+			// swal({
+			// 	title: '',
+			// 	text: 'Logout',
+			// 	showCancelButton: true,
+			// 	confirmButtonColor: '#3085d6',
+			// 	cancelButtonColor: '#d33',
+			// 	showConfirmButton: true,
+			// }).then(function() {
+			// 	logout(1);
+			// });
 		}
 		// end function
 
@@ -146,7 +159,15 @@ $genarray = json_decode($json, TRUE);
 
 		<header data-role="header">
 			<div class="head-bar d-flex justify-content-between">
-				<div style="width:139.14px;"></div>
+				<div style="width:139.14px;">
+					<?php
+					if ($form_out == 1) {
+						echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+					} else {
+						echo "";
+					}
+					?>
+				</div>
 				<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 				<div class="text-right" style="width:139.14px;">
 					<button onclick="logout(1)" class="head-btn btn-primary" role="button">

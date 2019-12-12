@@ -11,6 +11,7 @@ if (isset($_GET['Delback'])) {
 } else {
 	$Delback = 0;
 }
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -65,6 +66,13 @@ $genarray = json_decode($json, TRUE);
 		var now_item = "";
 		var mul_qty = {};
 		var mul_weight = {};
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
@@ -435,21 +443,21 @@ $genarray = json_decode($json, TRUE);
 						senddata(JSON.stringify(data));
 					} else {
 						if (Menu == 'dirty') {
-							window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+							window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 						} else if (Menu == 'clean') {
-							window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+							window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 						} else if (Menu == 'newlinentable') {
-							window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu;
+							window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 						}
 					}
 				});
 			} else {
 				if (Menu == 'dirty') {
-					window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu;
+					window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 				} else if (Menu == 'clean') {
-					window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+					window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 				} else if (Menu == 'newlinentable') {
-					window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu;
+					window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 				}
 			}
 		}

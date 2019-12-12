@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
@@ -30,6 +31,16 @@ require '../getTimeZone.php';
 	?>
 	<script>
 		var f = true;
+		var siteCode = '<?php echo $siteCode ?>';
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var siteCode = "";
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			$(".btn.btn-mylight.btn-block").remove();
 			load_site();
@@ -71,12 +82,12 @@ require '../getTimeZone.php';
 			if ($('#row' + DocNo).data('process') > 0) {
 				var siteCode = '<?php echo $siteCode ?>';
 				var Menu = '<?php echo $Menu ?>';
-				window.location.href = 'track_doc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From;
+				window.location.href = 'track_doc.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From + txt_form_out;
 			}
 		}
 
 		function back() {
-			window.location.href = "menu.php";
+			window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 		}
 		// end function
 

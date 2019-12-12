@@ -8,6 +8,7 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $DocNo = $_GET['DocNo'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/clean_lang.xml');
@@ -35,6 +36,12 @@ require '../getTimeZone.php';
 		var siteCode = "<?php echo $siteCode ?>";
 		var DocNo = "<?php echo $DocNo ?>";
 		var RadioName = [];
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
@@ -72,7 +79,7 @@ require '../getTimeZone.php';
 		}
 
 		function back() {
-			window.location.href = 'kpi_clean1.php?siteCode=' + siteCode;
+			window.location.href = 'kpi_clean1.php?siteCode=' + siteCode + txt_form_out;
 		}
 
 		function AlertError(Title, Text, Type) {

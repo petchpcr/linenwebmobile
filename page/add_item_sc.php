@@ -7,6 +7,7 @@ $Per = $_SESSION['Permission'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -52,6 +53,13 @@ $genarray = json_decode($json, TRUE);
 		var new_i_qty = [];
 		var new_i_order = [];
 		var new_i_par = [];
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
@@ -295,11 +303,11 @@ $genarray = json_decode($json, TRUE);
 					if (Create == 1) {
 						del_doc();
 					} else {
-						window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+						window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 					}
 				})
 			} else {
-				window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+				window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 			}
 		}
 
@@ -415,10 +423,10 @@ $genarray = json_decode($json, TRUE);
 							ar_to_site();
 							$("#md_chooseitem").modal('hide');
 						} else if (temp["form"] == 'add_item') {
-							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 
 						} else if (temp["form"] == 'del_doc') {
-							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu;
+							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';

@@ -7,6 +7,7 @@ $Per = $_SESSION['Permission'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -26,7 +27,6 @@ $genarray = json_decode($json, TRUE);
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 
-
 	<?php
 	require 'script_css.php';
 	require 'logout_fun.php';
@@ -37,6 +37,13 @@ $genarray = json_decode($json, TRUE);
 		var Menu = "<?php echo $Menu ?>";
 		var siteCode = "<?php echo $siteCode ?>";
 		var sign_funciton = "";
+
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
 
 		$(document).ready(function(e) {
 			load_doc();
@@ -112,7 +119,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			window.location.href = 'signdoc_dirty.php?siteCode=' + siteCode;
+			window.location.href = 'signdoc_dirty.php?siteCode=' + siteCode + txt_form_out;
 		}
 
 		function logout(num) {

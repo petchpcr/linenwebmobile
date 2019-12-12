@@ -7,6 +7,7 @@ $Per = $_SESSION['Permission'];
 if ($Userid == "") {
 	header("location:../index.html");
 }
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
@@ -37,6 +38,13 @@ $genarray = json_decode($json, TRUE);
 		var Menu = '<?php echo $Menu ?>';
 		var siteCode = "<?php echo $siteCode ?>";
 
+		var form_out = '<?php echo $form_out ?>';
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		} else {
+			var txt_form_out = "";
+		}
+
 		$(document).ready(function(e) {
 			load_doc();
 		});
@@ -53,7 +61,7 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-				window.location.href = Menu + '.php?siteCode=' + siteCode + '&Menu=' + Menu;
+				window.location.href = Menu + '.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 		}
 
 		function logout(num) {
@@ -87,7 +95,7 @@ $genarray = json_decode($json, TRUE);
 			var Userid = '<?php echo $Userid; ?>';
 			var DepCode = $("#add_doc").data("depcode");
 			var RefDocNo = $("#RefDocNo").val();
-			window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1';
+			window.location.href = 'add_items_repair_wash.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1' + txt_form_out;
 		}
 
 		function CancelDoc() {
@@ -156,7 +164,7 @@ $genarray = json_decode($json, TRUE);
 								$("#item").append(Str);
 							}
 						} else if (temp["form"] == 'CancelDoc') {
-							window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu;
+							window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';

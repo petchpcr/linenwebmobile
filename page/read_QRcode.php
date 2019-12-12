@@ -10,6 +10,8 @@ if ($Userid == "") {
 	header("location:../index.html");
 }
 $language = $_SESSION['lang'];
+$form_out = $_GET['form_out'];
+$siteCode = $_GET['siteCode'];
 $xml = simplexml_load_file('../xml/Language/menu_lang.xml');
 $json = json_encode($xml);
 $array = json_decode($json, TRUE);
@@ -34,9 +36,16 @@ $genarray = json_decode($json, TRUE);
 	<script src="../js/vue-qrcode-reader.browser.js"></script>
 	<link rel="stylesheet" href="../css/vue-qrcode-reader.css">
 	<script>
-		// var getQR = "BHQLPNONO010006,12";
+		var siteCode = '<?php echo $siteCode ?>';
 		var itemCode;
 		var itemQty;
+
+		var form_out = '<?php echo $form_out ?>';
+		var txt_form_out = "";
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		}
+
 		$(document).ready(function(e) {
 			// load_QRcode(getQR);
 		});
@@ -66,7 +75,11 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			window.location.href = 'menu.php';
+			if (form_out == 1) {
+				window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
+			} else {
+				window.location.href = "menu.php";
+			}
 		}
 		// end function
 

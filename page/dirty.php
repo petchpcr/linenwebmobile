@@ -13,6 +13,7 @@ if (!isset($_GET['From'])) {
 }
 $TypeDoc = $_GET['TypeDoc'];
 $Menu = $_GET['Menu'];
+$form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $language = $_SESSION['lang'];
 $xml = simplexml_load_file('../xml/Language/dirty_lang.xml');
@@ -53,6 +54,12 @@ require '../getTimeZone.php';
 		var Arr_Qty = [];
 		var sendmail = 0;
 		var comment = 0;
+
+		var form_out = '<?php echo $form_out ?>';
+		var txt_form_out = "";
+		if (form_out == 1) {
+			var txt_form_out = "&form_out=1";
+		}
 
 		$(document).ready(function(e) {
 			if (Menu == 'factory') {
@@ -119,7 +126,7 @@ require '../getTimeZone.php';
 
 		function show_process(DocNo, From) {
 			if (Menu == 'dirty') {
-				window.location.href = 'dirty_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo;
+				window.location.href = 'dirty_view.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + txt_form_out;
 			} else if (Menu == 'factory') {
 				window.location.href = 'process.php?siteCode=' + siteCode + '&Menu=' + Menu + '&DocNo=' + DocNo + '&From=' + From + '&TypeDoc=' + TypeDoc;
 			}
@@ -219,7 +226,7 @@ require '../getTimeZone.php';
 			if (Menu == "factory") {
 				window.location.href = "hospital.php?Menu=factory";
 			} else {
-				window.location.href = "menu.php";
+				window.location.href = "menu.php?siteCode=" + siteCode + txt_form_out;
 			}
 		}
 		// end function
@@ -458,7 +465,7 @@ require '../getTimeZone.php';
 							var siteCode = temp['siteCode']
 							var DocNo = temp['DocNo']
 							var Menu = '<?php echo $Menu; ?>';
-							window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1';
+							window.location.href = 'add_items_dirty.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&Delback=1' + txt_form_out;
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
 						}

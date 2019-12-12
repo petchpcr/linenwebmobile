@@ -23,6 +23,7 @@ $genarray = json_decode($json, TRUE);
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php
+	$form_out = $_GET['form_out'];
 	$Menu = $_GET['Menu'];
 	if ($Menu == 'dirty') {
 		echo "<title>" . $genarray['titledirty'][$language] . $array['title'][$language] . "</title>";
@@ -42,6 +43,7 @@ $genarray = json_decode($json, TRUE);
 
 	<script>
 		var Menu = '<?php echo $Menu; ?>';
+		var form_out = '<?php echo $form_out; ?>';
 		var SiteCode;
 
 		$(document).ready(function(e) {
@@ -57,6 +59,7 @@ $genarray = json_decode($json, TRUE);
 
 		function load_site() {
 			var data = {
+				'form_out': form_out,
 				'STATUS': 'load_site'
 			};
 			senddata(JSON.stringify(data));
@@ -64,10 +67,14 @@ $genarray = json_decode($json, TRUE);
 
 		function show_doc(sltHpt) {
 			SiteCode = sltHpt;
-			if (Menu == "factory") {
-				$("#choose_doc").modal('show');
+			if (form_out == 1) {
+				window.location.href = 'menu.php?siteCode=' + SiteCode + '&form_out=1';
 			} else {
-				window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+				if (Menu == "factory") {
+					$("#choose_doc").modal('show');
+				} else {
+					window.location.href = 'dirty.php?siteCode=' + SiteCode + '&Menu=' + Menu;
+				}
 			}
 		}
 
@@ -145,11 +152,14 @@ $genarray = json_decode($json, TRUE);
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
 				<?php
-				$Menu = $_GET['Menu'];
-				if ($Menu == 'dirty') {
-					echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+				if ($form_out == 1) { 
+						echo "";
 				} else {
-					echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+					if ($Menu == 'dirty') {
+						echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+					} else {
+						echo "<button onclick='back()' class='head-btn btn-primary'><i class='fas fa-arrow-circle-left mr-1'></i>" . $genarray['back'][$language] . "</button>";
+					}
 				}
 				?>
 			</div>
