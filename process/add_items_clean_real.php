@@ -157,7 +157,11 @@
 
     function del_back($conn, $DATA){
         $DocNo = $DATA["DocNo"];
-        $Menu = $DATA["Menu"];
+        if ($DATA["Menu"] == "clean") {
+            $Menu = "cleanstock";
+        } else if ($DATA["Menu"] == "clean_real") {
+            $Menu = "clean";
+        }
         $return['Menu'] = $Menu;
         $Sql = "DELETE FROM $Menu WHERE DocNo = '$DocNo'";
         mysqli_query($conn,$Sql);

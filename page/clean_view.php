@@ -167,7 +167,7 @@ $genarray = json_decode($json, TRUE);
 								$("#item").append(Str);
 							}
 						} else if (temp["form"] == 'CancelDoc') {
-							window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
+							window.location.href = Menu + '.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 
 						} else if (temp["form"] == 'logout') {
 							window.location.href = '../index.html';
