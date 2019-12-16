@@ -11,12 +11,6 @@ function choose_items($conn, $DATA)
 {
     $DepCode = $DATA["DepCode"];
     $Search = $DATA["Search"];
-    $refDoc = $DATA["refDoc"];
-
-    $Sql = "SELECT Count(*) AS c FROM rewash WHERE docNo= '$refDoc'";
-    $meQuery = mysqli_query($conn, $Sql);
-    $Result = mysqli_fetch_assoc($meQuery);
-    $c    =  $Result['c'];
 
     $Sql = "SELECT department.DepName,site.HptName
         FROM department 
@@ -27,42 +21,26 @@ function choose_items($conn, $DATA)
         $return['DepName']    =  $Result['DepName'];
         $return['HptName']    =  $Result['HptName'];
     }
+    $return['Sql'] = $Sql;
 
-    if ($c == 0) {
-        $count = 0;
-        $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
-    
-                    FROM                item_stock,item
-    
-                    WHERE               DepCode='$DepCode'
-                    AND                 item_stock.ItemCode=item.ItemCode
-                    AND                 item.ItemName LIKE '%$Search%' 
-                    ORDER BY            item.ItemName ASC";
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['ItemCode']    =  $Result['ItemCode'];
-            $return[$count]['ItemName']    =  $Result['ItemName'];
-            $return[$count]['UnitCode']    =  $Result['UnitCode'];
-            $count++;
-        }
-    } else {
-        $count = 0;
-        $Sql = "SELECT DISTINCT     rewash_detail.ItemCode,ItemName,item.UnitCode
-    
-                    FROM                rewash_detail,item
+    $count = 0;
+    $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
 
-                    WHERE               rewash_detail.DocNo='$refDoc'
-                    AND                 rewash_detail.ItemCode=item.ItemCode
-                    AND                 item.ItemName LIKE '%$Search%' 
-                    ORDER BY            item.ItemName ASC";
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $return[$count]['ItemCode']    =  $Result['ItemCode'];
-            $return[$count]['ItemName']    =  $Result['ItemName'];
-            $return[$count]['UnitCode']    =  $Result['UnitCode'];
-            $count++;
-        }
+                FROM                item_stock,item
+
+                WHERE               DepCode='$DepCode'
+                AND                 item_stock.ItemCode=item.ItemCode
+                AND                 item.ItemName LIKE '%$Search%' 
+                ORDER BY            item.ItemName ASC";
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $return[$count]['ItemCode']    =  $Result['ItemCode'];
+        $return[$count]['ItemName']    =  $Result['ItemName'];
+        $return[$count]['UnitCode']    =  $Result['UnitCode'];
+        $count++;
     }
+
+    $return['Sql2'] = $Sql;
     $return['cnt'] = $count;
 
     if ($count > 0) {
