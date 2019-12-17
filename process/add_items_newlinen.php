@@ -29,6 +29,7 @@ function choose_items($conn, $DATA)
                 WHERE   IsActive = 1 
                 -- AND     Itemnew = 1 
                 -- AND     (HptCode = '$siteCode' OR HptCode = '0')
+                AND     IsClean != 1 
                 AND     HptCode = '$siteCode'
                 AND     ItemName LIKE '%$Search%'
                 ORDER BY ItemName ASC";
