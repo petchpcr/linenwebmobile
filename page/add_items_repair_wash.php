@@ -74,9 +74,6 @@ $genarray = json_decode($json, TRUE);
 		var Delback = "<?php echo $Delback ?>";
 		var Unweight = "<?php echo $Unweight ?>";
 		var NotDelDetail = "<?php echo $NotDelDetail ?>";
-		var arr_old_items = [];
-		var arr_new_items = [];
-		var arr_del_items = [];
 
 		var form_out = '<?php echo $form_out ?>';
 		if (form_out == 1) {
@@ -101,14 +98,9 @@ $genarray = json_decode($json, TRUE);
 
 		// function
 		function load_items() {
-			arr_old_items = [];
-			arr_new_items = [];
-			arr_del_items = [];
 			var data = {
 				'DocNo': DocNo,
-				'refDoc': refDoc,
 				'Unweight': Unweight,
-				'NotDelDetail': NotDelDetail,
 				'STATUS': 'load_items'
 			};
 			senddata(JSON.stringify(data));
@@ -126,9 +118,8 @@ $genarray = json_decode($json, TRUE);
 			var Search = $("#search_items").val();
 			var data = {
 				'siteCode': siteCode,
-				'DepCode': DepCode,
 				'Search': Search,
-				'refDoc': refDoc,
+				'DocNo': DocNo,
 				'STATUS': 'choose_items'
 			};
 			senddata(JSON.stringify(data));
@@ -139,69 +130,33 @@ $genarray = json_decode($json, TRUE);
 			$("#new_weight").val("");
 			$("#btn_edit").attr("onclick", "change_value(\"" + item + "\",\"" + name + "\")");
 
-			$("#btn_edit").prop("disabled",false);
-			$("#new_qty").prop("disabled",false);
-			$("#new_weight").prop("disabled",false);
+			$("#btn_edit").prop("disabled", false);
+			$("#new_qty").prop("disabled", false);
+			$("#new_weight").prop("disabled", false);
 
 			$("#md_edit").modal('show');
 		}
 
 		function change_value(item, name) {
-			$("#btn_edit").prop("disabled",true);
-			$("#new_qty").prop("disabled",true);
-			$("#new_weight").prop("disabled",true);
 			var qty = $("#new_qty").val();
+			var weight = $("#new_weight").val();
+
 			if (qty > 0) {
+				$("#btn_edit").prop("disabled", true);
+				$("#new_qty").prop("disabled", true);
+				$("#new_weight").prop("disabled", true);
 
-				var weight = $("#new_weight").val();
-				var last_item = $('.item:last').data("num");
-				if (last_item == null || last_item == '') {
-					last_item = 0;
-				}
-				var num = Number(last_item) + 1;
-				var total = $(".chk-item").length;
-
-				var id = "weight" + num;
-				var unit = 1;
-				var idqty = id + "qty";
-				var div = "#chs" + num;
-
-				var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
-				Str += "		<div class='col'>";
-				Str += "			<div class='row'>";
-
-				Str += "				<div class='d-flex align-items-center col-lg-8 col-md-7 col-sm-6 col-6'>";
-				Str += "					<div class='text-truncate font-weight-bold'>" + name + "</div>";
-				Str += "				</div>";
-
-				Str += "				<div class='d-flex align-items-center col-lg-4 col-md-5 col-sm-6 col-6 input-group p-0'>";
-				Str += "					<div class='pr-1'><?php echo $array['numberSize'][$language]; ?></div>";
-				Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
-				Str += "					bg-white my-2 mr-1 itemnum numonly'id='" + idqty + "' placeholder='0' value='" + qty + "'>";
-
-				Str += "					<div class='pr-1'><?php echo $array['weight'][$language]; ?></div>";
-				Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center";
-				Str += "					bg-white my-2 mr-1 item new numonly' data-code='" + item + "' data-qty='" + qty + "'";
-				Str += "					data-unit='" + unit + "' id='" + id + "' data-num='" + num + "' data-oldnum=0 placeholder='0.0' value='" + weight + "'>";
-
-				Str += "					<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
-				Str += "				</div>";
-
-				Str += "			</div>";
-				Str += "		</div>";
-				Str += "	</div>";
-
-				$("#items").append(Str);
-				arr_new_items.push(item);
-				num++;
-
-				cal_weight();
-				cal_num();
-
-				choose_items();
+				var data = {
+					'DocNo': DocNo,
+					'item': item,
+					'qty': qty,
+					'weight': weight,
+					'STATUS': 'change_value'
+				};
+				senddata(JSON.stringify(data));
 			}
 			$("#md_edit").modal('hide');
-			
+
 		}
 
 		function chk_items(chk) {
@@ -214,35 +169,13 @@ $genarray = json_decode($json, TRUE);
 			var test = $(id).data("name");
 		}
 
-		function del_items(num) {
-			var item = "#item" + num;
-			var input = "#weight" + num;
-			var have = 0;
-			var code = $(input).data("code");
-
-			for (var i = 0; i < arr_del_items.length; i++) {
-				if (arr_del_items[i] == code) {
-					have = 1;
-				}
-			}
-
-			var old_i = arr_old_items.indexOf(code); // หา Index ของคำนั้น
-			if (old_i != -1) {
-				arr_old_items.splice(old_i, 1);
-			} // ลบ Index ที่หาเจอ
-
-			var new_i = arr_new_items.indexOf(code); // หา Index ของคำนั้น
-			if (new_i != -1) {
-				arr_new_items.splice(new_i, 1);
-			} // ลบ Index ที่หาเจอ
-
-			if (have == 0) {
-				arr_del_items.push(code);
-			}
-
-			$(item).remove();
-			cal_weight();
-			cal_num();
+		function del_items(item) {
+			var data = {
+				'DocNo': DocNo,
+				'item': item,
+				'STATUS': 'del_items'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function show_weight(num) {
@@ -314,81 +247,29 @@ $genarray = json_decode($json, TRUE);
 			$("#sum_weight").val(price);
 		}
 
-		function add_item(lastsave) {
-			$("#btn_save").prop("disabled",true);
-			var arr_old_Qty = [];
-			var arr_old_UnitCode = [];
-			var arr_old_weight = [];
-			$(".old").each(function() {
-				var qtyid = $(this).attr("id") + 'qty';
-				var qty = $('#' + qtyid).val();
-				if (true) {
-					if (qty == null || qty == "") {
-						qty = 0;
-					}
-					arr_old_Qty.push(qty);
-				} else {
-					arr_old_Qty.push(0);
-				}
-				arr_old_UnitCode.push($(this).data("unit"));
-				var val = $(this).val();
-				var weight = 0;
-				if (val != null && val != "") {
-					weight = val;
-				}
+		function add_item() {
+			$("#btn_save").prop("disabled", true);
+			var ar_item = [];
+			var ar_weight = [];
+			var ar_qty = [];
+			$(".item ").each(function() {
+				var num = $(this).attr("data-num");
+				var weight = $(this).val();
+				var qty_id = "#weight" + num + "qty";
+				var qty = $(qty_id).val();
+				var item = $(this).attr("data-code");
 
-				arr_old_weight.push(weight);
+				ar_item.push(item);
+				ar_weight.push(weight);
+				ar_qty.push(qty);
 			});
-
-			var old_i = arr_old_items.join(',');
-			var old_qty = arr_old_Qty.join(',');
-			var old_unit = arr_old_UnitCode.join(',');
-			var old_weight = arr_old_weight.join(',');
-
-			var arr_new_Qty = [];
-			var arr_new_UnitCode = [];
-			var arr_new_weight = [];
-			$(".new").each(function() {
-				var qtyid = $(this).attr("id") + 'qty';
-				var qty = $('#' + qtyid).val();
-				if (true) {
-					if (qty == null || qty == "") {
-						qty = 0;
-					}
-					arr_new_Qty.push(qty);
-				} else {
-					arr_new_Qty.push(0);
-				}
-				arr_new_UnitCode.push($(this).data("unit"));
-				var val = $(this).val();
-				var weight = 0;
-				if (val != null && val != "") {
-					weight = val;
-				}
-				arr_new_weight.push(weight);
-			});
-
-			var new_i = arr_new_items.join(',');
-			var new_qty = arr_new_Qty.join(',');
-			var new_unit = arr_new_UnitCode.join(',');
-			var new_weight = arr_new_weight.join(',');
-
-			var del_i = arr_del_items.join(',');
 
 			var data = {
-				'lastsave': lastsave,
 				'DocNo': DocNo,
-				'refDocNo': '<?php echo $refDoc; ?>',
 				'Userid': Userid,
-				'old_i': old_i,
-				'old_qty': old_qty,
-				'old_unit': old_unit,
-				'old_weight': old_weight,
-				'new_i': new_i,
-				'new_qty': new_qty,
-				'new_unit': new_unit,
-				'new_weight': new_weight,
-				'del_i': del_i,
+				'ar_item': ar_item,
+				'ar_weight': ar_weight,
+				'ar_qty': ar_qty,
 				'STATUS': 'add_item'
 			};
 			senddata(JSON.stringify(data));
@@ -444,7 +325,8 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			if (Delback == 1) {
+			// if (Delback == 1) {
+			if (false) {
 				var data = {
 					'DocNo': DocNo,
 					'refDoc': refDoc,
@@ -509,14 +391,13 @@ $genarray = json_decode($json, TRUE);
 								Str += "					data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "'";
 								Str += "					data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
 
-								Str += "					<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
+								Str += "					<img onclick='del_items(\"" + temp[i]['ItemCode'] + "\")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
 								Str += "				</div>";
 
 								Str += "			</div>";
 								Str += "		</div>";
 								Str += "	</div>";
 								$("#items").append(Str);
-								arr_old_items.push(temp[i]['ItemCode']);
 
 								cal_weight();
 								cal_num();
@@ -534,61 +415,41 @@ $genarray = json_decode($json, TRUE);
 								$("#btn_sign_nh").prop('hidden', true);
 							}
 						} else if (temp["form"] == 'choose_items') {
-							var HptName = temp['HptName'];
-							var DepName = temp['DepName'];
 							$("#choose_item").empty();
 							for (var i = 0; i < temp['cnt']; i++) {
-								var have_old = 0;
-								var have_new = 0;
+								var num = i + 1;
+								var chk = "chk" + num;
+								var Str = "<button onclick='new_value(\"" + temp[i]['ItemCode'] + "\",\"" + temp[i]['ItemName'] + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
+								Str += "</div></button>";
 
-								if (Menu != 'dirty') {
-									if (arr_old_items.length > 0) {
-										for (var ii = 0; ii < arr_old_items.length; ii++) {
-											if (arr_old_items[ii] == temp[i]['ItemCode']) {
-												have_old = 1;
-											}
-										}
-									}
-
-									if (arr_new_items.length > 0) {
-										for (var iii = 0; iii < arr_new_items.length; iii++) {
-											if (arr_new_items[iii] == temp[i]['ItemCode']) {
-												have_new = 1;
-											}
-										}
-									}
-								}
-
-								if (have_old == 0 && have_new == 0) {
-									var num = i + 1;
-									var chk = "chk" + num;
-									var Str = "<button onclick='new_value(\"" + temp[i]['ItemCode'] + "\",\"" + temp[i]['ItemName'] + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-									Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
-									Str += "</div></button>";
-
-									$("#choose_item").append(Str);
-								}
+								$("#choose_item").append(Str);
 							}
-							var count = $("#choose_item").children().length;
-							if (count == 0) {
-								$("#md_item").modal('hide');
-							}
+						} else if (temp["form"] == 'change_value') {
+							load_items();
+							choose_items();
+							$("#btn_edit").prop("disabled", false);
+							$("#new_qty").prop("disabled", false);
+							$("#new_weight").prop("disabled", false);
+							$("#md_edit").modal('hide');
+
+						} else if (temp["form"] == 'del_items') {
+							load_items();
+
 						} else if (temp["form"] == 'add_item') {
 							Delback = 0;
-							if (temp['lastsave'] == 1) {
-								swal({
-									title: '',
-									text: '<?php echo $genarray['savesuccess'][$language]; ?>',
-									type: 'success',
-									showCancelButton: false,
-									confirmButtonColor: '#3085d6',
-									cancelButtonColor: '#d33',
-									showConfirmButton: false,
-									timer: 1200,
-									confirmButtonText: 'Error!!'
-								})
-								setTimeout('back()', 1500);
-							}
+							swal({
+								title: '',
+								text: '<?php echo $genarray['savesuccess'][$language]; ?>',
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								showConfirmButton: false,
+								timer: 1200,
+								confirmButtonText: 'Error!!'
+							})
+							setTimeout('back()', 1500);
 						} else if (temp["form"] == 'del_back') {
 							Delback = 0;
 							back();
@@ -620,7 +481,7 @@ $genarray = json_decode($json, TRUE);
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
-				<button data-toggle="modal" data-target="#exampleModal" class="head-btn btn-primary"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+				<button onclick="back()" class="head-btn btn-primary"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
@@ -651,8 +512,8 @@ $genarray = json_decode($json, TRUE);
 	<div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
 		<div class="col-lg-9 col-md-10 col-sm-12">
 			<?php
-			if (true) {
-				echo '<div class="form-row my-2">
+				if (true) {
+					echo '<div class="form-row my-2">
 								<div class="col-12 input-group">
 									<div class="input-group-prepend">
 											<span class="input-group-text" style="width:100px;">' . $array['numberSum'][$language] . '</span>
@@ -663,7 +524,7 @@ $genarray = json_decode($json, TRUE);
 									</div>
 								</div>
 							</div>';
-			}
+				}
 			?>
 			<div class="form-row my-2">
 				<div class="col-12 input-group">
@@ -684,7 +545,7 @@ $genarray = json_decode($json, TRUE);
 					</button>
 				</div>
 				<div class="col-6">
-					<button id="btn_save" onclick="add_item(1)" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#" hidden>
+					<button id="btn_save" onclick="add_item()" class="btn btn-success btn-block" type="button" data-toggle="modal" data-target="#" hidden>
 						<i class="fas fa-save mr-1"></i><?php echo $genarray['save'][$language]; ?>
 					</button>
 					<button id="btn_sign_fac" onclick="sign_fac()" class="btn btn-success btn-block mt-0" type="button" hidden>

@@ -52,6 +52,7 @@
 <time><en>time</en><th>เวลา</th></time>
 
 <titleclean><en>Clean Doc </en><th>ผ้าสะอาด</th></titleclean>
+<titlecleanstock><en>Clean Stock Doc </en><th>บันทึกรับเข้าคลัง</th></titlecleanstock>
 <titledirty><en>Dirty Doc </en><th>ผ้าสกปรก</th></titledirty>
 <titleQC><en>QC</en><th>ตรวจสอบคุณภาพ</th></titleQC>
 <titlefactory><en>Factory </en><th>โรงงานซัก </th></titlefactory>

@@ -84,12 +84,16 @@ function load_doc($conn, $DATA)
     }
 }
 
-function add_repair_wash($conn, $DATA)
+function add_clean_real($conn, $DATA)
 {
-    $Menu = "repair_wash";
-    $H_doc = "RPW";
     $Userid = $DATA["Userid"];
-    $Menu = $DATA["Menu"];
+    if ($DATA["Menu"] == "clean") {
+        $Menu = "cleanstock";
+        $H_doc = "CK";
+    } else if ($DATA["Menu"] == "repair_wash") {
+        $Menu = $DATA["Menu"];
+        $H_doc = "RPW";
+    }
     $siteCode = $DATA["siteCode"];
     $RefDocNo = $DATA["refDocNo"];
 
@@ -213,13 +217,13 @@ function add_repair_wash($conn, $DATA)
         $return['RefDocNo'] = $RefDocNo;
 
         $return['status'] = "success";
-        $return['form'] = "add_repair_wash";
+        $return['form'] = "add_clean_real";
         echo json_encode($return);
         mysqli_close($conn);
         die;
     } else {
         $return['status'] = "failed";
-        $return['form'] = "add_repair_wash";
+        $return['form'] = "add_clean_real";
         echo json_encode($return);
         mysqli_close($conn);
         die;
@@ -234,8 +238,8 @@ if (isset($_POST['DATA'])) {
         load_site($conn, $DATA);
     } else if ($DATA['STATUS'] == 'load_doc') {
         load_doc($conn, $DATA);
-    } else if ($DATA['STATUS'] == 'add_repair_wash') {
-        add_repair_wash($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'add_clean_real') {
+        add_clean_real($conn, $DATA);
     } else if ($DATA['STATUS'] == 'logout') {
         logout($conn, $DATA);
     }

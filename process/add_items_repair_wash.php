@@ -7,65 +7,11 @@ require '../connect/connect.php';
 require 'logout.php';
 date_default_timezone_set("Asia/Bangkok");
 
-function choose_items($conn, $DATA)
-{
-    $siteCode = $DATA["siteCode"];
-    $DepCode = $DATA["DepCode"];
-    $Search = $DATA["Search"];
-    $refDoc = $DATA["refDoc"];
-
-    $Sql = "SELECT department.DepName,site.HptName
-        FROM department 
-        INNER JOIN site ON department.HptCode = site.HptCode 
-        WHERE department.DepCode = '$DepCode'";
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $return['DepName']    =  $Result['DepName'];
-        $return['HptName']    =  $Result['HptName'];
-    }
-
-    $count = 0;
-    $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
-
-                FROM                item_stock,item
-
-                WHERE               item.HptCode = '$siteCode'
-                AND                 item_stock.ItemCode = item.ItemCode
-                AND                 item.ItemName LIKE '%$Search%' 
-                AND                 item.IsClean != 1 
-                ORDER BY            item.ItemName ASC";
-
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $return[$count]['ItemCode']    =  $Result['ItemCode'];
-        $return[$count]['ItemName']    =  $Result['ItemName'];
-        $return[$count]['UnitCode']    =  $Result['UnitCode'];
-        $count++;
-    }
-    $return['cnt'] = $count;
-    $return['Sql'] = $Sql;
-
-    if ($count > 0) {
-        $return['status'] = "success";
-        $return['form'] = "choose_items";
-        echo json_encode($return);
-        mysqli_close($conn);
-        die;
-    } else {
-        $return['status'] = "failed";
-        $return['form'] = "choose_items";
-        echo json_encode($return);
-        mysqli_close($conn);
-        die;
-    }
-}
-
 function load_items($conn, $DATA)
 {
     $count = 0;
     $DocNo = $DATA["DocNo"];
-    $refDoc = $DATA["refDoc"];
-    $Unweight = $DATA["Unweight"];
+    // $Unweight = $DATA["Unweight"];
 
     $Sql = "SELECT SignFac,SignNH FROM repair_wash WHERE DocNo = '$DocNo'";
     $meQuery = mysqli_query($conn, $Sql);
@@ -92,9 +38,9 @@ function load_items($conn, $DATA)
         $return[$count]['UnitCode'] = $Result['UnitCode'];
         $return[$count]['Qty'] = $Result['Qty'];
         $weight = $Result['Weight'];
-        if ($Unweight == 1) {
-            $weight = 0;
-        }
+        // if ($Unweight == 1) {
+        //     $weight = 0;
+        // }
         $return[$count]['Weight'] = $weight;
         $count++;
     }
@@ -109,6 +55,122 @@ function load_items($conn, $DATA)
     } else {
         $return['status'] = "failed";
         $return['form'] = "load_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
+function choose_items($conn, $DATA)
+{
+    $siteCode = $DATA["siteCode"];
+    $Search = $DATA["Search"];
+    $DocNo = $DATA["DocNo"];
+    $Ar_ItemCode = array();
+    $count = 0;
+
+    $Sql = "SELECT r.ItemCode 
+            FROM repair_wash_detail r 
+            INNER JOIN item i ON r.ItemCode = i.ItemCode 
+            WHERE r.DocNo = '$DocNo' 
+            GROUP BY r.ItemCode 
+            ORDER BY i.ItemName";
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        array_push($Ar_ItemCode,$Result['ItemCode']);
+    }
+
+    $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
+
+            FROM                item_stock,item
+
+            WHERE               item.HptCode = '$siteCode'
+            AND                 item_stock.ItemCode = item.ItemCode
+            AND                 item.ItemName LIKE '%$Search%' 
+            AND                 item.IsClean != 1 
+            ORDER BY            item.ItemName ASC";
+
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $have = 0;
+        foreach ($Ar_ItemCode as $key => $ItemCode) {
+            if ($ItemCode == $Result['ItemCode']) {
+                $have = 1;
+            }
+        }
+        if ($have == 0) {
+            $return[$count]['ItemCode']    =  $Result['ItemCode'];
+            $return[$count]['ItemName']    =  $Result['ItemName'];
+            $return[$count]['UnitCode']    =  $Result['UnitCode'];
+            $count++;
+        }
+    }
+    $return['cnt'] = $count;
+    $return['Sql'] = $Sql;
+
+    if ($count > 0) {
+        $return['status'] = "success";
+        $return['form'] = "choose_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['status'] = "failed";
+        $return['form'] = "choose_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
+function change_value($conn, $DATA)
+{
+    $DocNo = $DATA["DocNo"];
+    $item = $DATA["item"];
+    $qty = $DATA["qty"];
+    if ($DATA["weight"] > 0) {
+        $insert = ",`Weight`";
+        $value = "," . $DATA["weight"];
+    } else {
+        $insert = "";
+        $value = "";
+    }
+    $Sql = "INSERT INTO repair_wash_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`" . $insert . ") 
+            VALUES ('$DocNo','$item',1,$qty" . $value . ") ";
+
+    if (mysqli_query($conn, $Sql)) {
+        $return['status'] = "success";
+        $return['form'] = "change_value";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['Sql'] = $Sql;
+        $return['status'] = "failed";
+        $return['form'] = "change_value";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
+function del_items($conn, $DATA)
+{
+    $DocNo = $DATA["DocNo"];
+    $item = $DATA["item"];
+
+    $Sql = "DELETE FROM repair_wash_detail WHERE DocNo = '$DocNo' AND ItemCode = '$item'";
+
+    if (mysqli_query($conn, $Sql)) {
+        $return['status'] = "success";
+        $return['form'] = "del_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['Sql'] = $Sql;
+        $return['status'] = "failed";
+        $return['form'] = "del_items";
         echo json_encode($return);
         mysqli_close($conn);
         die;
@@ -142,60 +204,22 @@ function check_signature($conn, $DATA) {
 
 function add_item($conn, $DATA)
 {
-    $lastsave = $DATA['lastsave'];
     $DocNo = $DATA['DocNo'];
     $Userid = $DATA['Userid'];
-    $refDocNo = $DATA['refDocNo'];
-    $arr_old_i = $DATA['old_i'];
-    $arr_old_qty = $DATA['old_qty'];
-    $arr_old_unit = $DATA['old_unit'];
-    $arr_old_weight = $DATA['old_weight'];
-    $arr_new_i = $DATA['new_i'];
-    $arr_new_qty = $DATA['new_qty'];
-    $arr_new_unit = $DATA['new_unit'];
-    $arr_new_weight = $DATA['new_weight'];
-    $arr_del_i = $DATA['del_i'];
+    $ar_item = $DATA['ar_item'];
+    $ar_weight = $DATA['ar_weight'];
+    $ar_qty = $DATA['ar_qty'];
+    $Total = 0;
 
-    $old_i = explode(",", $arr_old_i);
-    $old_qty = explode(",", $arr_old_qty);
-    $old_unit = explode(",", $arr_old_unit);
-    $old_weight = explode(",", $arr_old_weight);
-    $new_i = explode(",", $arr_new_i);
-    $new_qty = explode(",", $arr_new_qty);
-    $new_unit = explode(",", $arr_new_unit);
-    $new_weight = explode(",", $arr_new_weight);
-    $del_i = explode(",", $arr_del_i);
-
-    $cnt_old = sizeof($old_i, 0);
-    $cnt_new = sizeof($new_i, 0);
-    $cnt_del = sizeof($del_i, 0);
-
-    for ($i = 0; $i < $cnt_del; $i++) {
-        $Sql = "DELETE FROM repair_wash_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
+    foreach ($ar_item as $key => $ItemCode) {
+        $Sql = "UPDATE repair_wash_detail SET Qty = '$ar_qty[$key]', Weight = '$ar_weight[$key]' WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         mysqli_query($conn, $Sql);
+        $Total += $ar_weight[$key];
     }
 
-    for ($i = 0; $i < $cnt_old; $i++) {
-        $Sql = "UPDATE repair_wash_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
-        mysqli_query($conn, $Sql);
-    }
-
-    for ($i = 0; $i < $cnt_new; $i++) {
-        $Sql = "INSERT INTO repair_wash_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-                    VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_qty[$i],$new_weight[$i]) ";
-        $return[$i]['Weight'] = $new_weight[$i];
-        mysqli_query($conn, $Sql);
-    }
-
-    $Sql = "SELECT SUM(Weight) AS total FROM repair_wash_detail WHERE DocNo = '$DocNo'";
-    $meQuery = mysqli_query($conn, $Sql);
-    $Result = mysqli_fetch_assoc($meQuery);
-    $total = $Result['total'];
-
-    $Sql = "UPDATE repair_wash SET Total = $total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1,RefDocNo = '$refDocNo' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE repair_wash SET Total = $Total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1 WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
-    $return['lastsave'] = $lastsave;
     $return['status'] = "success";
     $return['form'] = "add_item";
     echo json_encode($return);
@@ -234,6 +258,10 @@ if (isset($_POST['DATA'])) {
         check_signature($conn, $DATA);
     } else if ($DATA['STATUS'] == 'choose_items') {
         choose_items($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'change_value') {
+        change_value($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'del_items') {
+        del_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'add_item') {
         add_item($conn, $DATA);
     } else if ($DATA['STATUS'] == 'del_back') {

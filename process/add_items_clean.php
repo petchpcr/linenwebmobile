@@ -7,147 +7,11 @@ require '../connect/connect.php';
 require 'logout.php';
 date_default_timezone_set("Asia/Bangkok");
 
-function choose_items($conn, $DATA)
-{
-    $DepCode = $DATA["DepCode"];
-    $Search = $DATA["Search"];
-
-    $Sql = "SELECT department.DepName,site.HptName
-        FROM department 
-        INNER JOIN site ON department.HptCode = site.HptCode 
-        WHERE department.DepCode = '$DepCode'";
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $return['DepName']    =  $Result['DepName'];
-        $return['HptName']    =  $Result['HptName'];
-    }
-    $return['Sql'] = $Sql;
-
-    $count = 0;
-    $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
-
-                FROM                item_stock,item
-
-                WHERE               DepCode='$DepCode'
-                AND                 item_stock.ItemCode=item.ItemCode
-                AND                 item.ItemName LIKE '%$Search%' 
-                ORDER BY            item.ItemName ASC";
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $return[$count]['ItemCode']    =  $Result['ItemCode'];
-        $return[$count]['ItemName']    =  $Result['ItemName'];
-        $return[$count]['UnitCode']    =  $Result['UnitCode'];
-        $count++;
-    }
-
-    $return['Sql2'] = $Sql;
-    $return['cnt'] = $count;
-
-    if ($count > 0) {
-        $return['status'] = "success";
-        $return['form'] = "choose_items";
-        echo json_encode($return);
-        mysqli_close($conn);
-        die;
-    } else {
-        $return['status'] = "failed";
-        $return['form'] = "choose_items";
-        echo json_encode($return);
-        mysqli_close($conn);
-        die;
-    }
-}
-
 function load_items($conn, $DATA)
 {
     $count = 0;
     $DocNo = $DATA["DocNo"];
-    $refDoc = $DATA["refDoc"];
-    $Unweight = $DATA["Unweight"];
-    $NotDelDetail = $DATA["NotDelDetail"];
-
-    if ($NotDelDetail != 1) {
-        $Sql = "DELETE FROM cleanstock_detail WHERE DocNo = '$DocNo'";
-        mysqli_query($conn, $Sql);
-    }
-
-    $Sql = "SELECT Count(*) AS cnt FROM cleanstock_detail WHERE DocNo = '$DocNo'";
-    $meQuery = mysqli_query($conn, $Sql);
-    $Result = mysqli_fetch_assoc($meQuery);
-    $cnt    =  $Result['cnt'];
-
-    $Sql = "SELECT Count(*) AS c FROM repair_wash WHERE DocNo = '$refDoc'";
-    $meQuery = mysqli_query($conn, $Sql);
-    $Result = mysqli_fetch_assoc($meQuery);
-    $c    =  $Result['c'];
-
-    if ($c == 1 && $cnt == 0) {
-        $Sql = "SELECT     ItemCode,UnitCode,Qty,Weight
-                FROM       repair_wash_detail
-                WHERE      DocNo = '$refDoc'";
-
-        $meQuery = mysqli_query($conn, $Sql);
-        while ($Result = mysqli_fetch_assoc($meQuery)) {
-            $new_i    =  $Result['ItemCode'];
-            $new_unit    =  $Result['UnitCode'];
-            $new_qty    =  $Result['Qty'];
-            $new_weight    =  0;
-            $Sql2 = "INSERT INTO cleanstock_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-                    VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
-            mysqli_query($conn, $Sql2);
-        }
-    }
-
-    $Sql = "SELECT dirty_detail.ItemCode,dirty_detail.UnitCode,SUM(dirty_detail.Qty) AS Qty,SUM(dirty_detail.Weight) AS Weight  
-            FROM dirty_detail 
-            INNER JOIN item on item.ItemCode = dirty_detail.ItemCode 
-            WHERE DocNo = '$refDoc' 
-            AND item.IsDirtyBag = 1 
-            GROUP BY dirty_detail.ItemCode";
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $new_i    =  $Result['ItemCode'];
-        $new_unit    =  $Result['UnitCode'];
-        $new_qty    =  $Result['Qty'];
-        $new_weight    =  $Result['Weight'];
-        $Sql2 = "INSERT INTO cleanstock_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-                    VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
-        mysqli_query($conn, $Sql2);
-    }
-
-    $Sql = "SELECT newlinentable_detail.ItemCode,newlinentable_detail.UnitCode,SUM(newlinentable_detail.Qty) AS Qty,SUM(newlinentable_detail.Weight) AS Weight  
-            FROM newlinentable_detail 
-            INNER JOIN item on item.ItemCode = newlinentable_detail.ItemCode 
-            WHERE DocNo = '$refDoc' 
-            AND item.IsDirtyBag = 1 
-            GROUP BY newlinentable_detail.ItemCode";
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $new_i    =  $Result['ItemCode'];
-        $new_unit    =  $Result['UnitCode'];
-        $new_qty    =  $Result['Qty'];
-        $new_weight    =  $Result['Weight'];
-        $Sql2 = "INSERT INTO cleanstock_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-        VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
-        mysqli_query($conn, $Sql2);
-    }
-
-    $Sql = "SELECT cleanstock_detail.ItemCode,cleanstock_detail.UnitCode,SUM(cleanstock_detail.Qty) AS Qty,SUM(cleanstock_detail.Weight) AS Weight  
-            FROM cleanstock_detail 
-            INNER JOIN item on item.ItemCode = cleanstock_detail.ItemCode 
-            WHERE DocNo = '$refDoc' 
-            AND cleanstock_detail.IsCheckList = 1 
-            GROUP BY cleanstock_detail.ItemCode";
-    $meQuery = mysqli_query($conn, $Sql);
-    while ($Result = mysqli_fetch_assoc($meQuery)) {
-        $new_i    =  $Result['ItemCode'];
-        $new_unit    =  $Result['UnitCode'];
-        $new_qty    =  $Result['Qty'];
-        $new_weight    =  $Result['Weight'];
-        $Sql2 = "INSERT INTO cleanstock_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-        VALUES ('$DocNo','$new_i',$new_unit,$new_qty,$new_weight) ";
-        mysqli_query($conn, $Sql2);
-    }
+    // $Unweight = $DATA["Unweight"];
 
     $Sql = "SELECT cleanstock_detail.ItemCode,
                         item.ItemName,
@@ -168,14 +32,13 @@ function load_items($conn, $DATA)
         $return[$count]['UnitCode'] = $Result['UnitCode'];
         $return[$count]['Qty'] = $Result['Qty'];
         $weight = $Result['Weight'];
-        if ($Unweight == 1) {
-            $weight = 0;
-        }
+        // if ($Unweight == 1) {
+        //     $weight = 0;
+        // }
         $return[$count]['Weight'] = $weight;
         $count++;
     }
     $return['count'] = $count;
-    $return['NotDelDetail'] = $NotDelDetail;
 
     if ($count > 0) {
         $return['status'] = "success";
@@ -192,58 +55,137 @@ function load_items($conn, $DATA)
     }
 }
 
+function choose_items($conn, $DATA)
+{
+    $DocNo = $DATA["DocNo"];
+    $DepCode = $DATA["DepCode"];
+    $Search = $DATA["Search"];
+    $Ar_ItemCode = array();
+    $count = 0;
+
+    $Sql = "SELECT c.ItemCode 
+            FROM cleanstock_detail c 
+            INNER JOIN item i ON c.ItemCode = i.ItemCode 
+            WHERE c.DocNo = '$DocNo' 
+            GROUP BY c.ItemCode 
+            ORDER BY i.ItemName";
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        array_push($Ar_ItemCode, $Result['ItemCode']);
+    }
+
+    $Sql = "SELECT DISTINCT     item_stock.ItemCode,ItemName,item.UnitCode
+
+            FROM                item_stock,item
+
+            WHERE               DepCode='$DepCode'
+            AND                 item_stock.ItemCode=item.ItemCode
+            AND                 item.ItemName LIKE '%$Search%' 
+            ORDER BY            item.ItemName ASC";
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+        $have = 0;
+        foreach ($Ar_ItemCode as $key => $ItemCode) {
+            if ($ItemCode == $Result['ItemCode']) {
+                $have = 1;
+            }
+        }
+        if ($have == 0) {
+            $return[$count]['ItemCode']    =  $Result['ItemCode'];
+            $return[$count]['ItemName']    =  $Result['ItemName'];
+            $return[$count]['UnitCode']    =  $Result['UnitCode'];
+            $count++;
+        }
+    }
+
+    $return['Sql'] = $Sql;
+    $return['cnt'] = $count;
+
+    if ($count > 0) {
+        $return['status'] = "success";
+        $return['form'] = "choose_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['status'] = "failed";
+        $return['form'] = "choose_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
+function change_value($conn, $DATA)
+{
+    $DocNo = $DATA["DocNo"];
+    $item = $DATA["item"];
+    $qty = $DATA["qty"];
+    if ($DATA["weight"] > 0) {
+        $insert = ",`Weight`";
+        $value = "," . $DATA["weight"];
+    } else {
+        $insert = "";
+        $value = "";
+    }
+    $Sql = "INSERT INTO cleanstock_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`" . $insert . ") 
+            VALUES ('$DocNo','$item',1,$qty" . $value . ") ";
+
+    if (mysqli_query($conn, $Sql)) {
+        $return['status'] = "success";
+        $return['form'] = "change_value";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['Sql'] = $Sql;
+        $return['status'] = "failed";
+        $return['form'] = "change_value";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
+function del_items($conn, $DATA)
+{
+    $DocNo = $DATA["DocNo"];
+    $item = $DATA["item"];
+
+    $Sql = "DELETE FROM cleanstock_detail WHERE DocNo = '$DocNo' AND ItemCode = '$item'";
+
+    if (mysqli_query($conn, $Sql)) {
+        $return['status'] = "success";
+        $return['form'] = "del_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    } else {
+        $return['Sql'] = $Sql;
+        $return['status'] = "failed";
+        $return['form'] = "del_items";
+        echo json_encode($return);
+        mysqli_close($conn);
+        die;
+    }
+}
+
 function add_item($conn, $DATA)
 {
     $DocNo = $DATA['DocNo'];
     $Userid = $DATA['Userid'];
-    $refDocNo = $DATA['refDocNo'];
-    $arr_old_i = $DATA['old_i'];
-    $arr_old_qty = $DATA['old_qty'];
-    $arr_old_unit = $DATA['old_unit'];
-    $arr_old_weight = $DATA['old_weight'];
-    $arr_new_i = $DATA['new_i'];
-    $arr_new_qty = $DATA['new_qty'];
-    $arr_new_unit = $DATA['new_unit'];
-    $arr_new_weight = $DATA['new_weight'];
-    $arr_del_i = $DATA['del_i'];
+    $ar_item = $DATA['ar_item'];
+    $ar_weight = $DATA['ar_weight'];
+    $ar_qty = $DATA['ar_qty'];
+    $Total = 0;
 
-    $old_i = explode(",", $arr_old_i);
-    $old_qty = explode(",", $arr_old_qty);
-    $old_unit = explode(",", $arr_old_unit);
-    $old_weight = explode(",", $arr_old_weight);
-    $new_i = explode(",", $arr_new_i);
-    $new_qty = explode(",", $arr_new_qty);
-    $new_unit = explode(",", $arr_new_unit);
-    $new_weight = explode(",", $arr_new_weight);
-    $del_i = explode(",", $arr_del_i);
-
-    $cnt_old = sizeof($old_i, 0);
-    $cnt_new = sizeof($new_i, 0);
-    $cnt_del = sizeof($del_i, 0);
-
-    for ($i = 0; $i < $cnt_del; $i++) {
-        $Sql = "DELETE FROM cleanstock_detail WHERE DocNo = '$DocNo' AND ItemCode = '$del_i[$i]'";
+    foreach ($ar_item as $key => $ItemCode) {
+        $Sql = "UPDATE cleanstock_detail SET Qty = '$ar_qty[$key]', Weight = '$ar_weight[$key]' WHERE DocNo = '$DocNo' AND ItemCode = '$ItemCode'";
         mysqli_query($conn, $Sql);
+        $Total += $ar_weight[$key];
     }
 
-    for ($i = 0; $i < $cnt_old; $i++) {
-        $Sql = "UPDATE cleanstock_detail SET Weight = $old_weight[$i],Qty=$old_qty[$i] WHERE DocNo = '$DocNo' AND ItemCode = '$old_i[$i]'";
-        mysqli_query($conn, $Sql);
-    }
-
-    for ($i = 0; $i < $cnt_new; $i++) {
-        $Sql = "INSERT INTO cleanstock_detail(`DocNo`,`ItemCode`,`UnitCode`,`Qty`,`Weight`) 
-                    VALUES ('$DocNo','$new_i[$i]',$new_unit[$i],$new_qty[$i],$new_weight[$i]) ";
-        $return[$i]['Weight'] = $new_weight[$i];
-        mysqli_query($conn, $Sql);
-    }
-
-    $Sql = "SELECT SUM(Weight) AS total FROM cleanstock_detail WHERE DocNo = '$DocNo'";
-    $meQuery = mysqli_query($conn, $Sql);
-    $Result = mysqli_fetch_assoc($meQuery);
-    $total = $Result['total'];
-
-    $Sql = "UPDATE cleanstock SET Total = $total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1,RefDocNo = '$refDocNo' WHERE DocNo = '$DocNo'";
+    $Sql = "UPDATE cleanstock SET Total = $Total, Modify_Code = '$Userid', Modify_Date = NOW(), IsStatus = 1 WHERE DocNo = '$DocNo'";
     mysqli_query($conn, $Sql);
 
     $return['status'] = "success";
@@ -293,6 +235,10 @@ if (isset($_POST['DATA'])) {
         load_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'choose_items') {
         choose_items($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'change_value') {
+        change_value($conn, $DATA);
+    } else if ($DATA['STATUS'] == 'del_items') {
+        del_items($conn, $DATA);
     } else if ($DATA['STATUS'] == 'add_item') {
         add_item($conn, $DATA);
     } else if ($DATA['STATUS'] == 'del_back') {

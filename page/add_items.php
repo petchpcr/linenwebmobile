@@ -73,9 +73,6 @@ $genarray = json_decode($json, TRUE);
 		var Delback = "<?php echo $Delback ?>";
 		var Unweight = "<?php echo $Unweight ?>";
 		var NotDelDetail = "<?php echo $NotDelDetail ?>";
-		var arr_old_items = [];
-		var arr_new_items = [];
-		var arr_del_items = [];
 
 		var form_out = '<?php echo $form_out ?>';
 		if (form_out == 1) {
@@ -83,7 +80,7 @@ $genarray = json_decode($json, TRUE);
 		} else {
 			var txt_form_out = "";
 		}
-		
+
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
 			load_items();
@@ -91,14 +88,9 @@ $genarray = json_decode($json, TRUE);
 
 		// function
 		function load_items() {
-			arr_old_items = [];
-			arr_new_items = [];
-			arr_del_items = [];
 			var data = {
 				'DocNo': DocNo,
-				'refDoc': refDoc,
 				'Unweight': Unweight,
-				'NotDelDetail': NotDelDetail,
 				'STATUS': 'load_items'
 			};
 			senddata(JSON.stringify(data));
@@ -109,10 +101,42 @@ $genarray = json_decode($json, TRUE);
 			var data = {
 				'DepCode': DepCode,
 				'Search': Search,
-				'refDoc': refDoc,
+				'DocNo': DocNo,
 				'STATUS': 'choose_items'
 			};
 			senddata(JSON.stringify(data));
+		}
+
+		function new_value(item, name) {
+			$("#new_qty").val(1);
+			$("#new_weight").val("");
+			$("#btn_edit").attr("onclick", "change_value(\"" + item + "\",\"" + name + "\")");
+
+			$("#btn_edit").prop("disabled",false);
+			$("#new_qty").prop("disabled",false);
+			$("#new_weight").prop("disabled",false);
+
+			$("#md_edit").modal('show');
+		}
+
+		function change_value(item, name) {
+			var qty = $("#new_qty").val();
+			var weight = $("#new_weight").val();
+
+			if (qty > 0) {
+				$("#btn_edit").prop("disabled",true);
+				$("#new_qty").prop("disabled",true);
+				$("#new_weight").prop("disabled",true);
+				
+				var data = {
+					'DocNo': DocNo,
+					'item': item,
+					'qty': qty,
+					'weight': weight,
+					'STATUS': 'change_value'
+				};
+				senddata(JSON.stringify(data));
+			}
 		}
 
 		function chk_items(chk) {
@@ -171,35 +195,13 @@ $genarray = json_decode($json, TRUE);
 			}
 		}
 
-		function del_items(num) {
-			var item = "#item" + num;
-			var input = "#weight" + num;
-			var have = 0;
-			var code = $(input).data("code");
-
-			for (var i = 0; i < arr_del_items.length; i++) {
-				if (arr_del_items[i] == code) {
-					have = 1;
-				}
-			}
-
-			var old_i = arr_old_items.indexOf(code); // หา Index ของคำนั้น
-			if (old_i != -1) {
-				arr_old_items.splice(old_i, 1);
-			} // ลบ Index ที่หาเจอ
-
-			var new_i = arr_new_items.indexOf(code); // หา Index ของคำนั้น
-			if (new_i != -1) {
-				arr_new_items.splice(new_i, 1);
-			} // ลบ Index ที่หาเจอ
-
-			if (have == 0) {
-				arr_del_items.push(code);
-			}
-
-			$(item).remove();
-			cal_weight();
-			cal_num();
+		function del_items(item) {
+			var data = {
+				'DocNo': DocNo,
+				'item': item,
+				'STATUS': 'del_items'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function show_weight(num) {
@@ -272,87 +274,36 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item() {
-			$("#btn_save").prop("disabled",true);
-			var arr_old_Qty = [];
-			var arr_old_UnitCode = [];
-			var arr_old_weight = [];
-			$(".old").each(function() {
-				var qtyid = $(this).attr("id") + 'qty';
-				var qty = $('#' + qtyid).val();
-				if (true) {
-					if (qty == null || qty == "") {
-						qty = 0;
-					}
-					arr_old_Qty.push(qty);
-				} else {
-					arr_old_Qty.push(0);
-				}
-				arr_old_UnitCode.push($(this).data("unit"));
-				var val = $(this).val();
-				var weight = 0;
-				if (val != null && val != "") {
-					weight = val;
-				}
-
-				arr_old_weight.push(weight);
+			$("#btn_save").prop("disabled", true);
+			var ar_item = [];
+			var ar_weight = [];
+			var ar_qty = [];
+			$(".item ").each(function() {
+				var num = $(this).attr("data-num");
+				var weight = $(this).val();
+				var qty_id = "#weight" + num + "qty";
+				var qty = $(qty_id).val();
+				var item = $(this).attr("data-code");
+				
+				ar_item.push(item);
+				ar_weight.push(weight);
+				ar_qty.push(qty);
 			});
-
-			var old_i = arr_old_items.join(',');
-			var old_qty = arr_old_Qty.join(',');
-			var old_unit = arr_old_UnitCode.join(',');
-			var old_weight = arr_old_weight.join(',');
-
-			var arr_new_Qty = [];
-			var arr_new_UnitCode = [];
-			var arr_new_weight = [];
-			$(".new").each(function() {
-				var qtyid = $(this).attr("id") + 'qty';
-				var qty = $('#' + qtyid).val();
-				if (true) {
-					if (qty == null || qty == "") {
-						qty = 0;
-					}
-					arr_new_Qty.push(qty);
-				} else {
-					arr_new_Qty.push(0);
-				}
-				arr_new_UnitCode.push($(this).data("unit"));
-				var val = $(this).val();
-				var weight = 0;
-				if (val != null && val != "") {
-					weight = val;
-				}
-				arr_new_weight.push(weight);
-			});
-
-			var new_i = arr_new_items.join(',');
-			var new_qty = arr_new_Qty.join(',');
-			var new_unit = arr_new_UnitCode.join(',');
-			var new_weight = arr_new_weight.join(',');
-
-			var del_i = arr_del_items.join(',');
 
 			var data = {
 				'DocNo': DocNo,
-				'refDocNo': '<?php echo $refDoc; ?>',
 				'Userid': Userid,
-				'old_i': old_i,
-				'old_qty': old_qty,
-				'old_unit': old_unit,
-				'old_weight': old_weight,
-				'new_i': new_i,
-				'new_qty': new_qty,
-				'new_unit': new_unit,
-				'new_weight': new_weight,
-				'del_i': del_i,
+				'ar_item': ar_item,
+				'ar_weight': ar_weight,
+				'ar_qty': ar_qty,
 				'STATUS': 'add_item'
 			};
 			senddata(JSON.stringify(data));
 		}
 
 		function back() {
-			console.log(Delback);
-			if (Delback == 1) {
+			// if (Delback == 1) {
+			if (false) {
 				var data = {
 					'DocNo': DocNo,
 					'refDoc': refDoc,
@@ -361,13 +312,7 @@ $genarray = json_decode($json, TRUE);
 				};
 				senddata(JSON.stringify(data));
 			} else {
-				if (Menu == 'dirty') {
-					window.location.href = 'dirty.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
-				} else if (Menu == 'clean') {
-					window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
-				} else if (Menu == 'newlinentable') {
-					window.location.href = 'new_linen_item.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
-				}
+				window.location.href = 'clean.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
 			}
 		}
 		// end function
@@ -376,13 +321,7 @@ $genarray = json_decode($json, TRUE);
 		function senddata(data) {
 			var form_data = new FormData();
 			form_data.append("DATA", data);
-			if (Menu == 'dirty') {
-				var URL = '../process/add_items_dirty.php';
-			} else if (Menu == 'clean') {
-				var URL = '../process/add_items_clean.php';
-			} else {
-				var URL = '../process/add_items_new_linen.php';
-			}
+			var URL = '../process/add_items_clean.php';
 
 			$.ajax({
 				url: URL,
@@ -402,90 +341,65 @@ $genarray = json_decode($json, TRUE);
 					if (temp["status"] == 'success') {
 						if (temp["form"] == 'load_items') {
 							$("#items").empty();
-							if (false) {
-								for (var i = 0; i < temp['count']; i++) {
-									var num = Number(i) + 1;
-									var id = "weight" + num;
-									var weight = temp[i]['Weight'];
-									if (temp[i]['Weight'] == 0.00) {
-										weight = "";
-									}
-									var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'>";
-									Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-									Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
-									Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'><img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-									$("#items").append(Str);
-									arr_old_items.push(temp[i]['ItemCode']);
-
-									cal_weight();
-									cal_num();
+							for (var i = 0; i < temp['count']; i++) {
+								var num = Number(i) + 1;
+								var id = "weight" + num;
+								var idqty = id + "qty";
+								var weight = temp[i]['Weight'];
+								if (temp[i]['Weight'] == 0.00) {
+									weight = "";
 								}
-							} else {
-								for (var i = 0; i < temp['count']; i++) {
-									var num = Number(i) + 1;
-									var id = "weight" + num;
-									var idqty = id + "qty";
-									var weight = temp[i]['Weight'];
-									if (temp[i]['Weight'] == 0.00) {
-										weight = "";
-									}
-									var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'><div class='col'><div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'>";
-									Str += "<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div></div><div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['numberSize'][$language]; ?>";
-									Str += "<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 itemnum numonly'";
-									Str += "id='" + idqty + "' value='" + temp[i]['Qty'] + "' placeholder='0'>";
-									Str += "<img onclick='del_items(" + num + ")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'></div></div>";
-									Str += "<div class='row'><div class='d-flex align-items-center col-xl-10 col-lg-9 col-md-9 col-sm-8 col-7'></div>";
-									Str += "<div class='d-flex align-items-center col-xl-2 col-lg-3 col-md-3 col-sm-4 col-5 input-group p-0'><?php echo $array['weight'][$language]; ?><input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
-									Str += "data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "' data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
-									Str += "<img src='../img/kg.png' onclick='show_weight(" + num + ")' height='40'></div></div></div>";
-									$("#items").append(Str);
-									arr_old_items.push(temp[i]['ItemCode']);
+								var Str = "<div id='item" + num + "' class='row alert alert-info mb-3 p-0'>";
+								Str += "		<div class='col'>";
+								Str += "			<div class='row'>";
 
-									cal_weight();
-									cal_num();
-								}
-							}
-							if (Ref == "dirty") {
-								choose_items();
-								$("#md_item").modal('show');
+								Str += "				<div class='d-flex align-items-center col-lg-8 col-md-7 col-sm-6 col-6'>";
+								Str += "					<div class='text-truncate font-weight-bold'>" + temp[i]['ItemName'] + "</div>";
+								Str += "				</div>";
+
+								Str += "				<div class='d-flex align-items-center col-lg-4 col-md-5 col-sm-6 col-6 input-group p-0'>";
+								Str += "					<div class='pr-1'><?php echo $array['numberSize'][$language]; ?></div>";
+								Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white ";
+								Str += "					my-2 mr-1 itemnum numonly' id='" + idqty + "' value='" + temp[i]['Qty'] + "' placeholder='0'>";
+
+								Str += "					<div class='pr-1'><?php echo $array['weight'][$language]; ?></div>";
+								Str += "					<input onkeydown='make_number()' type='text' class='form-control rounded text-center bg-white my-2 mr-1 item old numonly' ";
+								Str += "					data-code='" + temp[i]['ItemCode'] + "' data-qty='" + temp[i]['Qty'] + "' data-unit='" + temp[i]['UnitCode'] + "' id='" + id + "'";
+								Str += "					data-num='" + num + "' data-oldnum=" + temp[i]['Weight'] + " value='" + weight + "' placeholder='0.0'>";
+
+								Str += "					<img onclick='del_items(\"" + temp[i]['ItemCode'] + "\")' src='../img/close.png' style='height:25px;margin-right:5px;margin-bottom:20px;'>";
+								Str += "				</div>";
+
+								Str += "			</div>";
+								Str += "		</div>";
+								Str += "	</div>";
+								$("#items").append(Str);
+
+								cal_weight();
+								cal_num();
 							}
 						} else if (temp["form"] == 'choose_items') {
-							var HptName = temp['HptName'];
-							var DepName = temp['DepName'];
 							$("#choose_item").empty();
 							for (var i = 0; i < temp['cnt']; i++) {
-								var have_old = 0;
-								var have_new = 0;
+								var num = i + 1;
+								var chk = "chk" + num;
+								var Str = "<button onclick='new_value(\"" + temp[i]['ItemCode'] + "\",\"" + temp[i]['ItemName'] + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
+								Str += "</div></button>";
 
-								if (Menu != 'dirty') {
-									if (arr_old_items.length > 0) {
-										for (var ii = 0; ii < arr_old_items.length; ii++) {
-											if (arr_old_items[ii] == temp[i]['ItemCode']) {
-												have_old = 1;
-											}
-										}
-									}
-
-									if (arr_new_items.length > 0) {
-										for (var iii = 0; iii < arr_new_items.length; iii++) {
-											if (arr_new_items[iii] == temp[i]['ItemCode']) {
-												have_new = 1;
-											}
-										}
-									}
-								}
-
-								if (have_old == 0 && have_new == 0) {
-									var num = i + 1;
-									var chk = "chk" + num;
-									var Str = "<button onclick='chk_items(\"" + chk + "\")' id='chs" + num + "' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-									Str += "<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold pr-0'><div>" + temp[i]['ItemName'] + "</div>";
-									Str += "<input class='m-0 chk-item' type='checkbox' id='" + chk + "' data-name='" + temp[i]['ItemName'] + "' value='" + temp[i]['ItemCode'] + "'></div><hr class='m-0'><div class='col-12 text-truncate text-left'>" + HptName + " / " + DepName + "</div></button>";
-
-									$("#choose_item").append(Str);
-								}
+								$("#choose_item").append(Str);
 							}
+						} else if (temp["form"] == 'change_value') {
+							load_items();
+							choose_items();
+							$("#btn_edit").prop("disabled",false);
+							$("#new_qty").prop("disabled",false);
+							$("#new_weight").prop("disabled",false);
+							$("#md_edit").modal('hide');
+
+						} else if (temp["form"] == 'del_items') {
+							load_items();
+
 						} else if (temp["form"] == 'add_item') {
 							Delback = 0;
 							swal({
@@ -514,7 +428,7 @@ $genarray = json_decode($json, TRUE);
 							choose_items();
 							$("#md_item").modal('show');
 
-						} else if (temp["form"] == 'add_item') {
+						}else if (temp["form"] == 'add_item') {
 							alert("error ADD ITEM");
 						}
 					}
@@ -529,7 +443,7 @@ $genarray = json_decode($json, TRUE);
 	<header data-role="header">
 		<div class="head-bar d-flex justify-content-between">
 			<div style="width:139.14px;">
-				<button data-toggle="modal" data-target="#exampleModal" class="head-btn btn-primary"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
+				<button onclick="back()" class="head-btn btn-primary"><i class="fas fa-arrow-circle-left mr-1"></i><?php echo $genarray['back'][$language]; ?></button>
 			</div>
 			<div class="head-text text-truncate font-weight-bold align-self-center"><?php echo $UserFName ?> <?php echo "[ " . $Per . " ]" ?></div>
 			<div class="text-right" style="width:139.14px;">
@@ -560,8 +474,8 @@ $genarray = json_decode($json, TRUE);
 	<div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
 		<div class="col-lg-9 col-md-10 col-sm-12">
 			<?php
-			if (true) {
-				echo '<div class="form-row my-2">
+				if (true) {
+					echo '<div class="form-row my-2">
 								<div class="col-12 input-group">
 									<div class="input-group-prepend">
 											<span class="input-group-text" style="width:100px;">' . $array['numberSum'][$language] . '</span>
@@ -572,7 +486,7 @@ $genarray = json_decode($json, TRUE);
 									</div>
 								</div>
 							</div>';
-			}
+				}
 			?>
 			<div class="form-row my-2">
 				<div class="col-12 input-group">
@@ -614,18 +528,52 @@ $genarray = json_decode($json, TRUE);
 				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
 					<input onkeyup="choose_items()" id="search_items" class="form-control mb-3" type="text" placeholder="<?php echo $array['searchitem'][$language]; ?>">
 
-					<div id="choose_item">
+					<div id="choose_item"></div>
+
+				</div>
+				<div class="modal-footer text-center">
+					<div class="row w-100 m-0">
+						<button type="button" class="btn btn-secondary my-2 mx-auto" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="md_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><?php echo $genarray['Getweight'][$language]; ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body text-center" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+
+					<div class="row">
+						<div class="col-6">
+							<div class="bg-primary text-center text-white mb-2 p-0" style="border-radius:0.25rem;"><?php echo $genarray['qty'][$language]; ?></div>
+						</div>
+						<div class="col-6">
+							<div class="bg-primary text-center text-white mb-2 p-0" style="border-radius:0.25rem;"><?php echo $genarray['weight'][$language]; ?></div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-6">
+							<input onkeydown="make_number()" id="new_qty" class="form-control text-center mb-3 numonly" type="text" placeholder="0">
+						</div>
+						<div class="col-6">
+							<input onkeydown="make_number()" id="new_weight" class="form-control text-center mb-3 numonly" type="text" placeholder="0.00">
+						</div>
 					</div>
 
 				</div>
 				<div class="modal-footer text-center">
-					<div class="row w-100 d-flex align-items-center m-0">
-						<div class="col-6 text-right">
-							<button id="btn_add_items" onclick="select_chk()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
-						</div>
-						<div class="col-6 text-left">
-							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
-						</div>
+					<div class="w-100 d-flex justify-content-center m-0">
+						<button id="btn_edit" type="button" class="btn btn-primary m-2"><?php echo $genarray['yes'][$language]; ?></button>
 					</div>
 				</div>
 			</div>

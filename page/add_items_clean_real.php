@@ -604,7 +604,8 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			if (Notsave == 1 || Delback == 1) {
+			// if (Notsave == 1 || Delback == 1) {
+			if (false) {
 				swal({
 					title: '<?php echo $genarray['confirm'][$language]; ?>',
 					text: '<?php echo $genarray['YNwantToExit'][$language]; ?>',

@@ -64,7 +64,7 @@ $genarray = json_decode($json, TRUE);
 		$(document).ready(function(e) {
 			$("#DocNo").text(DocNo);
 			load_dep()
-			
+
 			if (AddAll == 1) {
 				Add_all_items();
 			} else {
@@ -105,8 +105,8 @@ $genarray = json_decode($json, TRUE);
 				// this.value = this.value.replace(/[^0-9]/g, ''); //<-- replace all other than given set of values\
 				// this.value = Number(this.value);
 				if (/\D/g.test(this.value)) {
-						// Filter non-digits from input value.
-						this.value = this.value.replace(/\D/g, '');
+					// Filter non-digits from input value.
+					this.value = this.value.replace(/\D/g, '');
 				}
 			});
 		}
@@ -115,6 +115,7 @@ $genarray = json_decode($json, TRUE);
 			var Search = $("#search_items").val();
 			var data = {
 				'Search': Search,
+				'DocNo': DocNo,
 				'DepCode': DepCode,
 				'STATUS': 'choose_items'
 			};
@@ -131,7 +132,8 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function select_chk() {
-			$("#btn_select").prop("disabled",true);
+			$("#btn_select").prop("disabled", true);
+			var have = 0;
 			$(".chk-item").each(function() {
 				var code, name, qty;
 				if ($(this).is(':checked')) {
@@ -143,24 +145,22 @@ $genarray = json_decode($json, TRUE);
 					new_i_code.push(code);
 					new_i_name.push(name);
 					new_i_qty.push(qty);
-				} else {
-					var Dcode = new_i_code.indexOf(code); // หา Index ของคำนั้น
-					if (Dcode != -1) {
-						new_i_code.splice(Dcode, 1); // ลบ Index ที่หาเจอ
-					}
-
-					var Dname = new_i_name.indexOf(name); // หา Index ของคำนั้น
-					if (Dname != -1) {
-						new_i_name.splice(Dname, 1); // ลบ Index ที่หาเจอ
-					}
-
-					var Dqty = new_i_qty.indexOf(qty); // หา Index ของคำนั้น
-					if (Dqty != -1) {
-						new_i_qty.splice(Dqty, 1); // ลบ Index ที่หาเจอ
-					}
+					have++;
 				}
 			});
-			get_par();
+
+			if (have > 0) {
+				var data = {
+					'DocNo': DocNo,
+					'DepCode': DepCode,
+					'new_i_code': new_i_code,
+					'new_i_qty': new_i_qty,
+					'STATUS': 'select_chk'
+				};
+				senddata(JSON.stringify(data));
+			} else {
+				$("#md_chooseitem").modal('hide');
+			}
 		}
 
 		function get_par() {
@@ -211,10 +211,10 @@ $genarray = json_decode($json, TRUE);
 			});
 		}
 
-		function edit_qty(code,i) {
+		function edit_qty(code, i) {
 			var iold = old_i_code.indexOf(code);
 			var inew = new_i_code.indexOf(code);
-			var id = "#qty_"+i;
+			var id = "#qty_" + i;
 			var value = $(id).val();
 			Notsave = 1;
 			if (iold != -1) {
@@ -224,12 +224,12 @@ $genarray = json_decode($json, TRUE);
 			}
 		}
 
-		function del_item(code,i) {
+		function del_item(code, i) {
 			Notsave = 1;
 			// หา Index ของคำนั้น
 			var iold = old_i_code.indexOf(code);
 			var inew = new_i_code.indexOf(code);
-			var id = "#list"+i;
+			var id = "#list" + i;
 			// ลบ Index ที่หาเจอ
 			if (iold != -1) {
 				old_i_code.splice(iold, 1);
@@ -246,38 +246,25 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function add_item() {
-			$("#btn_save").prop("disabled",true);
-			var old_size = old_i_code.length;
-			var new_size = new_i_code.length;
-			if (old_size == 0 && new_size == 0) {
-				var Title = "ไม่สามารถบันทึกข้อมูลได้";
-				var Text = "ต้องมีข้อมูลในเอกสาร";
-				var Type = "warning";
-				AlertError(Title, Text, Type);
-			} else {
-				var old_code = old_i_code.join(',');
-				var old_qty = old_i_qty.join(',');
-				var old_par = old_i_par.join(',');
-				// var old_order = old_i_order.join(',');
-				var new_code = new_i_code.join(',');
-				var new_qty = new_i_qty.join(',');
-				var new_par = new_i_par.join(',');
-				// var new_order = new_i_order.join(',');
+			$("#btn_save").prop("disabled", true);
+			var ar_item = [];
+			var ar_qty = [];
 
-				var data = {
-					'DocNo': DocNo,
-					'old_code': old_code,
-					'old_qty': old_qty,
-					'old_par': old_par,
-					// 'old_order': old_order,
-					'new_code': new_code,
-					'new_qty': new_qty,
-					'new_par': new_par,
-					// 'new_order': new_order,
-					'STATUS': 'add_item'
-				};
-				senddata(JSON.stringify(data));
-			}
+			$(".sc_qty").each(function() {
+				var item = $(this).attr("data-code");
+				var qty = $(this).val();
+
+				ar_item.push(item);
+				ar_qty.push(qty);
+			});
+
+			var data = {
+				'DocNo': DocNo,
+				'ar_item': ar_item,
+				'ar_qty': ar_qty,
+				'STATUS': 'add_item'
+			};
+			senddata(JSON.stringify(data));
 		}
 
 		function del_doc() {
@@ -289,7 +276,8 @@ $genarray = json_decode($json, TRUE);
 		}
 
 		function back() {
-			if (Notsave == 1 || Create == 1) {
+			// if (Notsave == 1 || Create == 1) {
+			if (false) {
 				swal({
 					title: "ข้อมูลยังไม่ถูกบันทึก",
 					text: "ต้องการละทิ้งหรือไม่ ?",
@@ -371,7 +359,8 @@ $genarray = json_decode($json, TRUE);
 									Str += "		<div class='col-4 d-flex align-items-center'>" + temp[i]['ItemName'] + "</div>";
 									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>" + temp[i]['ParQty'] + "</div>";
 									Str += "		<div class='col-4 d-flex align-items-center justify-content-center'>";
-									Str += "			<input type='text' onkeyup='edit_qty(\"" + temp[i]['ItemCode'] + "\"," + i + ")' onkeydown='make_number()' id='qty_" + i + "' class='form-control text-center sc_qty numonly' style='max-width:100px;' placeholder='0' value='" + Qty + "'>";
+									Str += "			<input type='text' onkeydown='make_number()' id='qty_" + i + "' data-code='" + temp[i]['ItemCode'] + "' ";
+									Str += "			class='form-control text-center sc_qty numonly' style='max-width:100px;' placeholder='0' value='" + Qty + "'>";
 									Str += "		</div>";
 									Str += "	</div>";
 									Str += "</td>";
@@ -384,46 +373,48 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'choose_items') {
 							$("#choose_item").empty();
 							for (var i = 0; i < temp['cnt']; i++) {
-								var have = 0;
-								old_i_code.forEach(function(val) {
-									if (val == temp[i]['ItemCode']) {
-										have++;
-									}
-								});
-								new_i_code.forEach(function(val) {
-									if (val == temp[i]['ItemCode']) {
-										have++;
-									}
-								});
-								if (have == 0) {
-									var chk_id = "chchk" + i;
-									var qty_id = "chqty" + i;
-									var Str = "<div onclick='select_item(" + i + ")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
-									Str += "	<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
-									Str += "		<div class='mr-auto text-truncate'>" + temp[i]['ItemName'] + "</div>";
-									Str += "		<input onclick='event.cancelBubble=true;' onkeydown='make_number()' id='" + qty_id + "' value='1' type='text' class='form-control text-center numonly mx-2' style='max-width:100px;'>";
-									Str += "		<input class='m-0 chk-item' type='checkbox' id='" + chk_id + "' data-code='" + temp[i]['ItemCode'] + "' data-name='" + temp[i]['ItemName'] + "' data-i='" + i + "'>";
-									Str += "	</div>";
-									Str += "</div>";
+								var chk_id = "chchk" + i;
+								var qty_id = "chqty" + i;
+								var Str = "<div onclick='select_item(" + i + ")' class='btn btn-block alert alert-info py-1 px-3 mb-2'>";
+								Str += "	<div class='d-flex justify-content-between align-items-center col-12 text-truncate text-left font-weight-bold px-0'>";
+								Str += "		<div class='mr-auto text-truncate'>" + temp[i]['ItemName'] + "</div>";
+								Str += "		<input onclick='event.cancelBubble=true;' onkeydown='make_number()' id='" + qty_id + "' value='1' type='text' class='form-control text-center numonly mx-2' style='max-width:100px;'>";
+								Str += "		<input class='m-0 chk-item' type='checkbox' id='" + chk_id + "' data-code='" + temp[i]['ItemCode'] + "' data-name='" + temp[i]['ItemName'] + "' data-i='" + i + "'>";
+								Str += "	</div>";
+								Str += "</div>";
 
-									$("#choose_item").append(Str);
-								}
+								$("#choose_item").append(Str);
 							}
 
-							$("#btn_select").prop("disabled",false);
+							$("#btn_select").prop("disabled", false);
 							$("#md_chooseitem").modal('show');
+
+						} else if (temp["form"] == 'select_chk') {
+							load_items();
+							$("#md_chooseitem").modal('hide');
 
 						} else if (temp["form"] == 'get_par') {
 							new_i_par = [];
 							new_i_order = [];
 							new_i_par = temp['ar_par'].split(',');
-							new_i_par.forEach(function(val,key) {
-							// new_i_order.push(Number(val)-Number(new_i_qty[key]));
+							new_i_par.forEach(function(val, key) {
+								// new_i_order.push(Number(val)-Number(new_i_qty[key]));
 							});
 							ar_to_site();
 							$("#md_chooseitem").modal('hide');
 						} else if (temp["form"] == 'add_item') {
-							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
+							swal({
+								title: '',
+								text: '<?php echo $genarray['savesuccess'][$language]; ?>',
+								type: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								showConfirmButton: false,
+								timer: 1200,
+								confirmButtonText: 'Error!!'
+							})
+							setTimeout('back()', 1500);
 
 						} else if (temp["form"] == 'del_doc') {
 							window.location.href = 'shelf_count.php?siteCode=' + siteCode + '&Menu=' + Menu + txt_form_out;
@@ -436,10 +427,10 @@ $genarray = json_decode($json, TRUE);
 						var message = "";
 						if (temp["form"] == 'Add_all_items') {
 							load_items();
-							
+
 						} else if (temp["form"] == 'choose_items') {
 							$("#choose_item").empty();
-							$("#btn_select").prop("disabled",true);
+							$("#btn_select").prop("disabled", true);
 
 						} else if (temp["form"] == 'load_items') {
 
@@ -475,7 +466,7 @@ $genarray = json_decode($json, TRUE);
 		</div>
 		<div class="text-center font-weight-bold mb-3" style="font-size:25px;">
 			<div class="text-truncate"><?php echo $genarray['Document'][$language]; ?> : <label id="DocNo" class="mb-0"></label> </div>
-			<div class="text-truncate"><?php echo $genarray['department'][$language]; ?> : <label id="DepName" ></label> </div>
+			<div class="text-truncate"><?php echo $genarray['department'][$language]; ?> : <label id="DepName"></label> </div>
 		</div>
 		<div class="row justify-content-center px-3">
 			<table class="table table-hover col-lg-9 col-md-10 col-sm-12">

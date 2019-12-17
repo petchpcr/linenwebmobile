@@ -31,4 +31,11 @@
 			senddata(JSON.stringify(data));
 		}
 	}
+
+	function updateOnlineStatus(event) {
+		window.location.assign("../index.html");
+		console.log("Disconnect Internet!");
+	}
+	window.addEventListener('offline', updateOnlineStatus);
+
 </script>

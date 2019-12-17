@@ -64,10 +64,10 @@ require '../getTimeZone.php';
 
 		function change_doc() {
 			var slt = $("#DocName").val();
-			if (slt == 0) {
-				$("#btn_confirm").prop('disabled', true);
+			if (slt == 5) {
+				$("#div_FacName").prop('hidden', false);
 			} else {
-				$("#btn_confirm").prop('disabled', false);
+				$("#div_FacName").prop('hidden', true);
 			}
 		}
 
@@ -117,8 +117,7 @@ require '../getTimeZone.php';
 			} else if (slt == 4) {
 				window.location.href = 'ref_clean.php?siteCode=' + siteCode + '&DepCode=' + depCode + '&Menu=' + Menu + '&From=clean_real' + txt_form_out;
 			} else if (slt == 5) {
-				$("#choose_doc").modal('hide');
-				$("#md_factory").modal('show');
+				create_clean();
 			}
 		}
 
@@ -313,10 +312,9 @@ require '../getTimeZone.php';
 					<?php echo $genarray['docfirst'][$language] . $array['CreateCleanLinenDoc'][$language]; ?>
 					<div class="input-group my-3">
 						<div class="input-group-prepend">
-							<label class="input-group-text" for="inputGroupSelect01"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
+							<label class="input-group-text" style="width:120px;"><?php echo $genarray['selecttypedoc'][$language]; ?></label>
 						</div>
 						<select onchange="change_doc()" id="DocName" class="custom-select">
-							<option value="0" selected><?php echo $genarray['docfirst'][$language]; ?></option>
 							<option value="1"><?php echo $array['refDocDirty'][$language]; ?></option>
 							<option value="2"><?php echo $array['refDocRewash'][$language]; ?></option>
 							<option value="3"><?php echo $array['refDocnew'][$language]; ?></option>
@@ -324,34 +322,9 @@ require '../getTimeZone.php';
 							<option value="5"><?php echo $array['NotRefDoc'][$language]; ?></option>
 						</select>
 					</div>
-				</div>
-				<div class="modal-footer text-center">
-					<div class="row w-100 d-flex align-items-center m-0">
-						<div class="col-6 text-right">
-							<button id="btn_confirm" onclick="add_clean()" type="button" class="btn btn-primary m-2" disabled><?php echo $genarray['confirm'][$language]; ?></button>
-						</div>
-						<div class="col-6 text-left">
-							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="modal fade" id="md_factory" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title"><?php echo $genarray['confirmCreatedocno'][$language]; ?></h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center">
-					<div class="input-group my-3">
+					<div id="div_FacName" class="input-group my-3" hidden>
 						<div class="input-group-prepend">
-							<label class="input-group-text"><?php echo $array['chooseFactory'][$language]; ?></label>
+							<label class="input-group-text" style="width:120px;"><?php echo $array['chooseFactory'][$language]; ?></label>
 						</div>
 						<select id="FacName" class="custom-select"></select>
 					</div>
@@ -359,10 +332,10 @@ require '../getTimeZone.php';
 				<div class="modal-footer text-center">
 					<div class="row w-100 d-flex align-items-center m-0">
 						<div class="col-6 text-right">
-							<button id="btn_add_dirty" onclick="create_clean()" type="button" class="btn btn-primary m-2" style="font-size: 20px;"><?php echo $genarray['confirm'][$language]; ?></button>
+							<button id="btn_confirm" onclick="add_clean()" type="button" class="btn btn-primary m-2"><?php echo $genarray['confirm'][$language]; ?></button>
 						</div>
 						<div class="col-6 text-left">
-							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal" style="font-size: 20px;"><?php echo $genarray['cancel'][$language]; ?></button>
+							<button type="button" class="btn btn-secondary m-2" data-dismiss="modal"><?php echo $genarray['cancel'][$language]; ?></button>
 						</div>
 					</div>
 				</div>
