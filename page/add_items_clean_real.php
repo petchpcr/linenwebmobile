@@ -15,7 +15,6 @@ $form_out = $_GET['form_out'];
 $siteCode = $_GET['siteCode'];
 $Menu = $_GET['Menu'];
 $DocNo = $_GET['DocNo'];
-$refDoc = $_GET['RefDocNo'];
 $DepCode = $_GET['DepCode'];
 $Userid = $_GET['user'];
 $Per = $_SESSION['Permission'];
@@ -52,7 +51,6 @@ $genarray = json_decode($json, TRUE);
 		var siteCode = '<?php echo $siteCode; ?>';
 		var DepCode = "<?php echo $DepCode ?>";
 		var DocNo = "<?php echo $DocNo ?>";
-		var refDoc = "<?php echo $refDoc ?>";
 		var Menu = '<?php echo $Menu; ?>';
 		var Userid = "<?php echo $Userid ?>";
 		var Delback = "<?php echo $Delback ?>";
@@ -107,7 +105,6 @@ $genarray = json_decode($json, TRUE);
 			mul_weight = {};
 			var data = {
 				'DocNo': DocNo,
-				'refDoc': refDoc,
 				'FromDelRound': FromDelRound,
 				'STATUS': 'load_items'
 			};
@@ -137,7 +134,6 @@ $genarray = json_decode($json, TRUE);
 				'Search': Search,
 				'DepCode': DepCode,
 				'siteCode': siteCode,
-				'refDoc': refDoc,
 				'show_md': show_md,
 				'STATUS': 'choose_items'
 			};

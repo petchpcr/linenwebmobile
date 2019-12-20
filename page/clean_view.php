@@ -97,7 +97,7 @@ $genarray = json_decode($json, TRUE);
 			if (Menu == "clean") {
 				window.location.href = 'add_items.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1' + txt_form_out;
 			} else if (Menu == "clean_real") {
-				window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&RefDocNo=' + RefDocNo  + '&NotDelDetail=1' + txt_form_out;
+				window.location.href = 'add_items_clean_real.php?siteCode=' + siteCode + '&DocNo=' + DocNo + '&Menu=' + Menu + '&user=' + Userid + '&DepCode=' + DepCode + '&NotDelDetail=1' + txt_form_out;
 			}
 		}
 
@@ -147,7 +147,20 @@ $genarray = json_decode($json, TRUE);
 							$("#add_doc").attr("data-depcode", temp['DepCode']);
 							$("#HptName").val(temp['HptName']);
 							$("#DepName").val(temp['DepName']);
-							$("#RefDocNo").val(temp['RefDocNo']);
+
+							if (Menu == "clean_real") {
+								$("#RefDocNo").prop("hidden",true);
+								$("#RefDocNo2").prop("hidden",false);
+								var Str = "";
+								$.each(temp['RefDocNo'], function(key, RefDocNo) {
+									Str += "<option>" + RefDocNo + "</option>";
+									$("#RefDocNo2").html(Str);
+								});
+
+							} else {
+								$("#RefDocNo").val(temp['RefDocNo']);
+							}
+
 							var FName = temp['FName'];
 							$("#FName").val(FName);
 							$("#Date").val(temp['xdate'] + " - " + temp['xtime']);
@@ -277,6 +290,7 @@ $genarray = json_decode($json, TRUE);
 								<span class="input-group-text" style="width:100px;"><?php echo $array['referentDocument'][$language] ?></span>
 							</div>
 							<input type="text" id="RefDocNo" class="form-control bg-white" style="color:#1659a2;" readonly>
+							<select id="RefDocNo2" class="form-control" style="color:#1659a2;" hidden></select>
 						</div>
 						<div class="input-group mb-1">
 							<div class="input-group-prepend">

@@ -90,6 +90,9 @@
 <roundtimedirty><en>Round time dirty</en><th>รอบชั่งผ้าสกปรก</th></roundtimedirty>
 <roundtime><en>Round time</en><th>รอบชั่งผ้า</th></roundtime>
 
+<docsamefacpls><en>Please select the same factory</en><th>กรุณาเลือกเอกสารที่มีโรงซักตรงกัน</th></docsamefacpls>
+<startdate><en>Start Date</en><th>วันที่เริ่มต้น</th></startdate>
+<enddate><en>End Date</en><th>วันที่สิ้นสุด</th></enddate>
 //old
 
 <activeItem><en>Active</en><th>Active</th></activeItem>

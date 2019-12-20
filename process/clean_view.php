@@ -9,7 +9,7 @@ function load_doc($conn, $DATA)
   $count = 0;
   $DocNo = $DATA["DocNo"];
   $siteCode = $DATA["siteCode"];
-  
+
   if ($DATA["Menu"] == 'clean') {
     $Menu = "cleanstock";
   } else if ($DATA["Menu"] == 'clean_real') {
@@ -65,6 +65,16 @@ function load_doc($conn, $DATA)
   }
   $return['boolean'] = $boolean;
 
+  if ($DATA["Menu"] == 'clean_real') {
+    $RefDocNo_clean = array();
+    $Sql = "SELECT RefDocNo FROM clean_ref WHERE DocNo = '$DocNo'";
+    $meQuery = mysqli_query($conn, $Sql);
+    while ($Result = mysqli_fetch_assoc($meQuery)) {
+      array_push($RefDocNo_clean,$Result['RefDocNo']);
+    }
+    $return['RefDocNo'] = $RefDocNo_clean;
+  }
+
   $s = "2";
   if ($DATA["Menu"] == 'clean') {
     $Sql2 = "SELECT cleanstock_detail.ItemCode,
@@ -94,11 +104,11 @@ function load_doc($conn, $DATA)
             FROM clean_detail 
             WHERE DocNo = '$DocNo'
             GROUP BY ItemCode,RequestName";
-    
+
     $meQuery = mysqli_query($conn, $Sql);
     while ($Result = mysqli_fetch_assoc($meQuery)) {
-      array_push($ar_item,$Result['ItemCode']);
-      array_push($ar_request,$Result['RequestName']);
+      array_push($ar_item, $Result['ItemCode']);
+      array_push($ar_request, $Result['RequestName']);
     }
     $return['ar_item'] = $ar_item;
     $return['ar_request'] = $ar_request;
@@ -172,7 +182,7 @@ function CancelDoc($conn, $DATA)
 
   $Sql = "UPDATE $Menu SET IsStatus = 9 WHERE DocNo = '$DocNo'";
 
-  if (mysqli_query($conn,$Sql)) {
+  if (mysqli_query($conn, $Sql)) {
     $return['status'] = "success";
     $return['form'] = "CancelDoc";
     echo json_encode($return);

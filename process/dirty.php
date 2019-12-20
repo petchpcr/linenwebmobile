@@ -3,6 +3,10 @@
 use Mpdf\Tag\P;
 
 session_start();
+$Userid = $_SESSION['Userid'];
+if ($Userid == "") {
+	header("location:../index.html");
+}
 require '../connect/connect.php';
 require 'logout.php';
 date_default_timezone_set("Asia/Bangkok");

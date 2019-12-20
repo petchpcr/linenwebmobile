@@ -457,7 +457,7 @@ $genarray = json_decode($json, TRUE);
 						</button>
 					</div>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-12 col-sm-12 col-12">
 						<button onclick="load_site()" class="btn btn-block btn-outline-primary mb-2" <?php if ($_SESSION['PmID'] == 3) {
 																																														echo hidden;
@@ -465,7 +465,7 @@ $genarray = json_decode($json, TRUE);
 							<i class="far fa-clock mr-2"></i><?php echo $array['showTime'][$language]; ?>
 						</button>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 

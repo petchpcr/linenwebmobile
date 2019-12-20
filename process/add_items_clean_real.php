@@ -8,7 +8,6 @@
         $DepCode = $DATA["DepCode"];
         $siteCode = $DATA["siteCode"];
         $Search = $DATA["Search"];
-        $refDoc = $DATA["refDoc"];
         $show_md = $DATA["show_md"];
         $count = 0;
 
