@@ -654,7 +654,8 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="modal-footer text-center">
 					<div class="w-100 d-flex justify-content-center m-0">
-						<button id="btn_edit" type="button" class="btn btn-primary m-2"><?php echo $genarray['yes'][$language]; ?></button>
+						<button id="btn_edit" type="button" class="btn btn-primary mx-4"><?php echo $genarray['confirm'][$language]; ?></button>
+						<button type="button" data-dismiss="modal" class="btn btn-secondary mx-4"><?php echo $genarray['cancel'][$language]; ?></button>
 					</div>
 				</div>
 			</div>

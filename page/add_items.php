@@ -112,9 +112,9 @@ $genarray = json_decode($json, TRUE);
 			$("#new_weight").val("");
 			$("#btn_edit").attr("onclick", "change_value(\"" + item + "\",\"" + name + "\")");
 
-			$("#btn_edit").prop("disabled",false);
-			$("#new_qty").prop("disabled",false);
-			$("#new_weight").prop("disabled",false);
+			$("#btn_edit").prop("disabled", false);
+			$("#new_qty").prop("disabled", false);
+			$("#new_weight").prop("disabled", false);
 
 			$("#md_edit").modal('show');
 		}
@@ -124,10 +124,10 @@ $genarray = json_decode($json, TRUE);
 			var weight = $("#new_weight").val();
 
 			if (qty > 0) {
-				$("#btn_edit").prop("disabled",true);
-				$("#new_qty").prop("disabled",true);
-				$("#new_weight").prop("disabled",true);
-				
+				$("#btn_edit").prop("disabled", true);
+				$("#new_qty").prop("disabled", true);
+				$("#new_weight").prop("disabled", true);
+
 				var data = {
 					'DocNo': DocNo,
 					'item': item,
@@ -284,7 +284,7 @@ $genarray = json_decode($json, TRUE);
 				var qty_id = "#weight" + num + "qty";
 				var qty = $(qty_id).val();
 				var item = $(this).attr("data-code");
-				
+
 				ar_item.push(item);
 				ar_weight.push(weight);
 				ar_qty.push(qty);
@@ -392,9 +392,9 @@ $genarray = json_decode($json, TRUE);
 						} else if (temp["form"] == 'change_value') {
 							load_items();
 							choose_items();
-							$("#btn_edit").prop("disabled",false);
-							$("#new_qty").prop("disabled",false);
-							$("#new_weight").prop("disabled",false);
+							$("#btn_edit").prop("disabled", false);
+							$("#new_qty").prop("disabled", false);
+							$("#new_weight").prop("disabled", false);
 							$("#md_edit").modal('hide');
 
 						} else if (temp["form"] == 'del_items') {
@@ -428,7 +428,7 @@ $genarray = json_decode($json, TRUE);
 							choose_items();
 							$("#md_item").modal('show');
 
-						}else if (temp["form"] == 'add_item') {
+						} else if (temp["form"] == 'add_item') {
 							alert("error ADD ITEM");
 						}
 					}
@@ -474,8 +474,8 @@ $genarray = json_decode($json, TRUE);
 	<div id="add_doc" class="fixed-bottom d-flex justify-content-center pb-4 bg-white">
 		<div class="col-lg-9 col-md-10 col-sm-12">
 			<?php
-				if (true) {
-					echo '<div class="form-row my-2">
+			if (true) {
+				echo '<div class="form-row my-2">
 								<div class="col-12 input-group">
 									<div class="input-group-prepend">
 											<span class="input-group-text" style="width:100px;">' . $array['numberSum'][$language] . '</span>
@@ -486,7 +486,7 @@ $genarray = json_decode($json, TRUE);
 									</div>
 								</div>
 							</div>';
-				}
+			}
 			?>
 			<div class="form-row my-2">
 				<div class="col-12 input-group">
@@ -573,7 +573,8 @@ $genarray = json_decode($json, TRUE);
 				</div>
 				<div class="modal-footer text-center">
 					<div class="w-100 d-flex justify-content-center m-0">
-						<button id="btn_edit" type="button" class="btn btn-primary m-2"><?php echo $genarray['yes'][$language]; ?></button>
+						<button id="btn_edit" type="button" class="btn btn-primary mx-4"><?php echo $genarray['confirm'][$language]; ?></button>
+						<button type="button" data-dismiss="modal" class="btn btn-secondary mx-4"><?php echo $genarray['cancel'][$language]; ?></button>
 					</div>
 				</div>
 			</div>
